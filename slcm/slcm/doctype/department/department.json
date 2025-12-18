@@ -1,7 +1,6 @@
 {
  "actions": [],
- "allow_rename": 1,
- "autoname": "field:department_id",
+ "autoname": "autoincrement",
  "creation": "2025-12-16 10:55:35.738754",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -72,10 +71,11 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-12-16 10:59:08.943372",
+ "modified": "2025-12-18 09:58:40.107927",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "Department",
+ "naming_rule": "Autoincrement",
  "owner": "Administrator",
  "permissions": [
   {
@@ -92,7 +92,10 @@
   }
  ],
  "row_format": "Dynamic",
+ "search_fields": "department_id",
+ "show_title_field_in_link": 1,
  "sort_field": "modified",
  "sort_order": "DESC",
- "states": []
+ "states": [],
+ "title_field": "department_name"
 }

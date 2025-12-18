@@ -1,0 +1,25 @@
+{
+ "doctype": "DocType",
+ "name": "Course Prerequisite",
+ "module": "SLCM",
+ "istable": 1,
+ "engine": "InnoDB",
+
+ "field_order": [
+  "prerequisite_course"
+ ],
+
+ "fields": [
+  {
+   "fieldname": "prerequisite_course",
+   "label": "Prerequisite Course",
+   "fieldtype": "Link",
+   "options": "Course",
+   "reqd": 1
+  }
+ ],
+
+ "row_format": "Dynamic",
+ "sort_field": "idx",
+ "sort_order": "ASC"
+}
