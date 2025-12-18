@@ -1,0 +1,70 @@
+{
+ "charts": [],
+ "content": "[{\"id\":\"ampnC-pZge\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">SLCM</span>\",\"col\":12}},{\"id\":\"EyqPZkdBbu\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Academic Year\",\"col\":3}},{\"id\":\"ZmY-5G2r84\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Academic Term\",\"col\":3}},{\"id\":\"PjGv61s6wJ\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Course\",\"col\":3}},{\"id\":\"u2ihXWwuOA\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Program\",\"col\":3}},{\"id\":\"ADelPmjiYb\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Program Enrollment\",\"col\":3}}]",
+ "creation": "2025-12-18 09:29:30.795332",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "education",
+ "idx": 0,
+ "indicator_color": "green",
+ "is_hidden": 0,
+ "label": "SLCM",
+ "links": [],
+ "modified": "2025-12-18 17:17:41.112380",
+ "modified_by": "Administrator",
+ "module": "SLCM",
+ "name": "SLCM",
+ "number_cards": [],
+ "owner": "Administrator",
+ "parent_page": "",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [],
+ "sequence_id": 1.0,
+ "shortcuts": [
+  {
+   "color": "Pink",
+   "doc_view": "List",
+   "label": "Course",
+   "link_to": "Course",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Yellow",
+   "doc_view": "List",
+   "label": "Program",
+   "link_to": "Program",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Pink",
+   "doc_view": "List",
+   "label": "Academic Year",
+   "link_to": "Academic Year",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Green",
+   "doc_view": "List",
+   "label": "Program Enrollment",
+   "link_to": "Program Enrollment",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Pink",
+   "doc_view": "List",
+   "label": "Academic Term",
+   "link_to": "Academic Term",
+   "stats_filter": "[]",
+   "type": "DocType"
+  }
+ ],
+ "title": "SLCM"
+}
