@@ -1,7 +1,6 @@
 {
  "actions": [],
- "allow_rename": 1,
- "autoname": "field:faculty_id",
+ "autoname": "autoincrement",
  "creation": "2025-12-16 10:43:12.345265",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -21,16 +20,18 @@
  ],
  "fields": [
   {
+   "description": "Unique faculty code",
    "fieldname": "faculty_id",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "Faculty ID",
    "reqd": 1,
-   "unique": 1,
-   "description": "Unique faculty code"
+   "unique": 1
   },
   {
    "fieldname": "first_name",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "First Name",
    "reqd": 1
   },
@@ -42,6 +43,7 @@
   {
    "fieldname": "email",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "Email",
    "options": "Email",
    "reqd": 1
@@ -55,36 +57,38 @@
   {
    "fieldname": "department",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Department",
    "options": "Department",
    "reqd": 1
   },
   {
+   "description": "Assistant Professor, Lecturer, etc.",
    "fieldname": "designation",
    "fieldtype": "Data",
    "label": "Designation",
-   "reqd": 1,
-   "description": "Assistant Professor, Lecturer, etc."
+   "reqd": 1
   },
   {
+   "description": "HOD or Senior Faculty",
    "fieldname": "reporting_to",
    "fieldtype": "Link",
    "label": "Reporting To",
-   "options": "Faculty",
-   "description": "HOD or Senior Faculty"
+   "options": "Faculty"
   },
   {
+   "default": "0",
    "fieldname": "is_hod",
    "fieldtype": "Check",
    "label": "Is HOD"
   },
   {
+   "default": "Active",
    "fieldname": "status",
    "fieldtype": "Select",
    "label": "Status",
    "options": "Active\nInactive",
-   "reqd": 1,
-   "default": "Active"
+   "reqd": 1
   },
   {
    "fieldname": "qualification",
@@ -100,10 +104,11 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-12-16 10:43:32.365155",
+ "modified": "2025-12-18 09:52:25.384750",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "Faculty",
+ "naming_rule": "Autoincrement",
  "owner": "Administrator",
  "permissions": [
   {
@@ -120,7 +125,10 @@
   }
  ],
  "row_format": "Dynamic",
+ "search_fields": "faculty_id",
+ "show_title_field_in_link": 1,
  "sort_field": "modified",
  "sort_order": "DESC",
- "states": []
+ "states": [],
+ "title_field": "first_name"
 }
