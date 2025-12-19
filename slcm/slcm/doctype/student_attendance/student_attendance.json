@@ -1,14 +1,13 @@
 {
  "actions": [],
  "allow_import": 1,
- "autoname": "naming_series:",
+ "autoname": "field:student",
  "creation": "2025-12-18 17:53:07.624015",
  "default_view": "List",
  "doctype": "DocType",
  "document_type": "Document",
  "engine": "InnoDB",
  "field_order": [
-  "naming_series",
   "student",
   "student_name",
   "student_mobile_number",
@@ -19,15 +18,9 @@
   "status",
   "leave_application",
   "amended_from",
-  "data_nvfk"
+  "program"
  ],
  "fields": [
-  {
-   "fieldname": "naming_series",
-   "fieldtype": "Select",
-   "label": "Series",
-   "options": "EDU-ATT-.YYYY.-"
-  },
   {
    "fieldname": "student",
    "fieldtype": "Data",
@@ -36,7 +29,7 @@
    "label": "Student",
    "options": "Student",
    "reqd": 1,
-   "search_index": 1
+   "unique": 1
   },
   {
    "fetch_from": "student.student_name",
@@ -54,14 +47,14 @@
   },
   {
    "fieldname": "course_schedule",
-   "fieldtype": "Data",
+   "fieldtype": "Link",
    "in_list_view": 1,
    "label": "Course Schedule",
    "options": "Course Schedule"
   },
   {
    "fieldname": "student_group",
-   "fieldtype": "Data",
+   "fieldtype": "Link",
    "in_global_search": 1,
    "in_standard_filter": 1,
    "label": "Student Group",
@@ -91,7 +84,7 @@
   },
   {
    "fieldname": "leave_application",
-   "fieldtype": "Data",
+   "fieldtype": "Link",
    "label": "Leave Application",
    "options": "Student Leave Applications",
    "read_only": 1
@@ -106,13 +99,6 @@
    "read_only": 1
   },
   {
-   "fetch_from": "student_group.program",
-   "fieldname": "data_nvfk",
-   "fieldtype": "Data",
-   "label": "Program",
-   "options": "Program"
-  },
-  {
    "fieldname": "amended_from",
    "fieldtype": "Data",
    "label": "Amended From",
@@ -120,16 +106,23 @@
    "options": "Student Attendance two",
    "print_hide": 1,
    "read_only": 1
+  },
+  {
+   "fetch_from": "student_group.program",
+   "fieldname": "program",
+   "fieldtype": "Link",
+   "label": "Program",
+   "options": "Program"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-12-18 18:17:39.094301",
+ "modified": "2025-12-19 12:26:03.346243",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "Student Attendance",
- "naming_rule": "By \"Naming Series\" field",
+ "naming_rule": "By fieldname",
  "owner": "Administrator",
  "permissions": [
   {
