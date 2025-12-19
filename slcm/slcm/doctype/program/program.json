@@ -13,8 +13,6 @@
   "hero_image",
   "column_break_3",
   "program_abbreviation",
-  "academic_year",
-  "academic_term",
   "section_break_xbux",
   "table_fela",
   "connections_tab"
@@ -66,27 +64,42 @@
    "fieldname": "table_fela",
    "fieldtype": "Table",
    "options": "Program Course"
-  },
-  {
-   "fieldname": "academic_year",
-   "fieldtype": "Link",
-   "label": "Academic Year",
-   "options": "Academic Year"
-  },
-  {
-   "fieldname": "academic_term",
-   "fieldtype": "Link",
-   "label": "Academic Term",
-   "options": "Academic Term"
   }
  ],
  "image_field": "hero_image",
  "links": [],
- "modified": "2025-12-19 10:36:57.956827",
+ "modified": "2025-12-18 12:46:54.748272",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "Program",
  "naming_rule": "By fieldname",
+ "allow_rename": 1,
+ "creation": "2025-12-16 15:46:38.668535",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "name1",
+  "course_name"
+ ],
+ "fields": [
+  {
+   "fieldname": "name1",
+   "fieldtype": "Data",
+   "label": "Name"
+  },
+  {
+   "fieldname": "course_name",
+   "fieldtype": "Data",
+   "label": "Course name"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-12-16 15:50:08.606213",
+ "modified_by": "Administrator",
+ "module": "SLCM",
+ "name": "Program",
  "owner": "Administrator",
  "permissions": [
   {
@@ -105,6 +118,7 @@
  "row_format": "Dynamic",
  "search_fields": "program_name",
  "show_name_in_global_search": 1,
+ "rows_threshold_for_grid_search": 20,
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": []

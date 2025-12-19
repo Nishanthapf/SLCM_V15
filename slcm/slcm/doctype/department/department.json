@@ -1,6 +1,6 @@
 {
  "actions": [],
- "autoname": "field:department_name",
+ "autoname": "autoincrement",
  "creation": "2025-12-16 10:55:35.738754",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -28,14 +28,12 @@
    "fieldtype": "Data",
    "in_list_view": 1,
    "label": "Department Name",
-   "reqd": 1,
-   "unique": 1
+   "reqd": 1
   },
   {
    "description": "Current Head of Department",
    "fieldname": "hod",
    "fieldtype": "Link",
-   "hidden": 1,
    "label": "Head of Department",
    "options": "Faculty"
   },
@@ -73,11 +71,11 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-12-19 10:17:31.945545",
+ "modified": "2025-12-18 09:58:40.107927",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "Department",
- "naming_rule": "By fieldname",
+ "naming_rule": "Autoincrement",
  "owner": "Administrator",
  "permissions": [
   {
