@@ -13,8 +13,8 @@
   "academic_term",
   "program",
   "batch",
-  "student_category",
   "course",
+  "student_category",
   "students_section",
   "get_students",
   "students",
@@ -61,6 +61,7 @@
    "options": "Program"
   },
   {
+   "depends_on": "eval:doc.group_based_on==\"Batch\"",
    "fieldname": "batch",
    "fieldtype": "Link",
    "label": "Batch",
@@ -73,6 +74,7 @@
    "options": "Student Category"
   },
   {
+   "depends_on": "eval:doc.group_based_on==\"Course\"",
    "fieldname": "course",
    "fieldtype": "Link",
    "label": "Course",
@@ -109,7 +111,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-12-18 18:37:38.955462",
+ "modified": "2025-12-19 11:32:50.338051",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "Student Group",
