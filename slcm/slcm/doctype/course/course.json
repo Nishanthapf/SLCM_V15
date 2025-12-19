@@ -5,10 +5,14 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "course_code",
   "course_name",
   "department",
+  "credit_value",
+  "course_type",
   "column_break_hzli",
   "description",
+  "status",
   "section_break_efuf",
   "topics"
  ],
@@ -43,12 +47,38 @@
    "fieldtype": "Table",
    "label": "Topics",
    "options": "Course Topic"
+  },
+  {
+   "fieldname": "course_code",
+   "fieldtype": "Data",
+   "label": "Course Code"
+  },
+  {
+   "fieldname": "credit_value",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Credit Value"
+  },
+  {
+   "fieldname": "course_type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Course Type",
+   "options": "\nCore\nElective"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "\nActive\nInactive"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-12-18 11:58:17.914078",
+ "modified": "2025-12-19 14:15:55.483355",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "Course",

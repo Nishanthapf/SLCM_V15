@@ -5,5 +5,5 @@
 from frappe.model.document import Document
 
 
-class ProgramEnrollment(Document):
+class CourseEnrollment(Document):
 	pass

@@ -13,6 +13,7 @@
   "program",
   "academic_year",
   "academic_term",
+  "faculty_advisor",
   "enrolled_courses_section",
   "table_hxbo"
  ],
@@ -64,15 +65,21 @@
    "fieldname": "table_hxbo",
    "fieldtype": "Table",
    "options": "Program Enrollment Course"
+  },
+  {
+   "fieldname": "faculty_advisor",
+   "fieldtype": "Link",
+   "label": "Faculty Advisor",
+   "options": "Faculty"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-12-18 16:20:46.693889",
+ "modified": "2025-12-19 14:38:02.601571",
  "modified_by": "Administrator",
  "module": "SLCM",
- "name": "Program Enrollment",
+ "name": "Student Enrollment",
  "naming_rule": "Expression (old style)",
  "owner": "Administrator",
  "permissions": [

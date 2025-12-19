@@ -8,13 +8,17 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "program_id",
   "program_name",
   "department",
   "hero_image",
   "column_break_3",
-  "program_abbreviation",
+  "program_level",
+  "program_duration",
   "academic_year",
   "academic_term",
+  "graduation_credits",
+  "program_status",
   "section_break_xbux",
   "table_fela",
   "connections_tab"
@@ -47,12 +51,6 @@
    "fieldtype": "Column Break"
   },
   {
-   "fieldname": "program_abbreviation",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "label": "Program Abbreviation"
-  },
-  {
    "fieldname": "connections_tab",
    "fieldtype": "Tab Break",
    "label": "Connections",
@@ -78,11 +76,39 @@
    "fieldtype": "Link",
    "label": "Academic Term",
    "options": "Academic Term"
+  },
+  {
+   "fieldname": "program_id",
+   "fieldtype": "Data",
+   "label": "Program Code"
+  },
+  {
+   "fieldname": "program_level",
+   "fieldtype": "Select",
+   "label": "Level of Study",
+   "options": "\nUG\nPG"
+  },
+  {
+   "fieldname": "program_duration",
+   "fieldtype": "Int",
+   "label": "Program Duration",
+   "reqd": 1
+  },
+  {
+   "fieldname": "graduation_credits",
+   "fieldtype": "Int",
+   "label": "Graduation Credits"
+  },
+  {
+   "fieldname": "program_status",
+   "fieldtype": "Select",
+   "label": "Program Status",
+   "options": "\nActive\nInactive"
   }
  ],
  "image_field": "hero_image",
  "links": [],
- "modified": "2025-12-19 10:36:57.956827",
+ "modified": "2025-12-19 12:44:16.717538",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "Program",

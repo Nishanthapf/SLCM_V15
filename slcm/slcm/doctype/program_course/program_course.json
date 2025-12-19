@@ -7,7 +7,10 @@
  "engine": "InnoDB",
  "field_order": [
   "course",
-  "course_name"
+  "course_name",
+  "course_type",
+  "course_status",
+  "credit_value"
  ],
  "fields": [
   {
@@ -26,13 +29,39 @@
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Course Name"
+  },
+  {
+   "fetch_from": "course.course_type",
+   "fieldname": "course_type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Course Type",
+   "options": "\nCore\nElective"
+  },
+  {
+   "fetch_from": "course.status",
+   "fieldname": "course_status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Course Status",
+   "options": "\nActive\nInactive"
+  },
+  {
+   "fetch_from": "course.credit_value",
+   "fieldname": "credit_value",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Credit Value"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-12-18 12:50:51.797361",
+ "modified": "2025-12-19 15:20:12.194369",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "Program Course",
