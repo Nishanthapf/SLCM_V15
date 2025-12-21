@@ -1,0 +1,118 @@
+{
+ "actions": [],
+ "autoname": "autoincrement",
+ "creation": "2025-12-21 10:03:48.316379",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "section_application",
+  "student",
+  "opportunity",
+  "applied_on",
+  "resume_used",
+  "section_status",
+  "application_status",
+  "remarks"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_application",
+   "fieldtype": "Section Break",
+   "label": "Application Details"
+  },
+  {
+   "fieldname": "student",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Student",
+   "options": "Student Master",
+   "reqd": 1
+  },
+  {
+   "fieldname": "opportunity",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Placement Opportunity",
+   "options": "Placement Opportunity",
+   "reqd": 1
+  },
+  {
+   "default": "now",
+   "fieldname": "applied_on",
+   "fieldtype": "Datetime",
+   "in_list_view": 1,
+   "label": "Applied On",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "resume_used",
+   "fieldtype": "Attach",
+   "label": "Resume Used",
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_status",
+   "fieldtype": "Section Break",
+   "label": "Application Status"
+  },
+  {
+   "default": "Applied",
+   "fieldname": "application_status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Status",
+   "options": "Applied\nShortlisted\nRejected",
+   "reqd": 1
+  },
+  {
+   "fieldname": "remarks",
+   "fieldtype": "Small Text",
+   "label": "Remarks"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-12-21 10:33:05.714647",
+ "modified_by": "Administrator",
+ "module": "SLCM",
+ "name": "Placement Application",
+ "naming_rule": "Autoincrement",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "read": 1,
+   "role": "Student"
+  },
+  {
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "role": "Placement Officer",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "applied_on",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

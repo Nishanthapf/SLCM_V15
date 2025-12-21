@@ -1,0 +1,106 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "hash",
+ "creation": "2025-12-21 09:55:39.654204",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "editable_grid": 1,
+ "index_web_pages_for_search": 1,
+ "module": "SLCM",
+ "name": "Company Interaction",
+ "owner": "Administrator",
+ "track_changes": 1,
+ "row_format": "Dynamic",
+ "sort_field": "interaction_date",
+ "sort_order": "DESC",
+ "grid_page_length": 50,
+ "rows_threshold_for_grid_search": 20,
+
+ "field_order": [
+  "section_company",
+  "company",
+  "interaction_type",
+  "interaction_date",
+  "section_notes",
+  "notes",
+  "logged_by"
+ ],
+
+ "fields": [
+  {
+   "fieldname": "section_company",
+   "fieldtype": "Section Break",
+   "label": "Company Interaction Details"
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "options": "Company",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "interaction_type",
+   "fieldtype": "Select",
+   "label": "Interaction Type",
+   "options": "Call\nEmail\nMeeting",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "interaction_date",
+   "fieldtype": "Date",
+   "label": "Interaction Date",
+   "reqd": 1,
+   "default": "Today",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "section_notes",
+   "fieldtype": "Section Break",
+   "label": "Discussion Notes"
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Text",
+   "label": "Notes"
+  },
+  {
+   "fieldname": "logged_by",
+   "fieldtype": "Link",
+   "label": "Logged By",
+   "options": "User",
+   "reqd": 1,
+   "default": "frappe.session.user"
+  }
+ ],
+
+ "permissions": [
+  {
+   "role": "Placement Officer",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "print": 1,
+   "email": 1,
+   "export": 1,
+   "share": 1
+  },
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "print": 1,
+   "email": 1,
+   "export": 1,
+   "share": 1
+  }
+ ],
+
+ "states": []
+}
