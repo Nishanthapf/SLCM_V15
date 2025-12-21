@@ -1,0 +1,72 @@
+{
+ "actions": [],
+ "autoname": "autoincrement",
+ "creation": "2025-12-21 10:25:00",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "company_name",
+  "internship_role",
+  "duration",
+  "location",
+  "description"
+ ],
+ "fields": [
+  {
+   "columns": 2,
+   "fieldname": "company_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Company Name",
+   "reqd": 1
+  },
+  {
+   "columns": 2,
+   "fieldname": "internship_role",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Role / Title",
+   "reqd": 1
+  },
+  {
+   "columns": 2,
+   "description": "e.g., 2 Months / June\u2013July 2024",
+   "fieldname": "duration",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Duration"
+  },
+  {
+   "columns": 2,
+   "fieldname": "location",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Location"
+  },
+  {
+   "columns": 3,
+   "fieldname": "description",
+   "fieldtype": "Small Text",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Work Description"
+  }
+ ],
+ "istable": 1,
+ "links": [],
+ "modified": "2025-12-21 11:28:53.378203",
+ "modified_by": "Administrator",
+ "module": "SLCM",
+ "name": "Internship Record",
+ "naming_rule": "Autoincrement",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}
