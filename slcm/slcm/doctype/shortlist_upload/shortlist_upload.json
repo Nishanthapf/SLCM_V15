@@ -1,0 +1,95 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "format:{opportunity}-SHORTLIST-{creation}",
+ "creation": "2025-12-21 10:06:15.560541",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "editable_grid": 1,
+ "index_web_pages_for_search": 1,
+ "module": "SLCM",
+ "name": "Shortlist Upload",
+ "owner": "Administrator",
+ "track_changes": 1,
+ "row_format": "Dynamic",
+ "sort_field": "uploaded_on",
+ "sort_order": "DESC",
+ "grid_page_length": 50,
+ "rows_threshold_for_grid_search": 20,
+
+ "field_order": [
+  "section_shortlist",
+  "opportunity",
+  "shortlist_file",
+  "uploaded_on",
+  "uploaded_by"
+ ],
+
+ "fields": [
+  {
+   "fieldname": "section_shortlist",
+   "fieldtype": "Section Break",
+   "label": "Shortlist Details"
+  },
+  {
+   "fieldname": "opportunity",
+   "fieldtype": "Link",
+   "label": "Placement Opportunity",
+   "options": "Placement Opportunity",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "shortlist_file",
+   "fieldtype": "Attach",
+   "label": "Shortlist File",
+   "reqd": 1,
+   "description": "Upload Excel or PDF shortlist"
+  },
+  {
+   "fieldname": "uploaded_on",
+   "fieldtype": "Datetime",
+   "label": "Uploaded On",
+   "reqd": 1,
+   "default": "now",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "uploaded_by",
+   "fieldtype": "Link",
+   "label": "Uploaded By",
+   "options": "User",
+   "reqd": 1,
+   "default": "frappe.session.user",
+   "in_list_view": 1
+  }
+ ],
+
+ "permissions": [
+  {
+   "role": "Placement Officer",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "print": 1,
+   "email": 1,
+   "export": 1,
+   "share": 1
+  },
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "print": 1,
+   "email": 1,
+   "export": 1,
+   "share": 1
+  }
+ ],
+
+ "states": []
+}
