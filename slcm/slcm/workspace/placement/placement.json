@@ -1,0 +1,99 @@
+{
+ "charts": [],
+ "content": "[{\"id\":\"x_jIE_xYi3\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Placement</span>\",\"col\":12}},{\"id\":\"2ozJXuUPND\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Placement Applied\",\"col\":4}},{\"id\":\"djELUeRqoH\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Shortlisted\",\"col\":4}},{\"id\":\"g2kR7a_MAm\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Placement Rejected\",\"col\":4}},{\"id\":\"kKEowS_51x\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Company\",\"col\":3}},{\"id\":\"uFU_6xuoNf\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Placement Opportunity\",\"col\":3}},{\"id\":\"4fEU5B3Hgb\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Placement Application\",\"col\":3}},{\"id\":\"XPtNKbj_iR\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Shortlist Upload\",\"col\":3}},{\"id\":\"i6Zz0-ExFd\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Create Placement Event\",\"col\":3}},{\"id\":\"yX08LXEubR\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Student Placement Profile\",\"col\":3}},{\"id\":\"lqv_zjJrXI\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"J7CxI84mkf\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Workflow</b></span>\",\"col\":12}},{\"id\":\"6hT-54xS9S\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Student Placement Profile Creation\",\"col\":3}},{\"id\":\"KZ_CTBWEO9\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Company\",\"col\":3}}]",
+ "creation": "2025-12-21 10:20:15.714027",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "agriculture",
+ "idx": 0,
+ "indicator_color": "cyan",
+ "is_hidden": 0,
+ "label": "Placement",
+ "links": [],
+ "modified": "2025-12-22 09:17:54.580177",
+ "modified_by": "Administrator",
+ "module": "SLCM",
+ "name": "Placement",
+ "number_cards": [
+  {
+   "label": "Placement Applied",
+   "number_card_name": "Placement Applied"
+  },
+  {
+   "label": "Shortlisted",
+   "number_card_name": "Placement Shortlisted"
+  },
+  {
+   "label": "Placement Rejected",
+   "number_card_name": "Placement Rejected"
+  }
+ ],
+ "owner": "Administrator",
+ "parent_page": "",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [],
+ "sequence_id": 3.0,
+ "shortcuts": [
+  {
+   "color": "Pink",
+   "doc_view": "List",
+   "label": "Student Placement Profile",
+   "link_to": "Student Placement Profile",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Orange",
+   "doc_view": "List",
+   "label": "Shortlist Upload",
+   "link_to": "Shortlist Upload",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Yellow",
+   "doc_view": "List",
+   "label": "Create Placement Event",
+   "link_to": "Placement Event",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Green",
+   "doc_view": "List",
+   "label": "Student Placement Profile Creation",
+   "link_to": "Student Placement Profile",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Orange",
+   "doc_view": "List",
+   "label": "Placement Application",
+   "link_to": "Placement Application",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Company",
+   "link_to": "Company",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Cyan",
+   "doc_view": "List",
+   "label": "Placement Opportunity",
+   "link_to": "Placement Opportunity",
+   "stats_filter": "[]",
+   "type": "DocType"
+  }
+ ],
+ "title": "Placement"
+}

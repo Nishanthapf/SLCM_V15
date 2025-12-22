@@ -1,0 +1,70 @@
+{
+ "charts": [],
+ "content": "[{\"id\":\"iyWchzt7tl\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Enrollment</span>\",\"col\":12}},{\"id\":\"nfgNb0qRUr\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Department\",\"col\":3}},{\"id\":\"5OUQp2jSlz\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Program\",\"col\":3}},{\"id\":\"jqSIb1BBeY\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Course\",\"col\":3}},{\"id\":\"qoYuYt398x\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Faculty\",\"col\":3}},{\"id\":\"3kDMht5s_J\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Student Enrollment\",\"col\":3}}]",
+ "creation": "2025-12-19 14:42:09.692398",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "assign",
+ "idx": 0,
+ "indicator_color": "green",
+ "is_hidden": 0,
+ "label": "Enrollment",
+ "links": [],
+ "modified": "2025-12-22 09:17:43.194243",
+ "modified_by": "Administrator",
+ "module": "SLCM",
+ "name": "Enrollment",
+ "number_cards": [],
+ "owner": "Administrator",
+ "parent_page": "",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [],
+ "sequence_id": 2.0,
+ "shortcuts": [
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Department",
+   "link_to": "Department",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Program",
+   "link_to": "Program",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Course",
+   "link_to": "Course",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Faculty",
+   "link_to": "Faculty",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Green",
+   "doc_view": "List",
+   "label": "Student Enrollment",
+   "link_to": "Student Enrollment",
+   "stats_filter": "[]",
+   "type": "DocType"
+  }
+ ],
+ "title": "Enrollment"
+}
