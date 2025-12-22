@@ -6,19 +6,18 @@ from frappe.model.document import Document
 
 
 class CompanyContact(Document):
+	def before_save(self):
+		"""
+		Ensure only one primary contact exists per company
+		"""
 
-    def before_save(self):
-        """
-        Ensure only one primary contact exists per company
-        """
-
-        if self.primary_contact:
-            frappe.db.sql(
-                """
+		if self.primary_contact:
+			frappe.db.sql(
+				"""
                 UPDATE `tabCompany Contact`
                 SET primary_contact = 0
                 WHERE company = %s
                   AND name != %s
                 """,
-                (self.company, self.name)
-            )
+				(self.company, self.name),
+			)

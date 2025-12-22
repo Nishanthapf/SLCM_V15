@@ -19,14 +19,14 @@ from frappe.model.document import Document
 
 
 class PlacementOpportunity(Document):
+	def validate(self):
+		"""
+		Validate application date range
+		"""
+		if self.application_start and self.application_end:
+			if self.application_end <= self.application_start:
+				frappe.throw("Application End must be after Application Start")
 
-    def validate(self):
-        """
-        Validate application date range
-        """
-        if self.application_start and self.application_end:
-            if self.application_end <= self.application_start:
-                frappe.throw("Application End must be after Application Start")
 
 # def on_update(self):
 #     if self.application_end < frappe.utils.now_datetime():

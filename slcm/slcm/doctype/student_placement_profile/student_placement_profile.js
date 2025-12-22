@@ -6,14 +6,11 @@
 
 // 	},
 // });
-frappe.ui.form.on('Student Placement Profile', {
-  refresh(frm) {
-    if (
-      frm.doc.profile_status === 'Locked' &&
-      frappe.user.has_role('Student')
-    ) {
-      frm.set_read_only();
-      frm.disable_save();
-    }
-  }
+frappe.ui.form.on("Student Placement Profile", {
+	refresh(frm) {
+		if (frm.doc.profile_status === "Locked" && frappe.user.has_role("Student")) {
+			frm.set_read_only();
+			frm.disable_save();
+		}
+	},
 });

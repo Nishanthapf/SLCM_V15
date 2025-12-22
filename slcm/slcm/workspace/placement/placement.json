@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"x_jIE_xYi3\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Placement</span>\",\"col\":12}},{\"id\":\"2ozJXuUPND\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Placement Applied\",\"col\":4}},{\"id\":\"djELUeRqoH\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Shortlisted\",\"col\":4}},{\"id\":\"g2kR7a_MAm\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Placement Rejected\",\"col\":4}},{\"id\":\"kKEowS_51x\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Company\",\"col\":3}},{\"id\":\"uFU_6xuoNf\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Placement Opportunity\",\"col\":3}},{\"id\":\"4fEU5B3Hgb\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Placement Application\",\"col\":3}},{\"id\":\"XPtNKbj_iR\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Shortlist Upload\",\"col\":3}},{\"id\":\"i6Zz0-ExFd\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Create Placement Event\",\"col\":3}},{\"id\":\"yX08LXEubR\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Student Placement Profile\",\"col\":3}},{\"id\":\"lqv_zjJrXI\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"J7CxI84mkf\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Workflow</b></span>\",\"col\":12}},{\"id\":\"6hT-54xS9S\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Student Placement Profile Creation\",\"col\":3}},{\"id\":\"KZ_CTBWEO9\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Company\",\"col\":3}}]",
+ "content": "[{\"id\":\"x_jIE_xYi3\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Placement</span>\",\"col\":12}},{\"id\":\"2ozJXuUPND\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Placement Applied\",\"col\":4}},{\"id\":\"djELUeRqoH\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Shortlisted\",\"col\":4}},{\"id\":\"g2kR7a_MAm\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Placement Rejected\",\"col\":4}},{\"id\":\"kKEowS_51x\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Company\",\"col\":3}},{\"id\":\"uFU_6xuoNf\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Placement Opportunity\",\"col\":3}},{\"id\":\"4fEU5B3Hgb\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Placement Application\",\"col\":3}},{\"id\":\"XPtNKbj_iR\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Shortlist Upload\",\"col\":3}},{\"id\":\"i6Zz0-ExFd\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Create Placement Event\",\"col\":3}},{\"id\":\"yX08LXEubR\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Student Placement Profile\",\"col\":3}},{\"id\":\"lqv_zjJrXI\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"J7CxI84mkf\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Workflow</b></span>\",\"col\":12}},{\"id\":\"6hT-54xS9S\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Student Placement Profile Creation\",\"col\":4}},{\"id\":\"KZ_CTBWEO9\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Company\",\"col\":3}},{\"id\":\"sUcZ-c2HRL\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Company Contact\",\"col\":3}},{\"id\":\"MUkKexZM7p\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Company Interaction\",\"col\":3}},{\"id\":\"gsLM7_Qd3K\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Placement Opportunity\",\"col\":3}}]",
  "creation": "2025-12-21 10:20:15.714027",
  "custom_blocks": [],
  "docstatus": 0,
@@ -13,7 +13,7 @@
  "is_hidden": 0,
  "label": "Placement",
  "links": [],
- "modified": "2025-12-22 09:17:54.580177",
+ "modified": "2025-12-22 10:19:50.745335",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "Placement",
@@ -43,6 +43,14 @@
    "doc_view": "List",
    "label": "Student Placement Profile",
    "link_to": "Student Placement Profile",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Placement Opportunity",
+   "link_to": "Placement Opportunity",
    "stats_filter": "[]",
    "type": "DocType"
   },
@@ -79,18 +87,26 @@
    "type": "DocType"
   },
   {
-   "color": "Grey",
+   "color": "Pink",
    "doc_view": "List",
-   "label": "Company",
-   "link_to": "Company",
+   "label": "Company Contact",
+   "link_to": "Company Contact",
    "stats_filter": "[]",
    "type": "DocType"
   },
   {
-   "color": "Cyan",
+   "color": "Grey",
    "doc_view": "List",
-   "label": "Placement Opportunity",
-   "link_to": "Placement Opportunity",
+   "label": "Company Interaction",
+   "link_to": "Company Interaction",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Company",
+   "link_to": "Company",
    "stats_filter": "[]",
    "type": "DocType"
   }

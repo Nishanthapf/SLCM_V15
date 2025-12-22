@@ -1,22 +1,11 @@
 {
  "actions": [],
  "allow_rename": 1,
- "autoname": "hash",
+ "autoname": "field:company",
  "creation": "2025-12-21 09:55:39.654204",
  "doctype": "DocType",
- "engine": "InnoDB",
  "editable_grid": 1,
- "index_web_pages_for_search": 1,
- "module": "SLCM",
- "name": "Company Interaction",
- "owner": "Administrator",
- "track_changes": 1,
- "row_format": "Dynamic",
- "sort_field": "interaction_date",
- "sort_order": "DESC",
- "grid_page_length": 50,
- "rows_threshold_for_grid_search": 20,
-
+ "engine": "InnoDB",
  "field_order": [
   "section_company",
   "company",
@@ -26,7 +15,6 @@
   "notes",
   "logged_by"
  ],
-
  "fields": [
   {
    "fieldname": "section_company",
@@ -36,26 +24,27 @@
   {
    "fieldname": "company",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Company",
    "options": "Company",
    "reqd": 1,
-   "in_list_view": 1
+   "unique": 1
   },
   {
    "fieldname": "interaction_type",
    "fieldtype": "Select",
+   "in_list_view": 1,
    "label": "Interaction Type",
    "options": "Call\nEmail\nMeeting",
-   "reqd": 1,
-   "in_list_view": 1
+   "reqd": 1
   },
   {
+   "default": "Today",
    "fieldname": "interaction_date",
    "fieldtype": "Date",
+   "in_list_view": 1,
    "label": "Interaction Date",
-   "reqd": 1,
-   "default": "Today",
-   "in_list_view": 1
+   "reqd": 1
   },
   {
    "fieldname": "section_notes",
@@ -68,39 +57,51 @@
    "label": "Notes"
   },
   {
+   "default": "frappe.session.user",
    "fieldname": "logged_by",
    "fieldtype": "Link",
    "label": "Logged By",
    "options": "User",
-   "reqd": 1,
-   "default": "frappe.session.user"
+   "reqd": 1
   }
  ],
-
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-12-22 10:11:29.311355",
+ "modified_by": "Administrator",
+ "module": "SLCM",
+ "name": "Company Interaction",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
  "permissions": [
   {
-   "role": "Placement Officer",
-   "read": 1,
-   "write": 1,
    "create": 1,
    "delete": 1,
-   "print": 1,
    "email": 1,
    "export": 1,
-   "share": 1
+   "print": 1,
+   "read": 1,
+   "role": "Placement Officer",
+   "share": 1,
+   "write": 1
   },
   {
-   "role": "System Manager",
-   "read": 1,
-   "write": 1,
    "create": 1,
    "delete": 1,
-   "print": 1,
    "email": 1,
    "export": 1,
-   "share": 1
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
   }
  ],
-
- "states": []
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "interaction_date",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
 }
