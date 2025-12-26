@@ -1,119 +1,135 @@
 {
- "actions": [],
- "autoname": "field:cohort_name",
- "creation": "2025-12-23 10:11:24.881085",
- "doctype": "DocType",
- "engine": "InnoDB",
- "field_order": [
-  "cohort_code",
-  "cohort_name",
-  "program",
-  "term_name",
-  "academic_year",
-  "start_date",
-  "end_date",
-  "term_weeks",
-  "status",
-  "description"
- ],
- "fields": [
-  {
-   "fieldname": "cohort_name",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "label": "Cohort Name",
-   "reqd": 1,
-   "unique": 1
-  },
-  {
-   "fieldname": "cohort_code",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "label": "Cohort Code",
-   "reqd": 1,
-   "unique": 1
-  },
-  {
-   "fieldname": "program",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "label": "Program",
-   "options": "Program",
-   "reqd": 1
-  },
-  {
-   "fieldname": "term_name",
-   "fieldtype": "Select",
-   "in_list_view": 1,
-   "label": "Term Name",
-   "options": "Semester 1\nSemester 2\nSemester 3\nSemester 4\nSemester 5\nSemester 6\nSemester 7\nSemester 8\nTrimester 1\nTrimester 2\nTrimester 3",
-   "reqd": 1
-  },
-  {
-   "fieldname": "academic_year",
-   "fieldtype": "Link",
-   "label": "Academic Year",
-   "options": "Academic Year",
-   "reqd": 1
-  },
-  {
-   "fieldname": "start_date",
-   "fieldtype": "Date",
-   "label": "Start Date",
-   "reqd": 1
-  },
-  {
-   "fieldname": "end_date",
-   "fieldtype": "Date",
-   "label": "End Date",
-   "reqd": 1
-  },
-  {
-   "description": "Automatically calculated from Start Date and End Date",
-   "fieldname": "term_weeks",
-   "fieldtype": "Int",
-   "label": "Term Duration (Weeks)",
-   "read_only": 1
-  },
-  {
-   "default": "Planned",
-   "fieldname": "status",
-   "fieldtype": "Select",
-   "label": "Status",
-   "options": "Planned\nActive\nCompleted\nInactive",
-   "reqd": 1
-  },
-  {
-   "fieldname": "description",
-   "fieldtype": "Small Text",
-   "label": "Description"
-  }
- ],
- "links": [],
- "modified": "2025-12-23 10:33:29.732970",
- "modified_by": "Administrator",
- "module": "SLCM",
- "name": "Cohort",
- "naming_rule": "By fieldname",
- "owner": "Administrator",
- "permissions": [
-  {
-   "create": 1,
-   "delete": 1,
-   "email": 1,
-   "export": 1,
-   "print": 1,
-   "read": 1,
-   "report": 1,
-   "role": "System Manager",
-   "share": 1,
-   "write": 1
-  }
- ],
- "row_format": "Dynamic",
- "sort_field": "modified",
- "sort_order": "DESC",
- "states": []
+  "doctype": "DocType",
+  "name": "Cohort",
+  "module": "SLCM",
+  "autoname": "field:cohort_name",
+  "allow_rename": 1,
+  "naming_rule": "By fieldname",
+  "title_field": "cohort_name",
+
+  "field_order": [
+    "cohort_code",
+    "cohort_name",
+    "program",
+    "academic_year",
+    "term_name",
+    "section_schedule",
+    "start_date",
+    "end_date",
+    "term_days",
+    "term_weeks",
+    "section_status",
+    "status",
+    "description"
+  ],
+
+  "fields": [
+
+    {
+      "fieldname": "cohort_code",
+      "fieldtype": "Data",
+      "label": "Cohort Code",
+      "reqd": 1,
+      "unique": 1,
+      "in_list_view": 1
+    },
+    {
+      "fieldname": "cohort_name",
+      "fieldtype": "Data",
+      "label": "Cohort Name",
+      "reqd": 1,
+      "unique": 1,
+      "in_list_view": 1
+    },
+    {
+      "fieldname": "program",
+      "fieldtype": "Link",
+      "label": "Program",
+      "options": "Program",
+      "reqd": 1,
+      "in_list_view": 1
+    },
+    {
+      "fieldname": "academic_year",
+      "fieldtype": "Link",
+      "label": "Academic Year",
+      "options": "Academic Year",
+      "reqd": 1
+    },
+    {
+      "fieldname": "term_name",
+      "fieldtype": "Select",
+      "label": "Term Name",
+      "options": "Semester 1\nSemester 2\nSemester 3\nSemester 4\nSemester 5\nSemester 6\nSemester 7\nSemester 8\nTrimester 1\nTrimester 2\nTrimester 3",
+      "reqd": 1
+    },
+
+    {
+      "fieldname": "section_schedule",
+      "fieldtype": "Section Break",
+      "label": "Term Schedule"
+    },
+    {
+      "fieldname": "start_date",
+      "fieldtype": "Date",
+      "label": "Term Start Date",
+      "reqd": 1
+    },
+    {
+      "fieldname": "end_date",
+      "fieldtype": "Date",
+      "label": "Term End Date",
+      "reqd": 1
+    },
+    {
+      "fieldname": "term_days",
+      "fieldtype": "Int",
+      "label": "Term Duration (Days)",
+      "read_only": 1
+    },
+    {
+      "fieldname": "term_weeks",
+      "fieldtype": "Int",
+      "label": "Term Duration (Weeks)",
+      "read_only": 1
+    },
+
+    {
+      "fieldname": "section_status",
+      "fieldtype": "Section Break",
+      "label": "Status & Notes"
+    },
+    {
+      "fieldname": "status",
+      "fieldtype": "Select",
+      "label": "Status",
+      "options": "Planned\nActive\nCompleted\nInactive",
+      "default": "Planned",
+      "reqd": 1
+    },
+    {
+      "fieldname": "description",
+      "fieldtype": "Small Text",
+      "label": "Description"
+    }
+  ],
+
+  "permissions": [
+    {
+      "role": "System Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "delete": 1,
+      "print": 1,
+      "email": 1,
+      "export": 1,
+      "report": 1,
+      "share": 1
+    }
+  ],
+
+  "row_format": "Dynamic",
+  "sort_field": "modified",
+  "sort_order": "DESC"
 }
-
-

@@ -1,0 +1,54 @@
+{
+  "doctype": "DocType",
+  "name": "Student Enrollment Course",
+  "module": "SLCM",
+  "istable": 1,
+  "editable_grid": 1,
+
+  "field_order": [
+    "course_offering",
+    "course",
+    "credits",
+    "status"
+  ],
+
+  "fields": [
+    {
+      "fieldname": "course_offering",
+      "fieldtype": "Link",
+      "label": "Course Offering",
+      "options": "Course Offering",
+      "reqd": 1,
+      "in_list_view": 1
+    },
+    {
+      "fieldname": "course",
+      "fieldtype": "Link",
+      "label": "Course",
+      "options": "Course",
+      "fetch_from": "course_offering.course",
+      "read_only": 1,
+      "in_list_view": 1
+    },
+    {
+      "fieldname": "credits",
+      "fieldtype": "Int",
+      "label": "Credits",
+      "fetch_from": "course_offering.course.credits",
+      "read_only": 1
+    },
+    {
+      "fieldname": "status",
+      "fieldtype": "Select",
+      "label": "Enrollment Status",
+      "options": "Enrolled\nDropped",
+      "default": "Enrolled",
+      "reqd": 1,
+      "in_list_view": 1
+    }
+  ],
+
+  "row_format": "Dynamic",
+  "sort_field": "modified",
+  "sort_order": "DESC"
+}
