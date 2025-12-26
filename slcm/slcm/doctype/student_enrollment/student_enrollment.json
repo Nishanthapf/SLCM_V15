@@ -1,5 +1,6 @@
 {
  "actions": [],
+ "allow_import": 1,
  "allow_rename": 1,
  "autoname": "STU-.EM-.#####",
  "creation": "2025-12-18 11:20:50.320260",
@@ -14,6 +15,14 @@
   "academic_year",
   "academic_term",
   "faculty_advisor",
+  "section_break_gvlp",
+  "cohort_code",
+  "cohort_name",
+  "cohort_program",
+  "column_break_ysdh",
+  "term_name",
+  "cohort_academic_year",
+  "term_duration_weeks",
   "enrolled_courses_section",
   "table_hxbo"
  ],
@@ -46,12 +55,14 @@
   {
    "fieldname": "academic_year",
    "fieldtype": "Link",
+   "hidden": 1,
    "label": "Academic Year",
    "options": "Academic Year"
   },
   {
    "fieldname": "academic_term",
    "fieldtype": "Link",
+   "hidden": 1,
    "label": "Academic Term",
    "options": "Academic Term"
   },
@@ -71,12 +82,56 @@
    "fieldtype": "Link",
    "label": "Faculty Advisor",
    "options": "Faculty"
+  },
+  {
+   "fieldname": "section_break_gvlp",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "cohort_code",
+   "fieldtype": "Link",
+   "label": "Cohort Code",
+   "options": "Cohort"
+  },
+  {
+   "fetch_from": "cohort_code.cohort_name",
+   "fieldname": "cohort_name",
+   "fieldtype": "Data",
+   "label": "Cohort Name"
+  },
+  {
+   "fetch_from": "cohort_code.program",
+   "fieldname": "cohort_program",
+   "fieldtype": "Data",
+   "label": "Program"
+  },
+  {
+   "fetch_from": "cohort_code.term_name",
+   "fieldname": "term_name",
+   "fieldtype": "Data",
+   "label": "Term Name"
+  },
+  {
+   "fetch_from": "cohort_code.academic_year",
+   "fieldname": "cohort_academic_year",
+   "fieldtype": "Data",
+   "label": "Academic Year"
+  },
+  {
+   "fetch_from": "cohort_code.term_weeks",
+   "fieldname": "term_duration_weeks",
+   "fieldtype": "Int",
+   "label": "Term Duration (Weeks)"
+  },
+  {
+   "fieldname": "column_break_ysdh",
+   "fieldtype": "Column Break"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-12-19 14:38:02.601571",
+ "modified": "2025-12-23 14:14:55.432073",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "Student Enrollment",
