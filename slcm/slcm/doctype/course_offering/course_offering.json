@@ -8,6 +8,7 @@
   "offering_id",
   "course",
   "academinc_term",
+  "credits",
   "faculty",
   "maximum_students",
   "enrollment_status"
@@ -46,12 +47,17 @@
    "fieldtype": "Select",
    "label": "Enrollment Status",
    "options": "\nOpen\nClose"
+  },
+  {
+   "fieldname": "credits",
+   "fieldtype": "Data",
+   "label": "Credits"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-12-19 14:36:40.693875",
+ "modified": "2025-12-26 12:58:58.997858",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "Course Offering",
