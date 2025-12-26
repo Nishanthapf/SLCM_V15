@@ -1,0 +1,25 @@
+{
+  "doctype": "DocType",
+  "name": "Student Qualification",
+  "module": "SLCM",
+  "istable": 1,
+
+  "fields": [
+    {
+      "fieldname": "qualification",
+      "fieldtype": "Select",
+      "label": "Qualification",
+      "options": "10th\n12th\nUG\nPG"
+    },
+    {
+      "fieldname": "percentage",
+      "fieldtype": "Float",
+      "label": "Percentage / CGPA"
+    },
+    {
+      "fieldname": "year_of_passing",
+      "fieldtype": "Int",
+      "label": "Year of Passing"
+    }
+  ]
+}

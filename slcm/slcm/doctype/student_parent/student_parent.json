@@ -1,0 +1,70 @@
+{
+  "doctype": "DocType",
+  "name": "Student Parent",
+  "module": "SLCM",
+  "istable": 1,
+
+  "fields": [
+    {
+      "fieldname": "relation",
+      "fieldtype": "Select",
+      "label": "Relationship",
+      "options": "Father\nMother\nGuardian"
+    },
+    {
+      "fieldname": "first_name",
+      "fieldtype": "Data",
+      "label": "First Name"
+    },
+    {
+      "fieldname": "middle_name",
+      "fieldtype": "Data",
+      "label": "Middle Name"
+    },
+    {
+      "fieldname": "last_name",
+      "fieldtype": "Data",
+      "label": "Last Name"
+    },
+    {
+      "fieldname": "dob",
+      "fieldtype": "Date",
+      "label": "Date of Birth"
+    },
+    {
+      "fieldname": "phone",
+      "fieldtype": "Phone",
+      "label": "Phone Number"
+    },
+    {
+      "fieldname": "email",
+      "fieldtype": "Data",
+      "label": "Email ID"
+    },
+    {
+      "fieldname": "address",
+      "fieldtype": "Text",
+      "label": "Address"
+    },
+    {
+      "fieldname": "occupation",
+      "fieldtype": "Data",
+      "label": "Occupation"
+    },
+    {
+      "fieldname": "annual_income",
+      "fieldtype": "Currency",
+      "label": "Annual Income"
+    },
+    {
+      "fieldname": "pan",
+      "fieldtype": "Data",
+      "label": "PAN Number"
+    },
+    {
+      "fieldname": "aadhar",
+      "fieldtype": "Data",
+      "label": "Aadhaar Number"
+    }
+  ]
+}
