@@ -48,7 +48,8 @@
     {
       "fieldname": "academic_status",
       "fieldtype": "Select",
-      "label": "Academic Status"
+      "label": "Academic Status",
+      "options": "Active\nInactive"
     },
 
     {
