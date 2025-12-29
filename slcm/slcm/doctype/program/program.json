@@ -63,7 +63,7 @@
   {
    "fieldname": "table_fela",
    "fieldtype": "Table",
-   "options": "Student Enrollment Course"
+   "options": "Program Enrollment Course"
   },
   {
    "fieldname": "academic_year",
@@ -108,7 +108,7 @@
  ],
  "image_field": "hero_image",
  "links": [],
- "modified": "2025-12-29 09:56:11.818083",
+ "modified": "2025-12-29 12:42:29.647457",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "Program",

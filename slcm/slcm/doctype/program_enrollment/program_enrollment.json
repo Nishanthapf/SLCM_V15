@@ -14,43 +14,43 @@
  ],
  "fields": [
   {
-   "fieldname": "course_offering",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "label": "Course Offering",
-   "options": "Course Offering",
-   "reqd": 1
-  },
-  {
-   "fetch_from": "course_offering.course",
    "fieldname": "course",
    "fieldtype": "Link",
    "in_list_view": 1,
    "label": "Course",
    "options": "Course",
-   "read_only": 1
-  },
-  {
-   "fetch_from": "course_offering.course.credits",
-   "fieldname": "credits",
-   "fieldtype": "Int",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Credits",
-   "read_only": 1
-  },
-  {
-   "default": "Enrolled",
-   "fieldname": "status",
-   "fieldtype": "Select",
-   "in_list_view": 1,
-   "label": "Enrollment Status",
-   "options": "Enrolled\nDropped",
    "reqd": 1
   },
   {
-   "fieldname": "section_break_y7f2",
-   "fieldtype": "Section Break"
+   "fetch_from": "course.course_name",
+   "fieldname": "course_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Course Name",
+   "read_only": 1
+  },
+  {
+   "fieldname": "course_type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Course Type",
+   "options": "\nCore\nElective"
+  },
+  {
+   "fieldname": "course_status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Course Status",
+   "options": "\nActive\nInactive"
+  },
+  {
+   "fieldname": "credit_value",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Credit Value"
   }
  ],
  "grid_page_length": 50,
