@@ -68,12 +68,14 @@
   {
    "fieldname": "academic_year",
    "fieldtype": "Link",
+   "hidden": 1,
    "label": "Academic Year",
    "options": "Academic Year"
   },
   {
    "fieldname": "academic_term",
    "fieldtype": "Link",
+   "hidden": 1,
    "label": "Academic Term",
    "options": "Academic Term"
   },
@@ -91,12 +93,13 @@
   {
    "fieldname": "program_duration",
    "fieldtype": "Int",
-   "label": "Program Duration",
-   "reqd": 1
+   "hidden": 1,
+   "label": "Program Duration"
   },
   {
    "fieldname": "graduation_credits",
    "fieldtype": "Int",
+   "hidden": 1,
    "label": "Graduation Credits"
   },
   {
@@ -108,7 +111,7 @@
  ],
  "image_field": "hero_image",
  "links": [],
- "modified": "2025-12-29 12:42:29.647457",
+ "modified": "2025-12-29 12:54:37.600324",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "Program",
