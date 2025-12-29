@@ -1,7 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
- "autoname": "field:term_name",
+ "autoname": "autoincrement",
  "creation": "2025-12-18 11:49:11.173362",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -23,8 +23,7 @@
   {
    "fieldname": "term_name",
    "fieldtype": "Data",
-   "label": "Term Name",
-   "unique": 1
+   "label": "Term Name"
   },
   {
    "fieldname": "column_break_gvpt",
@@ -55,7 +54,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-12-18 16:01:25.080038",
+ "modified": "2025-12-29 14:23:31.780973",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "Academic Term",
