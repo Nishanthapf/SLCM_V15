@@ -1,10 +1,12 @@
 {
  "actions": [],
- "creation": "2025-12-27 10:08:08.235482",
+ "allow_rename": 1,
+ "creation": "2025-12-29 09:51:41.385757",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
+  "section_break_y7f2",
   "course_offering",
   "course",
   "credits",
@@ -45,17 +47,24 @@
    "label": "Enrollment Status",
    "options": "Enrolled\nDropped",
    "reqd": 1
+  },
+  {
+   "fieldname": "section_break_y7f2",
+   "fieldtype": "Section Break"
   }
  ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-12-29 10:13:03.705367",
+ "modified": "2025-12-29 10:14:49.694928",
  "modified_by": "Administrator",
  "module": "SLCM",
- "name": "Student Enrollment Course",
+ "name": "Program Enrollment",
  "owner": "Administrator",
  "permissions": [],
  "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": []

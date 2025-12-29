@@ -1,160 +1,161 @@
 {
-  "doctype": "DocType",
-  "name": "Student Enrollment",
-  "module": "SLCM",
-  "autoname": "ENR-.YYYY.-.#####",
-  "allow_rename": 1,
-  "allow_import": 1,
-  "title_field": "student_name",
-
-  "field_order": [
-    "section_student",
-    "student",
-    "student_name",
-    "enrollment_date",
-
-    "column_break_1",
-
-    "cohort",
-    "program",
-    "academic_year",
-    "term_name",
-    "term_duration_weeks",
-
-    "section_courses",
-    "courses",
-
-    "section_advisor",
-    "faculty_advisor",
-    "status",
-    "remarks"
-  ],
-
-  "fields": [
-
-    {
-      "fieldname": "section_student",
-      "fieldtype": "Section Break",
-      "label": "Student Details"
-    },
-    {
-      "fieldname": "student",
-      "fieldtype": "Link",
-      "label": "Student",
-      "options": "Student Master",
-      "reqd": 1
-    },
-    {
-      "fieldname": "student_name",
-      "fieldtype": "Data",
-      "label": "Student Name",
-      "fetch_from": "student.first_name",
-      "read_only": 1
-    },
-    {
-      "fieldname": "enrollment_date",
-      "fieldtype": "Date",
-      "label": "Enrollment Date",
-      "default": "Today",
-      "reqd": 1
-    },
-
-    {
-      "fieldname": "column_break_1",
-      "fieldtype": "Column Break"
-    },
-
-    {
-      "fieldname": "cohort",
-      "fieldtype": "Link",
-      "label": "Cohort",
-      "options": "Cohort",
-      "reqd": 1
-    },
-    {
-      "fieldname": "program",
-      "fieldtype": "Link",
-      "label": "Program",
-      "options": "Program",
-      "fetch_from": "cohort.program",
-      "read_only": 1
-    },
-    {
-      "fieldname": "academic_year",
-      "fieldtype": "Link",
-      "label": "Academic Year",
-      "options": "Academic Year",
-      "fetch_from": "cohort.academic_year",
-      "read_only": 1
-    },
-    {
-      "fieldname": "term_name",
-      "fieldtype": "Data",
-      "label": "Term Name",
-      "fetch_from": "cohort.term_name",
-      "read_only": 1
-    },
-    {
-      "fieldname": "term_duration_weeks",
-      "fieldtype": "Int",
-      "label": "Term Duration (Weeks)",
-      "fetch_from": "cohort.term_weeks",
-      "read_only": 1
-    },
-
-    {
-      "fieldname": "section_courses",
-      "fieldtype": "Section Break",
-      "label": "Enrolled Courses"
-    },
-    {
-      "fieldname": "courses",
-      "fieldtype": "Table",
-      "label": "Courses",
-      "options": "Student Enrollment Course"
-    },
-
-    {
-      "fieldname": "section_advisor",
-      "fieldtype": "Section Break",
-      "label": "Advisor & Status"
-    },
-    {
-      "fieldname": "faculty_advisor",
-      "fieldtype": "Link",
-      "label": "Faculty Advisor",
-      "options": "Faculty"
-    },
-    {
-      "fieldname": "status",
-      "fieldtype": "Select",
-      "label": "Enrollment Status",
-      "options": "Enrolled\nDropped\nCompleted",
-      "default": "Enrolled",
-      "reqd": 1
-    },
-    {
-      "fieldname": "remarks",
-      "fieldtype": "Small Text",
-      "label": "Remarks"
-    }
-  ],
-
-  "permissions": [
-    {
-      "role": "System Manager",
-      "read": 1,
-      "write": 1,
-      "create": 1,
-      "delete": 1,
-      "print": 1,
-      "email": 1,
-      "export": 1,
-      "report": 1,
-      "share": 1
-    }
-  ],
-
-  "sort_field": "modified",
-  "sort_order": "DESC"
+ "actions": [],
+ "allow_import": 1,
+ "allow_rename": 1,
+ "autoname": "ENR-.YYYY.-.#####",
+ "creation": "2025-12-27 10:08:07.751790",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "section_student",
+  "student",
+  "student_name",
+  "enrollment_date",
+  "column_break_1",
+  "cohort",
+  "program",
+  "academic_year",
+  "term_name",
+  "term_duration_weeks",
+  "section_courses",
+  "table_hxbo",
+  "section_advisor",
+  "faculty_advisor",
+  "status",
+  "remarks"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_student",
+   "fieldtype": "Section Break",
+   "label": "Student Details"
+  },
+  {
+   "fieldname": "student",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Student ID",
+   "options": "Student Master",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "student.first_name",
+   "fieldname": "student_name",
+   "fieldtype": "Data",
+   "label": "Student Name",
+   "read_only": 1
+  },
+  {
+   "default": "Today",
+   "fieldname": "enrollment_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Enrollment Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "cohort",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Cohort",
+   "options": "Cohort",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "cohort.program",
+   "fieldname": "program",
+   "fieldtype": "Link",
+   "label": "Program",
+   "options": "Program",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "cohort.academic_year",
+   "fieldname": "academic_year",
+   "fieldtype": "Link",
+   "label": "Academic Year",
+   "options": "Academic Year",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "cohort.term_name",
+   "fieldname": "term_name",
+   "fieldtype": "Data",
+   "label": "Term Name",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "cohort.term_weeks",
+   "fieldname": "term_duration_weeks",
+   "fieldtype": "Int",
+   "label": "Term Duration (Weeks)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_courses",
+   "fieldtype": "Section Break",
+   "label": "Enrolled Courses"
+  },
+  {
+   "fieldname": "section_advisor",
+   "fieldtype": "Section Break",
+   "label": "Advisor & Status"
+  },
+  {
+   "fieldname": "faculty_advisor",
+   "fieldtype": "Link",
+   "label": "Faculty Advisor",
+   "options": "Faculty"
+  },
+  {
+   "default": "Enrolled",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Enrollment Status",
+   "options": "Enrolled\nDropped\nCompleted",
+   "reqd": 1
+  },
+  {
+   "fieldname": "remarks",
+   "fieldtype": "Small Text",
+   "label": "Remarks"
+  },
+  {
+   "fieldname": "table_hxbo",
+   "fieldtype": "Table",
+   "label": "Courses",
+   "options": "Program Enrollment"
+  }
+ ],
+ "links": [],
+ "modified": "2025-12-29 09:53:57.279166",
+ "modified_by": "Administrator",
+ "module": "SLCM",
+ "name": "Student Enrollment",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "student_name"
 }

@@ -1,253 +1,311 @@
 {
-  "doctype": "DocType",
-  "name": "Student Master",
-  "module": "SLCM",
-  "autoname": "ST-.YYYY.-.#####",
-  "allow_rename": 1,
-  "title_field": "first_name",
-
-  "fields": [
-
-    {
-      "fieldtype": "Section Break",
-      "label": "Registration & Admission Details"
-    },
-    {
-      "fieldname": "registration_id",
-      "fieldtype": "Data",
-      "label": "Registration ID"
-    },
-    {
-      "fieldname": "application_number",
-      "fieldtype": "Data",
-      "label": "Application Number",
-      "reqd": 1
-    },
-    {
-      "fieldname": "admission_sequence",
-      "fieldtype": "Int",
-      "label": "Admission Sequence"
-    },
-    {
-      "fieldname": "admission_type",
-      "fieldtype": "Select",
-      "label": "Admission Type",
-      "options": "Regular\nPACE\nOther"
-    },
-    {
-      "fieldname": "quota",
-      "fieldtype": "Select",
-      "label": "Quota / Category",
-      "options": "General\nSC\nST\nOBC\nEWS\nNRI"
-    },
-    {
-      "fieldname": "intake",
-      "fieldtype": "Data",
-      "label": "Intake"
-    },
-    {
-      "fieldname": "academic_status",
-      "fieldtype": "Select",
-      "label": "Academic Status",
-      "options": "Active\nInactive"
-    },
-
-    {
-      "fieldtype": "Section Break",
-      "label": "Program & Academic Mapping"
-    },
-    {
-      "fieldname": "department",
-      "fieldtype": "Link",
-      "label": "Department",
-      "options": "Department"
-    },
-    {
-      "fieldname": "programme",
-      "fieldtype": "Link",
-      "label": "Programme",
-      "options": "Program"
-    },
-    {
-      "fieldname": "specialisation",
-      "fieldtype": "Data",
-      "label": "Specialisation"
-    },
-    {
-      "fieldname": "batch_year",
-      "fieldtype": "Int",
-      "label": "Batch Year"
-    },
-    {
-      "fieldname": "current_year",
-      "fieldtype": "Int",
-      "label": "Current Year"
-    },
-    {
-      "fieldname": "current_term",
-      "fieldtype": "Link",
-      "label": "Current Term",
-      "options": "Academic Term"
-    },
-    {
-      "fieldname": "programme_section",
-      "fieldtype": "Data",
-      "label": "Programme Section"
-    },
-    {
-      "fieldname": "programme_system",
-      "fieldtype": "Select",
-      "label": "Programme System",
-      "options": "Semester\nTrimester"
-    },
-    {
-      "fieldname": "number_of_programmes_enrolled",
-      "fieldtype": "Int",
-      "label": "Number of Programmes Enrolled"
-    },
-
-    {
-      "fieldtype": "Section Break",
-      "label": "Personal Details"
-    },
-    {
-      "fieldname": "first_name",
-      "fieldtype": "Data",
-      "label": "First Name",
-      "reqd": 1
-    },
-    {
-      "fieldname": "middle_name",
-      "fieldtype": "Data",
-      "label": "Middle Name"
-    },
-    {
-      "fieldname": "last_name",
-      "fieldtype": "Data",
-      "label": "Last Name",
-      "reqd": 1
-    },
-    {
-      "fieldname": "dob",
-      "fieldtype": "Date",
-      "label": "Date of Birth"
-    },
-    {
-      "fieldname": "gender",
-      "fieldtype": "Select",
-      "label": "Gender",
-      "options": "Male\nFemale\nOther"
-    },
-    {
-      "fieldname": "nationality",
-      "fieldtype": "Data",
-      "label": "Nationality"
-    },
-    {
-      "fieldname": "religion",
-      "fieldtype": "Data",
-      "label": "Religion"
-    },
-    {
-      "fieldname": "blood_group",
-      "fieldtype": "Select",
-      "label": "Blood Group",
-      "options": "A+\nA-\nB+\nB-\nO+\nO-\nAB+\nAB-"
-    },
-    {
-      "fieldname": "pwd",
-      "fieldtype": "Check",
-      "label": "Person with Disability (PWD)"
-    },
-    {
-      "fieldname": "state_of_domicile",
-      "fieldtype": "Data",
-      "label": "State of Domicile"
-    },
-
-    {
-      "fieldtype": "Section Break",
-      "label": "Contact Details"
-    },
-    {
-      "fieldname": "email",
-      "fieldtype": "Data",
-      "label": "Email ID"
-    },
-    {
-      "fieldname": "phone",
-      "fieldtype": "Phone",
-      "label": "Phone Number"
-    },
-    {
-      "fieldname": "alternate_phone",
-      "fieldtype": "Phone",
-      "label": "Alternate Phone Number"
-    },
-    {
-      "fieldname": "emergency_contact",
-      "fieldtype": "Phone",
-      "label": "Emergency Contact Number"
-    },
-
-    {
-      "fieldtype": "Section Break",
-      "label": "Parent & Guardian Details"
-    },
-    {
-      "fieldname": "parents",
-      "fieldtype": "Table",
-      "label": "Parent / Guardian Information",
-      "options": "Student Parent"
-    },
-
-    {
-      "fieldtype": "Section Break",
-      "label": "Educational Qualifications"
-    },
-    {
-      "fieldname": "qualifications",
-      "fieldtype": "Table",
-      "label": "Educational Qualifications",
-      "options": "Student Qualification"
-    },
-
-    {
-      "fieldtype": "Section Break",
-      "label": "Account Status"
-    },
-    {
-      "fieldname": "student_status",
-      "fieldtype": "Select",
-      "label": "Student Status",
-      "options": "Active\nInactive\nGraduated\nDropped"
-    },
-    {
-      "fieldname": "account_status",
-      "fieldtype": "Select",
-      "label": "Account Status",
-      "options": "Active\nBlocked"
-    },
-    {
-      "fieldname": "status_remark",
-      "fieldtype": "Text",
-      "label": "Status Remark"
-    }
-
-  ],
-
-  "permissions": [
-    {
-      "role": "System Manager",
-      "read": 1,
-      "write": 1,
-      "create": 1,
-      "delete": 1,
-      "print": 1,
-      "email": 1,
-      "export": 1,
-      "report": 1,
-      "share": 1
-    }
-  ]
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "STU-.YYYY-.#####",
+ "creation": "2025-12-27 10:45:26.940794",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "registration_admission_section",
+  "registration_id",
+  "application_number",
+  "admission_sequence",
+  "admission_type",
+  "quota",
+  "intake",
+  "academic_status",
+  "program_mapping_section",
+  "department",
+  "programme",
+  "specialisation",
+  "batch_year",
+  "current_year",
+  "current_term",
+  "programme_section",
+  "programme_system",
+  "number_of_programmes_enrolled",
+  "personal_details_section",
+  "first_name",
+  "middle_name",
+  "last_name",
+  "dob",
+  "gender",
+  "nationality",
+  "religion",
+  "blood_group",
+  "pwd",
+  "state_of_domicile",
+  "contact_details_section",
+  "email",
+  "phone",
+  "alternate_phone",
+  "emergency_contact",
+  "parent_guardian_section",
+  "parents",
+  "education_section",
+  "qualifications",
+  "account_status_section",
+  "student_status",
+  "account_status",
+  "status_remark"
+ ],
+ "fields": [
+  {
+   "fieldname": "registration_admission_section",
+   "fieldtype": "Section Break",
+   "label": "Registration & Admission Details"
+  },
+  {
+   "fieldname": "registration_id",
+   "fieldtype": "Data",
+   "label": "Registration ID"
+  },
+  {
+   "fieldname": "application_number",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Application Number",
+   "reqd": 1
+  },
+  {
+   "fieldname": "admission_sequence",
+   "fieldtype": "Int",
+   "label": "Admission Sequence"
+  },
+  {
+   "fieldname": "admission_type",
+   "fieldtype": "Select",
+   "label": "Admission Type",
+   "options": "Regular\nPACE\nOther"
+  },
+  {
+   "fieldname": "quota",
+   "fieldtype": "Select",
+   "label": "Quota / Category",
+   "options": "General\nSC\nST\nOBC\nEWS\nNRI"
+  },
+  {
+   "fieldname": "intake",
+   "fieldtype": "Data",
+   "label": "Intake"
+  },
+  {
+   "fieldname": "academic_status",
+   "fieldtype": "Select",
+   "label": "Academic Status",
+   "options": "Active\nInactive"
+  },
+  {
+   "fieldname": "program_mapping_section",
+   "fieldtype": "Section Break",
+   "label": "Program & Academic Mapping"
+  },
+  {
+   "fieldname": "department",
+   "fieldtype": "Link",
+   "label": "Department",
+   "options": "Department"
+  },
+  {
+   "fieldname": "programme",
+   "fieldtype": "Link",
+   "label": "Programme",
+   "options": "Program"
+  },
+  {
+   "fieldname": "specialisation",
+   "fieldtype": "Data",
+   "label": "Specialisation"
+  },
+  {
+   "fieldname": "batch_year",
+   "fieldtype": "Int",
+   "label": "Batch Year"
+  },
+  {
+   "fieldname": "current_year",
+   "fieldtype": "Int",
+   "label": "Current Year"
+  },
+  {
+   "fieldname": "current_term",
+   "fieldtype": "Link",
+   "label": "Current Term",
+   "options": "Academic Term"
+  },
+  {
+   "fieldname": "programme_section",
+   "fieldtype": "Data",
+   "label": "Programme Section"
+  },
+  {
+   "fieldname": "programme_system",
+   "fieldtype": "Select",
+   "label": "Programme System",
+   "options": "Semester\nTrimester"
+  },
+  {
+   "fieldname": "number_of_programmes_enrolled",
+   "fieldtype": "Int",
+   "label": "Number of Programmes Enrolled"
+  },
+  {
+   "fieldname": "personal_details_section",
+   "fieldtype": "Section Break",
+   "label": "Personal Details"
+  },
+  {
+   "fieldname": "first_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "First Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "middle_name",
+   "fieldtype": "Data",
+   "label": "Middle Name"
+  },
+  {
+   "fieldname": "last_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Last Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "dob",
+   "fieldtype": "Date",
+   "label": "Date of Birth"
+  },
+  {
+   "fieldname": "gender",
+   "fieldtype": "Select",
+   "label": "Gender",
+   "options": "Male\nFemale\nOther"
+  },
+  {
+   "fieldname": "nationality",
+   "fieldtype": "Data",
+   "label": "Nationality"
+  },
+  {
+   "fieldname": "religion",
+   "fieldtype": "Data",
+   "label": "Religion"
+  },
+  {
+   "fieldname": "blood_group",
+   "fieldtype": "Select",
+   "label": "Blood Group",
+   "options": "A+\nA-\nB+\nB-\nO+\nO-\nAB+\nAB-"
+  },
+  {
+   "default": "0",
+   "fieldname": "pwd",
+   "fieldtype": "Check",
+   "label": "Person with Disability (PWD)"
+  },
+  {
+   "fieldname": "state_of_domicile",
+   "fieldtype": "Data",
+   "label": "State of Domicile"
+  },
+  {
+   "fieldname": "contact_details_section",
+   "fieldtype": "Section Break",
+   "label": "Contact Details"
+  },
+  {
+   "fieldname": "email",
+   "fieldtype": "Data",
+   "label": "Email ID",
+   "options": "Email"
+  },
+  {
+   "fieldname": "phone",
+   "fieldtype": "Phone",
+   "label": "Phone Number"
+  },
+  {
+   "fieldname": "alternate_phone",
+   "fieldtype": "Phone",
+   "label": "Alternate Phone Number"
+  },
+  {
+   "fieldname": "emergency_contact",
+   "fieldtype": "Phone",
+   "label": "Emergency Contact Number"
+  },
+  {
+   "fieldname": "parent_guardian_section",
+   "fieldtype": "Section Break",
+   "label": "Parent & Guardian Details"
+  },
+  {
+   "fieldname": "parents",
+   "fieldtype": "Table",
+   "label": "Parent / Guardian Information",
+   "options": "Student Parent"
+  },
+  {
+   "fieldname": "education_section",
+   "fieldtype": "Section Break",
+   "label": "Educational Qualifications"
+  },
+  {
+   "fieldname": "qualifications",
+   "fieldtype": "Table",
+   "label": "Educational Qualifications",
+   "options": "Student Qualification"
+  },
+  {
+   "fieldname": "account_status_section",
+   "fieldtype": "Section Break",
+   "label": "Account Status"
+  },
+  {
+   "fieldname": "student_status",
+   "fieldtype": "Select",
+   "label": "Student Status",
+   "options": "Active\nInactive\nGraduated\nDropped"
+  },
+  {
+   "fieldname": "account_status",
+   "fieldtype": "Select",
+   "label": "Account Status",
+   "options": "Active\nBlocked"
+  },
+  {
+   "fieldname": "status_remark",
+   "fieldtype": "Text",
+   "label": "Status Remark"
+  }
+ ],
+ "links": [],
+ "modified": "2025-12-27 10:45:47.253126",
+ "modified_by": "Administrator",
+ "module": "SLCM",
+ "name": "Student Master",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "first_name"
 }

@@ -1,6 +1,7 @@
 {
  "actions": [],
- "allow_rename": 1,
+ "allow_import": 1,
+ "autoname": "field:course",
  "creation": "2025-12-19 14:35:11.638689",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -23,7 +24,8 @@
    "fieldname": "course",
    "fieldtype": "Link",
    "label": "Course",
-   "options": "Course"
+   "options": "Course",
+   "unique": 1
   },
   {
    "fieldname": "academinc_term",
@@ -57,10 +59,11 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-12-26 12:58:58.997858",
+ "modified": "2025-12-29 10:09:22.607548",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "Course Offering",
+ "naming_rule": "By fieldname",
  "owner": "Administrator",
  "permissions": [
   {

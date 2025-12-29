@@ -1,5 +1,6 @@
 {
  "actions": [],
+ "allow_import": 1,
  "autoname": "field:course_name",
  "creation": "2025-12-18 11:40:33.390186",
  "doctype": "DocType",
@@ -78,7 +79,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-12-19 14:15:55.483355",
+ "modified": "2025-12-27 11:25:27.924249",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "Course",
