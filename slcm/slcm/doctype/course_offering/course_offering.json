@@ -1,43 +1,77 @@
 {
  "actions": [],
  "allow_import": 1,
- "autoname": "field:course",
- "creation": "2025-12-19 14:35:11.638689",
+ "allow_rename": 1,
+ "autoname": "CO-.YYYY.-.#####",
+ "creation": "2025-12-30 13:03:04.922140",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "offering_id",
-  "course",
-  "academinc_term",
-  "credits",
+  "course_title",
+  "course_name",
+  "program",
+  "cohort",
+  "academic_year",
+  "term_name",
   "faculty",
+  "credit_value",
   "maximum_students",
-  "enrollment_status"
+  "status"
  ],
  "fields": [
   {
-   "fieldname": "offering_id",
+   "fetch_from": "course.course_title",
+   "fieldname": "course_name",
    "fieldtype": "Data",
-   "label": "Offering ID"
+   "in_list_view": 1,
+   "label": "Course Name",
+   "read_only": 1
   },
   {
-   "fieldname": "course",
+   "fieldname": "program",
    "fieldtype": "Link",
-   "label": "Course",
-   "options": "Course",
-   "unique": 1
+   "in_list_view": 1,
+   "label": "Program",
+   "options": "Program",
+   "reqd": 1
   },
   {
-   "fieldname": "academinc_term",
+   "fieldname": "cohort",
    "fieldtype": "Link",
-   "label": "Academinc Term",
-   "options": "Academic Term"
+   "in_list_view": 1,
+   "label": "Cohort",
+   "options": "Cohort",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "cohort.academic_year",
+   "fieldname": "academic_year",
+   "fieldtype": "Link",
+   "label": "Academic Year",
+   "options": "Academic Year",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "cohort.term_name",
+   "fieldname": "term_name",
+   "fieldtype": "Data",
+   "label": "Term",
+   "read_only": 1
   },
   {
    "fieldname": "faculty",
    "fieldtype": "Link",
    "label": "Faculty",
-   "options": "Faculty"
+   "options": "Faculty",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "course.credits",
+   "fieldname": "credit_value",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Credits",
+   "read_only": 1
   },
   {
    "fieldname": "maximum_students",
@@ -45,25 +79,29 @@
    "label": "Maximum Students"
   },
   {
-   "fieldname": "enrollment_status",
+   "default": "Open",
+   "fieldname": "status",
    "fieldtype": "Select",
-   "label": "Enrollment Status",
-   "options": "\nOpen\nClose"
+   "in_list_view": 1,
+   "label": "Status",
+   "options": "Open\nClosed",
+   "reqd": 1
   },
   {
-   "fieldname": "credits",
-   "fieldtype": "Data",
-   "label": "Credits"
+   "fieldname": "course_title",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Course",
+   "options": "Course",
+   "reqd": 1
   }
  ],
- "grid_page_length": 50,
- "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-12-29 10:09:22.607548",
+ "modified": "2025-12-30 13:05:38.130957",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "Course Offering",
- "naming_rule": "By fieldname",
+ "naming_rule": "Expression (old style)",
  "owner": "Administrator",
  "permissions": [
   {
@@ -80,7 +118,6 @@
   }
  ],
  "row_format": "Dynamic",
- "rows_threshold_for_grid_search": 20,
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": []
