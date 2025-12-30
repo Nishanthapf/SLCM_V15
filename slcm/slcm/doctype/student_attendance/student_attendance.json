@@ -1,104 +1,106 @@
 {
-  "doctype": "DocType",
-  "name": "Student Attendance",
-  "module": "SLCM",
-
-  "autoname": "ATT-.YYYY.-.#####",
-  "naming_rule": "Expression (old style)",
-  "allow_import": 1,
-  "allow_rename": 1,
-
-  "field_order": [
-    "student",
-    "student_name",
-    "course_offering",
-    "course",
-    "attendance_date",
-    "status",
-    "source",
-    "attendance_log"
-  ],
-
-  "fields": [
-    {
-      "fieldname": "student",
-      "fieldtype": "Link",
-      "label": "Student",
-      "options": "Student Master",
-      "reqd": 1,
-      "in_list_view": 1
-    },
-    {
-      "fieldname": "student_name",
-      "fieldtype": "Data",
-      "label": "Student Name",
-      "fetch_from": "student.first_name",
-      "read_only": 1,
-      "in_list_view": 1
-    },
-    {
-      "fieldname": "course_offering",
-      "fieldtype": "Link",
-      "label": "Course Offering",
-      "options": "Course Offering",
-      "reqd": 1,
-      "in_list_view": 1
-    },
-    {
-      "fieldname": "course",
-      "fieldtype": "Link",
-      "label": "Course",
-      "options": "Course",
-      "fetch_from": "course_offering.course",
-      "read_only": 1
-    },
-    {
-      "fieldname": "attendance_date",
-      "fieldtype": "Date",
-      "label": "Attendance Date",
-      "reqd": 1,
-      "in_list_view": 1
-    },
-    {
-      "fieldname": "status",
-      "fieldtype": "Select",
-      "label": "Status",
-      "options": "Present\nAbsent",
-      "reqd": 1,
-      "in_list_view": 1
-    },
-    {
-      "fieldname": "source",
-      "fieldtype": "Select",
-      "label": "Source",
-      "options": "RFID\nManual\nQR",
-      "default": "RFID",
-      "reqd": 1
-    },
-    {
-      "fieldname": "attendance_log",
-      "fieldtype": "Link",
-      "label": "Attendance Log",
-      "options": "Attendance Log"
-    }
-  ],
-
-  "permissions": [
-    {
-      "role": "System Manager",
-      "read": 1,
-      "write": 1,
-      "create": 1,
-      "delete": 0,
-      "print": 1,
-      "email": 1,
-      "export": 1,
-      "report": 1,
-      "share": 1
-    }
-  ],
-
-  "row_format": "Dynamic",
-  "sort_field": "modified",
-  "sort_order": "DESC"
+ "actions": [],
+ "allow_import": 1,
+ "allow_rename": 1,
+ "autoname": "ATT-.YYYY.-.#####",
+ "creation": "2025-12-30 13:22:48.887328",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "student",
+  "student_name",
+  "course_offer",
+  "course",
+  "attendance_date",
+  "status",
+  "source",
+  "attendance_log"
+ ],
+ "fields": [
+  {
+   "fieldname": "student",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Student",
+   "options": "Student Master",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "student.first_name",
+   "fieldname": "student_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Student Name",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "course_offering.course",
+   "fieldname": "course",
+   "fieldtype": "Link",
+   "label": "Course",
+   "options": "Course",
+   "read_only": 1
+  },
+  {
+   "fieldname": "attendance_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Attendance Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Status",
+   "options": "Present\nAbsent",
+   "reqd": 1
+  },
+  {
+   "default": "RFID",
+   "fieldname": "source",
+   "fieldtype": "Select",
+   "label": "Source",
+   "options": "RFID\nManual\nQR",
+   "reqd": 1
+  },
+  {
+   "fieldname": "attendance_log",
+   "fieldtype": "Link",
+   "label": "Attendance Log",
+   "options": "Attendance Log"
+  },
+  {
+   "fieldname": "course_offer",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Course Offering",
+   "options": "Course Offering",
+   "reqd": 1
+  }
+ ],
+ "links": [],
+ "modified": "2025-12-30 15:02:07.274716",
+ "modified_by": "Administrator",
+ "module": "SLCM",
+ "name": "Student Attendance",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
 }
