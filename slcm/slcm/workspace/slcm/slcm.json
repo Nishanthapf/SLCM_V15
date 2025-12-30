@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"ampnC-pZge\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">SLCM</span>\",\"col\":12}},{\"id\":\"VISCTPe3IV\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"l-Uw5kPvGF\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>PROGRAM ENROLLMENT</b></span>\",\"col\":12}},{\"id\":\"EyqPZkdBbu\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Academic Year\",\"col\":3}},{\"id\":\"ZmY-5G2r84\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Academic Term\",\"col\":3}},{\"id\":\"XOJsc36IzJ\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Department\",\"col\":3}},{\"id\":\"u2ihXWwuOA\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Program\",\"col\":3}},{\"id\":\"XKcIBnnMqO\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Course\",\"col\":3}},{\"id\":\"-VeGqLmj7b\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Faculty Enrollment\",\"col\":3}},{\"id\":\"fOe3YJI1bY\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"ULkH_B-f24\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Course Master\",\"col\":3}},{\"id\":\"AkItovmJgS\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Student Master\",\"col\":3}},{\"id\":\"WTSyYTWQAD\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Cohort\",\"col\":3}},{\"id\":\"oYt69mDwkj\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Student Enrollment\",\"col\":3}}]",
+ "content": "[{\"id\":\"ampnC-pZge\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">SLCM</span>\",\"col\":12}},{\"id\":\"VISCTPe3IV\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"1D5J8oEbaw\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>MASTER DOCTYPES</b></span>\",\"col\":12}},{\"id\":\"-VeGqLmj7b\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Faculty Master\",\"col\":3}},{\"id\":\"ULkH_B-f24\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Course Master\",\"col\":3}},{\"id\":\"AkItovmJgS\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Student Master\",\"col\":3}},{\"id\":\"yo--HiCA-T\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"l-Uw5kPvGF\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>PROGRAM ENROLLMENT</b></span>\",\"col\":12}},{\"id\":\"EyqPZkdBbu\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Academic Year\",\"col\":3}},{\"id\":\"XOJsc36IzJ\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Department\",\"col\":3}},{\"id\":\"u2ihXWwuOA\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Program\",\"col\":3}},{\"id\":\"XKcIBnnMqO\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Course\",\"col\":3}},{\"id\":\"WTSyYTWQAD\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Cohort\",\"col\":3}},{\"id\":\"oYt69mDwkj\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Student Enrollment\",\"col\":3}}]",
  "creation": "2025-12-18 09:29:30.795332",
  "custom_blocks": [],
  "docstatus": 0,
@@ -13,7 +13,7 @@
  "is_hidden": 0,
  "label": "SLCM",
  "links": [],
- "modified": "2025-12-30 12:04:46.707843",
+ "modified": "2025-12-30 12:32:02.379910",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "SLCM",
@@ -26,10 +26,10 @@
  "sequence_id": 1.0,
  "shortcuts": [
   {
-   "color": "Pink",
+   "color": "Grey",
    "doc_view": "List",
-   "label": "Academic Term",
-   "link_to": "Academic Term",
+   "label": "Faculty Master",
+   "link_to": "Faculty",
    "stats_filter": "[]",
    "type": "DocType"
   },
@@ -86,14 +86,6 @@
    "doc_view": "List",
    "label": "Student Enrollment",
    "link_to": "Student Enrollment",
-   "stats_filter": "[]",
-   "type": "DocType"
-  },
-  {
-   "color": "Grey",
-   "doc_view": "List",
-   "label": "Faculty Enrollment",
-   "link_to": "Faculty",
    "stats_filter": "[]",
    "type": "DocType"
   },

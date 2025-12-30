@@ -57,10 +57,10 @@
   {
    "fieldname": "department",
    "fieldtype": "Link",
+   "hidden": 1,
    "in_list_view": 1,
    "label": "Department",
-   "options": "Department",
-   "reqd": 1
+   "options": "Department"
   },
   {
    "description": "Assistant Professor, Lecturer, etc.",
@@ -104,7 +104,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-12-18 09:52:25.384750",
+ "modified": "2025-12-30 12:23:33.994640",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "Faculty",
