@@ -1,11 +1,13 @@
 {
  "actions": [],
+ "allow_import": 1,
  "allow_rename": 1,
- "autoname": "STU-.YYYY-.#####",
- "creation": "2025-12-27 10:45:26.940794",
+ "autoname": "STU-.#####",
+ "creation": "2025-12-30 10:31:47.469762",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "tab_registration",
   "registration_admission_section",
   "registration_id",
   "application_number",
@@ -14,6 +16,8 @@
   "quota",
   "intake",
   "academic_status",
+  "applying_scholarship",
+  "tab_program_mapping",
   "program_mapping_section",
   "department",
   "programme",
@@ -21,9 +25,11 @@
   "batch_year",
   "current_year",
   "current_term",
+  "tab_programme",
   "programme_section",
   "programme_system",
   "number_of_programmes_enrolled",
+  "tab_personal",
   "personal_details_section",
   "first_name",
   "middle_name",
@@ -35,21 +41,43 @@
   "blood_group",
   "pwd",
   "state_of_domicile",
+  "aadhaar_number",
+  "pan_number",
+  "passport_available",
+  "passport_number",
+  "date_of_registration",
+  "tab_contact",
   "contact_details_section",
   "email",
   "phone",
   "alternate_phone",
   "emergency_contact",
+  "tab_parent",
   "parent_guardian_section",
   "parents",
+  "tab_education",
   "education_section",
   "qualifications",
+  "tab_account",
   "account_status_section",
   "student_status",
   "account_status",
-  "status_remark"
+  "status_remark",
+  "tab_documents",
+  "aadhaar_card",
+  "pan_card",
+  "std_x_marksheet",
+  "transfer_certificate",
+  "entrance_exam_score_marksheet",
+  "passport_size_photo",
+  "passport"
  ],
  "fields": [
+  {
+   "fieldname": "tab_registration",
+   "fieldtype": "Tab Break",
+   "label": "Registration"
+  },
   {
    "fieldname": "registration_admission_section",
    "fieldtype": "Section Break",
@@ -96,6 +124,17 @@
    "options": "Active\nInactive"
   },
   {
+   "fieldname": "applying_scholarship",
+   "fieldtype": "Select",
+   "label": "Applying for Scholarship",
+   "options": "Yes\nNo"
+  },
+  {
+   "fieldname": "tab_program_mapping",
+   "fieldtype": "Tab Break",
+   "label": "Program Mapping"
+  },
+  {
    "fieldname": "program_mapping_section",
    "fieldtype": "Section Break",
    "label": "Program & Academic Mapping"
@@ -134,9 +173,14 @@
    "options": "Academic Term"
   },
   {
+   "fieldname": "tab_programme",
+   "fieldtype": "Tab Break",
+   "label": "Programme"
+  },
+  {
    "fieldname": "programme_section",
-   "fieldtype": "Data",
-   "label": "Programme Section"
+   "fieldtype": "Section Break",
+   "label": "Programme Details"
   },
   {
    "fieldname": "programme_system",
@@ -150,6 +194,11 @@
    "label": "Number of Programmes Enrolled"
   },
   {
+   "fieldname": "tab_personal",
+   "fieldtype": "Tab Break",
+   "label": "Personal"
+  },
+  {
    "fieldname": "personal_details_section",
    "fieldtype": "Section Break",
    "label": "Personal Details"
@@ -157,7 +206,6 @@
   {
    "fieldname": "first_name",
    "fieldtype": "Data",
-   "in_list_view": 1,
    "label": "First Name",
    "reqd": 1
   },
@@ -169,7 +217,6 @@
   {
    "fieldname": "last_name",
    "fieldtype": "Data",
-   "in_list_view": 1,
    "label": "Last Name",
    "reqd": 1
   },
@@ -204,12 +251,45 @@
    "default": "0",
    "fieldname": "pwd",
    "fieldtype": "Check",
-   "label": "Person with Disability (PWD)"
+   "label": "PWD"
   },
   {
    "fieldname": "state_of_domicile",
    "fieldtype": "Data",
    "label": "State of Domicile"
+  },
+  {
+   "fieldname": "aadhaar_number",
+   "fieldtype": "Int",
+   "label": "Aadhaar Number"
+  },
+  {
+   "fieldname": "pan_number",
+   "fieldtype": "Data",
+   "label": "PAN Number"
+  },
+  {
+   "fieldname": "passport_available",
+   "fieldtype": "Select",
+   "label": "Passport Available",
+   "options": "Yes\nNo"
+  },
+  {
+   "depends_on": "eval:doc.passport_available==\"Yes\"",
+   "fieldname": "passport_number",
+   "fieldtype": "Data",
+   "label": "Passport Number"
+  },
+  {
+   "depends_on": "eval:doc.passport_available==\"Yes\"",
+   "fieldname": "date_of_registration",
+   "fieldtype": "Date",
+   "label": "Date of Registration"
+  },
+  {
+   "fieldname": "tab_contact",
+   "fieldtype": "Tab Break",
+   "label": "Contact"
   },
   {
    "fieldname": "contact_details_section",
@@ -219,23 +299,28 @@
   {
    "fieldname": "email",
    "fieldtype": "Data",
-   "label": "Email ID",
+   "label": "Email",
    "options": "Email"
   },
   {
    "fieldname": "phone",
    "fieldtype": "Phone",
-   "label": "Phone Number"
+   "label": "Phone"
   },
   {
    "fieldname": "alternate_phone",
    "fieldtype": "Phone",
-   "label": "Alternate Phone Number"
+   "label": "Alternate Phone"
   },
   {
    "fieldname": "emergency_contact",
    "fieldtype": "Phone",
-   "label": "Emergency Contact Number"
+   "label": "Emergency Contact"
+  },
+  {
+   "fieldname": "tab_parent",
+   "fieldtype": "Tab Break",
+   "label": "Parent / Guardian"
   },
   {
    "fieldname": "parent_guardian_section",
@@ -245,8 +330,13 @@
   {
    "fieldname": "parents",
    "fieldtype": "Table",
-   "label": "Parent / Guardian Information",
+   "label": "Parents",
    "options": "Student Parent"
+  },
+  {
+   "fieldname": "tab_education",
+   "fieldtype": "Tab Break",
+   "label": "Education"
   },
   {
    "fieldname": "education_section",
@@ -256,8 +346,13 @@
   {
    "fieldname": "qualifications",
    "fieldtype": "Table",
-   "label": "Educational Qualifications",
+   "label": "Qualifications",
    "options": "Student Qualification"
+  },
+  {
+   "fieldname": "tab_account",
+   "fieldtype": "Tab Break",
+   "label": "Account"
   },
   {
    "fieldname": "account_status_section",
@@ -280,10 +375,51 @@
    "fieldname": "status_remark",
    "fieldtype": "Text",
    "label": "Status Remark"
+  },
+  {
+   "fieldname": "tab_documents",
+   "fieldtype": "Tab Break",
+   "label": "Documents"
+  },
+  {
+   "fieldname": "aadhaar_card",
+   "fieldtype": "Attach",
+   "label": "Aadhaar Card"
+  },
+  {
+   "fieldname": "pan_card",
+   "fieldtype": "Attach",
+   "label": "PAN Card"
+  },
+  {
+   "fieldname": "std_x_marksheet",
+   "fieldtype": "Attach",
+   "label": "STD X Marksheet"
+  },
+  {
+   "fieldname": "transfer_certificate",
+   "fieldtype": "Attach",
+   "label": "Transfer Certificate"
+  },
+  {
+   "fieldname": "entrance_exam_score_marksheet",
+   "fieldtype": "Attach",
+   "label": "Entrance exam score marksheet"
+  },
+  {
+   "description": "Latest image",
+   "fieldname": "passport_size_photo",
+   "fieldtype": "Attach",
+   "label": "Passport size photo"
+  },
+  {
+   "fieldname": "passport",
+   "fieldtype": "Attach",
+   "label": "Passport"
   }
  ],
  "links": [],
- "modified": "2025-12-29 14:57:19.870524",
+ "modified": "2025-12-30 10:34:47.795155",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "Student Master",
@@ -293,13 +429,8 @@
   {
    "create": 1,
    "delete": 1,
-   "email": 1,
-   "export": 1,
-   "print": 1,
    "read": 1,
-   "report": 1,
    "role": "System Manager",
-   "share": 1,
    "write": 1
   }
  ],
