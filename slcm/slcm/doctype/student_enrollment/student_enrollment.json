@@ -118,7 +118,7 @@
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "Enrollment Status",
-   "options": "Enrolled\nDropped\nCompleted",
+   "options": "Enrolled\nDropped\nCompleted\nPending",
    "reqd": 1
   },
   {
@@ -139,7 +139,7 @@
   }
  ],
  "links": [],
- "modified": "2025-12-30 11:40:23.195474",
+ "modified": "2025-12-30 12:11:08.665017",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "Student Enrollment",
