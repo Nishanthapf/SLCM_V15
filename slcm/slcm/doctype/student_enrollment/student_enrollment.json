@@ -17,6 +17,7 @@
   "academic_year",
   "term_name",
   "term_duration_weeks",
+  "data_xgxm",
   "section_courses",
   "table_hxbo",
   "section_advisor",
@@ -130,10 +131,15 @@
    "fieldtype": "Table",
    "label": "Courses",
    "options": "Program Enrollment"
+  },
+  {
+   "fieldname": "data_xgxm",
+   "fieldtype": "Data",
+   "label": "Batch"
   }
  ],
  "links": [],
- "modified": "2025-12-29 09:53:57.279166",
+ "modified": "2025-12-30 11:40:23.195474",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "Student Enrollment",

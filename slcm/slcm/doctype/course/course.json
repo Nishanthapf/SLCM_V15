@@ -20,8 +20,9 @@
  "fields": [
   {
    "fieldname": "course_name",
-   "fieldtype": "Data",
+   "fieldtype": "Link",
    "label": "Course Name",
+   "options": "Course Master",
    "unique": 1
   },
   {
@@ -79,7 +80,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-12-27 11:25:27.924249",
+ "modified": "2025-12-30 11:47:29.570311",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "Course",
