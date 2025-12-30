@@ -82,12 +82,13 @@
   {
    "fieldname": "aadhar",
    "fieldtype": "Data",
-   "label": "Aadhaar Number"
+   "label": "Aadhaar Number",
+   "length": 12
   }
  ],
  "istable": 1,
  "links": [],
- "modified": "2025-12-26 11:12:00.781330",
+ "modified": "2025-12-30 10:53:38.069597",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "Student Parent",

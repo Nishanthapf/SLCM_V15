@@ -261,7 +261,8 @@
   {
    "fieldname": "aadhaar_number",
    "fieldtype": "Int",
-   "label": "Aadhaar Number"
+   "label": "Aadhaar Number",
+   "length": 12
   },
   {
    "fieldname": "pan_number",
@@ -419,7 +420,7 @@
   }
  ],
  "links": [],
- "modified": "2025-12-30 10:34:47.795155",
+ "modified": "2025-12-30 10:52:49.463683",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "Student Master",
