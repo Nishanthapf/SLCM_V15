@@ -92,6 +92,7 @@
    "fieldname": "application_number",
    "fieldtype": "Data",
    "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Application Number",
    "reqd": 1
   },
@@ -142,12 +143,16 @@
   {
    "fieldname": "department",
    "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Department",
    "options": "Department"
   },
   {
    "fieldname": "programme",
    "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Programme",
    "options": "Program"
   },
@@ -159,16 +164,22 @@
   {
    "fieldname": "batch_year",
    "fieldtype": "Int",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Batch Year"
   },
   {
    "fieldname": "current_year",
    "fieldtype": "Int",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Current Year"
   },
   {
    "fieldname": "current_term",
    "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Current Term",
    "options": "Academic Term"
   },
@@ -206,6 +217,8 @@
   {
    "fieldname": "first_name",
    "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "First Name",
    "reqd": 1
   },
@@ -420,7 +433,7 @@
   }
  ],
  "links": [],
- "modified": "2025-12-30 10:52:49.463683",
+ "modified": "2025-12-30 12:36:41.295886",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "Student Master",
