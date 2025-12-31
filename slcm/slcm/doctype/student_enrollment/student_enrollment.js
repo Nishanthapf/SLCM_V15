@@ -1,4 +1,11 @@
 frappe.ui.form.on("Student Enrollment", {
+	refresh(frm) {
+		// Add quick links to related records
+		if (!frm.is_new() && frm.doc.student) {
+			frm.set_df_property("html_links", "options", get_quick_links_html(frm));
+		}
+	},
+
 	program(frm) {
 		// 1️⃣ Clear table if program removed
 		if (!frm.doc.program) {
@@ -38,3 +45,27 @@ frappe.ui.form.on("Student Enrollment", {
 		});
 	},
 });
+
+function get_quick_links_html(frm) {
+	const student = frm.doc.student;
+	const enrollment = frm.doc.name;
+
+	return `
+		<div style="padding: 10px;">
+			<h6>Quick Links</h6>
+			<div style="display: flex; gap: 10px; flex-wrap: wrap;">
+				<button class="btn btn-sm btn-default" onclick="frappe.set_route('List', 'Student Attendance', {'student': '${student}'})">
+					View Attendance
+				</button>
+				<button class="btn btn-sm btn-default" onclick="frappe.set_route('List', 'Student Fee Assignment', {'student': '${student}'})">
+					View Fees
+				</button>
+				<button class="btn btn-sm btn-default" onclick="frappe.set_route('List', 'Course Schedule', {'student_group': '${
+					frm.doc.cohort || ""
+				}'})">
+					View Schedule
+				</button>
+			</div>
+		</div>
+	`;
+}

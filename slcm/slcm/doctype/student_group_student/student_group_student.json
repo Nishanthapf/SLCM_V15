@@ -15,14 +15,14 @@
  "fields": [
   {
    "fieldname": "student",
-   "fieldtype": "Data",
+   "fieldtype": "Link",
    "in_list_view": 1,
    "label": "Student",
-   "options": "Student",
+   "options": "Student Master",
    "reqd": 1
   },
   {
-   "fetch_from": "student.student_name",
+   "fetch_from": "student.first_name",
    "fieldname": "student_name",
    "fieldtype": "Data",
    "in_list_view": 1,

@@ -5,6 +5,9 @@ app_description = "Student Life Cycle Management"
 app_email = "nishanth.a@azimpremjifoundation.org"
 app_license = "mit"
 
+app_include_js = ["/assets/slcm/js/student_workspace_redirect.js"]
+
+
 # Apps
 # ------------------
 

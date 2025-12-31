@@ -3,20 +3,88 @@
  "allow_import": 1,
  "allow_rename": 1,
  "autoname": "ATT-.YYYY.-.#####",
- "creation": "2025-12-30 13:22:48.887328",
+ "creation": "2025-12-30 13:24:56.712673",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "section_based_on",
+  "based_on",
+  "group_based_on",
+  "column_break_1",
+  "student_group",
+  "class",
+  "course_schedule",
+  "section_student",
   "student",
   "student_name",
+  "section_course",
   "course_offer",
   "course",
+  "program",
+  "academic_year",
+  "academic_term",
+  "section_attendance",
   "attendance_date",
+  "period",
   "status",
+  "column_break_2",
   "source",
-  "attendance_log"
+  "attendance_log",
+  "instructor",
+  "room",
+  "remarks"
  ],
  "fields": [
+  {
+   "fieldname": "section_based_on",
+   "fieldtype": "Section Break",
+   "label": "Attendance Based On"
+  },
+  {
+   "default": "Student Group",
+   "fieldname": "based_on",
+   "fieldtype": "Select",
+   "label": "Based On",
+   "options": "Student Group\nCourse Schedule\nClass",
+   "reqd": 1
+  },
+  {
+   "depends_on": "eval:doc.based_on==\"Student Group\"",
+   "fieldname": "group_based_on",
+   "fieldtype": "Select",
+   "label": "Group Based On",
+   "options": "\nBatch\nCourse\nActivity"
+  },
+  {
+   "fieldname": "column_break_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "depends_on": "eval:doc.based_on==\"Student Group\"",
+   "fieldname": "student_group",
+   "fieldtype": "Link",
+   "label": "Student Group",
+   "options": "Student Group"
+  },
+  {
+   "depends_on": "eval:doc.based_on==\"Class\"",
+   "fieldname": "class",
+   "fieldtype": "Link",
+   "label": "Class",
+   "options": "Student Group"
+  },
+  {
+   "depends_on": "eval:doc.based_on==\"Course Schedule\"",
+   "fieldname": "course_schedule",
+   "fieldtype": "Link",
+   "label": "Course Schedule",
+   "options": "Course Schedule"
+  },
+  {
+   "fieldname": "section_student",
+   "fieldtype": "Section Break",
+   "label": "Student Details"
+  },
   {
    "fieldname": "student",
    "fieldtype": "Link",
@@ -34,12 +102,51 @@
    "read_only": 1
   },
   {
-   "fetch_from": "course_offering.course",
+   "fieldname": "section_course",
+   "fieldtype": "Section Break",
+   "label": "Course Details"
+  },
+  {
+   "fieldname": "course_offer",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Course Offering",
+   "options": "Course Offering"
+  },
+  {
+   "fetch_from": "course_offer.course_title",
    "fieldname": "course",
    "fieldtype": "Link",
    "label": "Course",
    "options": "Course",
    "read_only": 1
+  },
+  {
+   "fetch_from": "course_schedule.program",
+   "fieldname": "program",
+   "fieldtype": "Link",
+   "label": "Program",
+   "options": "Program",
+   "read_only": 1
+  },
+  {
+   "fieldname": "academic_year",
+   "fieldtype": "Link",
+   "label": "Academic Year",
+   "options": "Academic Year",
+   "read_only": 1
+  },
+  {
+   "fieldname": "academic_term",
+   "fieldtype": "Link",
+   "label": "Academic Term",
+   "options": "Academic Term",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_attendance",
+   "fieldtype": "Section Break",
+   "label": "Attendance Details"
   },
   {
    "fieldname": "attendance_date",
@@ -49,15 +156,25 @@
    "reqd": 1
   },
   {
+   "fieldname": "period",
+   "fieldtype": "Link",
+   "label": "Period",
+   "options": "Attendance Period"
+  },
+  {
    "fieldname": "status",
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "Status",
-   "options": "Present\nAbsent",
+   "options": "Present\nAbsent\nLate\nExcused",
    "reqd": 1
   },
   {
-   "default": "RFID",
+   "fieldname": "column_break_2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Manual",
    "fieldname": "source",
    "fieldtype": "Select",
    "label": "Source",
@@ -71,16 +188,28 @@
    "options": "Attendance Log"
   },
   {
-   "fieldname": "course_offer",
+   "fetch_from": "course_schedule.instructor",
+   "fieldname": "instructor",
+   "fieldtype": "Data",
+   "label": "Instructor",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "course_schedule.room",
+   "fieldname": "room",
    "fieldtype": "Link",
-   "in_list_view": 1,
-   "label": "Course Offering",
-   "options": "Course Offering",
-   "reqd": 1
+   "label": "Room",
+   "options": "Room",
+   "read_only": 1
+  },
+  {
+   "fieldname": "remarks",
+   "fieldtype": "Small Text",
+   "label": "Remarks"
   }
  ],
  "links": [],
- "modified": "2025-12-30 15:02:07.274716",
+ "modified": "2025-12-30 18:02:28.616297",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "Student Attendance",

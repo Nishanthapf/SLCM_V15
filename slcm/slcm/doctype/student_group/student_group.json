@@ -1,6 +1,8 @@
 {
  "actions": [],
+ "allow_import": 1,
  "allow_rename": 1,
+ "autoname": "field:student_group_name",
  "creation": "2025-12-18 18:29:46.576236",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -15,6 +17,7 @@
   "batch",
   "course",
   "student_category",
+  "disabled",
   "students_section",
   "get_students",
   "students",
@@ -25,21 +28,28 @@
   {
    "fieldname": "academic_year",
    "fieldtype": "Link",
+   "in_standard_filter": 1,
    "label": "Academic Year",
-   "options": "Academic Year"
+   "options": "Academic Year",
+   "reqd": 1
   },
   {
    "fieldname": "group_based_on",
    "fieldtype": "Select",
+   "in_list_view": 1,
    "label": "Group Based on",
-   "options": "\nBatch\nCourse\nActivity"
+   "options": "\nBatch\nCourse\nActivity",
+   "reqd": 1
   },
   {
    "fieldname": "student_group_name",
    "fieldtype": "Data",
-   "label": "Student Group Name"
+   "label": "Student Group Name",
+   "reqd": 1,
+   "unique": 1
   },
   {
+   "description": "Set 0 for no limit",
    "fieldname": "max_strength",
    "fieldtype": "Int",
    "label": "Max Strength"
@@ -77,15 +87,25 @@
    "depends_on": "eval:doc.group_based_on==\"Course\"",
    "fieldname": "course",
    "fieldtype": "Link",
+   "in_global_search": 1,
+   "in_standard_filter": 1,
    "label": "Course",
    "options": "Course"
   },
   {
+   "default": "0",
+   "fieldname": "disabled",
+   "fieldtype": "Check",
+   "label": "Disabled"
+  },
+  {
+   "depends_on": "eval:!doc.__islocal",
    "fieldname": "students_section",
    "fieldtype": "Section Break",
    "label": "Students"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "students",
    "fieldtype": "Table",
    "label": "Students",
@@ -115,7 +135,9 @@
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "Student Group",
+ "naming_rule": "By fieldname",
  "owner": "Administrator",
+ "search_fields": "program, batch, course",
  "permissions": [
   {
    "create": 1,

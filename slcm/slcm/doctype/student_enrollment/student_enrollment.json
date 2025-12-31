@@ -23,7 +23,10 @@
   "section_advisor",
   "faculty_advisor",
   "status",
-  "remarks"
+  "remarks",
+  "user",
+  "section_links",
+  "html_links"
  ],
  "fields": [
   {
@@ -136,10 +139,26 @@
    "fieldname": "data_xgxm",
    "fieldtype": "Data",
    "label": "Batch"
+  },
+  {
+   "fieldname": "user",
+   "fieldtype": "Link",
+   "label": "User",
+   "options": "User"
+  },
+  {
+   "fieldname": "section_links",
+   "fieldtype": "Section Break",
+   "label": "Related Records"
+  },
+  {
+   "fieldname": "html_links",
+   "fieldtype": "HTML",
+   "label": "Quick Links"
   }
  ],
  "links": [],
- "modified": "2025-12-30 12:11:08.665017",
+ "modified": "2025-12-31 11:43:14.803355",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "Student Enrollment",
