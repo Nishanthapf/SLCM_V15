@@ -95,12 +95,12 @@
   },
   {
    "fieldname": "from_time",
-   "fieldtype": "Date",
+   "fieldtype": "Time",
    "label": "From Time"
   },
   {
    "fieldname": "to_time",
-   "fieldtype": "Date",
+   "fieldtype": "Time",
    "label": "To Time"
   },
   {

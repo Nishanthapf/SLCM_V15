@@ -17,6 +17,7 @@
   "intake",
   "academic_status",
   "applying_scholarship",
+  "user",
   "tab_program_mapping",
   "program_mapping_section",
   "department",
@@ -430,10 +431,16 @@
    "fieldname": "passport",
    "fieldtype": "Attach",
    "label": "Passport"
+  },
+  {
+   "fieldname": "user",
+   "fieldtype": "Link",
+   "label": "User",
+   "options": "User"
   }
  ],
  "links": [],
- "modified": "2025-12-30 12:36:41.295886",
+ "modified": "2025-12-30 18:18:34.280217",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "Student Master",

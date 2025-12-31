@@ -1,0 +1,61 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-12-31 12:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "payment",
+  "amount",
+  "payment_date",
+  "payment_mode"
+ ],
+ "fields": [
+  {
+   "fieldname": "payment",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Payment",
+   "options": "Fee Payment",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "payment.amount",
+   "fieldname": "amount",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Amount",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "payment.payment_date",
+   "fieldname": "payment_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Payment Date",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "payment.payment_mode",
+   "fieldname": "payment_mode",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Payment Mode",
+   "read_only": 1
+  }
+ ],
+ "istable": 1,
+ "links": [],
+ "modified": "2025-12-31 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "SLCM",
+ "name": "Fee Payment Entry",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
+
