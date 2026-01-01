@@ -1,5 +1,6 @@
 {
  "actions": [],
+ "allow_import": 1,
  "allow_rename": 1,
  "autoname": "field:category",
  "creation": "2025-12-18 18:28:31.766489",
@@ -19,7 +20,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-01-01 12:11:49.392719",
+ "modified": "2026-01-01 15:54:25.261971",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "Student Category",

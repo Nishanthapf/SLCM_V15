@@ -1,5 +1,6 @@
 {
  "actions": [],
+ "allow_import": 1,
  "autoname": "field:term_name",
  "creation": "2025-12-18 11:49:11.173362",
  "doctype": "DocType",
@@ -58,7 +59,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-01-01 12:07:09.999108",
+ "modified": "2026-01-01 15:54:14.047247",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "Academic Term",

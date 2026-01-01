@@ -28,13 +28,18 @@
   {
    "fieldname": "student_group",
    "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Student Group",
    "options": "Student Group"
   },
   {
    "fieldname": "instructor",
-   "fieldtype": "Data",
-   "label": "Instructor"
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Instructor",
+   "options": "Faculty"
   },
   {
    "fieldname": "instructor_name",
@@ -60,6 +65,8 @@
   {
    "fieldname": "course",
    "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Course",
    "options": "Course"
   },
@@ -86,6 +93,8 @@
   {
    "fieldname": "room",
    "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Room",
    "options": "Room"
   },
@@ -112,10 +121,11 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-12-27 11:25:42.006769",
+ "modified": "2026-01-01 16:06:55.712566",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "Course Schedule",
+ "naming_rule": "By \"Naming Series\" field",
  "owner": "Administrator",
  "permissions": [
   {
