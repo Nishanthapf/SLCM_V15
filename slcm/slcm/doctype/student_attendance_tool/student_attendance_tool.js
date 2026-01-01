@@ -7,12 +7,7 @@ frappe.ui.form.on("Student Attendance Tool", {
 	},
 
 	onload(frm) {
-		frm.set_query("student_group", () => ({
-			filters: {
-				group_based_on: frm.doc.group_based_on,
-				disabled: 0,
-			},
-		}));
+		frm.trigger("set_student_group_query");
 
 		if (!frm.doc.date) {
 			frm.set_value("date", frappe.datetime.get_today());
@@ -26,30 +21,56 @@ frappe.ui.form.on("Student Attendance Tool", {
 			frm.set_value("course_schedule", frappe.route_options.course_schedule);
 			frappe.route_options = null;
 		}
+
 		frm.disable_save();
 	},
 
+	/* ---------------- Field Events ---------------- */
+
 	based_on(frm) {
-		if (frm.doc.based_on === "Student Group") {
-			frm.set_value("course_schedule", "");
-		} else {
-			frm.set_value("student_group", "");
-			frm.set_value("group_based_on", "");
-		}
+		frm.set_value("student_group", null);
+		frm.set_value("group_based_on", null);
+		frm.set_value("course_schedule", null);
 		frm.students_area.empty();
+		frm.trigger("set_student_group_query");
 	},
 
 	group_based_on(frm) {
-		if (frm.doc.student_group) {
-			frm.set_value("student_group", "");
-		}
+		frm.set_value("student_group", null);
 		frm.students_area.empty();
+		frm.trigger("set_student_group_query");
 	},
+
+	/* ---------------- Link Query (FIXED) ---------------- */
+
+	set_student_group_query(frm) {
+		frm.set_query("student_group", () => {
+			if (!frm.doc.group_based_on) {
+				// Prevent empty dropdown confusion
+				return {
+					filters: {
+						name: ["=", "__invalid__"],
+					},
+				};
+			}
+
+			return {
+				filters: {
+					group_based_on: frm.doc.group_based_on,
+					disabled: 0,
+				},
+			};
+		});
+	},
+
+	/* ---------------- Data Fetch ---------------- */
 
 	student_group(frm) {
 		if ((frm.doc.student_group && frm.doc.date) || frm.doc.course_schedule) {
 			frm.students_area.html(
-				"<div style='padding:2rem;text-align:center'><i class='fa fa-spinner fa-spin'></i> Fetching students...</div>"
+				"<div style='padding:2rem;text-align:center'>" +
+					"<i class='fa fa-spinner fa-spin'></i> Fetching students..." +
+					"</div>"
 			);
 
 			frappe.call({
@@ -85,7 +106,7 @@ frappe.ui.form.on("Student Attendance Tool", {
 	},
 });
 
-/* ---------------- Students Editor ---------------- */
+/* ================= STUDENTS EDITOR ================= */
 
 class StudentsEditor {
 	constructor(frm, wrapper, students) {
@@ -162,7 +183,6 @@ class StudentsEditor {
 	}
 
 	mark_attendance(toolbar) {
-		const me = this;
 		const students_present = [];
 		const students_absent = [];
 
@@ -192,12 +212,12 @@ class StudentsEditor {
 						based_on: this.frm.doc.based_on,
 						group_based_on: this.frm.doc.group_based_on,
 					},
-					callback() {
+					callback: () => {
 						frappe.show_alert({
 							message: __("Attendance marked"),
 							indicator: "green",
 						});
-						me.frm.trigger("student_group");
+						this.frm.trigger("student_group");
 					},
 				});
 			}
@@ -206,9 +226,9 @@ class StudentsEditor {
 
 	show_empty_state() {
 		$(this.wrapper).html(
-			`<div class="text-center text-muted" style="padding:2rem">${__(
-				"No Students found"
-			)}</div>`
+			`<div class="text-center text-muted" style="padding:2rem">
+				${__("No Students found")}
+			</div>`
 		);
 	}
 }

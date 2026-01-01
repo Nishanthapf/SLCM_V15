@@ -1,7 +1,6 @@
 {
  "actions": [],
- "allow_rename": 1,
- "autoname": "autoincrement",
+ "autoname": "field:term_name",
  "creation": "2025-12-18 11:49:11.173362",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -23,7 +22,8 @@
   {
    "fieldname": "term_name",
    "fieldtype": "Data",
-   "label": "Term Name"
+   "label": "Term Name",
+   "unique": 1
   },
   {
    "fieldname": "column_break_gvpt",
@@ -33,6 +33,7 @@
    "fieldname": "term_start_date",
    "fieldtype": "Date",
    "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Term Start Date",
    "reqd": 1,
    "search_index": 1
@@ -41,6 +42,7 @@
    "fieldname": "term_end_date",
    "fieldtype": "Date",
    "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Term End Date",
    "reqd": 1,
    "search_index": 1
@@ -48,13 +50,15 @@
   {
    "fieldname": "title",
    "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Title"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-12-29 14:23:31.780973",
+ "modified": "2026-01-01 12:07:09.999108",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "Academic Term",

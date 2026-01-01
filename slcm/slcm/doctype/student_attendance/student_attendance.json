@@ -44,6 +44,8 @@
    "default": "Student Group",
    "fieldname": "based_on",
    "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Based On",
    "options": "Student Group\nCourse Schedule\nClass",
    "reqd": 1
@@ -52,6 +54,8 @@
    "depends_on": "eval:doc.based_on==\"Student Group\"",
    "fieldname": "group_based_on",
    "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Group Based On",
    "options": "\nBatch\nCourse\nActivity"
   },
@@ -63,6 +67,8 @@
    "depends_on": "eval:doc.based_on==\"Student Group\"",
    "fieldname": "student_group",
    "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Student Group",
    "options": "Student Group"
   },
@@ -70,6 +76,8 @@
    "depends_on": "eval:doc.based_on==\"Class\"",
    "fieldname": "class",
    "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Class",
    "options": "Student Group"
   },
@@ -89,6 +97,7 @@
    "fieldname": "student",
    "fieldtype": "Link",
    "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Student",
    "options": "Student Master",
    "reqd": 1
@@ -209,7 +218,7 @@
   }
  ],
  "links": [],
- "modified": "2025-12-30 18:02:28.616297",
+ "modified": "2026-01-01 12:09:04.727114",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "Student Attendance",
@@ -218,6 +227,7 @@
  "permissions": [
   {
    "create": 1,
+   "delete": 1,
    "email": 1,
    "export": 1,
    "print": 1,

@@ -2,6 +2,7 @@
 # For license information, please see license.txt
 
 import frappe
+from frappe import _
 from frappe.model.document import Document
 
 
@@ -11,7 +12,7 @@ class StudentAttendanceTool(Document):
 
 @frappe.whitelist()
 def get_student_attendance_records(
-	based_on,
+	based_on=None,
 	date=None,
 	student_group=None,
 	course_schedule=None,
@@ -19,55 +20,83 @@ def get_student_attendance_records(
 	"""
 	Get student list with existing attendance status
 	"""
-	student_list = []
-	student_attendance_list = []
 
-	# Fetch student group from course schedule if needed
+	# -------------------- VALIDATION --------------------
+
+	if not based_on:
+		frappe.throw(_("Based On is required"))
+
+	if based_on == "Student Group":
+		if not student_group or not date:
+			frappe.throw(_("Student Group and Date are required"))
+
+	if based_on == "Course Schedule":
+		if not course_schedule:
+			frappe.throw(_("Course Schedule is required"))
+
+	# -------------------- RESOLVE STUDENT GROUP --------------------
+
 	if based_on == "Course Schedule" and course_schedule:
-		student_group = frappe.db.get_value("Course Schedule", course_schedule, "student_group")
-
-	# Get students from Student Group
-	if student_group:
-		student_list = frappe.get_all(
-			"Student Group Student",
-			fields=["student", "student_name", "group_roll_number"],
-			filters={"parent": student_group, "active": 1},
-			order_by="group_roll_number",
+		student_group = frappe.db.get_value(
+			"Course Schedule",
+			course_schedule,
+			"student_group",
 		)
 
-	# Query Builder DocType
+	if not student_group:
+		return []
+
+	# -------------------- FETCH STUDENTS --------------------
+
+	student_list = frappe.get_all(
+		"Student Group Student",
+		fields=[
+			"student",
+			"student_name",
+			"group_roll_number",
+		],
+		filters={
+			"parent": student_group,
+			"active": 1,
+		},
+		order_by="group_roll_number",
+	)
+
+	if not student_list:
+		return []
+
+	# -------------------- FETCH EXISTING ATTENDANCE --------------------
+
 	StudentAttendance = frappe.qb.DocType("Student Attendance")
 
-	# Fetch existing attendance
-	if course_schedule:
-		query = (
-			frappe.qb.from_(StudentAttendance)
-			.select(StudentAttendance.student, StudentAttendance.status)
-			.where(StudentAttendance.course_schedule == course_schedule)
-			.where(
-				StudentAttendance.attendance_date == date
-				if date
-				else StudentAttendance.attendance_date.isnotnull()
-			)
-			.where(StudentAttendance.docstatus < 2)
+	query = (
+		frappe.qb.from_(StudentAttendance)
+		.select(
+			StudentAttendance.student,
+			StudentAttendance.status,
 		)
-	else:
-		query = (
-			frappe.qb.from_(StudentAttendance)
-			.select(StudentAttendance.student, StudentAttendance.status)
-			.where(StudentAttendance.student_group == student_group)
-			.where(StudentAttendance.attendance_date == date)
-			.where((StudentAttendance.course_schedule == "") | StudentAttendance.course_schedule.isnull())
-			.where(StudentAttendance.docstatus < 2)
+		.where(StudentAttendance.docstatus < 2)
+	)
+
+	if based_on == "Course Schedule":
+		query = query.where(StudentAttendance.course_schedule == course_schedule)
+
+	if date:
+		query = query.where(StudentAttendance.attendance_date == date)
+
+	if based_on == "Student Group":
+		query = query.where(StudentAttendance.student_group == student_group)
+		query = query.where(
+			(StudentAttendance.course_schedule == "") | StudentAttendance.course_schedule.isnull()
 		)
 
-	student_attendance_list = query.run(as_dict=True)
+	attendance_rows = query.run(as_dict=True)
 
-	# Merge attendance status with student list
-	attendance_map = {a.student: a.status for a in student_attendance_list}
+	# -------------------- MERGE STATUS --------------------
+
+	attendance_map = {row["student"]: row["status"] for row in attendance_rows}
 
 	for student in student_list:
-		if student.student in attendance_map:
-			student.status = attendance_map[student.student]
+		student["status"] = attendance_map.get(student["student"], "Absent")
 
 	return student_list
