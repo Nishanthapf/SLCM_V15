@@ -28,6 +28,7 @@
    "fieldname": "program_name",
    "fieldtype": "Data",
    "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Program Name",
    "reqd": 1,
    "unique": 1
@@ -69,6 +70,8 @@
    "fieldname": "academic_year",
    "fieldtype": "Link",
    "hidden": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Academic Year",
    "options": "Academic Year"
   },
@@ -76,17 +79,23 @@
    "fieldname": "academic_term",
    "fieldtype": "Link",
    "hidden": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Academic Term",
    "options": "Academic Term"
   },
   {
    "fieldname": "program_id",
    "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Program Code"
   },
   {
    "fieldname": "program_level",
    "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Level of Study",
    "options": "\nUG\nPG"
   },
@@ -100,11 +109,15 @@
    "fieldname": "graduation_credits",
    "fieldtype": "Int",
    "hidden": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Graduation Credits"
   },
   {
    "fieldname": "program_status",
    "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Program Status",
    "options": "\nActive\nInactive"
   }
@@ -117,7 +130,7 @@
    "link_fieldname": "program"
   }
  ],
- "modified": "2025-12-31 16:55:53.171419",
+ "modified": "2026-01-01 17:33:23.745014",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "Program",

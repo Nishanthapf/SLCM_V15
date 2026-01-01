@@ -29,6 +29,7 @@
    "fieldname": "cohort_code",
    "fieldtype": "Data",
    "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Cohort Code",
    "reqd": 1,
    "unique": 1
@@ -37,6 +38,7 @@
    "fieldname": "cohort_name",
    "fieldtype": "Data",
    "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Cohort Name",
    "reqd": 1,
    "unique": 1
@@ -45,6 +47,7 @@
    "fieldname": "program",
    "fieldtype": "Link",
    "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Program",
    "options": "Program",
    "reqd": 1
@@ -52,6 +55,8 @@
   {
    "fieldname": "academic_year",
    "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Academic Year",
    "options": "Academic Year",
    "reqd": 1
@@ -59,6 +64,8 @@
   {
    "fieldname": "term_name",
    "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Term Name",
    "reqd": 1
   },
@@ -112,22 +119,28 @@
   {
    "fieldname": "seat_limit",
    "fieldtype": "Int",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Seat Limit"
   },
   {
    "fieldname": "batch",
    "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Batch"
   },
   {
    "description": "Term of the Current Year",
    "fieldname": "term_year",
    "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Term Year"
   }
  ],
  "links": [],
- "modified": "2026-01-01 15:42:16.903042",
+ "modified": "2026-01-01 17:35:42.451294",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "Cohort",
