@@ -7,11 +7,11 @@ import frappe
 from frappe import _
 
 
+# ------------------------------------------------------------
+# BULK ATTENDANCE FROM COURSE SCHEDULE
+# ------------------------------------------------------------
 @frappe.whitelist()
 def create_bulk_attendance_from_schedule(course_schedule, attendance_date, attendance_data):
-	"""
-	Create bulk attendance records from Course Schedule
-	"""
 	if not course_schedule:
 		frappe.throw(_("Course Schedule is required"))
 
@@ -23,18 +23,16 @@ def create_bulk_attendance_from_schedule(course_schedule, attendance_date, atten
 	if not schedule.student_group:
 		frappe.throw(_("Student Group is required in Course Schedule"))
 
-	student_group = frappe.get_doc("Student Group", schedule.student_group)
-	students = [row.student for row in student_group.students if row.active]
+	group = frappe.get_doc("Student Group", schedule.student_group)
+	students = [row.student for row in group.students if row.active]
 
 	if not students:
-		frappe.throw(_("No active students found in Student Group"))
+		frappe.throw(_("No active students found"))
 
 	if isinstance(attendance_data, str):
 		attendance_data = json.loads(attendance_data)
 
-	created_count = 0
-	updated_count = 0
-	errors = []
+	created, updated, errors = 0, 0, []
 
 	for student in students:
 		status = attendance_data.get(student, "Absent")
@@ -43,66 +41,53 @@ def create_bulk_attendance_from_schedule(course_schedule, attendance_date, atten
 			"Student Attendance",
 			{
 				"student": student,
-				"course_schedule": course_schedule,
 				"attendance_date": attendance_date,
-				"docstatus": ["<", 2],
+				"course_schedule": course_schedule,
+				"based_on": "Course Schedule",
+				"docstatus": ("<", 2),
 			},
 		)
 
 		try:
 			if existing:
-				attendance = frappe.get_doc("Student Attendance", existing)
-				attendance.status = status
-				attendance.save()
-				updated_count += 1
+				doc = frappe.get_doc("Student Attendance", existing)
+				doc.status = status
+				doc.save()
+				updated += 1
 			else:
-				attendance = frappe.get_doc(
+				frappe.get_doc(
 					{
 						"doctype": "Student Attendance",
 						"student": student,
-						"based_on": "Course Schedule",
-						"course_schedule": course_schedule,
 						"attendance_date": attendance_date,
 						"status": status,
-						"source": "Manual",
+						"based_on": "Course Schedule",
+						"course_schedule": course_schedule,
+						"student_group": schedule.student_group,
 						"program": schedule.program,
 						"course": schedule.course,
 						"instructor": schedule.instructor,
 						"room": schedule.room,
+						"source": "Manual",
 					}
-				)
-				attendance.insert()
-				created_count += 1
+				).insert()
+				created += 1
 		except Exception as e:
-			errors.append(f"Error for student {student}: {e!s}")
-
-	frappe.db.commit()
-
-	total_processed = created_count + updated_count
-	present_count = sum(1 for s in students if attendance_data.get(s) == "Present")
-	absent_count = total_processed - present_count
-
-	message = _("Successfully marked attendance for {0} students").format(total_processed)
-	message += _(" ({0} Present, {1} Absent)").format(present_count, absent_count)
+			errors.append(f"{student}: {e!s}")
 
 	return {
 		"status": "success",
-		"total_students": len(students),
-		"created": created_count,
-		"updated": updated_count,
-		"total_processed": total_processed,
-		"present_count": present_count,
-		"absent_count": absent_count,
+		"created": created,
+		"updated": updated,
 		"errors": errors,
-		"message": message,
 	}
 
 
+# ------------------------------------------------------------
+# BULK ATTENDANCE FROM STUDENT GROUP
+# ------------------------------------------------------------
 @frappe.whitelist()
 def create_bulk_attendance_from_group(student_group, attendance_date, attendance_data):
-	"""
-	Create bulk attendance records from Student Group
-	"""
 	if not student_group:
 		frappe.throw(_("Student Group is required"))
 
@@ -113,14 +98,12 @@ def create_bulk_attendance_from_group(student_group, attendance_date, attendance
 	students = [row.student for row in group.students if row.active]
 
 	if not students:
-		frappe.throw(_("No active students found in Student Group"))
+		frappe.throw(_("No active students found"))
 
 	if isinstance(attendance_data, str):
 		attendance_data = json.loads(attendance_data)
 
-	created_count = 0
-	updated_count = 0
-	errors = []
+	created, updated, errors = 0, 0, []
 
 	for student in students:
 		status = attendance_data.get(student, "Absent")
@@ -129,49 +112,50 @@ def create_bulk_attendance_from_group(student_group, attendance_date, attendance
 			"Student Attendance",
 			{
 				"student": student,
-				"student_group": student_group,
 				"attendance_date": attendance_date,
-				"docstatus": ["<", 2],
+				"student_group": student_group,
+				"based_on": "Student Group",
+				"docstatus": ("<", 2),
 			},
 		)
 
 		try:
 			if existing:
-				attendance = frappe.get_doc("Student Attendance", existing)
-				attendance.status = status
-				attendance.save()
-				updated_count += 1
+				doc = frappe.get_doc("Student Attendance", existing)
+				doc.status = status
+				doc.save()
+				updated += 1
 			else:
-				attendance = frappe.get_doc(
+				frappe.get_doc(
 					{
 						"doctype": "Student Attendance",
 						"student": student,
+						"attendance_date": attendance_date,
+						"status": status,
 						"based_on": "Student Group",
 						"student_group": student_group,
 						"group_based_on": group.group_based_on,
-						"attendance_date": attendance_date,
-						"status": status,
-						"source": "Manual",
 						"program": group.program,
 						"academic_year": group.academic_year,
 						"academic_term": group.academic_term,
+						"source": "Manual",
 					}
-				)
-				attendance.insert()
-				created_count += 1
+				).insert()
+				created += 1
 		except Exception as e:
-			errors.append(f"Error for student {student}: {e!s}")
-
-	frappe.db.commit()
+			errors.append(f"{student}: {e!s}")
 
 	return {
 		"status": "success",
-		"created": created_count,
-		"updated": updated_count,
+		"created": created,
+		"updated": updated,
 		"errors": errors,
 	}
 
 
+# ------------------------------------------------------------
+# MAIN STUDENT ATTENDANCE TOOL API
+# ------------------------------------------------------------
 @frappe.whitelist()
 def mark_attendance(
 	students_present=None,
@@ -180,13 +164,12 @@ def mark_attendance(
 	course_schedule=None,
 	date=None,
 	based_on=None,
-	group_based_on=None,
 ):
-	"""
-	Main API used by Student Attendance Tool
-	"""
 	if not date:
 		frappe.throw(_("Date is required"))
+
+	if not based_on:
+		frappe.throw(_("Based On is required"))
 
 	if isinstance(students_present, str):
 		students_present = json.loads(students_present)
@@ -196,58 +179,69 @@ def mark_attendance(
 	students_present = students_present or []
 	students_absent = students_absent or []
 
-	created_count = 0
-	updated_count = 0
-	errors = []
+	group = frappe.get_doc("Student Group", student_group) if student_group else None
+	schedule = frappe.get_doc("Course Schedule", course_schedule) if course_schedule else None
 
-	group_doc = frappe.get_doc("Student Group", student_group) if student_group else None
-	schedule_doc = frappe.get_doc("Course Schedule", course_schedule) if course_schedule else None
+	program = schedule.program if schedule else group.program if group else None
 
-	for student in students_present:
+	if not program:
+		frappe.throw(_("Program could not be determined"))
+
+	def upsert(student_id, status):
+		existing = frappe.db.exists(
+			"Student Attendance",
+			{
+				"student": student_id,
+				"attendance_date": date,
+				"based_on": based_on,
+				"student_group": student_group,
+				"course_schedule": course_schedule,
+				"docstatus": ("<", 2),
+			},
+		)
+
+		if existing:
+			doc = frappe.get_doc("Student Attendance", existing)
+			doc.status = status
+			doc.save()
+			return "updated"
+
+		frappe.get_doc(
+			{
+				"doctype": "Student Attendance",
+				"student": student_id,
+				"attendance_date": date,
+				"status": status,
+				"based_on": based_on,
+				"student_group": student_group,
+				"course_schedule": course_schedule,
+				"program": program,
+				"source": "Manual",
+			}
+		).insert()
+		return "created"
+
+	created, updated, errors = 0, 0, []
+
+	for row in students_present:
 		try:
-			attendance = frappe.get_doc(
-				{
-					"doctype": "Student Attendance",
-					"student": student.get("student"),
-					"attendance_date": date,
-					"status": "Present",
-					"source": "Manual",
-					"based_on": based_on,
-					"student_group": student_group,
-					"course_schedule": course_schedule,
-					"program": schedule_doc.program if schedule_doc else group_doc.program,
-				}
-			)
-			attendance.insert()
-			created_count += 1
+			result = upsert(row.get("student"), "Present")
+			created += result == "created"
+			updated += result == "updated"
 		except Exception as e:
-			errors.append(f"Error for student {student.get('student')}: {e!s}")
+			errors.append(f"{row.get('student')}: {e!s}")
 
-	for student in students_absent:
+	for row in students_absent:
 		try:
-			attendance = frappe.get_doc(
-				{
-					"doctype": "Student Attendance",
-					"student": student.get("student"),
-					"attendance_date": date,
-					"status": "Absent",
-					"source": "Manual",
-					"based_on": based_on,
-					"student_group": student_group,
-					"course_schedule": course_schedule,
-					"program": schedule_doc.program if schedule_doc else group_doc.program,
-				}
-			)
-			attendance.insert()
-			created_count += 1
+			result = upsert(row.get("student"), "Absent")
+			created += result == "created"
+			updated += result == "updated"
 		except Exception as e:
-			errors.append(f"Error for student {student.get('student')}: {e!s}")
-
-	frappe.db.commit()
+			errors.append(f"{row.get('student')}: {e!s}")
 
 	return {
 		"status": "success",
-		"created": created_count,
-		"updated": updated_count,
+		"created": created,
+		"updated": updated,
 		"errors": errors,
 	}

@@ -110,8 +110,14 @@
   }
  ],
  "image_field": "hero_image",
- "links": [],
- "modified": "2025-12-29 12:54:37.600324",
+ "links": [
+  {
+   "group": "Admission and Enrollments",
+   "link_doctype": "Student Enrollment",
+   "link_fieldname": "program"
+  }
+ ],
+ "modified": "2025-12-31 16:55:53.171419",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "Program",
