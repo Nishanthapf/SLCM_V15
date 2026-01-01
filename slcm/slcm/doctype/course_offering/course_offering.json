@@ -20,7 +20,7 @@
  ],
  "fields": [
   {
-   "fetch_from": "course.course_title",
+   "fetch_from": "course_title.course_name",
    "fieldname": "course_name",
    "fieldtype": "Data",
    "in_list_view": 1,
@@ -98,7 +98,7 @@
   }
  ],
  "links": [],
- "modified": "2026-01-01 12:17:57.748116",
+ "modified": "2026-01-01 15:53:34.318074",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "Course Offering",

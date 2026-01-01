@@ -12,6 +12,7 @@
   "program",
   "academic_year",
   "term_name",
+  "term_year",
   "batch",
   "seat_limit",
   "section_schedule",
@@ -117,10 +118,16 @@
    "fieldname": "batch",
    "fieldtype": "Data",
    "label": "Batch"
+  },
+  {
+   "description": "Term of the Current Year",
+   "fieldname": "term_year",
+   "fieldtype": "Data",
+   "label": "Term Year"
   }
  ],
  "links": [],
- "modified": "2025-12-30 11:35:05.322964",
+ "modified": "2026-01-01 15:42:16.903042",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "Cohort",

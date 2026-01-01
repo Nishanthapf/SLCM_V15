@@ -1,7 +1,7 @@
 {
  "actions": [],
  "allow_import": 1,
- "autoname": "autoincrement",
+ "autoname": "field:department_name",
  "creation": "2025-12-16 10:55:35.738754",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -29,7 +29,8 @@
    "fieldtype": "Data",
    "in_list_view": 1,
    "label": "Department Name",
-   "reqd": 1
+   "reqd": 1,
+   "unique": 1
   },
   {
    "description": "Current Head of Department",
@@ -72,11 +73,11 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-12-29 14:34:05.649542",
+ "modified": "2026-01-01 15:31:02.868448",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "Department",
- "naming_rule": "Autoincrement",
+ "naming_rule": "By fieldname",
  "owner": "Administrator",
  "permissions": [
   {
