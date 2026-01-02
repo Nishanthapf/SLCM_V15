@@ -145,7 +145,7 @@ frappe.listview_settings["Student Enrollment"] = {
 		}
 
 		if (doc.status === "Pending") {
-			return [__("Pending"), "gray", "status,=,Pending"];
+			return [__("Pending"), "yellow", "status,=,Pending"];
 		}
 
 		return [__(doc.status), "gray"];

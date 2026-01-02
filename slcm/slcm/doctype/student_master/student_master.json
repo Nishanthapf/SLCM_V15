@@ -206,7 +206,7 @@
   {
    "fieldname": "number_of_programmes_enrolled",
    "fieldtype": "Int",
-   "label": "Number of Programmes Enrolled"
+   "label": "Number of Courses Enrolled"
   },
   {
    "fieldname": "tab_personal",
@@ -453,7 +453,7 @@
   }
  ],
  "links": [],
- "modified": "2026-01-01 17:31:43.378376",
+ "modified": "2026-01-02 10:22:09.121493",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "Student Master",
