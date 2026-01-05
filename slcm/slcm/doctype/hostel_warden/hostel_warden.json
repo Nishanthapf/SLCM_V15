@@ -1,0 +1,98 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "WARDEN-.####",
+ "creation": "2026-01-05 17:18:38.133646",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "warden_details_section",
+  "warden_name",
+  "warden_code",
+  "column_break_1",
+  "warden_contact",
+  "warden_email",
+  "warden_user",
+  "status_section",
+  "status"
+ ],
+ "fields": [
+  {
+   "fieldname": "warden_details_section",
+   "fieldtype": "Section Break",
+   "label": "Warden Details"
+  },
+  {
+   "fieldname": "warden_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Warden Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "warden_code",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Warden Code",
+   "unique": 1
+  },
+  {
+   "fieldname": "column_break_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "warden_contact",
+   "fieldtype": "Phone",
+   "in_filter": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Contact Number"
+  },
+  {
+   "fieldname": "warden_email",
+   "fieldtype": "Data",
+   "label": "Email",
+   "options": "Email"
+  },
+  {
+   "description": "Link warden to a system login if applicable",
+   "fieldname": "warden_user",
+   "fieldtype": "Link",
+   "label": "System User",
+   "options": "User"
+  },
+  {
+   "fieldname": "status_section",
+   "fieldtype": "Section Break",
+   "label": "Status"
+  },
+  {
+   "default": "Active",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_filter": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Status",
+   "options": "Active\nInactive"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-01-05 17:23:15.684336",
+ "modified_by": "Administrator",
+ "module": "SLCM",
+ "name": "Hostel Warden",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "warden_name"
+}

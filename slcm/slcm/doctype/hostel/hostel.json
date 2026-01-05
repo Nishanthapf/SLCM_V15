@@ -11,8 +11,7 @@
   "hostel_code",
   "hostel_type",
   "warden_details_section",
-  "warden_name",
-  "warden_contact",
+  "warden_details",
   "capacity_section",
   "total_rooms",
   "total_capacity"
@@ -26,6 +25,7 @@
   {
    "fieldname": "hostel_name",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "Hostel Name",
    "reqd": 1,
    "unique": 1
@@ -48,16 +48,6 @@
    "label": "Warden Details"
   },
   {
-   "fieldname": "warden_name",
-   "fieldtype": "Data",
-   "label": "Warden Name"
-  },
-  {
-   "fieldname": "warden_contact",
-   "fieldtype": "Phone",
-   "label": "Warden Contact"
-  },
-  {
    "fieldname": "capacity_section",
    "fieldtype": "Section Break",
    "label": "Capacity Details"
@@ -71,12 +61,18 @@
    "fieldname": "total_capacity",
    "fieldtype": "Int",
    "label": "Total Capacity (Beds)"
+  },
+  {
+   "fieldname": "warden_details",
+   "fieldtype": "Table",
+   "label": "Warden Details",
+   "options": "Hostel Warden"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-01-05 16:40:00.000000",
+ "modified": "2026-01-05 17:47:11.347620",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "Hostel",
