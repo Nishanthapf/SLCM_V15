@@ -8,10 +8,12 @@
  "field_order": [
   "academic_year",
   "term_name",
+  "term_type",
+  "number_of_terms_per_academic_year",
   "column_break_gvpt",
+  "how_many_months",
   "term_start_date",
-  "term_end_date",
-  "title"
+  "term_end_date"
  ],
  "fields": [
   {
@@ -23,6 +25,7 @@
   {
    "fieldname": "term_name",
    "fieldtype": "Data",
+   "hidden": 1,
    "label": "Term Name",
    "unique": 1
   },
@@ -49,17 +52,28 @@
    "search_index": 1
   },
   {
-   "fieldname": "title",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Title"
+   "fieldname": "term_type",
+   "fieldtype": "Select",
+   "label": "Term Type",
+   "options": "\nSemester\nTrimester"
+  },
+  {
+   "fieldname": "how_many_months",
+   "fieldtype": "Select",
+   "label": "How many months?",
+   "options": "\n1\n2\n3\n4\n5\n6"
+  },
+  {
+   "fieldname": "number_of_terms_per_academic_year",
+   "fieldtype": "Select",
+   "label": "Number of terms per academic year",
+   "options": "\n1\n2\n3\n4"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-01-01 15:54:14.047247",
+ "modified": "2026-01-05 12:42:34.503185",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "Academic Term",
