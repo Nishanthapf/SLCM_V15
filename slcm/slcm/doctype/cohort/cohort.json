@@ -147,6 +147,7 @@
    "label": "Program Shortcode"
   },
   {
+   "description": "Enter the last two digit of the current year",
    "fetch_from": "program.current_year",
    "fieldname": "current_year",
    "fieldtype": "Data",
@@ -154,7 +155,7 @@
   }
  ],
  "links": [],
- "modified": "2026-01-06 12:55:38.931731",
+ "modified": "2026-01-06 18:17:41.308176",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "Cohort",

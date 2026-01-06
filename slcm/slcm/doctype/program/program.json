@@ -130,6 +130,7 @@
    "reqd": 1
   },
   {
+   "description": "Enter the last two digit of the current year",
    "fieldname": "current_year",
    "fieldtype": "Data",
    "label": "Current Year"
@@ -143,7 +144,7 @@
    "link_fieldname": "program"
   }
  ],
- "modified": "2026-01-06 12:53:49.603643",
+ "modified": "2026-01-06 18:17:28.299785",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "Program",
