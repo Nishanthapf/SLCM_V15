@@ -2,7 +2,7 @@
  "actions": [],
  "allow_import": 1,
  "allow_rename": 1,
- "autoname": "format:{program_shortcode}{academic_year}{###}",
+ "autoname": "format:{program_shortcode}{current_year}{###}",
  "creation": "2025-12-30 10:31:47.469762",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -16,6 +16,7 @@
   "quota",
   "intake",
   "academic_year",
+  "current_year",
   "academic_status",
   "applying_scholarship",
   "scholarship_amount",
@@ -33,7 +34,7 @@
   "batch_year",
   "current_term",
   "term_name",
-  "current_year",
+  "term_year",
   "current_cgpa",
   "attendance_status",
   "tab_programme",
@@ -91,6 +92,7 @@
   "pan_card",
   "std_x_marksheet",
   "transfer_certificate",
+  "pwd_certificate",
   "entrance_exam_score_marksheet",
   "passport_size_photo",
   "posh_anti_ragging_declaration",
@@ -232,12 +234,10 @@
    "label": "Batch"
   },
   {
-   "fetch_from": "programme.term_year",
+   "fetch_from": "programme.current_year",
    "fieldname": "current_year",
-   "fieldtype": "Int",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Term Year"
+   "fieldtype": "Data",
+   "label": "Current Year"
   },
   {
    "fetch_from": "programme.term_name",
@@ -492,7 +492,7 @@
   {
    "fieldname": "education_section",
    "fieldtype": "Section Break",
-   "label": "Educational Qualifications"
+   "label": "Educational Background"
   },
   {
    "fieldname": "qualifications",
@@ -516,7 +516,7 @@
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Student Status",
-   "options": "Active\nInactive\nGraduated\nDropped\nAlumni"
+   "options": "Active\nInactive\nGraduated\nDropped\nAlumni\nDormant"
   },
   {
    "fieldname": "account_status",
@@ -656,10 +656,23 @@
    "fieldname": "academic_year",
    "fieldtype": "Data",
    "label": "Academic Year"
+  },
+  {
+   "fetch_from": "programme.term_year",
+   "fieldname": "term_year",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Term Year"
+  },
+  {
+   "fieldname": "pwd_certificate",
+   "fieldtype": "Attach",
+   "label": "PWD (Persons with Disabilities) Certificate"
   }
  ],
  "links": [],
- "modified": "2026-01-06 12:43:33.513059",
+ "modified": "2026-01-06 12:58:41.770386",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "Student Master",

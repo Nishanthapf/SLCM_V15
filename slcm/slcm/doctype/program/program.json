@@ -17,6 +17,7 @@
   "program_level",
   "program_duration",
   "academic_year",
+  "current_year",
   "academic_term",
   "graduation_credits",
   "program_status",
@@ -127,6 +128,11 @@
    "fieldtype": "Data",
    "label": "Program Shortcode",
    "reqd": 1
+  },
+  {
+   "fieldname": "current_year",
+   "fieldtype": "Data",
+   "label": "Current Year"
   }
  ],
  "image_field": "hero_image",
@@ -137,7 +143,7 @@
    "link_fieldname": "program"
   }
  ],
- "modified": "2026-01-06 12:36:34.271750",
+ "modified": "2026-01-06 12:53:49.603643",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "Program",

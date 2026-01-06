@@ -11,6 +11,7 @@
   "cohort_name",
   "program",
   "program_shortcode",
+  "current_year",
   "academic_year",
   "term_name",
   "term_year",
@@ -144,10 +145,16 @@
    "fieldname": "program_shortcode",
    "fieldtype": "Data",
    "label": "Program Shortcode"
+  },
+  {
+   "fetch_from": "program.current_year",
+   "fieldname": "current_year",
+   "fieldtype": "Data",
+   "label": "Current Year"
   }
  ],
  "links": [],
- "modified": "2026-01-06 12:37:30.756894",
+ "modified": "2026-01-06 12:55:38.931731",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "Cohort",
