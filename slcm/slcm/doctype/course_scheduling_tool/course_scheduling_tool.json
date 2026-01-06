@@ -1,0 +1,165 @@
+{
+  "doctype": "DocType",
+  "name": "Course Scheduling Tool",
+  "module": "SLCM",
+  "custom": 1,
+  "issingle": 0,
+  "is_submittable": 0,
+  "allow_copy": 1,
+  "engine": "InnoDB",
+  "track_changes": 1,
+  "hide_toolbar": 0,
+  "row_format": "Dynamic",
+  "sort_field": "modified",
+  "sort_order": "DESC",
+
+  "field_order": [
+    "student_group",
+    "course",
+    "program",
+    "column_break_3",
+    "academic_year",
+    "academic_term",
+    "section_break_6",
+    "instructor",
+    "instructor_name",
+    "column_break_9",
+    "room",
+    "section_break_7",
+    "days_html",
+    "section_break_14",
+    "from_time",
+    "course_start_date",
+    "column_break_15",
+    "to_time",
+    "course_end_date",
+    "reschedule"
+  ],
+
+  "fields": [
+    {
+      "fieldname": "student_group",
+      "label": "Student Group",
+      "fieldtype": "Link",
+      "options": "Student Group",
+      "reqd": 1
+    },
+    {
+      "fieldname": "course",
+      "label": "Course",
+      "fieldtype": "Link",
+      "options": "Course",
+      "reqd": 1
+    },
+    {
+      "fieldname": "program",
+      "label": "Program",
+      "fieldtype": "Link",
+      "options": "Program",
+      "read_only": 1
+    },
+    {
+      "fieldname": "column_break_3",
+      "fieldtype": "Column Break"
+    },
+    {
+      "fieldname": "academic_year",
+      "label": "Academic Year",
+      "fieldtype": "Link",
+      "options": "Academic Year",
+      "read_only": 1
+    },
+    {
+      "fieldname": "academic_term",
+      "label": "Academic Term",
+      "fieldtype": "Link",
+      "options": "Academic Term",
+      "read_only": 1
+    },
+    {
+      "fieldname": "section_break_6",
+      "fieldtype": "Section Break"
+    },
+    {
+      "fieldname": "instructor",
+      "label": "Instructor",
+      "fieldtype": "Link",
+      "options": "Faculty",
+      "reqd": 1
+    },
+    {
+      "fieldname": "instructor_name",
+      "label": "Instructor Name",
+      "fieldtype": "Data",
+      "read_only": 1
+    },
+    {
+      "fieldname": "column_break_9",
+      "fieldtype": "Column Break"
+    },
+    {
+      "fieldname": "room",
+      "label": "Room",
+      "fieldtype": "Link",
+      "options": "Room",
+      "reqd": 1
+    },
+    {
+      "fieldname": "section_break_7",
+      "fieldtype": "Section Break"
+    },
+    {
+      "fieldname": "days_html",
+      "label": "Days",
+      "fieldtype": "HTML"
+    },
+    {
+      "fieldname": "section_break_14",
+      "fieldtype": "Section Break"
+    },
+    {
+      "fieldname": "from_time",
+      "label": "From Time",
+      "fieldtype": "Time",
+      "reqd": 1
+    },
+    {
+      "fieldname": "course_start_date",
+      "label": "Course Start Date",
+      "fieldtype": "Date",
+      "reqd": 1
+    },
+    {
+      "fieldname": "column_break_15",
+      "fieldtype": "Column Break"
+    },
+    {
+      "fieldname": "to_time",
+      "label": "To Time",
+      "fieldtype": "Time",
+      "reqd": 1
+    },
+    {
+      "fieldname": "course_end_date",
+      "label": "Course End Date",
+      "fieldtype": "Date",
+      "reqd": 1
+    },
+    {
+      "fieldname": "reschedule",
+      "label": "Reschedule",
+      "fieldtype": "Check",
+      "default": 0
+    }
+  ],
+
+  "permissions": [
+    {
+      "role": "System Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "delete": 1
+    }
+  ]
+}
