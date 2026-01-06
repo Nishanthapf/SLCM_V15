@@ -10,6 +10,7 @@
  "field_order": [
   "program_id",
   "program_name",
+  "program_shortcode",
   "department",
   "hero_image",
   "column_break_3",
@@ -120,6 +121,12 @@
    "in_standard_filter": 1,
    "label": "Program Status",
    "options": "\nActive\nInactive"
+  },
+  {
+   "fieldname": "program_shortcode",
+   "fieldtype": "Data",
+   "label": "Program Shortcode",
+   "reqd": 1
   }
  ],
  "image_field": "hero_image",
@@ -130,7 +137,7 @@
    "link_fieldname": "program"
   }
  ],
- "modified": "2026-01-01 17:33:23.745014",
+ "modified": "2026-01-06 12:36:34.271750",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "Program",
