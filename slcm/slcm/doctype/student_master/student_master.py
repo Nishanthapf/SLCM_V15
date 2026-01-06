@@ -85,6 +85,9 @@ def update_registration_status(student_id, new_status, remarks=None):
 	This function works independently of workflow system
 	Auto-creates workflow state if missing
 	"""
+	user_roles = frappe.get_roles()
+	is_system_manager = "System Manager" in user_roles
+
 	# Auto-create workflow state if it doesn't exist
 	if not frappe.db.exists("Workflow State", new_status):
 		try:
@@ -112,11 +115,10 @@ def update_registration_status(student_id, new_status, remarks=None):
 	}
 
 	# Check if user has permission for this status transition
-	user_roles = frappe.get_roles()
 	required_roles = transition_roles.get(new_status, [])
 
 	# System Manager can do anything
-	if "System Manager" not in user_roles:
+	if not is_system_manager:
 		# Check if user has required role
 		if not any(role in user_roles for role in required_roles):
 			frappe.throw(
@@ -137,9 +139,9 @@ def update_registration_status(student_id, new_status, remarks=None):
 		"Completed": ["Draft"],
 	}
 
-	if current_status in valid_transitions:
-		if new_status not in valid_transitions[current_status]:
-			if "System Manager" not in user_roles:
+	if not is_system_manager:
+		if current_status in valid_transitions:
+			if new_status not in valid_transitions[current_status]:
 				frappe.throw(
 					_(
 						"Invalid status transition from {0} to {1}. Please follow the workflow sequence."

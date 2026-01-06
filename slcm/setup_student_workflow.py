@@ -215,6 +215,12 @@ def create_workflow():
 			"next_state": "Completed",
 			"allowed": "IT Admin",
 		},
+		{
+			"state": "Completed",
+			"action": "Re-Open",
+			"next_state": "Draft",
+			"allowed": "System Manager",
+		},
 	]
 
 	if frappe.db.exists("Workflow", workflow_name):

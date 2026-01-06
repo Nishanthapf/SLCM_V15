@@ -671,6 +671,8 @@
    "label": "PWD (Persons with Disabilities) Certificate"
   }
  ],
+
+
  "links": [],
  "modified": "2026-01-06 12:58:41.770386",
  "modified_by": "Administrator",
@@ -678,70 +680,66 @@
  "name": "Student Master",
  "naming_rule": "Expression",
  "owner": "Administrator",
+
  "permissions": [
   {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
    "create": 1,
    "delete": 1,
-   "read": 1,
-   "role": "System Manager",
-   "write": 1
-  },
-  {
-   "create": 1,
-   "email": 1,
    "print": 1,
-   "read": 1,
-   "role": "SLCM Registrar",
-   "write": 1
+   "email": 1
   },
   {
-   "email": 1,
+   "role": "SLCM Registrar",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "print": 1,
+   "email": 1
+  },
+  {
+   "role": "Accounts User",
+   "read": 1,
+   "write": 1,
+   "print": 1,
+   "email": 1
+  },
+  {
+   "role": "Hostel Warden",
+   "read": 1,
+   "write": 1,
+   "print": 1,
+   "email": 1
+  },
+
+  {
+   "role": "SLCM Registrar",
    "permlevel": 1,
-   "print": 1,
    "read": 1,
-   "role": "SLCM Registrar",
    "write": 1
   },
   {
-   "email": 1,
-   "print": 1,
-   "read": 1,
    "role": "Accounts User",
-   "write": 1
-  },
-  {
-   "email": 1,
    "permlevel": 2,
-   "print": 1,
    "read": 1,
-   "role": "Accounts User",
    "write": 1
   },
   {
-   "email": 1,
-   "print": 1,
-   "read": 1,
    "role": "Hostel Warden",
-   "write": 1
-  },
-  {
-   "email": 1,
    "permlevel": 3,
-   "print": 1,
    "read": 1,
-   "role": "Hostel Warden",
    "write": 1
   },
   {
-   "delete": 1,
-   "email": 1,
-   "permlevel": 4,
-   "print": 1,
-   "read": 1,
    "role": "System Manager",
+   "permlevel": 4,
+   "read": 1,
    "write": 1
   }
  ],
+
  "row_format": "Dynamic",
  "sort_field": "modified",
  "sort_order": "DESC",

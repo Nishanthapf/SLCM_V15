@@ -8,6 +8,7 @@ frappe.listview_settings["Student Master"] = {
 		inject_status_css();
 		add_listview_status_actions(listview);
 		add_listview_status_button(listview);
+		add_bulk_delete_button(listview);
 		// Ensure status column is visible
 		ensure_status_column_visible(listview);
 	},
@@ -109,6 +110,61 @@ function add_listview_status_actions(listview) {
 
 		show_bulk_status_dialog(listview, selected);
 	});
+}
+
+/* --------------------------------------------------
+   List View → Bulk Delete (System Manager only)
+-------------------------------------------------- */
+function add_bulk_delete_button(listview) {
+	// Show only for System Manager or Administrator
+	if (!frappe.user.has_role("System Manager") && frappe.session.user !== "Administrator") return;
+
+	listview.page.add_inner_button(
+		__("Delete Selected"),
+		function () {
+			const selected = listview.get_checked_items();
+
+			if (!selected.length) {
+				frappe.msgprint({
+					title: __("No Selection"),
+					message: __("Please select at least one student to delete."),
+					indicator: "orange",
+				});
+				return;
+			}
+
+			frappe.confirm(
+				__("Are you sure you want to delete {0} student(s)?", [selected.length]),
+				function () {
+					const names = selected.map((row) => row.name);
+					frappe.call({
+						method: "frappe.desk.reportview.delete_items",
+						args: {
+							items: names,
+							doctype: "Student Master",
+						},
+						freeze: true,
+						freeze_message: __("Deleting records..."),
+						callback: function () {
+							frappe.show_alert({
+								message: __("Deleted {0} student(s)", [names.length]),
+								indicator: "green",
+							});
+							listview.refresh();
+						},
+						error: function (r) {
+							frappe.msgprint({
+								title: __("Error"),
+								message: r.message || __("Failed to delete records"),
+								indicator: "red",
+							});
+						},
+					});
+				}
+			);
+		},
+		__("Actions")
+	);
 }
 
 function show_bulk_status_dialog(listview, selected) {
