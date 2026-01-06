@@ -2,7 +2,7 @@
  "actions": [],
  "allow_import": 1,
  "allow_rename": 1,
- "autoname": "STU-.#####",
+ "autoname": "format:{programme}{current_year}{###}",
  "creation": "2025-12-30 10:31:47.469762",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -92,7 +92,15 @@
   "entrance_exam_score_marksheet",
   "passport_size_photo",
   "posh_anti_ragging_declaration",
-  "passport"
+  "passport",
+  "registration_status",
+  "status_updated_by",
+  "status_updated_on",
+  "status_remarks",
+  "offer_letter_verified",
+  "rego_remarks",
+  "laptop_allocated",
+  "official_email_id"
  ],
  "fields": [
   {
@@ -156,7 +164,8 @@
    "depends_on": "eval:doc.applying_scholarship=='Yes'",
    "fieldname": "scholarship_amount",
    "fieldtype": "Currency",
-   "label": "Scholarship Amount"
+   "label": "Scholarship Amount",
+   "permlevel": 2
   },
   {
    "depends_on": "eval:doc.applying_scholarship=='Yes'",
@@ -168,7 +177,8 @@
    "fieldname": "scholarship_approver",
    "fieldtype": "Link",
    "label": "Approver (FINO/REGO)",
-   "options": "User"
+   "options": "User",
+   "permlevel": 2
   },
   {
    "fieldname": "scholarship_approval_date",
@@ -451,12 +461,14 @@
    "fieldname": "hostel_allocated",
    "fieldtype": "Link",
    "label": "Hostel",
-   "options": "Hostel"
+   "options": "Hostel",
+   "permlevel": 3
   },
   {
    "fieldname": "room_number",
    "fieldtype": "Data",
-   "label": "Room Number"
+   "label": "Room Number",
+   "permlevel": 3
   },
   {
    "fieldname": "meal_plan",
@@ -577,14 +589,67 @@
    "fieldname": "signature_ppkg",
    "fieldtype": "Signature",
    "label": "Residence Agreement"
+  },
+  {
+   "fieldname": "registration_status",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Registration Status",
+   "options": "Workflow State",
+   "read_only": 1
+  },
+  {
+   "fieldname": "status_updated_by",
+   "fieldtype": "Link",
+   "label": "Status Updated By",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "status_updated_on",
+   "fieldtype": "Datetime",
+   "label": "Status Updated On",
+   "read_only": 1
+  },
+  {
+   "fieldname": "status_remarks",
+   "fieldtype": "Small Text",
+   "label": "Status Remarks"
+  },
+  {
+   "default": "0",
+   "fieldname": "offer_letter_verified",
+   "fieldtype": "Check",
+   "label": "Offer Letter Verified",
+   "permlevel": 1
+  },
+  {
+   "fieldname": "rego_remarks",
+   "fieldtype": "Small Text",
+   "label": "REGO Remarks",
+   "permlevel": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "laptop_allocated",
+   "fieldtype": "Check",
+   "label": "Laptop Allocated",
+   "permlevel": 4
+  },
+  {
+   "fieldname": "official_email_id",
+   "fieldtype": "Data",
+   "label": "Official Email ID",
+   "permlevel": 4
   }
  ],
  "links": [],
- "modified": "2026-01-05 17:46:55.634923",
+ "modified": "2026-01-06 12:11:45.534981",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "Student Master",
- "naming_rule": "Expression (old style)",
+ "naming_rule": "Expression",
  "owner": "Administrator",
  "permissions": [
   {
@@ -593,6 +658,61 @@
    "read": 1,
    "role": "System Manager",
    "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "SLCM Registrar",
+   "write": 1
+  },
+  {
+   "email": 1,
+   "permlevel": 1,
+   "print": 1,
+   "read": 1,
+   "role": "SLCM Registrar",
+   "write": 1
+  },
+  {
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "Accounts User",
+   "write": 1
+  },
+  {
+   "email": 1,
+   "permlevel": 2,
+   "print": 1,
+   "read": 1,
+   "role": "Accounts User",
+   "write": 1
+  },
+  {
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "Hostel Warden",
+   "write": 1
+  },
+  {
+   "email": 1,
+   "permlevel": 3,
+   "print": 1,
+   "read": 1,
+   "role": "Hostel Warden",
+   "write": 1
+  },
+  {
+   "email": 1,
+   "permlevel": 4,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "write": 1,
+   "delete" : 1
   }
  ],
  "row_format": "Dynamic",

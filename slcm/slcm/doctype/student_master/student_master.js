@@ -1,11 +1,6 @@
 // Copyright (c) 2025, Nishanth and contributors
 // For license information, please see license.txt
 
-// frappe.ui.form.on("Student Master", {
-// 	refresh(frm) {
-
-// 	},
-// });
 frappe.ui.form.on("Student Master", {
 	refresh(frm) {
 		// Hide default left sidebar
@@ -13,6 +8,32 @@ frappe.ui.form.on("Student Master", {
 
 		// Render custom right-side profile panel
 		frm.trigger("render_profile_sidebar");
+
+		// Custom Status Button
+		if (!frm.is_new()) {
+			frm.add_custom_button(
+				__("Status"),
+				function () {
+					frm.trigger("show_status_dialog");
+				},
+				__("Actions")
+			).addClass("btn-primary");
+		}
+	},
+
+	show_status_dialog(frm) {
+		// Fetch available actions
+		frappe.call({
+			method: "slcm.slcm.doctype.student_master.student_master.get_available_status_actions",
+			args: {
+				student_id: frm.doc.name,
+			},
+			callback: function (r) {
+				if (r.message) {
+					show_status_transition_dialog(frm, r.message);
+				}
+			},
+		});
 	},
 
 	render_profile_sidebar(frm) {
@@ -36,21 +57,129 @@ frappe.ui.form.on("Student Master", {
 			</div>
 		`;
 
-		frm.fields_dict.profile_sidebar.$wrapper.html(html);
+		if (frm.fields_dict.profile_sidebar) {
+			frm.fields_dict.profile_sidebar.$wrapper.html(html);
 
-		frm.fields_dict.profile_sidebar.$wrapper.find(".upload-btn").on("click", () => {
-			new frappe.ui.FileUploader({
-				doctype: frm.doctype,
-				docname: frm.doc.name,
-				on_success(file) {
-					if (file.file_url && file.file_url.match(/\.(jpg|jpeg|png|webp)$/i)) {
-						frm.set_value("student_image", file.file_url);
-						frm.save().then(() => {
-							frm.reload_doc();
-						});
-					}
-				},
+			frm.fields_dict.profile_sidebar.$wrapper.find(".upload-btn").on("click", () => {
+				new frappe.ui.FileUploader({
+					doctype: frm.doctype,
+					docname: frm.doc.name,
+					on_success(file) {
+						if (file.file_url && file.file_url.match(/\.(jpg|jpeg|png|webp)$/i)) {
+							frm.set_value("student_image", file.file_url);
+							frm.save().then(() => {
+								frm.reload_doc();
+							});
+						}
+					},
+				});
 			});
-		});
+		}
 	},
 });
+
+function show_status_transition_dialog(frm, data) {
+	const current_status = data.current_status || "Draft";
+	const available_actions = data.available_actions || [];
+
+	if (available_actions.length === 0) {
+		frappe.msgprint({
+			title: __("No Actions Available"),
+			message: __("You do not have permission to change the status from {0}.", [
+				current_status,
+			]),
+			indicator: "orange",
+		});
+		return;
+	}
+
+	// Create dialog
+	let dialog = new frappe.ui.Dialog({
+		title: __("Update Registration Status"),
+		fields: [
+			{
+				fieldtype: "HTML",
+				options: `<div class="alert alert-info">
+					<strong>Current Status:</strong> ${current_status}
+				</div>`,
+			},
+			{
+				fieldtype: "Select",
+				fieldname: "new_status",
+				label: __("New Status"),
+				options: available_actions.map((a) => a.next_state).join("\n"),
+				reqd: 1,
+			},
+			{
+				fieldtype: "Small Text",
+				fieldname: "remarks",
+				label: __("Remarks (Optional)"),
+			},
+		],
+		primary_action_label: __("Update Status"),
+		primary_action: function () {
+			const values = dialog.get_values();
+			if (!values.new_status) {
+				frappe.msgprint({
+					title: __("Required"),
+					message: __("Please select a new status"),
+					indicator: "orange",
+				});
+				return;
+			}
+
+			// Confirm action
+			frappe.confirm(
+				__("Are you sure you want to change status from <b>{0}</b> to <b>{1}</b>?", [
+					current_status,
+					values.new_status,
+				]),
+				function () {
+					// Yes
+					frappe.call({
+						method: "slcm.slcm.doctype.student_master.student_master.update_registration_status",
+						args: {
+							student_id: frm.doc.name,
+							new_status: values.new_status,
+							remarks: values.remarks,
+						},
+						freeze: true,
+						freeze_message: __("Updating status..."),
+						callback: function (r) {
+							if (r.message && r.message.status === "success") {
+								frappe.show_alert({
+									message: r.message.message,
+									indicator: "green",
+								});
+								dialog.hide();
+								frm.reload_doc();
+							} else {
+								frappe.msgprint({
+									title: __("Error"),
+									message: r.message
+										? r.message.message || r.message
+										: __("Failed to update status"),
+									indicator: "red",
+								});
+							}
+						},
+						error: function (r) {
+							frappe.msgprint({
+								title: __("Error"),
+								message:
+									r.message || __("Failed to update status. Please try again."),
+								indicator: "red",
+							});
+						},
+					});
+				},
+				function () {
+					// No
+					dialog.hide();
+				}
+			);
+		},
+	});
+
+	dialog.show();
+}

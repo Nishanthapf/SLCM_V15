@@ -1,0 +1,99 @@
+{
+    "workflow_name": "Student Registration Workflow",
+    "document_type": "Student Master",
+    "is_active": 1,
+    "override_status": 1,
+    "workflow_state_field": "registration_status",
+    "states": [
+        {
+            "state": "Draft",
+            "doc_status": 0,
+            "allow_edit": "System Manager"
+        },
+        {
+            "state": "Pending REGO",
+            "doc_status": 0,
+            "allow_edit": "REGO Officer"
+        },
+        {
+            "state": "Pending FINO",
+            "doc_status": 0,
+            "allow_edit": "FINO Officer"
+        },
+        {
+            "state": "Pending Registration",
+            "doc_status": 0,
+            "allow_edit": "Registration Officer"
+        },
+        {
+            "state": "Pending Print & Scan",
+            "doc_status": 0,
+            "allow_edit": "Documentation Officer"
+        },
+        {
+            "state": "Pending Residences",
+            "doc_status": 0,
+            "allow_edit": "Residence / Hostel Admin"
+        },
+        {
+            "state": "Pending IT",
+            "doc_status": 0,
+            "allow_edit": "IT Admin"
+        },
+        {
+            "state": "Completed",
+            "doc_status": 1,
+            "allow_edit": "System Manager"
+        }
+    ],
+    "transitions": [
+        {
+            "state": "Draft",
+            "action": "Submit for REGO",
+            "next_state": "Pending REGO",
+            "allowed": "Student,Registration User"
+        },
+        {
+            "state": "Pending REGO",
+            "action": "Approve Documents",
+            "next_state": "Pending FINO",
+            "allowed": "REGO Officer"
+        },
+        {
+            "state": "Pending FINO",
+            "action": "Approve Finances",
+            "next_state": "Pending Registration",
+            "allowed": "FINO Officer"
+        },
+        {
+            "state": "Pending Registration",
+            "action": "Complete Registration",
+            "next_state": "Pending Print & Scan",
+            "allowed": "Registration Officer"
+        },
+        {
+            "state": "Pending Print & Scan",
+            "action": "Upload Documents",
+            "next_state": "Pending Residences",
+            "allowed": "Documentation Officer"
+        },
+        {
+            "state": "Pending Residences",
+            "action": "Allocate Room",
+            "next_state": "Pending IT",
+            "allowed": "Residence / Hostel Admin"
+        },
+        {
+            "state": "Pending IT",
+            "action": "Allocate Assets",
+            "next_state": "Completed",
+            "allowed": "IT Admin"
+        },
+        {
+            "state": "Completed",
+            "action": "Re-Open",
+            "next_state": "Draft",
+            "allowed": "System Manager"
+        }
+    ]
+}
