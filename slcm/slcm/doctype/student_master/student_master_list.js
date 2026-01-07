@@ -87,7 +87,7 @@ function add_listview_status_button(listview) {
 
 			show_bulk_status_dialog(listview, selected);
 		},
-		__("Actions")
+		__("Update Status")
 	);
 }
 
@@ -163,7 +163,7 @@ function add_bulk_delete_button(listview) {
 				}
 			);
 		},
-		__("Actions")
+		__("Update Status")
 	);
 }
 

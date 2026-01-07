@@ -16,7 +16,7 @@ frappe.ui.form.on("Student Master", {
 				function () {
 					frm.trigger("show_status_dialog");
 				},
-				__("Actions")
+				__("Update Status")
 			).addClass("btn-primary");
 		}
 	},
