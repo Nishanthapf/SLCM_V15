@@ -8,6 +8,14 @@ app_license = "mit"
 app_include_js = ["/assets/slcm/js/student_workspace_redirect.js"]
 
 
+doc_events = {
+    "Student Master": {
+        "before_save": "slcm.slcm.doctype.student_master.attach_file.set_document_links"
+    }
+}
+
+
+
 # Apps
 # ------------------
 
