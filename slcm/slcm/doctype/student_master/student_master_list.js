@@ -179,13 +179,26 @@ function show_bulk_status_dialog(listview, selected) {
 		"Completed",
 	];
 
+	// Get current statuses for selected students
+	const status_summary = {};
+	selected.forEach((student) => {
+		const status = student.registration_status || "Draft";
+		status_summary[status] = (status_summary[status] || 0) + 1;
+	});
+
+	const status_html = Object.entries(status_summary)
+		.map(([status, count]) => `<strong>${status}:</strong> ${count} student(s)`)
+		.join("<br>");
+
 	let dialog = new frappe.ui.Dialog({
 		title: __("Bulk Update Status"),
 		fields: [
 			{
 				fieldtype: "HTML",
 				options: `<div class="alert alert-info">
-					<strong>Selected:</strong> ${selected.length} student(s)
+					<strong>Selected:</strong> ${selected.length} student(s)<br><br>
+					<strong>Current Status Distribution:</strong><br>
+					${status_html}
 				</div>`,
 			},
 			{
@@ -198,7 +211,8 @@ function show_bulk_status_dialog(listview, selected) {
 			{
 				fieldtype: "Small Text",
 				fieldname: "remarks",
-				label: __("Remarks (Optional)"),
+				label: __("Remarks"),
+				reqd: 1,
 			},
 		],
 		primary_action_label: __("Update Status"),
@@ -209,6 +223,15 @@ function show_bulk_status_dialog(listview, selected) {
 				frappe.msgprint({
 					title: __("Required"),
 					message: __("Please select a new status"),
+					indicator: "orange",
+				});
+				return;
+			}
+
+			if (!values.remarks || !values.remarks.trim()) {
+				frappe.msgprint({
+					title: __("Required"),
+					message: __("Please enter remarks"),
 					indicator: "orange",
 				});
 				return;

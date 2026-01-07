@@ -113,7 +113,8 @@ function show_status_transition_dialog(frm, data) {
 			{
 				fieldtype: "Small Text",
 				fieldname: "remarks",
-				label: __("Remarks (Optional)"),
+				label: __("Remarks"),
+				reqd: 1,
 			},
 		],
 		primary_action_label: __("Update Status"),
@@ -123,6 +124,15 @@ function show_status_transition_dialog(frm, data) {
 				frappe.msgprint({
 					title: __("Required"),
 					message: __("Please select a new status"),
+					indicator: "orange",
+				});
+				return;
+			}
+
+			if (!values.remarks || !values.remarks.trim()) {
+				frappe.msgprint({
+					title: __("Required"),
+					message: __("Please enter remarks"),
 					indicator: "orange",
 				});
 				return;

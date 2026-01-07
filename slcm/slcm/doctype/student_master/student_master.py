@@ -86,7 +86,8 @@ def update_registration_status(student_id, new_status, remarks=None):
 	Auto-creates workflow state if missing
 	"""
 	user_roles = frappe.get_roles()
-	is_system_manager = "System Manager" in user_roles
+	is_system_manager = "System Manager" in user_roles or frappe.session.user == "Administrator"
+	is_admin = is_system_manager
 
 	# Auto-create workflow state if it doesn't exist
 	if not frappe.db.exists("Workflow State", new_status):
@@ -117,8 +118,8 @@ def update_registration_status(student_id, new_status, remarks=None):
 	# Check if user has permission for this status transition
 	required_roles = transition_roles.get(new_status, [])
 
-	# System Manager can do anything
-	if not is_system_manager:
+	# System Manager and Administrator can do anything
+	if not is_admin:
 		# Check if user has required role
 		if not any(role in user_roles for role in required_roles):
 			frappe.throw(
@@ -139,7 +140,8 @@ def update_registration_status(student_id, new_status, remarks=None):
 		"Completed": ["Draft"],
 	}
 
-	if not is_system_manager:
+	# Admin and System Manager can change to any status
+	if not is_admin:
 		if current_status in valid_transitions:
 			if new_status not in valid_transitions[current_status]:
 				frappe.throw(
@@ -153,8 +155,11 @@ def update_registration_status(student_id, new_status, remarks=None):
 	student.status_updated_by = frappe.session.user
 	student.status_updated_on = now_datetime()
 
-	if remarks:
-		student.status_remarks = remarks
+	# Remarks is mandatory
+	if not remarks:
+		frappe.throw(_("Remarks is mandatory for status update"))
+
+	student.status_remarks = remarks
 
 	try:
 		student.save(ignore_permissions=True)
@@ -174,6 +179,7 @@ def get_available_status_actions(student_id):
 	student = frappe.get_doc("Student Master", student_id)
 	current_status = student.registration_status or "Draft"
 	user_roles = frappe.get_roles()
+	is_admin = "System Manager" in user_roles or frappe.session.user == "Administrator"
 
 	# Define workflow transitions
 	workflow_transitions = {
@@ -216,10 +222,9 @@ def get_available_status_actions(student_id):
 	}
 
 	available_actions = []
-	is_system_manager = "System Manager" in user_roles
 
-	# System Manager can see all possible statuses
-	if is_system_manager:
+	# Admin and System Manager can see all possible statuses
+	if is_admin:
 		all_states = [
 			"Draft",
 			"Pending REGO",
