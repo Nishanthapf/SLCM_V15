@@ -199,8 +199,7 @@ function show_bulk_status_dialog(listview, selected) {
 				fieldtype: "HTML",
 				options: `<div class="alert alert-info">
 					<strong>Selected:</strong> ${selected.length} student(s)<br><br>
-					<strong>Current Status:</strong><br>
-					${status_html}
+					<strong>Current Status:</strong><br>${status_html}
 				</div>`,
 			},
 			{

@@ -9,7 +9,6 @@
  "field_order": [
   "tab_registration",
   "registration_admission_section",
-  "naming_series",
   "registration_id",
   "application_number",
   "admission_sequence",
@@ -22,10 +21,11 @@
   "applying_scholarship",
   "scholarship_amount",
   "scholarship_percentage",
-  "scholarship_approver",
   "scholarship_approval_date",
   "number_of_instalments",
+  "official_email_id",
   "user",
+  "naming_series",
   "tab_program_mapping",
   "program_mapping_section",
   "department",
@@ -85,10 +85,14 @@
   "qualifications",
   "tab_account",
   "account_status_section",
+  "column_break_zfil",
+  "admission_fee_status",
   "student_status",
   "account_status",
   "status_remark",
   "tab_documents",
+  "offer_letter",
+  "offer_letter_verified",
   "aadhaar_card",
   "pan_card",
   "std_x_marksheet",
@@ -98,17 +102,10 @@
   "passport_size_photo",
   "posh_anti_ragging_declaration",
   "passport",
-  "registration_status",
-  "status_updated_by",
-  "status_updated_on",
-  "status_remarks",
-  "offer_letter_verified",
-  "rego_remarks",
-  "laptop_allocated",
-  "official_email_id",
   "tab_status_history",
   "status_history_section",
-  "workflow_history"
+  "workflow_history",
+  "registration_status"
  ],
  "fields": [
   {
@@ -187,13 +184,6 @@
    "fieldname": "scholarship_percentage",
    "fieldtype": "Percent",
    "label": "Scholarship Percentage"
-  },
-  {
-   "fieldname": "scholarship_approver",
-   "fieldtype": "Link",
-   "label": "Approver (FINO/REGO)",
-   "options": "User",
-   "permlevel": 2
   },
   {
    "fieldname": "scholarship_approval_date",
@@ -606,29 +596,8 @@
   {
    "fieldname": "registration_status",
    "fieldtype": "Link",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
    "label": "Registration Status",
-   "options": "Workflow State",
-   "read_only": 1
-  },
-  {
-   "fieldname": "status_updated_by",
-   "fieldtype": "Link",
-   "label": "Status Updated By",
-   "options": "User",
-   "read_only": 1
-  },
-  {
-   "fieldname": "status_updated_on",
-   "fieldtype": "Datetime",
-   "label": "Status Updated On",
-   "read_only": 1
-  },
-  {
-   "fieldname": "status_remarks",
-   "fieldtype": "Small Text",
-   "label": "Status Remarks"
+   "options": "Workflow State"
   },
   {
    "default": "0",
@@ -638,23 +607,9 @@
    "permlevel": 1
   },
   {
-   "fieldname": "rego_remarks",
-   "fieldtype": "Small Text",
-   "label": "REGO Remarks",
-   "permlevel": 1
-  },
-  {
-   "default": "0",
-   "fieldname": "laptop_allocated",
-   "fieldtype": "Check",
-   "label": "Laptop Allocated",
-   "permlevel": 4
-  },
-  {
    "fieldname": "official_email_id",
    "fieldtype": "Data",
-   "label": "Official Email ID",
-   "permlevel": 4
+   "label": "Official Email ID"
   },
   {
    "fetch_from": "programme.program_shortcode",
@@ -697,10 +652,26 @@
    "fieldname": "status_history_section",
    "fieldtype": "Section Break",
    "label": "Status History"
+  },
+  {
+   "fieldname": "offer_letter",
+   "fieldtype": "Attach",
+   "label": "Offer Letter"
+  },
+  {
+   "fieldname": "column_break_zfil",
+   "fieldtype": "Column Break",
+   "options": "\nPaid\nUnpaid"
+  },
+  {
+   "fieldname": "admission_fee_status",
+   "fieldtype": "Select",
+   "label": "Admission Fee Status",
+   "options": "\nPaid\nUnpaid"
   }
  ],
  "links": [],
- "modified": "2026-01-07 14:53:11.268604",
+ "modified": "2026-01-07 15:50:22.740552",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "Student Master",
