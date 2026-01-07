@@ -8,6 +8,8 @@
 // });
 frappe.ui.form.on("Student Placement Profile", {
 	refresh(frm) {
+		$("span.sidebar-toggle-btn").hide();
+		$(".col-lg-2.layout-side-section").hide();
 		if (frm.doc.profile_status === "Locked" && frappe.user.has_role("Student")) {
 			frm.set_read_only();
 			frm.disable_save();

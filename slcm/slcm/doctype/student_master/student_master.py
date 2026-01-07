@@ -4,7 +4,7 @@
 import frappe
 from frappe import _
 from frappe.model.document import Document
-from frappe.utils import now_datetime
+from frappe.utils import get_fullname, now_datetime
 
 
 class StudentMaster(Document):
@@ -49,7 +49,7 @@ class StudentMaster(Document):
 						).format(previous_status, self.registration_status)
 					)
 
-	def on_update(self):
+	def before_save(self):
 		"""Track status changes"""
 		if self.is_new():
 			return
@@ -62,6 +62,18 @@ class StudentMaster(Document):
 			self.status_updated_by = frappe.session.user
 			self.status_updated_on = now_datetime()
 
+			# Update Status History Child Table
+			self.append(
+				"workflow_history",
+				{
+					"workflow_state": self.registration_status,
+					"previous_state": previous_status,
+					"updated_by": frappe.session.user,
+					"updated_on": now_datetime(),
+					"remarks": self.status_remarks,
+				},
+			)
+
 			# Add comment for audit trail
 			frappe.get_doc(
 				{
@@ -72,7 +84,7 @@ class StudentMaster(Document):
 					"content": _("Status changed from {0} to {1} by {2}").format(
 						previous_status or "Draft",
 						self.registration_status,
-						frappe.get_fullname(frappe.session.user),
+						get_fullname(frappe.session.user),
 					),
 				}
 			).insert(ignore_permissions=True)

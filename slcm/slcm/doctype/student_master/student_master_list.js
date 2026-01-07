@@ -5,6 +5,8 @@ frappe.listview_settings["Student Master"] = {
 	add_fields: ["registration_status", "status_updated_by", "status_updated_on"],
 
 	onload(listview) {
+		$("span.sidebar-toggle-btn").hide();
+		$(".col-lg-2.layout-side-section").hide();
 		inject_status_css();
 		add_listview_status_actions(listview);
 		add_listview_status_button(listview);
@@ -197,7 +199,7 @@ function show_bulk_status_dialog(listview, selected) {
 				fieldtype: "HTML",
 				options: `<div class="alert alert-info">
 					<strong>Selected:</strong> ${selected.length} student(s)<br><br>
-					<strong>Current Status Distribution:</strong><br>
+					<strong>Current Status:</strong><br>
 					${status_html}
 				</div>`,
 			},

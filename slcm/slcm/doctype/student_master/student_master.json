@@ -2,14 +2,14 @@
  "actions": [],
  "allow_import": 1,
  "allow_rename": 1,
-"autoname": "naming_series:naming_series",
- "creation": "2025-12-30 10:31:47.469762",
+ "autoname": "naming_series:naming_series",
+ "creation": "2026-01-07 14:46:29.467983",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
   "tab_registration",
   "registration_admission_section",
-    "naming_series",
+  "naming_series",
   "registration_id",
   "application_number",
   "admission_sequence",
@@ -105,7 +105,10 @@
   "offer_letter_verified",
   "rego_remarks",
   "laptop_allocated",
-  "official_email_id"
+  "official_email_id",
+  "tab_status_history",
+  "status_history_section",
+  "workflow_history"
  ],
  "fields": [
   {
@@ -118,13 +121,13 @@
    "fieldtype": "Section Break",
    "label": "Registration & Admission Details"
   },
-    {
-    "fieldname": "naming_series",
-    "fieldtype": "Select",
-    "label": "Naming Series",
-    "hidden": 1,
-    "no_copy": 1
-    },
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "hidden": 1,
+   "label": "Naming Series",
+   "no_copy": 1
+  },
   {
    "fieldname": "registration_id",
    "fieldtype": "Data",
@@ -677,77 +680,89 @@
    "fieldname": "pwd_certificate",
    "fieldtype": "Attach",
    "label": "PWD (Persons with Disabilities) Certificate"
+  },
+  {
+   "fieldname": "tab_status_history",
+   "fieldtype": "Tab Break",
+   "label": "Status History"
+  },
+  {
+   "fieldname": "workflow_history",
+   "fieldtype": "Table",
+   "label": "History",
+   "options": "Student Workflow History",
+   "read_only": 1
+  },
+  {
+   "fieldname": "status_history_section",
+   "fieldtype": "Section Break",
+   "label": "Status History"
   }
  ],
-
-
  "links": [],
- "modified": "2026-01-06 12:58:41.770386",
+ "modified": "2026-01-07 14:53:11.268604",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "Student Master",
  "naming_rule": "Expression",
  "owner": "Administrator",
-
  "permissions": [
   {
-   "role": "System Manager",
-   "read": 1,
-   "write": 1,
    "create": 1,
    "delete": 1,
+   "email": 1,
    "print": 1,
-   "email": 1
+   "read": 1,
+   "role": "System Manager",
+   "write": 1
   },
   {
-   "role": "SLCM Registrar",
-   "read": 1,
-   "write": 1,
    "create": 1,
+   "email": 1,
    "print": 1,
-   "email": 1
-  },
-  {
-   "role": "Accounts User",
    "read": 1,
-   "write": 1,
-   "print": 1,
-   "email": 1
-  },
-  {
-   "role": "Hostel Warden",
-   "read": 1,
-   "write": 1,
-   "print": 1,
-   "email": 1
-  },
-
-  {
    "role": "SLCM Registrar",
+   "write": 1
+  },
+  {
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "Accounts User",
+   "write": 1
+  },
+  {
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "Hostel Warden",
+   "write": 1
+  },
+  {
    "permlevel": 1,
    "read": 1,
+   "role": "SLCM Registrar",
    "write": 1
   },
   {
-   "role": "Accounts User",
    "permlevel": 2,
    "read": 1,
+   "role": "Accounts User",
    "write": 1
   },
   {
-   "role": "Hostel Warden",
    "permlevel": 3,
    "read": 1,
+   "role": "Hostel Warden",
    "write": 1
   },
   {
-   "role": "System Manager",
    "permlevel": 4,
    "read": 1,
+   "role": "System Manager",
    "write": 1
   }
  ],
-
  "row_format": "Dynamic",
  "sort_field": "modified",
  "sort_order": "DESC",

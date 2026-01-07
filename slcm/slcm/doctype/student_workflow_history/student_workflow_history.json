@@ -1,0 +1,67 @@
+{
+ "actions": [],
+ "creation": "2026-01-07 14:46:28.814841",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "workflow_state",
+  "previous_state",
+  "updated_by",
+  "updated_on",
+  "remarks"
+ ],
+ "fields": [
+  {
+   "columns": 2,
+   "fieldname": "workflow_state",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "To",
+   "options": "Workflow State"
+  },
+  {
+   "columns": 2,
+   "fieldname": "previous_state",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "From",
+   "options": "Workflow State"
+  },
+  {
+   "columns": 2,
+   "fieldname": "updated_by",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Updated By",
+   "options": "User"
+  },
+  {
+   "columns": 2,
+   "fieldname": "updated_on",
+   "fieldtype": "Datetime",
+   "in_list_view": 1,
+   "label": "Updated On"
+  },
+  {
+   "columns": 4,
+   "fieldname": "remarks",
+   "fieldtype": "Small Text",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Remarks"
+  }
+ ],
+ "istable": 1,
+ "links": [],
+ "modified": "2026-01-07 14:58:45.487097",
+ "modified_by": "Administrator",
+ "module": "SLCM",
+ "name": "Student Workflow History",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

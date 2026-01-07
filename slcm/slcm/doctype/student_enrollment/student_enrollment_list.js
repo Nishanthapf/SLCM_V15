@@ -127,6 +127,8 @@
  *****************************************************/
 frappe.listview_settings["Student Enrollment"] = {
 	onload(listview) {
+		$("span.sidebar-toggle-btn").hide();
+		$(".col-lg-2.layout-side-section").hide();
 		inject_enrollment_status_css();
 		add_listview_status_actions(listview);
 	},
