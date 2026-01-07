@@ -2,13 +2,14 @@
  "actions": [],
  "allow_import": 1,
  "allow_rename": 1,
- "autoname": "format:{program_shortcode}{current_year}{###}",
+"autoname": "naming_series:naming_series",
  "creation": "2025-12-30 10:31:47.469762",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
   "tab_registration",
   "registration_admission_section",
+    "naming_series",
   "registration_id",
   "application_number",
   "admission_sequence",
@@ -117,6 +118,13 @@
    "fieldtype": "Section Break",
    "label": "Registration & Admission Details"
   },
+    {
+    "fieldname": "naming_series",
+    "fieldtype": "Select",
+    "label": "Naming Series",
+    "hidden": 1,
+    "no_copy": 1
+    },
   {
    "fieldname": "registration_id",
    "fieldtype": "Data",
