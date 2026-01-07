@@ -25,7 +25,6 @@
   {
    "fieldname": "term_name",
    "fieldtype": "Data",
-   "hidden": 1,
    "label": "Term Name",
    "unique": 1
   },
@@ -73,7 +72,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-01-05 12:42:34.503185",
+ "modified": "2026-01-06 20:58:33.698560",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "Academic Term",
