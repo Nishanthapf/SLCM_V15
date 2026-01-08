@@ -1,0 +1,61 @@
+{
+ "charts": [],
+ "content": "[{\"id\":\"lGzl80sXgG\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">IT Team</span>\",\"col\":12}},{\"id\":\"2H88Q1r7VE\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"ID Card Template\",\"col\":3}},{\"id\":\"s-givwrb-0\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Student ID Card\",\"col\":3}},{\"id\":\"1b-e4VtO7y\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"ID Card Generation Tool\",\"col\":3}},{\"id\":\"FNnQTquMUu\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"ID Card Print Log\",\"col\":3}}]",
+ "creation": "2026-01-08 18:02:19.541991",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "quantity-1",
+ "idx": 0,
+ "indicator_color": "green",
+ "is_hidden": 0,
+ "label": "IT Team",
+ "links": [],
+ "modified": "2026-01-08 18:07:39.406378",
+ "modified_by": "Administrator",
+ "module": "SLCM",
+ "name": "IT Team",
+ "number_cards": [],
+ "owner": "Administrator",
+ "parent_page": "",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [],
+ "sequence_id": 25.0,
+ "shortcuts": [
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "ID Card Generation Tool",
+   "type": "URL",
+   "url": "http://127.0.0.1:8010/app/id-card-generation-tool"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "ID Card Template",
+   "link_to": "ID Card Template",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "ID Card Print Log",
+   "link_to": "ID Card Print Log",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Student ID Card",
+   "link_to": "Student ID Card",
+   "stats_filter": "[]",
+   "type": "DocType"
+  }
+ ],
+ "title": "IT Team"
+}
