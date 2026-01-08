@@ -9,11 +9,8 @@ app_include_js = ["/assets/slcm/js/student_workspace_redirect.js"]
 
 
 doc_events = {
-    "Student Master": {
-        "before_save": "slcm.slcm.doctype.student_master.attach_file.set_document_links"
-    }
+	"Student Master": {"before_save": "slcm.slcm.doctype.student_master.attach_file.set_document_links"}
 }
-
 
 
 # Apps
@@ -257,3 +254,5 @@ doc_events = {
 # ------------
 # List of apps whose translatable strings should be excluded from this app's translations.
 # ignore_translatable_strings_from = []
+
+website_route_rules = [{"from_route": "/verify-student/<student_id>", "to_route": "verify_student"}]

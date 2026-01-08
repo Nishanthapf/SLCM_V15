@@ -1,0 +1,158 @@
+{
+    "actions": [],
+    "autoname": "field:template_name",
+    "creation": "2024-05-21 12:00:00.000000",
+    "doctype": "DocType",
+    "engine": "InnoDB",
+    "field_order": [
+        "template_name",
+        "card_type",
+        "card_size",
+        "is_default",
+        "section_break_design",
+        "front_background",
+        "back_background",
+        "institute_logo",
+        "column_break_design",
+        "font_family",
+        "base_font_color",
+        "section_break_institute",
+        "institute_name",
+        "institute_address",
+        "validity_text",
+        "section_break_fields",
+        "fields"
+    ],
+    "fields": [
+        {
+            "fieldname": "template_name",
+            "fieldtype": "Data",
+            "label": "Template Name",
+            "reqd": 1,
+            "unique": 1
+        },
+        {
+            "default": "Student",
+            "fieldname": "card_type",
+            "fieldtype": "Select",
+            "label": "Card Type",
+            "options": "Student\nStaff\nVisitor",
+            "reqd": 1
+        },
+        {
+            "default": "CR80",
+            "fieldname": "card_size",
+            "fieldtype": "Select",
+            "label": "Card Size",
+            "options": "CR80",
+            "read_only": 1,
+            "reqd": 1
+        },
+        {
+            "default": "0",
+            "fieldname": "is_default",
+            "fieldtype": "Check",
+            "label": "Is Default Template"
+        },
+        {
+            "fieldname": "section_break_design",
+            "fieldtype": "Section Break",
+            "label": "Design Assets"
+        },
+        {
+            "fieldname": "front_background",
+            "fieldtype": "Attach Image",
+            "label": "Front Background",
+            "reqd": 1,
+            "description": "Recommended: 1016x638 px (300 DPI for CR80)"
+        },
+        {
+            "fieldname": "back_background",
+            "fieldtype": "Attach Image",
+            "label": "Back Background",
+            "reqd": 1,
+            "description": "Recommended: 1016x638 px (300 DPI for CR80)"
+        },
+        {
+            "fieldname": "institute_logo",
+            "fieldtype": "Attach Image",
+            "label": "Institute Logo"
+        },
+        {
+            "fieldname": "column_break_design",
+            "fieldtype": "Column Break"
+        },
+        {
+            "fieldname": "font_family",
+            "fieldtype": "Data",
+            "label": "Default Font Family",
+            "default": "Arial"
+        },
+        {
+            "fieldname": "base_font_color",
+            "fieldtype": "Data",
+            "label": "Base Font Color",
+            "default": "#000000"
+        },
+        {
+            "fieldname": "section_break_institute",
+            "fieldtype": "Section Break",
+            "label": "Institute Details"
+        },
+        {
+            "fieldname": "institute_name",
+            "fieldtype": "Data",
+            "label": "Institute Name"
+        },
+        {
+            "fieldname": "institute_address",
+            "fieldtype": "Small Text",
+            "label": "Institute Address"
+        },
+        {
+            "fieldname": "validity_text",
+            "fieldtype": "Data",
+            "label": "Validity Text",
+            "description": "e.g., 'Valid until completion of course'"
+        },
+        {
+            "fieldname": "section_break_fields",
+            "fieldtype": "Section Break",
+            "label": "Field Mapping"
+        },
+        {
+            "fieldname": "fields",
+            "fieldtype": "Table",
+            "label": "Fields",
+            "options": "ID Card Template Field"
+        }
+    ],
+    "links": [],
+    "modified": "2024-05-21 12:00:00.000000",
+    "modified_by": "Administrator",
+    "module": "SLCM",
+    "name": "ID Card Template",
+    "naming_rule": "By fieldname",
+    "owner": "Administrator",
+    "permissions": [
+        {
+            "create": 1,
+            "delete": 1,
+            "email": 1,
+            "export": 1,
+            "print": 1,
+            "read": 1,
+            "report": 1,
+            "role": "System Manager",
+            "share": 1,
+            "write": 1
+        },
+        {
+            "read": 1,
+            "role": "SLCM Registrar"
+        }
+    ],
+    "sort_field": "modified",
+    "sort_order": "DESC",
+    "states": []
+}

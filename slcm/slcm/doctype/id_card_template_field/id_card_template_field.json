@@ -1,0 +1,101 @@
+{
+    "actions": [],
+    "creation": "2024-05-21 12:00:00.000000",
+    "doctype": "DocType",
+    "editable_grid": 1,
+    "engine": "InnoDB",
+    "field_order": [
+        "field_label",
+        "student_fieldname",
+        "side",
+        "position_x",
+        "position_y",
+        "width",
+        "font_size",
+        "alignment",
+        "font_color",
+        "font_files"
+    ],
+    "fields": [
+        {
+            "fieldname": "field_label",
+            "fieldtype": "Data",
+            "in_list_view": 1,
+            "label": "Field Label",
+            "reqd": 1
+        },
+        {
+            "fieldname": "student_fieldname",
+            "fieldtype": "Data",
+            "in_list_view": 1,
+            "label": "Student Fieldname (Source)",
+            "reqd": 1,
+            "description": "Fieldname in Student Master or 'qrcode' or 'static_text'"
+        },
+        {
+            "default": "Front",
+            "fieldname": "side",
+            "fieldtype": "Select",
+            "in_list_view": 1,
+            "label": "Side",
+            "options": "Front\nBack",
+            "reqd": 1
+        },
+        {
+            "fieldname": "position_x",
+            "fieldtype": "Int",
+            "in_list_view": 1,
+            "label": "Position X (px)",
+            "reqd": 1
+        },
+        {
+            "fieldname": "position_y",
+            "fieldtype": "Int",
+            "in_list_view": 1,
+            "label": "Position Y (px)",
+            "reqd": 1
+        },
+        {
+            "fieldname": "width",
+            "fieldtype": "Int",
+            "label": "Max Width (px)",
+            "description": "Text will wrap or scale if it exceeds this width"
+        },
+        {
+            "default": "30",
+            "fieldname": "font_size",
+            "fieldtype": "Int",
+            "label": "Font Size",
+            "reqd": 1
+        },
+        {
+            "default": "Left",
+            "fieldname": "alignment",
+            "fieldtype": "Select",
+            "label": "Alignment",
+            "options": "Left\nCenter\nRight"
+        },
+        {
+            "default": "#000000",
+            "fieldname": "font_color",
+            "fieldtype": "Data",
+            "label": "Font Color (Hex)"
+        },
+        {
+            "fieldname": "font_files",
+            "fieldtype": "Attach",
+            "label": "Custom Font File (TTF/OTF)"
+        }
+    ],
+    "istable": 1,
+    "links": [],
+    "modified": "2024-05-21 12:00:00.000000",
+    "modified_by": "Administrator",
+    "module": "SLCM",
+    "name": "ID Card Template Field",
+    "owner": "Administrator",
+    "permissions": [],
+    "sort_field": "modified",
+    "sort_order": "DESC",
+    "states": []
+}

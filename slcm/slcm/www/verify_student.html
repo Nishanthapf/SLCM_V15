@@ -1,0 +1,121 @@
+{% extends "templates/web.html" %}
+
+{% block page_content %}
+<style>
+    .verify-card {
+        border-radius: 15px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        overflow: hidden;
+        border: 1px solid #e0e0e0;
+        background: white;
+    }
+    .verify-header {
+        padding: 20px;
+        text-align: center;
+        color: white;
+    }
+    .status-badge {
+        font-size: 1.5rem;
+        font-weight: bold;
+        padding: 5px 15px;
+        border-radius: 20px;
+        background: white;
+        display: inline-block;
+        margin-top: 10px;
+    }
+    .student-photo {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 4px solid white;
+        margin: -60px auto 10px;
+        display: block;
+        background: #f0f0f0;
+    }
+    .details-row {
+        padding: 10px 20px;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    .details-label {
+        font-weight: bold;
+        color: #666;
+    }
+</style>
+
+<div class="py-5" style="background-color: #f8f9fa; min-height: 80vh;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-5">
+                {% if error_message %}
+                <div class="alert alert-danger text-center">
+                    {{ error_message }}
+                </div>
+                {% else %}
+
+                <div class="verify-card">
+                    <div class="verify-header bg-{{ status_color }}">
+                        <h5>Identity Verification</h5>
+                        <div class="status-badge text-{{ status_color }}">
+                            {{ status_label }}
+                        </div>
+                        {% if reason %}
+                        <div class="mt-2 small rgba-white-slight">{{ reason }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="text-center position-relative">
+                        {% if student.passport_size_photo %}
+                        <img src="{{ student.passport_size_photo }}" class="student-photo shadow-sm">
+                        {% else %}
+                        <div class="student-photo shadow-sm d-flex align-items-center justify-content-center bg-secondary text-white">
+                            <i class="fa fa-user fa-3x"></i>
+                        </div>
+                        {% endif %}
+
+                        <h3 class="mt-3 mb-1">{{ student.first_name }} {{ student.last_name or '' }}</h3>
+                        <p class="text-muted mb-3">{{ student.name }}</p>
+                    </div>
+
+                    <div class="details-row">
+                        <div class="row">
+                            <div class="col-5 details-label">Department</div>
+                            <div class="col-7">{{ student.department or '-' }}</div>
+                        </div>
+                    </div>
+
+                    <div class="details-row">
+                        <div class="row">
+                            <div class="col-5 details-label">Course</div>
+                            <div class="col-7">{{ student.programme or '-' }}</div>
+                        </div>
+                    </div>
+
+                    <div class="details-row">
+                        <div class="row">
+                            <div class="col-5 details-label">Batch</div>
+                            <div class="col-7">{{ student.batch_year or '-' }}</div>
+                        </div>
+                    </div>
+
+                    {% if card %}
+                    <div class="details-row">
+                        <div class="row">
+                            <div class="col-5 details-label">Valid Until</div>
+                            <div class="col-7">{{ card.get_formatted("expiry_date") }}</div>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <div class="p-4 text-center">
+                        <small class="text-muted">Verified by SLCM System</small>
+                    </div>
+
+                </div>
+
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

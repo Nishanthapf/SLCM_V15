@@ -1,0 +1,84 @@
+{
+    "actions": [],
+    "autoname": "naming_series:",
+    "creation": "2024-05-21 12:00:00.000000",
+    "doctype": "DocType",
+    "engine": "InnoDB",
+    "field_order": [
+        "student_id_card",
+        "printed_on",
+        "printed_by",
+        "printer_name",
+        "print_format",
+        "reprint_reason",
+        "naming_series"
+    ],
+    "fields": [
+        {
+            "fieldname": "student_id_card",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "label": "Student ID Card",
+            "options": "Student ID Card",
+            "reqd": 1
+        },
+        {
+            "fieldname": "printed_on",
+            "fieldtype": "Datetime",
+            "in_list_view": 1,
+            "label": "Printed On",
+            "reqd": 1
+        },
+        {
+            "fieldname": "printed_by",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "label": "Printed By",
+            "options": "User",
+            "reqd": 1
+        },
+        {
+            "fieldname": "printer_name",
+            "fieldtype": "Data",
+            "label": "Printer Name"
+        },
+        {
+            "fieldname": "print_format",
+            "fieldtype": "Data",
+            "label": "Print Format"
+        },
+        {
+            "fieldname": "reprint_reason",
+            "fieldtype": "Small Text",
+            "label": "Reprint Reason"
+        },
+        {
+            "default": "IDPL-.#####",
+            "fieldname": "naming_series",
+            "fieldtype": "Select",
+            "label": "Naming Series",
+            "options": "IDPL-.#####"
+        }
+    ],
+    "is_submittable": 0,
+    "links": [],
+    "modified": "2024-05-21 12:00:00.000000",
+    "modified_by": "Administrator",
+    "module": "SLCM",
+    "name": "ID Card Print Log",
+    "naming_rule": "By \"naming_series\" field",
+    "owner": "Administrator",
+    "permissions": [
+        {
+            "read": 1,
+            "role": "System Manager"
+        },
+        {
+            "read": 1,
+            "role": "SLCM Registrar"
+        }
+    ],
+    "sort_field": "modified",
+    "sort_order": "DESC",
+    "states": []
+}
