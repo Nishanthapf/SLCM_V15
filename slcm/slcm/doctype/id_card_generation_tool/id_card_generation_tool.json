@@ -1,6 +1,6 @@
 {
     "actions": [],
-    "creation": "2024-05-21 12:00:00.000000",
+    "creation": "2024-05-21 12:00:00",
     "doctype": "DocType",
     "engine": "InnoDB",
     "field_order": [
@@ -19,7 +19,9 @@
         "section_students",
         "student_list",
         "generate_cards",
-        "download_zip"
+        "download_zip",
+        "preview_section",
+        "preview_html"
     ],
     "fields": [
         {
@@ -54,6 +56,7 @@
         {
             "fieldname": "get_students",
             "fieldtype": "Button",
+            "hidden": 1,
             "label": "Get Students"
         },
         {
@@ -63,20 +66,23 @@
         {
             "fieldname": "id_card_template",
             "fieldtype": "Link",
+            "in_list_view": 1,
             "label": "ID Card Template",
             "options": "ID Card Template",
             "reqd": 1
         },
         {
+            "default": "Today",
             "fieldname": "issue_date",
             "fieldtype": "Date",
+            "in_list_view": 1,
             "label": "Issue Date",
-            "default": "Today",
             "reqd": 1
         },
         {
             "fieldname": "expiry_date",
             "fieldtype": "Date",
+            "in_list_view": 1,
             "label": "Expiry Date",
             "reqd": 1
         },
@@ -112,11 +118,22 @@
             "fieldname": "download_zip",
             "fieldtype": "Button",
             "label": "Download ZIP"
+        },
+        {
+            "fieldname": "preview_section",
+            "fieldtype": "Section Break",
+            "label": "Card Preview",
+            "hidden": 1
+        },
+        {
+            "fieldname": "preview_html",
+            "fieldtype": "HTML",
+            "label": "Preview HTML"
         }
     ],
     "issingle": 1,
     "links": [],
-    "modified": "2024-05-21 12:00:00.000000",
+    "modified": "2026-01-08 12:12:35.289218",
     "modified_by": "Administrator",
     "module": "SLCM",
     "name": "ID Card Generation Tool",
@@ -126,10 +143,8 @@
             "create": 1,
             "delete": 1,
             "email": 1,
-            "export": 1,
             "print": 1,
             "read": 1,
-            "report": 1,
             "role": "System Manager",
             "share": 1,
             "write": 1
@@ -140,6 +155,7 @@
             "write": 1
         }
     ],
+    "row_format": "Dynamic",
     "sort_field": "modified",
     "sort_order": "DESC",
     "states": []

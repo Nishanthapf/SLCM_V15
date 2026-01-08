@@ -21,7 +21,10 @@
         "institute_address",
         "validity_text",
         "section_break_fields",
-        "fields"
+        "fields",
+        "section_break_jinja",
+        "front_html",
+        "back_html"
     ],
     "fields": [
         {
@@ -63,14 +66,14 @@
             "fieldname": "front_background",
             "fieldtype": "Attach Image",
             "label": "Front Background",
-            "reqd": 1,
+            "reqd": 0,
             "description": "Recommended: 1016x638 px (300 DPI for CR80)"
         },
         {
             "fieldname": "back_background",
             "fieldtype": "Attach Image",
             "label": "Back Background",
-            "reqd": 1,
+            "reqd": 0,
             "description": "Recommended: 1016x638 px (300 DPI for CR80)"
         },
         {
@@ -125,6 +128,24 @@
             "fieldtype": "Table",
             "label": "Fields",
             "options": "ID Card Template Field"
+        },
+        {
+            "fieldname": "section_break_jinja",
+            "fieldtype": "Section Break",
+            "label": "Jinja Template (Advanced)",
+            "description": "If these fields are set, the Design Assets and Field Mapping will be ignored."
+        },
+        {
+            "fieldname": "front_html",
+            "fieldtype": "Code",
+            "label": "Front HTML",
+            "options": "HTML"
+        },
+        {
+            "fieldname": "back_html",
+            "fieldtype": "Code",
+            "label": "Back HTML",
+            "options": "HTML"
         }
     ],
     "links": [],

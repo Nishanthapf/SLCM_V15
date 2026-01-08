@@ -75,7 +75,9 @@ class IDCardGenerationTool(Document):
 				generated_count += 1
 			except Exception as e:
 				row.status = f"Error: {e!s}"
-				frappe.log_error(f"ID Card Gen Error for {row.student}: {e!s}")
+				# Truncate title to avoid "Value too big" error
+				error_msg = f"ID Card Gen Error for {row.student}: {e!s}"
+				frappe.log_error(error_msg[:139], error_msg)
 
 		self.save()
 		frappe.msgprint(f"Generated {generated_count} ID Cards.")
@@ -224,6 +226,52 @@ class IDCardGenerationTool(Document):
 
 	def get_full_path(self, file_url):
 		return frappe.get_site_path("public", file_url.lstrip("/"))
+
+	@frappe.whitelist()
+	def get_preview_html(self, template_name, student):
+		if not template_name or not student:
+			return ""
+
+		template = frappe.get_doc("ID Card Template", template_name)
+		student_doc = frappe.get_doc("Student Master", student)
+
+		# Create a dummy ID Card doc for context
+		id_card = frappe.new_doc("Student ID Card")
+		id_card.student = student
+
+		# Create context
+		context = student_doc.as_dict()
+		context.update(template.as_dict())
+		context.update(
+			{
+				"doc": id_card,
+				"student": student_doc,
+				"template": template,
+				"college_name": template.institute_name,
+				"logo_url": template.institute_logo,  # In preview, we can use relative URL
+				"qr_code_url": None,  # No QR for preview or placeholder
+			}
+		)
+
+		html = ""
+		if template.front_html:
+			html += "<div class='row'><div class='col-md-6'><h5>Front</h5>"
+			html += frappe.render_template(template.front_html, context)
+			html += "</div>"
+
+		if template.back_html:
+			if template.front_html:
+				html += "<div class='col-md-6'><h5>Back</h5>"
+			else:
+				html += "<div class='row'><div class='col-md-12'><h5>Back</h5>"
+
+			html += frappe.render_template(template.back_html, context)
+			html += "</div>"
+
+		if template.front_html or template.back_html:
+			html += "</div>"
+
+		return html
 
 	def save_temp_image(self, image, filename):
 		img_io = io.BytesIO()

@@ -1,5 +1,7 @@
 import io
 import os
+import subprocess
+import tempfile
 
 import frappe
 from frappe.model.document import Document
@@ -20,7 +22,7 @@ def hex_to_rgb(hex_color):
 
 class StudentIDCard(Document):
 	def validate(self):
-		if not self.generate_qr_code_data():
+		if not self.generate_qr_code_string():
 			# Set default QR data if not generated yet
 			pass
 
@@ -46,26 +48,99 @@ class StudentIDCard(Document):
 		template = frappe.get_doc("ID Card Template", self.id_card_template)
 		student = frappe.get_doc("Student Master", self.student)
 
-		# Paths for backgrounds
-		front_bg_path = self.get_file_path(template.front_background)
-		back_bg_path = self.get_file_path(template.back_background)
+		# Check for Jinja Template first
+		if template.front_html or template.back_html:
+			self.generate_card_html(template, student)
+		else:
+			# Fallback to coordinate system
+			# Paths for backgrounds
+			front_bg_path = self.get_file_path(template.front_background)
+			back_bg_path = self.get_file_path(template.back_background)
 
-		# Load Images
-		front_img = Image.open(front_bg_path).convert("RGBA")
-		back_img = Image.open(back_bg_path).convert("RGBA")
+			if front_bg_path:
+				front_img = Image.open(front_bg_path).convert("RGBA")
+				self.process_side(front_img, template, student, "Front")
+				self.save_image(front_img, f"{self.name}_Front.png", "front_id_image")
 
-		# Process Front
-		self.process_side(front_img, template, student, "Front")
-
-		# Process Back
-		self.process_side(back_img, template, student, "Back")
-
-		# Save Generated Images
-		self.save_image(front_img, f"{self.name}_Front.png", "front_id_image")
-		self.save_image(back_img, f"{self.name}_Back.png", "back_id_image")
+			if back_bg_path:
+				back_img = Image.open(back_bg_path).convert("RGBA")
+				self.process_side(back_img, template, student, "Back")
+				self.save_image(back_img, f"{self.name}_Back.png", "back_id_image")
 
 		self.card_status = "Generated"
 		self.save()
+
+	def generate_card_html(self, template, student):
+		if template.front_html:
+			self.generate_image_from_html(template.front_html, student, template, "front_id_image", "Front")
+		if template.back_html:
+			self.generate_image_from_html(template.back_html, student, template, "back_id_image", "Back")
+
+	def generate_image_from_html(self, html_content, student, template, fieldname, side):
+		# Prepare Context
+		# Flatten student and template for easier access
+		context = student.as_dict()
+		context.update(template.as_dict())
+		context.update(
+			{
+				"doc": self,
+				"student": student,
+				"template": template,
+				"college_name": template.institute_name,
+				"logo_url": self.get_file_path(template.institute_logo) if template.institute_logo else None,
+				"qr_code_url": self.get_qr_code_url(),  # Helper to get QR image path/url
+			}
+		)
+
+		# Render Jinja
+		rendered_html = frappe.render_template(html_content, context)
+
+		# Create temp file for HTML
+		with tempfile.NamedTemporaryFile(suffix=".html", delete=False, mode="w") as f:
+			f.write(rendered_html)
+			html_path = f.name
+
+		# Output image path
+		output_filename = f"{self.name}_{side}.png"
+		output_path = os.path.join(tempfile.gettempdir(), output_filename)
+
+		try:
+			# Run wkhtmltoimage
+			args = [
+				"/usr/bin/wkhtmltoimage",
+				"--enable-local-file-access",
+				"--width",
+				"1011",
+				"--height",
+				"638",
+				"--quality",
+				"100",
+				"--disable-smart-width",
+				html_path,
+				output_path,
+			]
+
+			# Capture stderr to debug failures
+			result = subprocess.run(args, capture_output=True, text=True)
+			if result.returncode != 0:
+				frappe.throw(f"wkhtmltoimage failed with code {result.returncode}: {result.stderr}")
+
+			# Read generated image
+			with open(output_path, "rb") as f:
+				img_content = f.read()
+
+			# Save to File Manager
+			saved_file = save_file(output_filename, img_content, self.doctype, self.name, is_private=0)
+			self.db_set(fieldname, saved_file.file_url)
+
+		except Exception as e:
+			frappe.throw(f"Error generating ID Card from HTML: {e}")
+		finally:
+			# Cleanup
+			if os.path.exists(html_path):
+				os.remove(html_path)
+			if os.path.exists(output_path):
+				os.remove(output_path)
 
 	def process_side(self, image, template, student, side):
 		draw = ImageDraw.Draw(image)
@@ -187,3 +262,25 @@ class StudentIDCard(Document):
 		saved_file = save_file(filename, img_content, self.doctype, self.name, is_private=0)
 
 		self.db_set(fieldname, saved_file.file_url)
+
+	def get_qr_code_url(self):
+		if not self.qr_code_data:
+			return None
+
+		# Generate QR
+		qr = qrcode.QRCode(
+			version=1,
+			error_correction=qrcode.constants.ERROR_CORRECT_H,
+			box_size=10,
+			border=1,
+		)
+		qr.add_data(self.qr_code_data)
+		qr.make(fit=True)
+		img_qr = qr.make_image(fill_color="black", back_color="white")
+
+		# Save to temp
+		temp_filename = f"qr_{self.name}.png"
+		temp_path = os.path.join(tempfile.gettempdir(), temp_filename)
+		img_qr.save(temp_path)
+
+		return temp_path
