@@ -42,10 +42,12 @@ class IDCardEditor {
     constructor(frm) {
         this.frm = frm;
         this.wrapper = frm.fields_dict.canvas_editor.$wrapper;
+        this.show_guides = true; // Default to showing guides
 
         let raw_data = frm.doc.canvas_data;
-        if (!raw_data) {
-            this.data = { front: [], back: [], orientation: 'horizontal', bg_color: { front: '#ffffff', back: '#ffffff' } };
+        if (!raw_data || raw_data === "{}" || raw_data === "[]") {
+            this.render_template_selector();
+            return;
         } else {
             try {
                 let parsed = JSON.parse(raw_data);
@@ -57,12 +59,194 @@ class IDCardEditor {
                     if (!this.data.bg_color) this.data.bg_color = { front: '#ffffff', back: '#ffffff' };
                 }
             } catch (e) {
-                this.data = { front: [], back: [], orientation: 'horizontal', bg_color: { front: '#ffffff', back: '#ffffff' } };
+                this.render_template_selector(); // Fallback
+                return;
             }
         }
 
         this.current_side = 'front';
         this.scale = 1.5;
+        this.render();
+    }
+
+    render_template_selector() {
+        this.wrapper.html(`
+            <style>
+                .tpl-card { border: 1px solid #ddd; border-radius: 8px; overflow: hidden; transition: all 0.2s; cursor: pointer; background: #fff; height: 100%; position: relative; }
+                .tpl-card:hover { border-color: #3498db; transform: translateY(-3px); box-shadow: 0 6px 12px rgba(0,0,0,0.1); }
+                .tpl-preview { height: 160px; background: #f4f6f9; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid #eee; position: relative; overflow: hidden; }
+                .tpl-body { padding: 20px; text-align: center; }
+                .tpl-title { font-weight: bold; font-size: 16px; margin-bottom: 5px; color: #333; }
+                .tpl-desc { font-size: 13px; color: #777; line-height: 1.4; }
+                
+                /* Mini Previews - Pure CSS */
+                .mini-card { background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.15); position: relative; overflow: hidden; }
+                
+                /* College Mini */
+                .mini-college { width: 60px; height: 96px; border-radius: 4px; }
+                .mini-college .header { background: #1a4d80; height: 20px; width: 100%; margin-bottom: 8px; }
+                .mini-college .photo { width: 24px; height: 24px; border: 1px solid #ddd; background: #eee; margin: 0 auto 5px; border-radius: 50%; }
+                .mini-college .lines { display: flex; flex-direction: column; gap: 3px; align-items: center; }
+                .mini-line { height: 2px; background: #e0e0e0; border-radius: 1px; }
+
+                /* University Mini */
+                .mini-uni { width: 96px; height: 60px; border-radius: 4px; display: flex; }
+                .mini-uni .side { width: 24px; height: 100%; background: #800000; }
+                .mini-uni .main { flex: 1; padding: 6px; display: flex; flex-direction: column; gap: 4px; }
+                .mini-uni .photo { width: 16px; height: 16px; background: #eee; border-radius: 50%; border: 1px solid #fff; position: absolute; left: 4px; top: 8px; }
+
+                /* Empty Mini */
+                .mini-empty { width: 60px; height: 96px; border: 1px dashed #ccc; border-radius: 4px; display: flex; align-items: center; justify-content: center; }
+                
+                .select-container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+            </style>
+            <div class="select-container">
+                <div style="text-align: center; margin-bottom: 40px;">
+                    <h3 style="margin-bottom: 10px;">Select a Template</h3>
+                    <p class="text-muted">Choose a starting point for your ID card design.</p>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="tpl-card template-select" data-template="empty">
+                            <div class="tpl-preview">
+                                <div class="mini-card mini-empty">
+                                    <i class="fa fa-plus" style="color: #ccc;"></i>
+                                </div>
+                            </div>
+                            <div class="tpl-body">
+                                <div class="tpl-title">Blank Canvas</div>
+                                <div class="tpl-desc">Start from scratch with a completely empty canvas.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="tpl-card template-select" data-template="college">
+                            <div class="tpl-preview">
+                                <div class="mini-card mini-college">
+                                    <div class="header"></div>
+                                    <div class="photo"></div>
+                                    <div class="lines">
+                                        <div class="mini-line" style="width: 30px;"></div>
+                                        <div class="mini-line" style="width: 20px;"></div>
+                                         <div class="mini-line" style="width: 25px; margin-top: 5px;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tpl-body">
+                                <div class="tpl-title">College Style</div>
+                                <div class="tpl-desc">Vertical layout ideal for colleges. Features a header bar and centered student photo.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="tpl-card template-select" data-template="university">
+                            <div class="tpl-preview">
+                                <div class="mini-card mini-uni">
+                                    <div class="side"></div>
+                                    <div class="photo"></div>
+                                    <div class="main">
+                                        <div class="mini-line" style="width: 40px; background: #ccc;"></div>
+                                        <div class="mini-line" style="width: 30px;"></div>
+                                        <div class="mini-line" style="width: 35px;"></div>
+                                        <div class="mini-line" style="width: 20px; margin-top: auto;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tpl-body">
+                                <div class="tpl-title">University Style</div>
+                                <div class="tpl-desc">Professional horizontal layout with a side strip and aligned details.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `);
+        this.wrapper.find('.template-select').on('click', (e) => {
+            let t = $(e.currentTarget).closest('.template-select').data('template');
+            this.load_default_template(t);
+        });
+    }
+
+    load_default_template(type) {
+        this.data = { front: [], back: [], orientation: 'horizontal', bg_color: { front: '#ffffff', back: '#ffffff' } };
+
+        if (type === 'college') {
+            // College Style: Simple, Header Bar, Photo Left
+            this.data.orientation = 'vertical';
+            this.data.front = [
+                // Header
+                { type: 'rect', x: 0, y: 0, width: 212.5, height: 60, style: { backgroundColor: '#1a4d80', opacity: 1 } },
+                // Institute Logo (Top Center)
+                { type: 'image', mapping: 'institute_logo', content: 'https://placehold.co/60x60?text=LOGO', x: 76, y: 5, width: 60, height: 60, style: { opacity: 1, borderRadius: '50%' }, shape: 'circle' },
+                // Institute Name
+                { type: 'text', mapping: 'institute_name', content: '[Institute Name]', x: 10, y: 70, style: { fontSize: '14px', fontWeight: 'bold', color: '#1a4d80', textAlign: 'center', width: '192px' } },
+                // Photo
+                { type: 'image', mapping: 'photo', content: '/assets/frappe/images/default-avatar.png', x: 71, y: 100, width: 70, height: 70, style: { opacity: 1, borderRadius: '5px', borderWidth: '1px', borderStyle: 'solid', borderColor: '#ccc' } },
+                // Name
+                { type: 'text', mapping: 'student_name', content: '[Student Name]', x: 10, y: 180, style: { fontSize: '12px', fontWeight: 'bold', color: '#000000', textAlign: 'center', width: '192px' } },
+                // Program
+                { type: 'text', mapping: 'program', content: '[Program]', x: 10, y: 195, style: { fontSize: '10px', fontWeight: 'normal', color: '#555', textAlign: 'center', width: '192px' } },
+                // Details
+                { type: 'text', mapping: 'student_id', content: 'ID: [Student ID]', x: 20, y: 220, style: { fontSize: '10px', color: '#000000' } },
+                { type: 'text', mapping: 'blood_group', content: 'Blood Group: [Blood Group]', x: 20, y: 235, style: { fontSize: '10px', color: '#000000' } },
+                // Footer Elements
+                { type: 'image', mapping: 'qr_code_image', content: 'https://placehold.co/50x50?text=QR', x: 10, y: 280, width: 50, height: 50, style: { opacity: 1 } },
+                { type: 'image', mapping: 'authority_signature', content: 'https://placehold.co/60x30?text=Sign', x: 140, y: 290, width: 60, height: 30, style: { opacity: 1 } },
+                { type: 'text', content: 'Authority Signature', x: 135, y: 320, style: { fontSize: '8px', color: '#555' } }
+            ];
+            // College Back
+            this.data.back = [
+                { type: 'text', content: 'Instructions', x: 10, y: 20, style: { fontSize: '12px', fontWeight: 'bold', textDecoration: 'underline' } },
+                { type: 'text', content: '1. This card is non-transferable.', x: 10, y: 40, style: { fontSize: '10px' } },
+                { type: 'text', content: '2. Report loss immediately.', x: 10, y: 55, style: { fontSize: '10px' } },
+                { type: 'text', content: 'If found, please return to:', x: 10, y: 80, style: { fontSize: '10px', fontWeight: 'bold' } },
+                { type: 'text', mapping: 'institute_address', content: '[Institute Address]', x: 10, y: 95, style: { fontSize: '10px', width: '190px' } },
+                { type: 'text', content: 'Emergency Contact:', x: 10, y: 150, style: { fontSize: '10px', fontWeight: 'bold' } },
+                { type: 'text', mapping: 'phone', content: '[Phone]', x: 10, y: 165, style: { fontSize: '10px' } }
+            ];
+        } else if (type === 'university') {
+            // University Style: Horizontal, Sidebar, Professional
+            this.data.orientation = 'horizontal';
+            this.data.front = [
+                // Sidebar
+                { type: 'rect', x: 0, y: 0, width: 80, height: 212.5, style: { backgroundColor: '#800000', opacity: 1 } },
+                // Photo
+                { type: 'image', mapping: 'photo', content: '/assets/frappe/images/default-avatar.png', x: 10, y: 20, width: 60, height: 60, style: { opacity: 1, borderRadius: '50%', borderWidth: '2px', borderStyle: 'solid', borderColor: '#fff' }, shape: 'circle' },
+                // ID in Sidebar
+                { type: 'text', mapping: 'student_id', content: '[Student ID]', x: 5, y: 90, style: { fontSize: '10px', fontWeight: 'bold', color: '#ffffff', textAlign: 'center', width: '70px' } },
+
+                // Main Content
+                // Logo
+                { type: 'image', mapping: 'institute_logo', content: 'https://placehold.co/50x50?text=LOGO', x: 280, y: 10, width: 40, height: 40, style: { opacity: 1 } },
+
+                // Institute Name
+                { type: 'text', mapping: 'institute_name', content: '[Institute Name]', x: 90, y: 15, style: { fontSize: '16px', fontWeight: 'bold', color: '#800000' } },
+                { type: 'text', mapping: 'institute_address', content: '[Institute Address]', x: 90, y: 35, style: { fontSize: '8px', color: '#555' } },
+
+                // Student Details
+                { type: 'text', mapping: 'student_name', content: '[Student Name]', x: 90, y: 70, style: { fontSize: '14px', fontWeight: 'bold', color: '#000000' } },
+                { type: 'text', mapping: 'program', content: '[Program]', x: 90, y: 90, style: { fontSize: '10px', color: '#555' } },
+                { type: 'text', mapping: 'email', content: 'E: [Email]', x: 90, y: 110, style: { fontSize: '10px', color: '#000000' } },
+                { type: 'text', mapping: 'phone', content: 'P: [Phone]', x: 90, y: 125, style: { fontSize: '10px', color: '#000000' } },
+
+                // Bottom
+                { type: 'image', mapping: 'qr_code_image', content: 'https://placehold.co/50x50?text=QR', x: 270, y: 150, width: 40, height: 40, style: { opacity: 1 } },
+                { type: 'image', mapping: 'authority_signature', content: 'https://placehold.co/60x30?text=Sign', x: 90, y: 160, width: 60, height: 30, style: { opacity: 1 } }
+            ];
+            // University Back
+            this.data.back = [
+                { type: 'rect', x: 0, y: 0, width: 337.5, height: 30, style: { backgroundColor: '#800000', opacity: 1 } },
+                { type: 'text', content: 'TERMS & CONDITIONS', x: 10, y: 8, style: { fontSize: '10px', fontWeight: 'bold', color: '#ffffff' } },
+                { type: 'text', content: 'This card is the property of the University.', x: 10, y: 40, style: { fontSize: '10px' } },
+                { type: 'text', content: 'If found, please return to:', x: 10, y: 60, style: { fontSize: '10px', fontWeight: 'bold' } },
+                { type: 'text', mapping: 'institute_address', content: '[Address]', x: 10, y: 75, style: { fontSize: '10px', width: '300px' } },
+                { type: 'image', content: 'https://placehold.co/150x50?text=BARCODE', x: 93, y: 140, width: 150, height: 50, style: { opacity: 0.8 } }
+            ];
+        }
+
+        this.current_side = 'front';
+        this.scale = 1.5;
+        this.save();
         this.render();
     }
 
@@ -111,6 +295,11 @@ class IDCardEditor {
                                     </div>
                                 </div>
                             </div>
+                            <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #eee;">
+                                <button class="btn btn-danger btn-block btn-sm" id="btn-change-template">
+                                    <i class="fa fa-refresh"></i> Reset / Change Template
+                                </button>
+                            </div>
                         </div>
                     </div>
                 
@@ -124,6 +313,11 @@ class IDCardEditor {
                             <button class="btn btn-default btn-block btn-xs tool-btn" data-action="add_shape" data-shape="box">Add Box</button>
                             <button class="btn btn-default btn-block btn-xs tool-btn" data-action="add_shape" data-shape="header">Add Header</button>
                              <button class="btn btn-default btn-block btn-xs tool-btn" data-action="add_shape" data-shape="footer">Add Footer</button>
+                             <div style="margin-top: 5px;">
+                                <label class="checkbox-inline" style="font-size: 11px; margin-left: 0;">
+                                    <input type="checkbox" id="toggle-guides" ${this.show_guides ? 'checked' : ''}> Show Guides
+                                </label>
+                             </div>
                             
                             <hr style="margin: 10px 0;">
                             <label class="prop-label">FIELDS</label>
@@ -163,16 +357,32 @@ class IDCardEditor {
                         min-height: 400px;
                         align-items: center;
                     ">
-                        <div id="card-canvas" style="
-                            width: ${width}px; 
-                            height: ${height}px; 
-                            background: ${this.data.bg_color[this.current_side] || '#ffffff'};
-                            position: relative;
-                            overflow: hidden;
-                            transform: scale(${this.scale}); 
-                            transform-origin: center center;
-                            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-                        ">
+
+                        <div id="card-canvas-wrapper" style="position: relative;">
+                            <div id="card-canvas" style="
+                                width: ${width}px; 
+                                height: ${height}px; 
+                                background: ${this.data.bg_color[this.current_side] || '#ffffff'};
+                                position: relative;
+                                overflow: hidden;
+                                transform: scale(${this.scale}); 
+                                transform-origin: center center;
+                                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                                z-index: 10;
+                            ">
+                            </div>
+                            <!-- Alignment Guides Overlay -->
+                            <div id="canvas-guides" style="
+                                position: absolute; top:0; left:0; pointer-events: none; z-index: 5;
+                                width: ${width}px; height: ${height}px;
+                                transform: scale(${this.scale}); transform-origin: center center;
+                                border: 1px dashed transparent; 
+                            ">
+                                 ${this.show_guides ? `
+                                    <div style="position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: rgba(0, 150, 255, 0.5); transform: translateX(-50%);"></div>
+                                    <div style="position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: rgba(0, 150, 255, 0.5); transform: translateY(-50%);"></div>
+                                 ` : ''}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -197,6 +407,17 @@ class IDCardEditor {
             this.data.orientation = $(e.target).data('val');
             this.save();
             this.render();
+        });
+
+        this.wrapper.find('#btn-change-template').on('click', () => {
+            frappe.confirm(
+                'Are you sure you want to change the template? This will discard your current design and unsaved changes.',
+                () => {
+                    this.data = { front: [], back: [], orientation: 'horizontal', bg_color: { front: '#ffffff', back: '#ffffff' } };
+                    this.save();
+                    this.render_template_selector();
+                }
+            );
         });
 
         this.wrapper.find('[data-side]').on('click', (e) => {
@@ -262,6 +483,11 @@ class IDCardEditor {
                 el.style.fontSize = '12px'; el.style.fontWeight = 'bold'; el.style.color = '#000000';
             }
             this.add_element(el);
+        });
+
+        this.wrapper.find('#toggle-guides').on('change', (e) => {
+            this.show_guides = $(e.target).is(':checked');
+            this.render();
         });
     }
 
