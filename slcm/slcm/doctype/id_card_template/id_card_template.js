@@ -138,6 +138,8 @@ class IDCardEditor {
                             <button class="btn btn-default btn-block btn-xs tool-btn" data-action="add_field" data-field="institute_logo">Institute Logo</button>
                             <button class="btn btn-default btn-block btn-xs tool-btn" data-action="add_field" data-field="authority_signature">Authority Signature</button>
                             <button class="btn btn-default btn-block btn-xs tool-btn" data-action="add_field" data-field="institute_name">Institute Name</button>
+                             <button class="btn btn-default btn-block btn-xs tool-btn" data-action="add_field" data-field="address">Address</button>
+                             <button class="btn btn-default btn-block btn-xs tool-btn" data-action="add_field" data-field="institute_address">Institute Address</button>
                              <button class="btn btn-default btn-block btn-xs tool-btn" data-action="add_field" data-field="department">Department</button>
                         </div>
                     </div>
