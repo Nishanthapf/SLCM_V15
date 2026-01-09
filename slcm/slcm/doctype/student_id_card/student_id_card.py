@@ -5,7 +5,7 @@ import tempfile
 
 import frappe
 from frappe.model.document import Document
-from frappe.utils import get_url
+from frappe.utils import get_url, now
 from frappe.utils.file_manager import save_file
 
 try:
@@ -31,6 +31,15 @@ class StudentIDCard(Document):
 			self.qr_code_data = self.generate_qr_code_string()
 
 		self.verification_url = self.generate_verification_url()
+
+		# Status Logging
+		old_status = frappe.db.get_value("Student ID Card", self.name, "card_status")
+		if self.card_status != old_status:
+			self.append("events", {
+				"timestamp": now(),
+				"card_status": self.card_status,
+				"user": frappe.session.user
+			})
 
 	def generate_qr_code_string(self):
 		# Format: URL or JSON data
