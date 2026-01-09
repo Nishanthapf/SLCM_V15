@@ -372,6 +372,63 @@ class IDCardEditor {
                      <input type="number" class="form-control input-sm prop-change" data-prop="height" value="${Math.round(el.height)}">
                 </div>
             </div>`;
+
+            if (el.type === 'image') {
+                html += `
+                <div style="margin-top: 10px;">
+                    <label class="prop-label">SHAPE</label>
+                    <select class="form-control input-sm shape-change">
+                        <option value="rect" ${!el.shape || el.shape === 'rect' ? 'selected' : ''}>Rectangle</option>
+                        <option value="circle" ${el.shape === 'circle' ? 'selected' : ''}>Circle</option>
+                        <option value="triangle" ${el.shape === 'triangle' ? 'selected' : ''}>Triangle</option>
+                    </select>
+                </div>`;
+            }
+
+            // Border Controls for Rect and Image
+            let bs = el.border_settings || { style: 'none', width: 1, color: '#000000', top: false, bottom: false, left: false, right: false };
+            html += `
+            <div style="margin-top: 10px; background: #f9f9f9; padding: 5px; border: 1px solid #ddd;">
+                <label class="prop-label">BORDER</label>
+                <div class="row">
+                    <div class="col-xs-6">
+                        <label class="prop-label" style="font-weight:normal">Style</label>
+                        <select class="form-control input-sm border-change" data-key="style">
+                            <option value="none" ${bs.style === 'none' ? 'selected' : ''}>None</option>
+                            <option value="solid" ${bs.style === 'solid' ? 'selected' : ''}>Solid</option>
+                            <option value="double" ${bs.style === 'double' ? 'selected' : ''}>Double</option>
+                            <option value="dashed" ${bs.style === 'dashed' ? 'selected' : ''}>Dashed</option>
+                        </select>
+                    </div>
+                    <div class="col-xs-6">
+                        <label class="prop-label" style="font-weight:normal">Width (px)</label>
+                        <input type="number" class="form-control input-sm border-change" data-key="width" value="${bs.width}">
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 5px;">
+                    <div class="col-xs-12">
+                        <label class="prop-label" style="font-weight:normal">Color</label>
+                        <input type="color" class="form-control input-sm border-change" data-key="color" value="${bs.color}">
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 5px;">
+                    <div class="col-xs-12">
+                        <label class="prop-label" style="font-weight:normal">Sides</label>
+                        <label class="checkbox-inline" style="font-size: 11px;">
+                            <input type="checkbox" class="border-change" data-key="top" ${bs.top ? 'checked' : ''}> Top
+                        </label>
+                        <label class="checkbox-inline" style="font-size: 11px;">
+                             <input type="checkbox" class="border-change" data-key="bottom" ${bs.bottom ? 'checked' : ''}> Bot
+                        </label>
+                        <label class="checkbox-inline" style="font-size: 11px;">
+                             <input type="checkbox" class="border-change" data-key="left" ${bs.left ? 'checked' : ''}> Left
+                        </label>
+                        <label class="checkbox-inline" style="font-size: 11px;">
+                             <input type="checkbox" class="border-change" data-key="right" ${bs.right ? 'checked' : ''}> Right
+                        </label>
+                    </div>
+                </div>
+            </div>`;
         }
 
         html += `<div style="margin-top: 10px;">
@@ -467,6 +524,62 @@ class IDCardEditor {
             this.data[this.current_side].splice(index, 1);
             this.show_properties(-1);
             this.load_elements();
+            this.save();
+        });
+
+        // Shape Handler
+        this.properties.find('.shape-change').on('change', (e) => {
+            let shape = $(e.target).val();
+            el.shape = shape;
+            if (!el.style) el.style = {};
+
+            if (shape === 'circle') {
+                el.style.borderRadius = '50%';
+                el.style.clipPath = 'none';
+            } else if (shape === 'triangle') {
+                el.style.borderRadius = '0';
+                el.style.clipPath = 'polygon(50% 0%, 0% 100%, 100% 100%)';
+            } else {
+                el.style.borderRadius = '0';
+                el.style.clipPath = 'none';
+            }
+            this.load_elements();
+            this.canvas.find(`[data-index="${index}"]`).addClass('selected');
+            this.save();
+        });
+
+        // Border Handler
+        this.properties.find('.border-change').on('change input', (e) => {
+            let key = $(e.target).data('key');
+            let val;
+            if ($(e.target).attr('type') === 'checkbox') {
+                val = $(e.target).is(':checked');
+            } else {
+                val = $(e.target).val();
+            }
+
+            if (!el.border_settings) el.border_settings = { style: 'none', width: 1, color: '#000000', top: false, bottom: false, left: false, right: false };
+            el.border_settings[key] = val;
+
+            if (!el.style) el.style = {};
+
+            // Helper to apply per-side props
+            const sides = ['top', 'bottom', 'left', 'right'];
+            const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+
+            sides.forEach(side => {
+                if (el.border_settings[side] && el.border_settings.style !== 'none') {
+                    el.style[`border${cap(side)}Style`] = el.border_settings.style;
+                    el.style[`border${cap(side)}Width`] = el.border_settings.width + 'px';
+                    el.style[`border${cap(side)}Color`] = el.border_settings.color;
+                } else {
+                    el.style[`border${cap(side)}Style`] = 'none';
+                    el.style[`border${cap(side)}Width`] = '0px';
+                }
+            });
+
+            this.load_elements();
+            this.canvas.find(`[data-index="${index}"]`).addClass('selected');
             this.save();
         });
     }

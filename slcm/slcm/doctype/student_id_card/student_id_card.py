@@ -220,6 +220,27 @@ class StudentIDCard(Document):
 					css_style += f" border-radius: {style['borderRadius']};"
 				if "clipPath" in style and style["clipPath"] != "none":
 					css_style += f" clip-path: {style['clipPath']}; -webkit-clip-path: {style['clipPath']};"
+
+				# Borders
+				for side in ["Top", "Bottom", "Left", "Right"]:
+					style_prop = f"border{side}Style"
+					width_prop = f"border{side}Width"
+					color_prop = f"border{side}Color"
+					
+					if style_prop in style:
+						b_style = style[style_prop]
+						b_width = style.get(width_prop, "0px")
+						b_color = style.get(color_prop, "#000000")
+						
+						# Scale Width
+						try:
+							w_val = float(str(b_width).replace("px", "")) * scale_factor
+							w_css = f"{w_val}px"
+						except Exception:
+							w_css = b_width # Fallback
+							
+						css_side = side.lower()
+						css_style += f" border-{css_side}-style: {b_style}; border-{css_side}-width: {w_css}; border-{css_side}-color: {b_color};"
 				
 				content = el.get("content", "")
 				
