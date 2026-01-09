@@ -1,0 +1,102 @@
+{
+ "charts": [],
+ "content": "[{\"id\":\"qaOSi5ehAD\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">REGO</span>\",\"col\":12}},{\"id\":\"QSfgl1b70S\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Faculty Master\",\"col\":3}},{\"id\":\"d3XPCbqjCZ\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Course Master\",\"col\":3}},{\"id\":\"CmEMELn-sx\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Student Master\",\"col\":3}},{\"id\":\"m5JzWYmuIs\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Academic Year\",\"col\":3}},{\"id\":\"i8c7vEgUdO\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Academic Term\",\"col\":3}},{\"id\":\"SDVAKj6ak8\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Department\",\"col\":3}},{\"id\":\"D_8QPjha2j\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Program\",\"col\":3}},{\"id\":\"fV3cXRhJAc\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Course\",\"col\":3}},{\"id\":\"TQQajFDH1x\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Cohort\",\"col\":3}}]",
+ "creation": "2026-01-07 18:11:36.419086",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "share",
+ "idx": 0,
+ "indicator_color": "green",
+ "is_hidden": 0,
+ "label": "REGO",
+ "links": [],
+ "modified": "2026-01-09 15:57:19.733028",
+ "modified_by": "Administrator",
+ "module": "SLCM",
+ "name": "REGO",
+ "number_cards": [],
+ "owner": "Administrator",
+ "parent_page": "",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [],
+ "sequence_id": 23.0,
+ "shortcuts": [
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Faculty Master",
+   "link_to": "Faculty",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Course Master",
+   "link_to": "Course Master",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Academic Year",
+   "link_to": "Academic Year",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Department",
+   "link_to": "Department",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Course",
+   "link_to": "Course",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Student Master",
+   "link_to": "Student Master",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Academic Term",
+   "link_to": "Academic Term",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Program",
+   "link_to": "Program",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Cohort",
+   "link_to": "Cohort",
+   "stats_filter": "[]",
+   "type": "DocType"
+  }
+ ],
+ "title": "REGO"
+}

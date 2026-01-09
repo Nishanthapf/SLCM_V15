@@ -1,8 +1,8 @@
 import io
+import json
 import os
 import subprocess
 import tempfile
-import json
 
 import frappe
 from frappe.model.document import Document
@@ -128,9 +128,9 @@ class StudentIDCard(Document):
 		student = frappe.get_doc("Student Master", self.student)
 
 		# Check for different modes
-		if template.template_creation_mode == 'Drag and Drop':
+		if template.template_creation_mode == "Drag and Drop":
 			self.generate_card_from_canvas(template, student)
-		elif template.template_creation_mode == 'Jinja Template':
+		elif template.template_creation_mode == "Jinja Template":
 			self.generate_card_html(template, student)
 		else:
 			# Fallback to field mapping / coordinate system (Field Mapping mode)
@@ -154,7 +154,7 @@ class StudentIDCard(Document):
 	def generate_card_from_canvas(self, template, student):
 		if not template.canvas_data:
 			frappe.throw("No design data found in the selected Drag & Drop Template.")
-		
+
 		try:
 			data = json.loads(template.canvas_data)
 		except Exception:
@@ -162,7 +162,7 @@ class StudentIDCard(Document):
 
 		# Orientation dimensions
 		if data.get("orientation") == "horizontal":
-			width, height = 1011, 638 # High res for print
+			width, height = 1011, 638  # High res for print
 			# Canvas is 337 x 212 (~ 3x scaling for print)
 			scale_factor = 3
 		else:
@@ -172,18 +172,18 @@ class StudentIDCard(Document):
 		for side in ["front", "back"]:
 			elements = data.get(side, [])
 			bg_color = data.get("bg_color", {}).get(side, "#ffffff")
-			
+
 			# Build HTML for this side
 			html_content = f"""
 			<html>
 			<head>
 				<style>
 					body {{ margin: 0; padding: 0; background-color: {bg_color}; }}
-					.container {{ 
-						position: relative; 
-						width: {width}px; 
-						height: {height}px; 
-						overflow: hidden; 
+					.container {{
+						position: relative;
+						width: {width}px;
+						height: {height}px;
+						overflow: hidden;
 					}}
 					.element {{ position: absolute; }}
 				</style>
@@ -191,7 +191,7 @@ class StudentIDCard(Document):
 			<body>
 				<div class="container">
 			"""
-			
+
 			for el in elements:
 				# Scale coordinates
 				x = float(el.get("x", 0)) * scale_factor
@@ -199,7 +199,7 @@ class StudentIDCard(Document):
 				w = float(el.get("width", 0)) * scale_factor
 				h = float(el.get("height", 0)) * scale_factor
 				style = el.get("style", {})
-				
+
 				# Styles
 				css_style = f"left: {x}px; top: {y}px;"
 				if "fontSize" in style:
@@ -226,32 +226,36 @@ class StudentIDCard(Document):
 					style_prop = f"border{border_side}Style"
 					width_prop = f"border{border_side}Width"
 					color_prop = f"border{border_side}Color"
-					
+
 					if style_prop in style:
 						b_style = style[style_prop]
 						b_width = style.get(width_prop, "0px")
 						b_color = style.get(color_prop, "#000000")
-						
+
 						# Scale Width
 						try:
 							w_val = float(str(b_width).replace("px", "")) * scale_factor
 							w_css = f"{w_val}px"
 						except Exception:
-							w_css = b_width # Fallback
-							
+							w_css = b_width  # Fallback
+
 						css_side = border_side.lower()
 						css_style += f" border-{css_side}-style: {b_style}; border-{css_side}-width: {w_css}; border-{css_side}-color: {b_color};"
-				
+
 				content = el.get("content", "")
-				
+
 				if el.get("type") == "text":
-					html_content += f'<div class="element" style="{css_style} white-space: nowrap;">{content}</div>'
+					html_content += (
+						f'<div class="element" style="{css_style} white-space: nowrap;">{content}</div>'
+					)
 				elif el.get("type") == "image":
 					# Resolve image content if mapped
 					if el.get("mapping"):
 						mapping = el.get("mapping")
 						if mapping == "photo":
-							content = self.get_file_path(self.photo) or "/assets/frappe/images/default-avatar.png"
+							content = (
+								self.get_file_path(self.photo) or "/assets/frappe/images/default-avatar.png"
+							)
 						elif mapping == "institute_logo":
 							content = self.get_file_path(template.institute_logo) or ""
 						elif mapping == "authority_signature":
@@ -260,15 +264,17 @@ class StudentIDCard(Document):
 							content = self.get_file_path(self.qr_code_image) or ""
 						# Ensure path is suitable for wkhtmltoimage (absolute local path preferable or base64)
 						# get_file_path returns absolute path
-					
+
 					html_content += f'<div class="element" style="{css_style} width: {w}px; height: {h}px; overflow: hidden;">'
 					if content:
 						# Inherit border radius for inner image if parent has it? Or just overflow hidden
 						# Ensure image fits
 						html_content += f'<img src="{content}" style="width: 100%; height: 100%; object-fit: cover; display: block;">'
-					html_content += '</div>'
+					html_content += "</div>"
 				elif el.get("type") == "rect":
-					html_content += f'<div class="element" style="{css_style} width: {w}px; height: {h}px;"></div>'
+					html_content += (
+						f'<div class="element" style="{css_style} width: {w}px; height: {h}px;"></div>'
+					)
 
 			html_content += """
 				</div>
@@ -278,15 +284,15 @@ class StudentIDCard(Document):
 
 			# Use existing generation method
 			# We need to render the content first to resolve {{ jinja }} in Text elements
-			# But our editor stores text like [Student Name] or custom text. 
+			# But our editor stores text like [Student Name] or custom text.
 			# The editor 'add_field' sets content like [Student Name].
 			# We need to map these brackets to actual values.
-			
+
 			# Replace placeholders
 			# Helper map
 			field_map = {
 				"[Student Name]": self.student_name,
-				"[Student ID]": self.name, 
+				"[Student ID]": self.name,
 				"[Blood Group]": student.blood_group,
 				"[Phone]": self.phone,
 				"[Email]": self.email,
@@ -298,15 +304,16 @@ class StudentIDCard(Document):
 				"[Institute Address]": template.institute_address,
 				"[Address]": student.state_of_domicile,
 			}
-			
+
 			for key, val in field_map.items():
-				if val is None: val = ""
+				if val is None:
+					val = ""
 				html_content = html_content.replace(key, str(val))
-				
+
 			# Now call generator
 			# We use a custom flow since we ALREADY have the full HTML, we don't need the jinja render step of generate_image_from_html
 			# But we need wkhtmltoimage logic.
-			
+
 			self.generate_image_from_raw_html(html_content, f"{side}_id_image", side.capitalize())
 
 	def generate_image_from_raw_html(self, html_content, fieldname, side_label):
@@ -314,7 +321,7 @@ class StudentIDCard(Document):
 		with tempfile.NamedTemporaryFile(suffix=".html", delete=False, mode="w") as f:
 			f.write(html_content)
 			html_path = f.name
-			
+
 		output_filename = f"{self.name}_{side_label}.png"
 		output_path = os.path.join(tempfile.gettempdir(), output_filename)
 
@@ -322,23 +329,27 @@ class StudentIDCard(Document):
 			args = [
 				"/usr/bin/wkhtmltoimage",
 				"--enable-local-file-access",
-				"--width", "1011",
-				"--height", "638", # This should swap for portrait... 
+				"--width",
+				"1011",
+				"--height",
+				"638",  # This should swap for portrait...
 				# Actually we set container size in CSS, wkhtmltoimage size should match or be larger?
 				# If portrait, we should probably flip these args or rely on CSS size.
 				# Let's check orientation again?
 				# For now, let's just make the window large enough.
-				"--quality", "100",
-				html_path, output_path
+				"--quality",
+				"100",
+				html_path,
+				output_path,
 			]
-			
+
 			# Adjust args for portrait if needed, but since we define container size, maybe just large viewport is enough
 			# But wkhtmltoimage crops? No, defaults to A4 or smart width.
 			# Be safe:
-			if "width: 638px;" in html_content: # Portrait check hack or pass arg
+			if "width: 638px;" in html_content:  # Portrait check hack or pass arg
 				args[3] = "638"
 				args[5] = "1011"
-			
+
 			result = subprocess.run(args, capture_output=True, text=True)
 			if result.returncode != 0:
 				frappe.throw(f"wkhtmltoimage failed: {result.stderr}")
@@ -352,9 +363,10 @@ class StudentIDCard(Document):
 		except Exception as e:
 			frappe.throw(f"Error generating from canvas: {e}")
 		finally:
-			if os.path.exists(html_path): os.remove(html_path)
-			if os.path.exists(output_path): os.remove(output_path)
-
+			if os.path.exists(html_path):
+				os.remove(html_path)
+			if os.path.exists(output_path):
+				os.remove(output_path)
 
 	def generate_card_html(self, template, student):
 		if template.front_html:
@@ -378,21 +390,21 @@ class StudentIDCard(Document):
 		context.update(
 			{
 				"doc": self,
-                "student": student,
-                "template": template,
-                # Institute details
-                "institute_name": template.institute_name,
-                "institute_address": template.institute_address,
-                # LOGO (IMPORTANT)
-                "institute_logo": self.get_file_path(template.institute_logo) or "",
-                "logo_url": self.get_file_path(template.institute_logo) or "",
-                # STUDENT PHOTO
-                "passport_size_photo": self.get_file_path(student.passport_size_photo) or "",
-                # QR CODE (IMPORTANT)
-                "qr_code_image": self.get_file_path(self.qr_code_image) or "",
-                "qr_code": self.get_file_path(self.qr_code_image) or "", # Alias
-            }
-        )
+				"student": student,
+				"template": template,
+				# Institute details
+				"institute_name": template.institute_name,
+				"institute_address": template.institute_address,
+				# LOGO (IMPORTANT)
+				"institute_logo": self.get_file_path(template.institute_logo) or "",
+				"logo_url": self.get_file_path(template.institute_logo) or "",
+				# STUDENT PHOTO
+				"passport_size_photo": self.get_file_path(student.passport_size_photo) or "",
+				# QR CODE (IMPORTANT)
+				"qr_code_image": self.get_file_path(self.qr_code_image) or "",
+				"qr_code": self.get_file_path(self.qr_code_image) or "",  # Alias
+			}
+		)
 
 		# Render Jinja
 		rendered_html = frappe.render_template(html_content, context)
@@ -563,25 +575,3 @@ class StudentIDCard(Document):
 		saved_file = save_file(filename, img_content, self.doctype, self.name, is_private=0)
 
 		self.db_set(fieldname, saved_file.file_url)
-
-	# def get_qr_code_url(self):
-	# 	if not self.qr_code_data:
-	# 		return None
-
-	# 	# Generate QR
-	# 	qr = qrcode.QRCode(
-	# 		version=1,
-	# 		error_correction=qrcode.constants.ERROR_CORRECT_H,
-	# 		box_size=10,
-	# 		border=1,
-	# 	)
-	# 	qr.add_data(self.qr_code_data)
-	# 	qr.make(fit=True)
-	# 	img_qr = qr.make_image(fill_color="black", back_color="white")
-
-	# 	# Save to temp
-	# 	temp_filename = f"qr_{self.name}.png"
-	# 	temp_path = os.path.join(tempfile.gettempdir(), temp_filename)
-	# 	img_qr.save(temp_path)
-
-	# 	return temp_path
