@@ -167,17 +167,36 @@ class StudentIDCard(Document):
 		context.update(template.as_dict())
 
 		# 4. Add overrides and helpers
+		# context.update(
+		# 	{
+		# 		"doc": self,
+		# 		"student": student,
+		# 		"template": template,
+		# 		"college_name": template.institute_name,
+		# 		"institute_name": template.institute_name,  # Alias
+		# 		"address": student.state_of_domicile or "",  # Best effort address
+		# 		"logo_url": self.get_file_path(template.institute_logo) if template.institute_logo else None,
+		# 		"qr_code_url": self.get_file_path(self.qr_code_image) if self.qr_code_image else None,
+		# 		"qr_code": self.get_file_path(self.qr_code_image) if self.qr_code_image else None,
+		# 	}
+		# )
+
 		context.update(
 			{
 				"doc": self,
 				"student": student,
 				"template": template,
-				"college_name": template.institute_name,
-				"institute_name": template.institute_name,  # Alias
-				"address": student.state_of_domicile or "",  # Best effort address
-				"logo_url": self.get_file_path(template.institute_logo) if template.institute_logo else None,
-				"qr_code_url": self.get_file_path(self.qr_code_image) if self.qr_code_image else None,
-				"qr_code": self.get_file_path(self.qr_code_image) if self.qr_code_image else None,
+				# Institute details
+				"institute_name": template.institute_name,
+				"institute_address": template.institute_address,
+				# LOGO (IMPORTANT)
+				"institute_logo": get_url(template.institute_logo) if template.institute_logo else None,
+				# STUDENT PHOTO
+				"passport_size_photo": get_url(student.passport_size_photo)
+				if student.passport_size_photo
+				else None,
+				# QR CODE (IMPORTANT)
+				"qr_code_image": get_url(self.qr_code_image) if self.qr_code_image else None,
 			}
 		)
 
