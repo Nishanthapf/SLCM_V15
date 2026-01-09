@@ -2,13 +2,18 @@
     "actions": [],
     "allow_import": 1,
     "autoname": "naming_series:",
-    "creation": "2024-05-21 12:00:00",
+    "creation": "2026-01-09 10:28:05.108518",
     "doctype": "DocType",
     "engine": "InnoDB",
     "field_order": [
         "section_break_data",
         "student",
         "student_name",
+        "email",
+        "phone",
+        "photo",
+        "department",
+        "program",
         "id_card_template",
         "column_break_data",
         "card_status",
@@ -20,11 +25,12 @@
         "back_id_image",
         "section_break_verification",
         "qr_code_data",
+        "qr_code_image",
         "verification_url",
         "section_break_print",
         "print_count",
         "remarks",
-        "section_break_events",
+        "section_break_history",
         "events"
     ],
     "fields": [
@@ -46,7 +52,53 @@
             "fetch_from": "student.first_name",
             "fieldname": "student_name",
             "fieldtype": "Data",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
             "label": "Student Name",
+            "read_only": 1
+        },
+        {
+            "fetch_from": "student.email",
+            "fieldname": "email",
+            "fieldtype": "Data",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Email",
+            "read_only": 1
+        },
+        {
+            "fetch_from": "student.phone",
+            "fieldname": "phone",
+            "fieldtype": "Data",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Phone",
+            "read_only": 1
+        },
+        {
+            "fetch_from": "student.passport_size_photo",
+            "fieldname": "photo",
+            "fieldtype": "Attach Image",
+            "label": "Photo"
+        },
+        {
+            "fetch_from": "student.department",
+            "fieldname": "department",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Department",
+            "options": "Department",
+            "read_only": 1
+        },
+        {
+            "fetch_from": "student.programme",
+            "fieldname": "program",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Program",
+            "options": "Cohort",
             "read_only": 1
         },
         {
@@ -117,6 +169,12 @@
             "read_only": 1
         },
         {
+            "fieldname": "qr_code_image",
+            "fieldtype": "Attach Image",
+            "label": "QR Code Image",
+            "read_only": 1
+        },
+        {
             "fieldname": "verification_url",
             "fieldtype": "Data",
             "label": "Verification URL",
@@ -140,20 +198,20 @@
             "label": "Remarks"
         },
         {
-            "fieldname": "section_break_events",
+            "fieldname": "section_break_history",
             "fieldtype": "Section Break",
-            "label": "Events"
+            "label": "Status History"
         },
         {
             "fieldname": "events",
             "fieldtype": "Table",
-            "label": "Events",
+            "label": "History",
             "options": "Student ID Card Event",
             "read_only": 1
         }
     ],
     "links": [],
-    "modified": "2026-01-08 21:30:49.347448",
+    "modified": "2026-01-09 10:32:43.942346",
     "modified_by": "Administrator",
     "module": "SLCM",
     "name": "Student ID Card",

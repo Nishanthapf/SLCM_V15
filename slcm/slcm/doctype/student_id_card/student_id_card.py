@@ -53,8 +53,8 @@ class StudentIDCard(Document):
 		)
 
 	def before_save(self):
-		if not self.qr_code_data:
-			self.qr_code_data = self.generate_qr_code_string()
+		self.qr_code_data = self.generate_qr_code_string()
+		self.generate_and_save_qr_image()
 
 		self.verification_url = self.generate_verification_url()
 
@@ -65,9 +65,51 @@ class StudentIDCard(Document):
 				"events", {"timestamp": now(), "card_status": self.card_status, "user": frappe.session.user}
 			)
 
+	def get_qr_code_url(self):
+		return self.qr_code_image or None
+
+	def generate_and_save_qr_image(self):
+		if not self.qr_code_data:
+			return
+
+		# Generate QR Image
+		qr = qrcode.QRCode(
+			version=1,
+			error_correction=qrcode.constants.ERROR_CORRECT_M,
+			box_size=10,
+			border=4,
+		)
+		qr.add_data(self.qr_code_data)
+		qr.make(fit=True)
+
+		img = qr.make_image(fill_color="black", back_color="white")
+
+		# Save to BytesIO
+		fname = f"{self.name}-QR.png"
+		buffer = io.BytesIO()
+		img.save(buffer, format="PNG")
+		img_content = buffer.getvalue()
+
+		# Save file
+		saved_file = save_file(fname, img_content, self.doctype, self.name, is_private=0)
+		self.qr_code_image = saved_file.file_url
+
 	def generate_qr_code_string(self):
-		# Format: URL or JSON data
-		return self.generate_verification_url()
+		"""Generate QR payload string for student verification"""
+		if not self.student:
+			return ""
+
+		student = frappe.get_doc("Student Master", self.student)
+
+		parts = [
+			student.first_name or "",
+			student.academic_year or "",
+			student.programme or "",
+			student.department or "",
+			student.blood_group or "",
+		]
+
+		return " | ".join(filter(None, parts))
 
 	def generate_verification_url(self):
 		base_url = get_url()
@@ -106,24 +148,6 @@ class StudentIDCard(Document):
 		self.card_status = "Generated"
 		self.save()
 
-
-def generate_qr_code_string(self):
-	"""Generate QR payload string for student verification"""
-	if not self.student:
-		return ""
-
-	student = frappe.get_doc("Student Master", self.student)
-
-	parts = [
-		student.first_name or "",
-		student.academic_year or "",
-		student.programme or "",
-		student.department or "",
-		student.blood_group or "",
-	]
-
-	return " | ".join(filter(None, parts))
-
 	def generate_card_html(self, template, student):
 		if template.front_html:
 			self.generate_image_from_html(template.front_html, student, template, "front_id_image", "Front")
@@ -152,8 +176,8 @@ def generate_qr_code_string(self):
 				"institute_name": template.institute_name,  # Alias
 				"address": student.state_of_domicile or "",  # Best effort address
 				"logo_url": self.get_file_path(template.institute_logo) if template.institute_logo else None,
-				"qr_code_url": self.get_qr_code_url(),
-				"qr_code": self.get_qr_code_url(),
+				"qr_code_url": self.get_file_path(self.qr_code_image) if self.qr_code_image else None,
+				"qr_code": self.get_file_path(self.qr_code_image) if self.qr_code_image else None,
 			}
 		)
 
@@ -327,24 +351,24 @@ def generate_qr_code_string(self):
 
 		self.db_set(fieldname, saved_file.file_url)
 
-	def get_qr_code_url(self):
-		if not self.qr_code_data:
-			return None
+	# def get_qr_code_url(self):
+	# 	if not self.qr_code_data:
+	# 		return None
 
-		# Generate QR
-		qr = qrcode.QRCode(
-			version=1,
-			error_correction=qrcode.constants.ERROR_CORRECT_H,
-			box_size=10,
-			border=1,
-		)
-		qr.add_data(self.qr_code_data)
-		qr.make(fit=True)
-		img_qr = qr.make_image(fill_color="black", back_color="white")
+	# 	# Generate QR
+	# 	qr = qrcode.QRCode(
+	# 		version=1,
+	# 		error_correction=qrcode.constants.ERROR_CORRECT_H,
+	# 		box_size=10,
+	# 		border=1,
+	# 	)
+	# 	qr.add_data(self.qr_code_data)
+	# 	qr.make(fit=True)
+	# 	img_qr = qr.make_image(fill_color="black", back_color="white")
 
-		# Save to temp
-		temp_filename = f"qr_{self.name}.png"
-		temp_path = os.path.join(tempfile.gettempdir(), temp_filename)
-		img_qr.save(temp_path)
+	# 	# Save to temp
+	# 	temp_filename = f"qr_{self.name}.png"
+	# 	temp_path = os.path.join(tempfile.gettempdir(), temp_filename)
+	# 	img_qr.save(temp_path)
 
-		return temp_path
+	# 	return temp_path
