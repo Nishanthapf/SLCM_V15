@@ -70,9 +70,9 @@ class IDCardEditor {
         let width, height;
         if (this.data.orientation === 'horizontal') {
             width = 337;
-            height = 212;
+            height = 212.5;
         } else {
-            width = 212;
+            width = 212.5;
             height = 337;
         }
 
@@ -132,6 +132,11 @@ class IDCardEditor {
                             <button class="btn btn-default btn-block btn-xs tool-btn" data-action="add_field" data-field="student_id">Student ID</button>
                             <button class="btn btn-default btn-block btn-xs tool-btn" data-action="add_field" data-field="blood_group">Blood Group</button>
                             <button class="btn btn-default btn-block btn-xs tool-btn" data-action="add_field" data-field="qr_code_image">QR Code</button>
+                            <button class="btn btn-default btn-block btn-xs tool-btn" data-action="add_field" data-field="date_of_birth">Date of Birth</button>
+                            <button class="btn btn-default btn-block btn-xs tool-btn" data-action="add_field" data-field="academic_year">Academic Year</button>
+                            <button class="btn btn-default btn-block btn-xs tool-btn" data-action="add_field" data-field="program">Program</button>
+                            <button class="btn btn-default btn-block btn-xs tool-btn" data-action="add_field" data-field="email">Email</button>
+                            <button class="btn btn-default btn-block btn-xs tool-btn" data-action="add_field" data-field="phone">Phone</button>
                             
                             <hr style="margin: 10px 0;">
                             <label class="prop-label">INSTITUTE</label>
@@ -154,7 +159,7 @@ class IDCardEditor {
                         justify-content: center;
                         background: #eee;
                         padding: 20px;
-                        border-radius: 4px;
+                        border-radius: 12.5px;
                         min-height: 400px;
                         align-items: center;
                     ">
@@ -214,8 +219,8 @@ class IDCardEditor {
         });
 
         this.wrapper.find('[data-action="add_watermark"]').on('click', () => {
-            let w = this.data.orientation === 'horizontal' ? 337 : 212;
-            let h = this.data.orientation === 'horizontal' ? 212 : 337;
+            let w = this.data.orientation === 'horizontal' ? 337 : 212.5;
+            let h = this.data.orientation === 'horizontal' ? 212.5 : 337;
             let img = this.frm.doc.watermark_image || 'https://placehold.co/200x200?text=Watermark';
             this.add_element({
                 type: 'image', content: img,
@@ -226,8 +231,8 @@ class IDCardEditor {
 
         this.wrapper.find('[data-action="add_shape"]').on('click', (e) => {
             let shape = $(e.target).data('shape');
-            let w = this.data.orientation === 'horizontal' ? 337 : 212;
-            let h = this.data.orientation === 'horizontal' ? 212 : 337;
+            let w = this.data.orientation === 'horizontal' ? 337 : 212.5;
+            let h = this.data.orientation === 'horizontal' ? 212.5 : 337;
             let el = { type: 'rect', style: { backgroundColor: '#3498db', opacity: 1 } };
 
             if (shape === 'header') {
@@ -289,9 +294,10 @@ class IDCardEditor {
             el_dom = $(`<div class="canvas-element" data-index="${index}" style="position: absolute; left: ${el.x}px; top: ${el.y}px; white-space: nowrap;">${el.content}</div>`);
             if (el.style) el_dom.css(el.style);
         } else if (el.type === 'image') {
-            el_dom = $(`<div class="canvas-element" data-index="${index}" style="position: absolute; left: ${el.x}px; top: ${el.y}px; width: ${el.width}px; height: ${el.height}px; opacity: ${opacity};">
+            el_dom = $(`<div class="canvas-element" data-index="${index}" style="position: absolute; left: ${el.x}px; top: ${el.y}px; width: ${el.width}px; height: ${el.height}px; opacity: ${opacity}; overflow: hidden;">
                 <img src="${el.content}" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;">
             </div>`);
+            if (el.style) el_dom.css(el.style);
         } else if (el.type === 'rect') {
             el_dom = $(`<div class="canvas-element" data-index="${index}" style="position: absolute; left: ${el.x}px; top: ${el.y}px; width: ${el.width}px; height: ${el.height}px;"></div>`);
             if (el.style) el_dom.css(el.style);
@@ -499,8 +505,8 @@ class IDCardEditor {
 
         this.properties.find('.tool-action').on('click', (e) => {
             let tool = $(e.currentTarget).data('tool');
-            let w_canvas = this.data.orientation === 'horizontal' ? 337 : 212;
-            let h_canvas = this.data.orientation === 'horizontal' ? 212 : 337;
+            let w_canvas = this.data.orientation === 'horizontal' ? 337 : 212.5;
+            let h_canvas = this.data.orientation === 'horizontal' ? 212.5 : 337;
 
             if (tool === 'center_h') {
                 el.x = (w_canvas - (el.width || $(this.canvas.find(`[data-index="${index}"]`)).width())) / 2;

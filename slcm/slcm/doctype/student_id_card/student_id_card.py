@@ -286,16 +286,17 @@ class StudentIDCard(Document):
 			# Helper map
 			field_map = {
 				"[Student Name]": self.student_name,
-				"[Student ID]": self.name, # Or self.student?
+				"[Student ID]": self.name, 
 				"[Blood Group]": student.blood_group,
 				"[Phone]": self.phone,
 				"[Email]": self.email,
 				"[Program]": self.program,
-				"[Department]": self.department,
+				"[Academic Year]": self.academic_year,
+				"[Date of Birth]": frappe.utils.format_date(self.date_of_birth) if self.date_of_birth else "",
 				"[Department]": self.department,
 				"[Institute Name]": template.institute_name,
 				"[Institute Address]": template.institute_address,
-				"[Address]": student.state_of_domicile, # Best effort
+				"[Address]": student.state_of_domicile,
 			}
 			
 			for key, val in field_map.items():
