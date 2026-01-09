@@ -6,6 +6,7 @@
     "engine": "InnoDB",
     "field_order": [
         "template_name",
+        "template_creation_mode",
         "card_type",
         "card_size",
         "is_default",
@@ -37,6 +38,14 @@
             "unique": 1
         },
         {
+            "default": "Field Mapping",
+            "fieldname": "template_creation_mode",
+            "fieldtype": "Select",
+            "label": "Template Creation Mode",
+            "options": "Field Mapping\nJinja Template\nDrag and Drop\nCanva",
+            "reqd": 1
+        },
+        {
             "default": "Student",
             "fieldname": "card_type",
             "fieldtype": "Select",
@@ -62,7 +71,8 @@
         {
             "fieldname": "section_break_design",
             "fieldtype": "Section Break",
-            "label": "Design Assets"
+            "label": "Design Assets",
+            "depends_on": "eval:doc.template_creation_mode == 'Field Mapping'"
         },
         {
             "fieldname": "front_background",
@@ -84,6 +94,16 @@
             "label": "Institute Logo"
         },
         {
+            "fieldname": "authority_signature",
+            "fieldtype": "Attach Image",
+            "label": "Authority Signature"
+        },
+        {
+            "fieldname": "watermark_image",
+            "fieldtype": "Attach Image",
+            "label": "Default Watermark"
+        },
+        {
             "fieldname": "column_break_design",
             "fieldtype": "Column Break"
         },
@@ -102,7 +122,8 @@
         {
             "fieldname": "section_break_institute",
             "fieldtype": "Section Break",
-            "label": "Institute Details"
+            "label": "Institute Details",
+            "depends_on": "eval:doc.template_creation_mode == 'Field Mapping'"
         },
         {
             "fieldname": "institute_name",
@@ -123,7 +144,8 @@
         {
             "fieldname": "section_break_fields",
             "fieldtype": "Section Break",
-            "label": "Field Mapping"
+            "label": "Field Mapping",
+            "depends_on": "eval:doc.template_creation_mode == 'Field Mapping'"
         },
         {
             "fieldname": "fields",
@@ -135,7 +157,37 @@
             "fieldname": "section_break_jinja",
             "fieldtype": "Section Break",
             "label": "Jinja Template (Advanced)",
-            "description": "If these fields are set, the Design Assets and Field Mapping will be ignored."
+            "description": "If these fields are set, the Design Assets and Field Mapping will be ignored.",
+            "depends_on": "eval:doc.template_creation_mode == 'Jinja Template'"
+        },
+        {
+            "fieldname": "drag_drop_section",
+            "fieldtype": "Section Break",
+            "label": "Drag & Drop Editor",
+            "depends_on": "eval:doc.template_creation_mode == 'Drag and Drop'"
+        },
+        {
+            "fieldname": "canvas_editor",
+            "fieldtype": "HTML",
+            "label": "Editor"
+        },
+        {
+            "fieldname": "canvas_data",
+            "fieldtype": "Code",
+            "label": "Canvas Data",
+            "hidden": 1,
+            "options": "JSON"
+        },
+        {
+            "fieldname": "canva_section",
+            "fieldtype": "Section Break",
+            "label": "Canva Integration",
+            "depends_on": "eval:doc.template_creation_mode == 'Canva'"
+        },
+        {
+            "fieldname": "canva_button",
+            "fieldtype": "HTML",
+            "label": "Launch Canva"
         },
         {
             "fieldname": "front_html",
