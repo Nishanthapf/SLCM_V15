@@ -1,5 +1,19 @@
 frappe.ui.form.on("Student ID Card", {
 	refresh: function (frm) {
+		if (frm.doc.qr_code_image) {
+			frm.set_df_property(
+				"qr_code_preview",
+				"options",
+				`<div style="text-align: center; margin: 10px;">
+					<img src="${frappe.utils.get_file_link(
+						frm.doc.qr_code_image
+					)}" style="max-width: 300px; border: 1px solid #ccc; padding: 10px;">
+				</div>`
+			);
+		} else {
+			frm.set_df_property("qr_code_preview", "options", "");
+		}
+
 		if (!frm.doc.__islocal) {
 			frm.add_custom_button(__("Generate Card"), function () {
 				frm.call("generate_card").then((r) => {
