@@ -563,6 +563,35 @@ class StudentIDCard(Document):
 	def get_file_path(self, file_url):
 		if not file_url:
 			return None
+
+		# Allow PLACEHOLDER urls to pass through (won't render but won't crash)
+		if file_url.startswith("http"):
+			return file_url
+
+		# Handle Assets
+		if file_url.startswith("/assets/"):
+			# In a typical bench, assets are in ../sites/assets relative to site
+			# But robust way: get bench path and append sites/assets
+			# Or check if it exists in site's public (sometimes linked)
+
+			# Try finding in bench/sites/assets
+			asset_path = file_url.replace("/assets/", "", 1)
+			bench_path = frappe.utils.get_bench_path()
+			full_path = os.path.join(bench_path, "sites", "assets", asset_path)
+
+			if os.path.exists(full_path):
+				return full_path
+
+			# Fallback: maybe inside app's public/ folder? (Development mode)
+			# e.g. /assets/slcm/js/... -> apps/slcm/slcm/public/js/...
+			# This is harder to resolve generically without map, but sites/assets should have it if built.
+			# If not built, we might need to look in app directory.
+
+		# Handle Uploaded Files
+		if file_url.startswith("/files/"):
+			return frappe.get_site_path("public", file_url.lstrip("/"))
+
+		# Default fallback
 		return frappe.get_site_path("public", file_url.lstrip("/"))
 
 	def save_image(self, image, filename, fieldname):
@@ -575,3 +604,38 @@ class StudentIDCard(Document):
 		saved_file = save_file(filename, img_content, self.doctype, self.name, is_private=0)
 
 		self.db_set(fieldname, saved_file.file_url)
+
+
+@frappe.whitelist()
+def create_or_update_template(template_data):
+	"""
+	Create or update an ID Card Template based on JS definition.
+	This ensures the backend has a record matching the selected template.
+	"""
+	if isinstance(template_data, str):
+		data = json.loads(template_data)
+	else:
+		data = template_data
+
+	template_name = data.get("template_name")
+	if not template_name:
+		frappe.throw("Template Name is missing.")
+
+	# Check if exists
+	# Use template name as ID if possible or search
+	if not frappe.db.exists("ID Card Template", {"template_name": template_name}):
+		doc = frappe.new_doc("ID Card Template")
+		doc.template_name = template_name
+	else:
+		existing = frappe.db.get_value("ID Card Template", {"template_name": template_name}, "name")
+		doc = frappe.get_doc("ID Card Template", existing)
+
+	# Map fields
+	doc.template_creation_mode = "Jinja Template"  # Forced
+	doc.front_html = data.get("front_template_html")
+	doc.back_html = data.get("back_template_html")
+	doc.card_size = data.get("card_size")
+	doc.orientation = data.get("orientation")
+
+	doc.save(ignore_permissions=True)
+	return doc.name

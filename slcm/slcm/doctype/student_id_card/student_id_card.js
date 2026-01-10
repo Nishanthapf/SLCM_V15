@@ -1,3 +1,4 @@
+/* global slcm */
 frappe.ui.form.on("Student ID Card", {
 	refresh: function (frm) {
 		if (frm.doc.qr_code_image) {
@@ -55,5 +56,87 @@ frappe.ui.form.on("Student ID Card", {
 				});
 			}
 		}
+
+		// Load Templates Module
+		// Note: Ensure student_id_card_templates.js is available in assets.
+		// You may need to add it to build.json or symlink it to public/js.
+		try {
+			// Try to load if exposed as asset
+			frappe.require("/assets/slcm/js/student_id_card_templates.js");
+		} catch (e) {
+			console.log(
+				"Could not load templates via require. Ensure global object slcm.templates is available."
+			);
+		}
+	},
+
+	show_template_dialog: function (frm) {
+		if (!val_check_templates()) {
+			frappe.msgprint(__("Template module (slcm.templates) not loaded."));
+			return;
+		}
+
+		const templates = slcm.templates.registry;
+		let options = templates.map((t) => ({ label: t.template_name, value: t.template_id }));
+
+		let d = new frappe.ui.Dialog({
+			title: "Select ID Card Template",
+			fields: [
+				{
+					label: "Template",
+					fieldname: "template_id",
+					fieldtype: "Select",
+					options: options,
+					reqd: 1,
+				},
+			],
+			primary_action_label: "Apply",
+			primary_action(values) {
+				frm.trigger("apply_template", values.template_id);
+				d.hide();
+			},
+		});
+
+		d.show();
+	},
+
+	apply_template: function (frm, template_id) {
+		if (!val_check_templates()) return;
+
+		const tmpl = slcm.templates.get(template_id);
+		if (!tmpl) {
+			frappe.msgprint("Template definition not found.");
+			return;
+		}
+
+		// We need to apply this template.
+		// Since the backend relies on "ID Card Template" doctype, we must ensure a record exists
+		// that matches this definition, and link it.
+
+		frappe.call({
+			method: "slcm.slcm.doctype.student_id_card.student_id_card.create_or_update_template",
+			args: {
+				template_data: JSON.stringify(tmpl),
+			},
+			freeze: true,
+			freeze_message: "Applying Template...",
+			callback: function (r) {
+				if (r.message) {
+					frm.set_value("id_card_template", r.message);
+
+					// Also set preview HTML if needed or just save
+					frappe.msgprint(__("Template applied successfully."));
+					frm.save();
+				}
+			},
+		});
 	},
 });
+
+function val_check_templates() {
+	if (typeof slcm === "undefined" || !slcm.templates) {
+		frappe.msgprint(__("SLCM Templates module is not loaded correctly."));
+		return false;
+	}
+	return true;
+}
