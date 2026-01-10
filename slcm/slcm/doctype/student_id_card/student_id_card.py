@@ -398,6 +398,8 @@ class StudentIDCard(Document):
 				# LOGO (IMPORTANT)
 				"institute_logo": self.get_file_path(template.institute_logo) or "",
 				"logo_url": self.get_file_path(template.institute_logo) or "",
+				# AUTHORITY SIGNATURE
+				"authority_signature": self.get_file_path(template.authority_signature) or "",
 				# STUDENT PHOTO
 				"passport_size_photo": self.get_file_path(student.passport_size_photo) or "",
 				# QR CODE (IMPORTANT)
@@ -564,17 +566,13 @@ class StudentIDCard(Document):
 		if not file_url:
 			return None
 
-		# Allow PLACEHOLDER urls to pass through (won't render but won't crash)
+		# Handle http/https urls (leave them as is for wkhtmltoimage, it might handle them if network allowed)
 		if file_url.startswith("http"):
 			return file_url
 
-		# Handle Assets
+		# Handle Assets (e.g., /assets/frappe/images/default-avatar.png)
 		if file_url.startswith("/assets/"):
-			# In a typical bench, assets are in ../sites/assets relative to site
-			# But robust way: get bench path and append sites/assets
-			# Or check if it exists in site's public (sometimes linked)
-
-			# Try finding in bench/sites/assets
+			# Standard bench structure: ./sites/assets/
 			asset_path = file_url.replace("/assets/", "", 1)
 			bench_path = frappe.utils.get_bench_path()
 			full_path = os.path.join(bench_path, "sites", "assets", asset_path)
@@ -582,17 +580,21 @@ class StudentIDCard(Document):
 			if os.path.exists(full_path):
 				return full_path
 
-			# Fallback: maybe inside app's public/ folder? (Development mode)
-			# e.g. /assets/slcm/js/... -> apps/slcm/slcm/public/js/...
-			# This is harder to resolve generically without map, but sites/assets should have it if built.
-			# If not built, we might need to look in app directory.
+			# Fallback for standard Frappe assets (if not in sites/assets yet)
+			if "default-avatar.png" in file_url:
+				return frappe.get_app_path("frappe", "public", "images", "default-avatar.png")
 
-		# Handle Uploaded Files
-		if file_url.startswith("/files/"):
+		# Handle Private Files
+		if file_url.startswith("/private/files/"):
+			file_name = file_url.replace("/private/files/", "", 1)
+			return frappe.get_site_path("private", "files", file_name)
+
+		# Handle Public Files (default)
+		# Should span /files/ and others
+		if file_url.startswith("/"):
 			return frappe.get_site_path("public", file_url.lstrip("/"))
 
-		# Default fallback
-		return frappe.get_site_path("public", file_url.lstrip("/"))
+		return frappe.get_site_path("public", file_url)
 
 	def save_image(self, image, filename, fieldname):
 		# Save to buffer

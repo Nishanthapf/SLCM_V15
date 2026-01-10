@@ -1,245 +1,258 @@
 {
-    "actions": [],
-    "autoname": "field:template_name",
-    "creation": "2024-05-21 12:00:00.000000",
-    "doctype": "DocType",
-    "engine": "InnoDB",
-    "field_order": [
-        "template_name",
-        "template_creation_mode",
-        "card_type",
-        "card_size",
-        "is_default",
-        "section_break_design",
-        "front_background",
-        "back_background",
-        "column_break_design",
-        "font_family",
-        "base_font_color",
-        "section_break_institute",
-        "institute_name",
-        "institute_logo",
-        "authority_signature",
-        "watermark_image",
-        "institute_address",
-        "validity_text",
-        "section_break_fields",
-        "fields",
-        "section_break_jinja",
-        "front_html",
-        "back_html",
-        "preview_section",
-        "preview_html"
-    ],
-    "fields": [
-        {
-            "fieldname": "template_name",
-            "fieldtype": "Data",
-            "label": "Template Name",
-            "reqd": 1,
-            "unique": 1
-        },
-        {
-            "default": "Field Mapping",
-            "fieldname": "template_creation_mode",
-            "fieldtype": "Select",
-            "label": "Template Creation Mode",
-            "options": "Field Mapping\nJinja Template\nDrag and Drop\nCanva",
-            "reqd": 1
-        },
-        {
-            "default": "Student",
-            "fieldname": "card_type",
-            "fieldtype": "Select",
-            "label": "Card Type",
-            "options": "Student\nStaff\nVisitor",
-            "reqd": 1
-        },
-        {
-            "default": "CR80",
-            "fieldname": "card_size",
-            "fieldtype": "Select",
-            "label": "Card Size",
-            "options": "CR80",
-            "read_only": 1,
-            "reqd": 1
-        },
-        {
-            "default": "0",
-            "fieldname": "is_default",
-            "fieldtype": "Check",
-            "label": "Is Default Template"
-        },
-        {
-            "fieldname": "section_break_design",
-            "fieldtype": "Section Break",
-            "label": "Design Assets",
-            "depends_on": "eval:doc.template_creation_mode == 'Field Mapping'"
-        },
-        {
-            "fieldname": "front_background",
-            "fieldtype": "Attach Image",
-            "label": "Front Background",
-            "reqd": 0,
-            "description": "Recommended: 1016x638 px (300 DPI for CR80)"
-        },
-        {
-            "fieldname": "back_background",
-            "fieldtype": "Attach Image",
-            "label": "Back Background",
-            "reqd": 0,
-            "description": "Recommended: 1016x638 px (300 DPI for CR80)"
-        },
-        {
-            "fieldname": "section_break_institute",
-            "fieldtype": "Section Break",
-            "label": "Institute Details"
-        },
-        {
-            "fieldname": "institute_name",
-            "fieldtype": "Data",
-            "label": "Institute Name"
-        },
-        {
-            "fieldname": "institute_logo",
-            "fieldtype": "Attach Image",
-            "label": "Institute Logo"
-        },
-        {
-            "fieldname": "authority_signature",
-            "fieldtype": "Attach Image",
-            "label": "Authority Signature"
-        },
-        {
-            "fieldname": "watermark_image",
-            "fieldtype": "Attach Image",
-            "label": "Default Watermark"
-        },
-        {
-            "fieldname": "institute_address",
-            "fieldtype": "Small Text",
-            "label": "Institute Address"
-        },
-        {
-            "fieldname": "column_break_design",
-            "fieldtype": "Column Break"
-        },
-        {
-            "fieldname": "font_family",
-            "fieldtype": "Data",
-            "label": "Default Font Family",
-            "default": "Arial"
-        },
-        {
-            "fieldname": "base_font_color",
-            "fieldtype": "Data",
-            "label": "Base Font Color",
-            "default": "#000000"
-        },
-        {
-            "fieldname": "validity_text",
-            "fieldtype": "Data",
-            "label": "Validity Text",
-            "description": "e.g., 'Valid until completion of course'"
-        },
-        {
-            "fieldname": "section_break_fields",
-            "fieldtype": "Section Break",
-            "label": "Field Mapping",
-            "depends_on": "eval:doc.template_creation_mode == 'Field Mapping'"
-        },
-        {
-            "fieldname": "fields",
-            "fieldtype": "Table",
-            "label": "Fields",
-            "options": "ID Card Template Field"
-        },
-        {
-            "fieldname": "section_break_jinja",
-            "fieldtype": "Section Break",
-            "label": "Jinja Template (Advanced)",
-            "description": "If these fields are set, the Design Assets and Field Mapping will be ignored.",
-            "depends_on": "eval:doc.template_creation_mode == 'Jinja Template'"
-        },
-        {
-            "fieldname": "drag_drop_section",
-            "fieldtype": "Section Break",
-            "label": "Drag & Drop Editor",
-            "depends_on": "eval:doc.template_creation_mode == 'Drag and Drop'"
-        },
-        {
-            "fieldname": "canvas_editor",
-            "fieldtype": "HTML",
-            "label": "Editor"
-        },
-        {
-            "fieldname": "canvas_data",
-            "fieldtype": "Code",
-            "label": "Canvas Data",
-            "hidden": 1,
-            "options": "JSON"
-        },
-        {
-            "fieldname": "canva_section",
-            "fieldtype": "Section Break",
-            "label": "Canva Integration",
-            "depends_on": "eval:doc.template_creation_mode == 'Canva'"
-        },
-        {
-            "fieldname": "canva_button",
-            "fieldtype": "HTML",
-            "label": "Launch Canva"
-        },
-        {
-            "fieldname": "front_html",
-            "fieldtype": "Code",
-            "label": "Front HTML",
-            "options": "HTML"
-        },
-        {
-            "fieldname": "back_html",
-            "fieldtype": "Code",
-            "label": "Back HTML",
-            "options": "HTML"
-        },
-        {
-            "fieldname": "preview_section",
-            "fieldtype": "Section Break",
-            "label": "Template Preview",
-            "hidden": 1
-        },
-        {
-            "fieldname": "preview_html",
-            "fieldtype": "HTML",
-            "label": "Preview"
-        }
-    ],
-    "links": [],
-    "modified": "2024-05-21 12:00:00.000000",
-    "modified_by": "Administrator",
-    "module": "SLCM",
-    "name": "ID Card Template",
-    "naming_rule": "By fieldname",
-    "owner": "Administrator",
-    "permissions": [
-        {
-            "create": 1,
-            "delete": 1,
-            "email": 1,
-            "export": 1,
-            "print": 1,
-            "read": 1,
-            "report": 1,
-            "role": "System Manager",
-            "share": 1,
-            "write": 1
-        },
-        {
-            "read": 1,
-            "role": "SLCM Registrar"
-        }
-    ],
-    "sort_field": "modified",
-    "sort_order": "DESC",
-    "states": []
+ "actions": [],
+ "autoname": "field:template_name",
+ "creation": "2024-05-21 12:00:00",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "preview_section",
+  "preview_html",
+  "section_break_dfcg",
+  "template_name",
+  "template_creation_mode",
+  "card_type",
+  "card_size",
+  "is_default",
+  "section_break_design",
+  "front_background",
+  "back_background",
+  "column_break_design",
+  "font_family",
+  "base_font_color",
+  "section_break_institute",
+  "institute_name",
+  "institute_logo",
+  "authority_signature",
+  "watermark_image",
+  "institute_address",
+  "validity_text",
+  "section_break_fields",
+  "fields",
+  "section_break_jinja",
+  "front_html",
+  "back_html",
+  "drag_drop_section",
+  "canvas_editor",
+  "canvas_data",
+  "canva_section",
+  "canva_button"
+ ],
+ "fields": [
+  {
+   "fieldname": "template_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Template Name",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "default": "Field Mapping",
+   "fieldname": "template_creation_mode",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Template Creation Mode",
+   "options": "Field Mapping\nJinja Template\nDrag and Drop\nCanva",
+   "reqd": 1
+  },
+  {
+   "default": "Student",
+   "fieldname": "card_type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Card Type",
+   "options": "Student\nStaff\nVisitor",
+   "reqd": 1
+  },
+  {
+   "default": "CR80",
+   "fieldname": "card_size",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Card Size",
+   "options": "CR80",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "is_default",
+   "fieldtype": "Check",
+   "label": "Is Default Template"
+  },
+  {
+   "depends_on": "eval:doc.template_creation_mode == 'Field Mapping'",
+   "fieldname": "section_break_design",
+   "fieldtype": "Section Break",
+   "label": "Design Assets"
+  },
+  {
+   "description": "Recommended: 1016x638 px (300 DPI for CR80)",
+   "fieldname": "front_background",
+   "fieldtype": "Attach Image",
+   "label": "Front Background"
+  },
+  {
+   "description": "Recommended: 1016x638 px (300 DPI for CR80)",
+   "fieldname": "back_background",
+   "fieldtype": "Attach Image",
+   "label": "Back Background"
+  },
+  {
+   "fieldname": "section_break_institute",
+   "fieldtype": "Section Break",
+   "label": "Institute Details"
+  },
+  {
+   "fieldname": "institute_name",
+   "fieldtype": "Data",
+   "label": "Institute Name"
+  },
+  {
+   "fieldname": "institute_logo",
+   "fieldtype": "Attach Image",
+   "label": "Institute Logo"
+  },
+  {
+   "fieldname": "authority_signature",
+   "fieldtype": "Attach Image",
+   "label": "Authority Signature"
+  },
+  {
+   "fieldname": "watermark_image",
+   "fieldtype": "Attach Image",
+   "label": "Default Watermark"
+  },
+  {
+   "fieldname": "institute_address",
+   "fieldtype": "Small Text",
+   "label": "Institute Address"
+  },
+  {
+   "fieldname": "column_break_design",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Arial",
+   "fieldname": "font_family",
+   "fieldtype": "Data",
+   "label": "Default Font Family"
+  },
+  {
+   "default": "#000000",
+   "fieldname": "base_font_color",
+   "fieldtype": "Data",
+   "label": "Base Font Color"
+  },
+  {
+   "description": "e.g., 'Valid until completion of course'",
+   "fieldname": "validity_text",
+   "fieldtype": "Data",
+   "label": "Validity Text"
+  },
+  {
+   "depends_on": "eval:doc.template_creation_mode == 'Field Mapping'",
+   "fieldname": "section_break_fields",
+   "fieldtype": "Section Break",
+   "label": "Field Mapping"
+  },
+  {
+   "fieldname": "fields",
+   "fieldtype": "Table",
+   "label": "Fields",
+   "options": "ID Card Template Field"
+  },
+  {
+   "depends_on": "eval:doc.template_creation_mode == 'Jinja Template'",
+   "description": "If these fields are set, the Design Assets and Field Mapping will be ignored.",
+   "fieldname": "section_break_jinja",
+   "fieldtype": "Section Break",
+   "label": "Jinja Template (Advanced)"
+  },
+  {
+   "depends_on": "eval:doc.template_creation_mode == 'Drag and Drop'",
+   "fieldname": "drag_drop_section",
+   "fieldtype": "Section Break",
+   "label": "Drag & Drop Editor"
+  },
+  {
+   "fieldname": "canvas_editor",
+   "fieldtype": "HTML",
+   "label": "Editor"
+  },
+  {
+   "fieldname": "canvas_data",
+   "fieldtype": "Code",
+   "hidden": 1,
+   "label": "Canvas Data",
+   "options": "JSON"
+  },
+  {
+   "depends_on": "eval:doc.template_creation_mode == 'Canva'",
+   "fieldname": "canva_section",
+   "fieldtype": "Section Break",
+   "label": "Canva Integration"
+  },
+  {
+   "fieldname": "canva_button",
+   "fieldtype": "HTML",
+   "label": "Launch Canva"
+  },
+  {
+   "fieldname": "front_html",
+   "fieldtype": "Code",
+   "label": "Front HTML",
+   "options": "HTML"
+  },
+  {
+   "fieldname": "back_html",
+   "fieldtype": "Code",
+   "label": "Back HTML",
+   "options": "HTML"
+  },
+  {
+   "fieldname": "preview_section",
+   "fieldtype": "Section Break",
+   "hidden": 1,
+   "label": "Template Preview"
+  },
+  {
+   "fieldname": "preview_html",
+   "fieldtype": "HTML",
+   "label": "Preview"
+  },
+  {
+   "fieldname": "section_break_dfcg",
+   "fieldtype": "Section Break"
+  }
+ ],
+ "links": [],
+ "modified": "2026-01-10 09:15:12.304475",
+ "modified_by": "Administrator",
+ "module": "SLCM",
+ "name": "ID Card Template",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "read": 1,
+   "role": "SLCM Registrar"
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
 }
