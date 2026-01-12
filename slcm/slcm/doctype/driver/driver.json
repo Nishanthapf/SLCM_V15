@@ -1,0 +1,81 @@
+{
+    "actions": [],
+    "autoname": "format:DRV-{driver_id}",
+    "creation": "2024-01-01 10:00:00.000000",
+    "doctype": "DocType",
+    "engine": "InnoDB",
+    "field_order": [
+        "driver_id",
+        "driver_name",
+        "photo",
+        "license_number",
+        "phone",
+        "status"
+    ],
+    "fields": [
+        {
+            "fieldname": "driver_id",
+            "fieldtype": "Data",
+            "in_list_view": 1,
+            "label": "Driver ID",
+            "reqd": 1,
+            "unique": 1
+        },
+        {
+            "fieldname": "driver_name",
+            "fieldtype": "Data",
+            "in_list_view": 1,
+            "label": "Driver Name",
+            "reqd": 1
+        },
+        {
+            "fieldname": "photo",
+            "fieldtype": "Attach Image",
+            "label": "Photo"
+        },
+        {
+            "fieldname": "license_number",
+            "fieldtype": "Data",
+            "label": "License Number",
+            "reqd": 1
+        },
+        {
+            "fieldname": "phone",
+            "fieldtype": "Data",
+            "label": "Phone",
+            "options": "Phone"
+        },
+        {
+            "default": "Active",
+            "fieldname": "status",
+            "fieldtype": "Select",
+            "label": "Status",
+            "options": "Active\nInactive"
+        }
+    ],
+    "index_web_pages_for_search": 1,
+    "links": [],
+    "modified": "2024-01-01 10:00:00.000000",
+    "modified_by": "Administrator",
+    "module": "SLCM",
+    "name": "Driver",
+    "naming_rule": "Expression",
+    "owner": "Administrator",
+    "permissions": [
+        {
+            "create": 1,
+            "delete": 1,
+            "email": 1,
+            "export": 1,
+            "print": 1,
+            "read": 1,
+            "report": 1,
+            "role": "System Manager",
+            "share": 1,
+            "write": 1
+        }
+    ],
+    "sort_field": "modified",
+    "sort_order": "DESC",
+    "track_changes": 1
+}

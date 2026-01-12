@@ -1,6 +1,53 @@
 /* global slcm */
 frappe.ui.form.on("Student ID Card", {
 	refresh: function (frm) {
+		// Dynamic Fetch for Faculty/Driver
+		frm.fields_dict["faculty"].df.onchange = () => {
+			if (frm.doc.faculty) {
+				frappe.db.get_doc("Faculty", frm.doc.faculty).then((doc) => {
+					frm.set_value("student_name", doc.first_name + " " + (doc.last_name || ""));
+					frm.set_value("email", doc.email);
+					frm.set_value("phone", doc.phone);
+					frm.set_value("department", doc.department);
+					frm.set_value("photo", doc.photo);
+					frm.set_value("designation", doc.designation);
+				});
+			}
+		};
+
+		frm.fields_dict["driver"].df.onchange = () => {
+			if (frm.doc.driver) {
+				frappe.db.get_doc("Driver", frm.doc.driver).then((doc) => {
+					frm.set_value("student_name", doc.driver_name); // Reusing student_name field for Name on Card
+					frm.set_value("phone", doc.phone);
+					frm.set_value("photo", doc.photo);
+					frm.set_value("designation", "Driver");
+				});
+			}
+		};
+
+		// Naming Series Automations
+		frm.fields_dict["card_type"].df.onchange = () => {
+			let map = {
+				Student: "STU-.#####",
+				Faculty: "FAC-.#####",
+				Driver: "DRV-.#####",
+				Visitor: "VIS-.#####",
+				"Non-Faculty": "STF-.#####",
+			};
+			if (map[frm.doc.card_type]) {
+				frm.set_value("naming_series", map[frm.doc.card_type]);
+			}
+			// Clear fields on type change
+			frm.set_value("student", null);
+			frm.set_value("faculty", null);
+			frm.set_value("driver", null);
+			frm.set_value("visitor_name", null);
+			frm.set_value("non_faculty_name", null);
+			frm.set_value("designation", null);
+			frm.set_value("department", null);
+			frm.set_value("photo", null);
+		};
 		if (frm.doc.qr_code_image) {
 			frm.set_df_property(
 				"qr_code_preview",

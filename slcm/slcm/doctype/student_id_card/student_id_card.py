@@ -24,19 +24,36 @@ def hex_to_rgb(hex_color):
 class StudentIDCard(Document):
 	def validate(self):
 		if self.card_status != "Cancelled":
-			existing = frappe.db.exists(
-				"Student ID Card",
-				{"student": self.student, "card_status": ["!=", "Cancelled"], "name": ["!=", self.name]},
-			)
-			if existing:
-				frappe.throw(f"Active ID Card {existing} already exists for Student {self.student}")
+			if self.card_type == "Student" and self.student:
+				existing = frappe.db.exists(
+					"Student ID Card",
+					{"student": self.student, "card_status": ["!=", "Cancelled"], "name": ["!=", self.name]},
+				)
+				if existing:
+					frappe.throw(f"Active ID Card {existing} already exists for Student {self.student}")
+
+			elif self.card_type == "Faculty" and self.faculty:
+				existing = frappe.db.exists(
+					"Student ID Card",
+					{"faculty": self.faculty, "card_status": ["!=", "Cancelled"], "name": ["!=", self.name]},
+				)
+				if existing:
+					frappe.throw(f"Active ID Card {existing} already exists for Faculty {self.faculty}")
+
+			elif self.card_type == "Driver" and self.driver:
+				existing = frappe.db.exists(
+					"Student ID Card",
+					{"driver": self.driver, "card_status": ["!=", "Cancelled"], "name": ["!=", self.name]},
+				)
+				if existing:
+					frappe.throw(f"Active ID Card {existing} already exists for Driver {self.driver}")
 
 		if not self.generate_qr_code_string():
 			# Set default QR data if not generated yet
 			pass
 
 	def before_insert(self):
-		if self.student:
+		if self.card_type == "Student" and self.student:
 			student = frappe.get_doc("Student Master", self.student)
 			self.student_name = f"{student.first_name} {student.last_name or ''}".strip()
 			self.email = student.email
@@ -45,6 +62,62 @@ class StudentIDCard(Document):
 				self.photo = student.passport_size_photo
 			self.department = student.department
 			self.program = student.programme
+
+		elif self.card_type == "Faculty" and self.faculty:
+			faculty = frappe.get_doc("Faculty", self.faculty)
+			self.student_name = f"{faculty.first_name} {faculty.last_name or ''}".strip()
+			self.email = faculty.email
+			self.phone = faculty.phone
+			self.department = faculty.department
+			self.designation = faculty.designation
+			if not self.photo:
+				self.photo = getattr(faculty, "photo", None)
+
+		elif self.card_type == "Driver" and self.driver:
+			driver = frappe.get_doc("Driver", self.driver)
+			self.student_name = driver.driver_name
+			self.phone = driver.phone
+			if not self.photo:
+				self.photo = getattr(driver, "photo", None)
+
+		elif self.card_type == "Visitor":
+			self.student_name = self.visitor_name
+			self.designation = "Visitor"  # Default for Visitor
+
+		elif self.card_type == "Non-Faculty":
+			self.student_name = self.non_faculty_name
+			# Designation is manually entered
+
+	def get_person_doc(self):
+		if self.card_type == "Student" and self.student:
+			return frappe.get_doc("Student Master", self.student)
+		elif self.card_type == "Faculty" and self.faculty:
+			return frappe.get_doc("Faculty", self.faculty)
+		elif self.card_type == "Driver" and self.driver:
+			return frappe.get_doc("Driver", self.driver)
+		elif self.card_type == "Visitor":
+			return frappe._dict(
+				{
+					"first_name": self.visitor_name,
+					"full_name": self.visitor_name,
+					"company": self.visitor_company,
+					"phone": self.phone,
+					"designation": "Visitor",
+				}
+			)
+		elif self.card_type == "Non-Faculty":
+			return frappe._dict(
+				{
+					"first_name": self.non_faculty_name,
+					"full_name": self.non_faculty_name,
+					"designation": self.designation,
+					"phone": self.phone,
+					"email": self.email,
+					"department": self.department,
+					"company": self.visitor_company,  # Stored in generic company field
+				}
+			)
+		return None
 
 	def after_insert(self):
 		frappe.enqueue(
@@ -96,21 +169,51 @@ class StudentIDCard(Document):
 		self.qr_code_image = saved_file.file_url
 
 	def generate_qr_code_string(self):
-		"""Generate QR payload string for student verification"""
-		if not self.student:
+		"""Generate QR payload string for verification"""
+		person = self.get_person_doc()
+		if not person:
 			return ""
 
-		student = frappe.get_doc("Student Master", self.student)
+		parts = []
+		if self.card_type == "Student":
+			parts = [
+				person.first_name or "",
+				person.academic_year or "",
+				person.programme or "",
+				person.department or "",
+				person.blood_group or "",
+				person.email or "",
+			]
+		elif self.card_type == "Faculty":
+			parts = [
+				person.faculty_id or "",
+				person.first_name or "",
+				person.department or "",
+				person.designation or "",
+				person.email or "",
+			]
+		elif self.card_type == "Driver":
+			parts = [
+				person.driver_id or "",
+				person.driver_name or "",
+				person.license_number or "",
+			]
+		elif self.card_type == "Visitor":
+			parts = [
+				"VISITOR",
+				self.visitor_name or "",
+				self.visitor_company or "",
+				self.issue_date or "",
+			]
+		elif self.card_type == "Non-Faculty":
+			parts = [
+				"STAFF",
+				self.non_faculty_name or "",
+				self.designation or "",
+				self.department or "",
+			]
 
-		parts = [
-			student.first_name or "",
-			student.academic_year or "",
-			student.programme or "",
-			student.department or "",
-			student.blood_group or "",
-		]
-
-		return " | ".join(filter(None, parts))
+		return " | ".join(filter(None, [str(p) for p in parts]))
 
 	def generate_verification_url(self):
 		base_url = get_url()
@@ -125,13 +228,14 @@ class StudentIDCard(Document):
 			frappe.throw("ID Card Template is required.")
 
 		template = frappe.get_doc("ID Card Template", self.id_card_template)
-		student = frappe.get_doc("Student Master", self.student)
+		# student = frappe.get_doc("Student Master", self.student) # OLD
+		person = self.get_person_doc()  # NEW
 
 		# Check for different modes
 		if template.template_creation_mode == "Drag and Drop":
-			self.generate_card_from_canvas(template, student)
+			self.generate_card_from_canvas(template, person)
 		elif template.template_creation_mode == "Jinja Template":
-			self.generate_card_html(template, student)
+			self.generate_card_html(template, person)
 		else:
 			# Fallback to field mapping / coordinate system (Field Mapping mode)
 			# Paths for backgrounds
@@ -140,12 +244,12 @@ class StudentIDCard(Document):
 
 			if front_bg_path:
 				front_img = Image.open(front_bg_path).convert("RGBA")
-				self.process_side(front_img, template, student, "Front")
+				self.process_side(front_img, template, person, "Front")
 				self.save_image(front_img, f"{self.name}_Front.png", "front_id_image")
 
 			if back_bg_path:
 				back_img = Image.open(back_bg_path).convert("RGBA")
-				self.process_side(back_img, template, student, "Back")
+				self.process_side(back_img, template, person, "Back")
 				self.save_image(back_img, f"{self.name}_Back.png", "back_id_image")
 
 		self.card_status = "Generated"
@@ -261,12 +365,18 @@ class StudentIDCard(Document):
 						elif mapping == "authority_signature":
 							content = self.get_file_path(template.authority_signature)
 							if not content:
-								frappe.log_error(f"Missing Authority Signature for Template: {template.name}", "ID Card Generation Warning")
+								frappe.log_error(
+									f"Missing Authority Signature for Template: {template.name}",
+									"ID Card Generation Warning",
+								)
 								content = ""
 						elif mapping == "qr_code_image":
 							content = self.get_file_path(self.qr_code_image)
 							if not content:
-								frappe.log_error(f"Missing QR Code Image for Card: {self.name}", "ID Card Generation Warning")
+								frappe.log_error(
+									f"Missing QR Code Image for Card: {self.name}",
+									"ID Card Generation Warning",
+								)
 								content = ""
 						# Ensure path is suitable for wkhtmltoimage (absolute local path preferable or base64)
 						# get_file_path returns absolute path
@@ -299,7 +409,7 @@ class StudentIDCard(Document):
 			field_map = {
 				"[Student Name]": self.student_name,
 				"[Student ID]": self.name,
-				"[Blood Group]": student.blood_group,
+				"[Blood Group]": getattr(student, "blood_group", ""),
 				"[Phone]": self.phone,
 				"[Email]": self.email,
 				"[Program]": self.program,
@@ -308,7 +418,7 @@ class StudentIDCard(Document):
 				"[Department]": self.department,
 				"[Institute Name]": template.institute_name,
 				"[Institute Address]": template.institute_address,
-				"[Address]": student.state_of_domicile,
+				"[Address]": getattr(student, "state_of_domicile", ""),
 			}
 
 			for key, val in field_map.items():
@@ -380,10 +490,14 @@ class StudentIDCard(Document):
 		if template.back_html:
 			self.generate_image_from_html(template.back_html, student, template, "back_id_image", "Back")
 
-	def generate_image_from_html(self, html_content, student, template, fieldname, side):
+	def generate_image_from_html(self, html_content, person, template, fieldname, side):
 		# Prepare Context
-		# 1. Start with Student Master data (e.g. first_name, blood_group)
-		context = student.as_dict()
+		# 1. Start with Person data (e.g. first_name, blood_group)
+		# 1. Start with Person data (e.g. first_name, blood_group)
+		if hasattr(person, "as_dict") and callable(person.as_dict):
+			context = person.as_dict()
+		else:
+			context = person.copy() if person else {}
 
 		# 2. Add ID Card Doc data (e.g. student_name, phone, email, photo)
 		# This ensures {{ student_name }} works as it's defined on the ID Card doc
@@ -393,10 +507,18 @@ class StudentIDCard(Document):
 		context.update(template.as_dict())
 
 		# 4. Add overrides and helpers
+		# Handle photo field based on person/card type
+		person_photo = ""
+		if self.card_type == "Student":
+			person_photo = getattr(person, "passport_size_photo", "")
+		elif self.card_type in ["Faculty", "Driver"]:
+			person_photo = getattr(person, "photo", "")
+
 		context.update(
 			{
 				"doc": self,
-				"student": student,
+				"student": person,  # Backwards compat: use 'student' as key for person
+				"person": person,  # New standard key
 				"template": template,
 				# Institute details
 				"institute_name": template.institute_name,
@@ -406,11 +528,15 @@ class StudentIDCard(Document):
 				"logo_url": self.get_file_path(template.institute_logo) or "",
 				# AUTHORITY SIGNATURE
 				"authority_signature": self.get_file_path(template.authority_signature) or "",
-				# STUDENT PHOTO
-				"passport_size_photo": self.get_file_path(student.passport_size_photo) or "",
+				# STUDENT/PERSON PHOTO
+				"passport_size_photo": self.get_file_path(person_photo) or "",  # For compatibility
+				"photo": self.get_file_path(person_photo) or "",  # Standard
 				# QR CODE (IMPORTANT)
 				"qr_code_image": self.get_file_path(self.qr_code_image) or "",
 				"qr_code": self.get_file_path(self.qr_code_image) or "",  # Alias
+				"institute_logo_url": get_url(template.institute_logo)
+				if template.institute_logo
+				else "",  # Helper
 			}
 		)
 
@@ -521,8 +647,10 @@ class StudentIDCard(Document):
 
 		if fieldname == "photo":
 			# Try passport_size_photo first, then photo
-			if hasattr(student, "passport_size_photo"):
+			if hasattr(student, "passport_size_photo") and student.passport_size_photo:
 				return student.passport_size_photo
+			if hasattr(student, "photo") and student.photo:
+				return student.photo
 			return None  # Or default placeholder
 
 		if hasattr(student, fieldname):
@@ -587,7 +715,7 @@ class StudentIDCard(Document):
 
 			if os.path.exists(full_path):
 				path = full_path
-			
+
 			# Fallback for standard Frappe assets (if not in sites/assets yet)
 			elif "default-avatar.png" in file_url:
 				path = frappe.get_app_path("frappe", "public", "images", "default-avatar.png")
@@ -601,13 +729,13 @@ class StudentIDCard(Document):
 		# Should span /files/ and others
 		elif file_url.startswith("/"):
 			path = frappe.get_site_path("public", file_url.lstrip("/"))
-		
+
 		else:
 			path = frappe.get_site_path("public", file_url)
 
 		if path:
 			return os.path.abspath(path)
-		
+
 		return None
 
 	def save_image(self, image, filename, fieldname):

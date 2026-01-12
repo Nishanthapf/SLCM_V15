@@ -1,272 +1,326 @@
 {
- "actions": [],
- "allow_import": 1,
- "autoname": "naming_series:",
- "creation": "2026-01-09 10:56:23.332911",
- "doctype": "DocType",
- "engine": "InnoDB",
- "field_order": [
-  "section_break_data",
-  "student",
-  "student_name",
-  "email",
-  "phone",
-  "photo",
-  "department",
-  "program",
-  "date_of_birth",
-  "academic_year",
-  "id_card_template",
-  "column_break_data",
-  "card_status",
-  "issue_date",
-  "expiry_date",
-  "naming_series",
-  "section_break_images",
-  "front_id_image",
-  "back_id_image",
-  "section_break_verification",
-  "qr_code_data",
-  "qr_code_image",
-  "verification_url",
-  "column_break_lknt",
-  "qr_code_preview",
-  "section_break_print",
-  "print_count",
-  "remarks",
-  "section_break_history",
-  "events"
- ],
- "fields": [
-  {
-   "fieldname": "section_break_data",
-   "fieldtype": "Section Break",
-   "label": "Card Details"
-  },
-  {
-   "fieldname": "student",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Student",
-   "options": "Student Master",
-   "reqd": 1
-  },
-  {
-   "fetch_from": "student.first_name",
-   "fieldname": "student_name",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Student Name",
-   "read_only": 1
-  },
-  {
-   "fetch_from": "student.email",
-   "fieldname": "email",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Email",
-   "read_only": 1
-  },
-  {
-   "fetch_from": "student.phone",
-   "fieldname": "phone",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Phone",
-   "read_only": 1
-  },
-  {
-   "fetch_from": "student.passport_size_photo",
-   "fieldname": "photo",
-   "fieldtype": "Attach Image",
-   "label": "Photo"
-  },
-  {
-   "fetch_from": "student.department",
-   "fieldname": "department",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Department",
-   "options": "Department",
-   "read_only": 1
-  },
-  {
-   "fetch_from": "student.programme",
-   "fieldname": "program",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Program",
-   "options": "Cohort",
-   "read_only": 1
-  },
-  {
-   "fetch_from": "student.dob",
-   "fieldname": "date_of_birth",
-   "fieldtype": "Date",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Date of Birth"
-  },
-  {
-   "fetch_from": "student.academic_year",
-   "fieldname": "academic_year",
-   "fieldtype": "Data",
-   "label": "Academic Year",
-   "read_only": 1
-  },
-  {
-   "fieldname": "id_card_template",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "label": "ID Card Template",
-   "options": "ID Card Template",
-   "reqd": 1
-  },
-  {
-   "fieldname": "column_break_data",
-   "fieldtype": "Column Break"
-  },
-  {
-   "default": "Draft",
-   "fieldname": "card_status",
-   "fieldtype": "Select",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Card Status",
-   "options": "Draft\nGenerated\nPrinted\nCancelled\nExpired",
-   "reqd": 1
-  },
-  {
-   "fieldname": "issue_date",
-   "fieldtype": "Date",
-   "label": "Issue Date",
-   "reqd": 1
-  },
-  {
-   "fieldname": "expiry_date",
-   "fieldtype": "Date",
-   "label": "Expiry Date",
-   "reqd": 1
-  },
-  {
-   "default": "IDC-.#####",
-   "fieldname": "naming_series",
-   "fieldtype": "Select",
-   "label": "Naming Series",
-   "options": "IDC-.#####"
-  },
-  {
-   "fieldname": "section_break_images",
-   "fieldtype": "Section Break",
-   "label": "Generated Images"
-  },
-  {
-   "fieldname": "front_id_image",
-   "fieldtype": "Attach Image",
-   "label": "Front ID Image"
-  },
-  {
-   "fieldname": "back_id_image",
-   "fieldtype": "Attach Image",
-   "label": "Back ID Image"
-  },
-  {
-   "fieldname": "section_break_verification",
-   "fieldtype": "Section Break",
-   "label": "Verification"
-  },
-  {
-   "fieldname": "qr_code_data",
-   "fieldtype": "Data",
-   "label": "QR Code Data",
-   "read_only": 1
-  },
-  {
-   "fieldname": "qr_code_image",
-   "fieldtype": "Attach Image",
-   "label": "QR Code Image",
-   "read_only": 1
-  },
-  {
-   "fieldname": "qr_code_preview",
-   "fieldtype": "HTML",
-   "label": "QR Code Preview"
-  },
-  {
-   "fieldname": "verification_url",
-   "fieldtype": "Data",
-   "label": "Verification URL",
-   "read_only": 1
-  },
-  {
-   "fieldname": "section_break_print",
-   "fieldtype": "Section Break",
-   "label": "Printing Info"
-  },
-  {
-   "default": "0",
-   "fieldname": "print_count",
-   "fieldtype": "Int",
-   "label": "Print Count",
-   "read_only": 1
-  },
-  {
-   "fieldname": "remarks",
-   "fieldtype": "Small Text",
-   "label": "Remarks"
-  },
-  {
-   "fieldname": "section_break_history",
-   "fieldtype": "Section Break",
-   "label": "Status History"
-  },
-  {
-   "fieldname": "events",
-   "fieldtype": "Table",
-   "label": "History",
-   "options": "Student ID Card Event",
-   "read_only": 1
-  },
-  {
-   "fieldname": "column_break_lknt",
-   "fieldtype": "Column Break"
-  }
- ],
- "links": [],
- "modified": "2026-01-09 15:24:03.247762",
- "modified_by": "Administrator",
- "module": "SLCM",
- "name": "Student ID Card",
- "naming_rule": "By \"Naming Series\" field",
- "owner": "Administrator",
- "permissions": [
-  {
-   "create": 1,
-   "delete": 1,
-   "email": 1,
-   "export": 1,
-   "print": 1,
-   "read": 1,
-   "report": 1,
-   "role": "System Manager",
-   "share": 1,
-   "write": 1
-  },
-  {
-   "create": 1,
-   "read": 1,
-   "role": "SLCM Registrar",
-   "write": 1
-  }
- ],
- "row_format": "Dynamic",
- "sort_field": "modified",
- "sort_order": "DESC",
- "states": []
+    "actions": [],
+    "allow_import": 1,
+    "autoname": "naming_series:",
+    "creation": "2026-01-12 12:20:26.979531",
+    "doctype": "DocType",
+    "engine": "InnoDB",
+    "field_order": [
+        "section_break_data",
+        "card_type",
+        "faculty",
+        "driver",
+        "non_faculty_name",
+        "designation",
+        "visitor_name",
+        "visitor_company",
+        "student",
+        "student_name",
+        "email",
+        "phone",
+        "photo",
+        "department",
+        "program",
+        "date_of_birth",
+        "academic_year",
+        "id_card_template",
+        "column_break_data",
+        "card_status",
+        "issue_date",
+        "expiry_date",
+        "naming_series",
+        "section_break_images",
+        "front_id_image",
+        "back_id_image",
+        "section_break_verification",
+        "qr_code_data",
+        "qr_code_image",
+        "verification_url",
+        "column_break_lknt",
+        "qr_code_preview",
+        "section_break_print",
+        "print_count",
+        "remarks",
+        "section_break_history",
+        "events"
+    ],
+    "fields": [
+        {
+            "fieldname": "section_break_data",
+            "fieldtype": "Section Break",
+            "label": "Card Details"
+        },
+        {
+            "default": "Student",
+            "fieldname": "card_type",
+            "fieldtype": "Select",
+            "in_list_view": 1,
+            "label": "Card Type",
+            "options": "Student\nFaculty\nDriver\nVisitor\nNon-Faculty",
+            "reqd": 1
+        },
+        {
+            "depends_on": "eval:doc.card_type == 'Faculty'",
+            "fieldname": "faculty",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "label": "Faculty",
+            "mandatory_depends_on": "eval:doc.card_type == 'Faculty'",
+            "options": "Faculty"
+        },
+        {
+            "depends_on": "eval:doc.card_type == 'Driver'",
+            "fieldname": "driver",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "label": "Driver",
+            "mandatory_depends_on": "eval:doc.card_type == 'Driver'",
+            "options": "Driver"
+        },
+        {
+            "depends_on": "eval:doc.card_type == 'Non-Faculty'",
+            "fieldname": "non_faculty_name",
+            "fieldtype": "Data",
+            "label": "Non-Faculty Name",
+            "mandatory_depends_on": "eval:doc.card_type == 'Non-Faculty'"
+        },
+        {
+            "fieldname": "designation",
+            "fieldtype": "Data",
+            "label": "Designation"
+        },
+        {
+            "depends_on": "eval:doc.card_type == 'Visitor'",
+            "fieldname": "visitor_name",
+            "fieldtype": "Data",
+            "label": "Visitor Name",
+            "mandatory_depends_on": "eval:doc.card_type == 'Visitor'"
+        },
+        {
+            "depends_on": "eval:doc.card_type == 'Visitor' || doc.card_type == 'Non-Faculty'",
+            "fieldname": "visitor_company",
+            "fieldtype": "Data",
+            "label": "Company / Organization"
+        },
+        {
+            "depends_on": "eval:doc.card_type == 'Student'",
+            "fieldname": "student",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Student",
+            "mandatory_depends_on": "eval:doc.card_type == 'Student'",
+            "options": "Student Master"
+        },
+        {
+            "fetch_from": "student.first_name",
+            "fieldname": "student_name",
+            "fieldtype": "Data",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Card Holder Name",
+            "read_only": 1
+        },
+        {
+            "fetch_from": "student.email",
+            "fieldname": "email",
+            "fieldtype": "Data",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Email",
+            "read_only": 1
+        },
+        {
+            "fetch_from": "student.phone",
+            "fieldname": "phone",
+            "fieldtype": "Data",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Phone",
+            "read_only": 1
+        },
+        {
+            "fetch_from": "student.passport_size_photo",
+            "fieldname": "photo",
+            "fieldtype": "Attach Image",
+            "label": "Photo"
+        },
+        {
+            "fetch_from": "student.department",
+            "fieldname": "department",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Department",
+            "options": "Department",
+            "read_only": 1
+        },
+        {
+            "fetch_from": "student.programme",
+            "fieldname": "program",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Program",
+            "options": "Cohort",
+            "read_only": 1
+        },
+        {
+            "fetch_from": "student.dob",
+            "fieldname": "date_of_birth",
+            "fieldtype": "Date",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Date of Birth"
+        },
+        {
+            "fetch_from": "student.academic_year",
+            "fieldname": "academic_year",
+            "fieldtype": "Data",
+            "label": "Academic Year",
+            "read_only": 1
+        },
+        {
+            "fieldname": "id_card_template",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "label": "ID Card Template",
+            "options": "ID Card Template",
+            "reqd": 1
+        },
+        {
+            "fieldname": "column_break_data",
+            "fieldtype": "Column Break"
+        },
+        {
+            "default": "Draft",
+            "fieldname": "card_status",
+            "fieldtype": "Select",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Card Status",
+            "options": "Draft\nGenerated\nPrinted\nCancelled\nExpired",
+            "reqd": 1
+        },
+        {
+            "fieldname": "issue_date",
+            "fieldtype": "Date",
+            "label": "Issue Date",
+            "reqd": 1
+        },
+        {
+            "fieldname": "expiry_date",
+            "fieldtype": "Date",
+            "label": "Expiry Date",
+            "reqd": 1
+        },
+        {
+            "default": "IDC-.#####",
+            "fieldname": "naming_series",
+            "fieldtype": "Select",
+            "label": "Naming Series",
+            "options": "IDC-.#####\nSTU-.#####\nFAC-.#####\nDRV-.#####\nVIS-.#####\nSTF-.#####"
+        },
+        {
+            "fieldname": "section_break_images",
+            "fieldtype": "Section Break",
+            "label": "Generated Images"
+        },
+        {
+            "fieldname": "front_id_image",
+            "fieldtype": "Attach Image",
+            "label": "Front ID Image"
+        },
+        {
+            "fieldname": "back_id_image",
+            "fieldtype": "Attach Image",
+            "label": "Back ID Image"
+        },
+        {
+            "fieldname": "section_break_verification",
+            "fieldtype": "Section Break",
+            "label": "Verification"
+        },
+        {
+            "fieldname": "qr_code_data",
+            "fieldtype": "Data",
+            "label": "QR Code Data",
+            "read_only": 1
+        },
+        {
+            "fieldname": "qr_code_image",
+            "fieldtype": "Attach Image",
+            "label": "QR Code Image",
+            "read_only": 1
+        },
+        {
+            "fieldname": "qr_code_preview",
+            "fieldtype": "HTML",
+            "label": "QR Code Preview"
+        },
+        {
+            "fieldname": "verification_url",
+            "fieldtype": "Data",
+            "label": "Verification URL",
+            "read_only": 1
+        },
+        {
+            "fieldname": "section_break_print",
+            "fieldtype": "Section Break",
+            "label": "Printing Info"
+        },
+        {
+            "default": "0",
+            "fieldname": "print_count",
+            "fieldtype": "Int",
+            "label": "Print Count",
+            "read_only": 1
+        },
+        {
+            "fieldname": "remarks",
+            "fieldtype": "Small Text",
+            "label": "Remarks"
+        },
+        {
+            "fieldname": "section_break_history",
+            "fieldtype": "Section Break",
+            "label": "Status History"
+        },
+        {
+            "fieldname": "events",
+            "fieldtype": "Table",
+            "label": "History",
+            "options": "Student ID Card Event",
+            "read_only": 1
+        },
+        {
+            "fieldname": "column_break_lknt",
+            "fieldtype": "Column Break"
+        }
+    ],
+    "links": [],
+    "modified": "2026-01-12 12:31:47.222490",
+    "modified_by": "Administrator",
+    "module": "SLCM",
+    "name": "Student ID Card",
+    "naming_rule": "By \"Naming Series\" field",
+    "owner": "Administrator",
+    "permissions": [
+        {
+            "create": 1,
+            "delete": 1,
+            "email": 1,
+            "export": 1,
+            "print": 1,
+            "read": 1,
+            "report": 1,
+            "role": "System Manager",
+            "share": 1,
+            "write": 1
+        }
+    ],
+    "row_format": "Dynamic",
+    "sort_field": "modified",
+    "sort_order": "DESC",
+    "states": []
 }
