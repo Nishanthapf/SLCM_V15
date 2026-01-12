@@ -259,9 +259,15 @@ class StudentIDCard(Document):
 						elif mapping == "institute_logo":
 							content = self.get_file_path(template.institute_logo) or ""
 						elif mapping == "authority_signature":
-							content = self.get_file_path(template.authority_signature) or ""
+							content = self.get_file_path(template.authority_signature)
+							if not content:
+								frappe.log_error(f"Missing Authority Signature for Template: {template.name}", "ID Card Generation Warning")
+								content = ""
 						elif mapping == "qr_code_image":
-							content = self.get_file_path(self.qr_code_image) or ""
+							content = self.get_file_path(self.qr_code_image)
+							if not content:
+								frappe.log_error(f"Missing QR Code Image for Card: {self.name}", "ID Card Generation Warning")
+								content = ""
 						# Ensure path is suitable for wkhtmltoimage (absolute local path preferable or base64)
 						# get_file_path returns absolute path
 
@@ -570,6 +576,8 @@ class StudentIDCard(Document):
 		if file_url.startswith("http"):
 			return file_url
 
+		path = None
+
 		# Handle Assets (e.g., /assets/frappe/images/default-avatar.png)
 		if file_url.startswith("/assets/"):
 			# Standard bench structure: ./sites/assets/
@@ -578,23 +586,29 @@ class StudentIDCard(Document):
 			full_path = os.path.join(bench_path, "sites", "assets", asset_path)
 
 			if os.path.exists(full_path):
-				return full_path
-
+				path = full_path
+			
 			# Fallback for standard Frappe assets (if not in sites/assets yet)
-			if "default-avatar.png" in file_url:
-				return frappe.get_app_path("frappe", "public", "images", "default-avatar.png")
+			elif "default-avatar.png" in file_url:
+				path = frappe.get_app_path("frappe", "public", "images", "default-avatar.png")
 
 		# Handle Private Files
-		if file_url.startswith("/private/files/"):
+		elif file_url.startswith("/private/files/"):
 			file_name = file_url.replace("/private/files/", "", 1)
-			return frappe.get_site_path("private", "files", file_name)
+			path = frappe.get_site_path("private", "files", file_name)
 
 		# Handle Public Files (default)
 		# Should span /files/ and others
-		if file_url.startswith("/"):
-			return frappe.get_site_path("public", file_url.lstrip("/"))
+		elif file_url.startswith("/"):
+			path = frappe.get_site_path("public", file_url.lstrip("/"))
+		
+		else:
+			path = frappe.get_site_path("public", file_url)
 
-		return frappe.get_site_path("public", file_url)
+		if path:
+			return os.path.abspath(path)
+		
+		return None
 
 	def save_image(self, image, filename, fieldname):
 		# Save to buffer
