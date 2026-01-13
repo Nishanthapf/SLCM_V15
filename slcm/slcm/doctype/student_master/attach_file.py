@@ -15,6 +15,8 @@ def set_document_links(doc, method=None):
 		"posh_anti_ragging_declaration": "posh_anti_ragging_declaration",
 		"passport": "passport",
 		"offer_letter": "offer_letter",
+		"student_declaration": "student_declaration",
+		"parent_declaration": "parent_declaration",
 	}
 
 	for attach_field, link_field in field_map.items():
