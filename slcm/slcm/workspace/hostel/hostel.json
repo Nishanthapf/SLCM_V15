@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"IBb9W2MaYV\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Hostel Management</span>\",\"col\":12}},{\"id\":\"qB9nktU76b\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Hostel Room\",\"col\":3}},{\"id\":\"2EOBgM3p_B\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Hostel Allocation\",\"col\":3}},{\"id\":\"9k_XYYAenp\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Student Master\",\"col\":3}}]",
+ "content": "[{\"id\":\"IBb9W2MaYV\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Hostel Management</span>\",\"col\":12}},{\"id\":\"aLCUZUju4P\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Hostel\",\"col\":3}},{\"id\":\"qB9nktU76b\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Hostel Room\",\"col\":3}},{\"id\":\"J8KirQRj1T\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Hostel Bed\",\"col\":3}},{\"id\":\"2EOBgM3p_B\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Hostel Allocation\",\"col\":3}},{\"id\":\"9k_XYYAenp\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Student Master\",\"col\":3}}]",
  "creation": "2024-01-13 12:00:00",
  "custom_blocks": [],
  "docstatus": 0,
@@ -69,7 +69,7 @@
    "type": "Link"
   }
  ],
- "modified": "2026-01-13 15:17:34.097918",
+ "modified": "2026-01-13 17:41:58.987830",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "Hostel",
@@ -83,8 +83,24 @@
    "role": "System Manager"
   }
  ],
- "sequence_id": 0.0,
+ "sequence_id": 5.0,
  "shortcuts": [
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Hostel",
+   "link_to": "Hostel",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Hostel Bed",
+   "link_to": "Hostel Bed",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
   {
    "color": "Grey",
    "doc_view": "List",

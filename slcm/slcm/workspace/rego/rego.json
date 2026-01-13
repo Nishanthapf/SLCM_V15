@@ -13,7 +13,7 @@
  "is_hidden": 0,
  "label": "REGO",
  "links": [],
- "modified": "2026-01-09 15:57:19.733028",
+ "modified": "2026-01-13 17:41:58.932964",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "REGO",
@@ -23,7 +23,7 @@
  "public": 1,
  "quick_lists": [],
  "roles": [],
- "sequence_id": 23.0,
+ "sequence_id": 4.0,
  "shortcuts": [
   {
    "color": "Grey",
