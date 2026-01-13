@@ -6,7 +6,7 @@
     "workflow_state_field": "registration_status",
     "states": [
         {
-            "state": "Draft",
+            "state": "Admitted",
             "doc_status": 0,
             "allow_edit": "System Manager"
         },
@@ -41,6 +41,11 @@
             "allow_edit": "IT Admin"
         },
         {
+            "state": "Final Verification REGO",
+            "doc_status": 0,
+            "allow_edit": "IT Admin"
+        },
+        {
             "state": "Completed",
             "doc_status": 1,
             "allow_edit": "System Manager"
@@ -48,7 +53,7 @@
     ],
     "transitions": [
         {
-            "state": "Draft",
+            "state": "Admitted",
             "action": "Submit for REGO",
             "next_state": "Pending REGO",
             "allowed": "Student,Registration User"
@@ -86,13 +91,19 @@
         {
             "state": "Pending IT",
             "action": "Allocate Assets",
-            "next_state": "Completed",
+            "next_state": "Final Verification REGO",
             "allowed": "IT Admin"
+        },
+        {
+            "state": "Final Verification REGO",
+            "action": "Final Approval",
+            "next_state": "Completed",
+            "allowed": "Registration Officer"
         },
         {
             "state": "Completed",
             "action": "Re-Open",
-            "next_state": "Draft",
+            "next_state": "Admitted",
             "allowed": "System Manager"
         }
     ]

@@ -116,7 +116,7 @@ frappe.ui.form.on("Student Master", {
 });
 
 function show_status_transition_dialog(frm, data) {
-	const current_status = data.current_status || "Draft";
+	const current_status = data.current_status || "Admitted";
 	const available_actions = data.available_actions || [];
 
 	if (available_actions.length === 0) {
