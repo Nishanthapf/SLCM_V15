@@ -344,11 +344,7 @@ def validate_transition_requirements(student, new_status):
 
 	elif new_status == "Completed":
 		# Pending IT -> Completed
-		# IT Check: Official Email, Laptop (if scholar)
+		# IT Check: Official Email
 		if not student.official_email_id:
 			frappe.throw(_("Cannot complete. Official Email ID must be set."))
-
-		# Check if eligible for laptop (e.g., if Applying Scholarship is Yes)
-		if student.applying_scholarship == "Yes" and not student.laptop_issued:
-			frappe.throw(_("Cannot complete. Laptop must be issued for scholarship students."))
 
