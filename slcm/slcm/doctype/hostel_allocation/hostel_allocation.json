@@ -2,7 +2,7 @@
     "actions": [],
     "allow_rename": 1,
     "autoname": "format:ALL-{student}-{hostel}",
-    "creation": "2024-01-13 12:00:00.000000",
+    "creation": "2024-01-13 12:00:00",
     "doctype": "DocType",
     "engine": "InnoDB",
     "field_order": [
@@ -20,6 +20,7 @@
             "fieldname": "student",
             "fieldtype": "Link",
             "in_list_view": 1,
+            "in_standard_filter": 1,
             "label": "Student",
             "options": "Student Master",
             "reqd": 1
@@ -28,6 +29,7 @@
             "fieldname": "hostel",
             "fieldtype": "Link",
             "in_list_view": 1,
+            "in_standard_filter": 1,
             "label": "Hostel",
             "options": "Hostel",
             "reqd": 1
@@ -36,10 +38,19 @@
             "fieldname": "room",
             "fieldtype": "Link",
             "in_list_view": 1,
+            "in_standard_filter": 1,
             "label": "Room",
             "options": "Hostel Room",
+            "reqd": 1
+        },
+        {
+            "fieldname": "bed",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "label": "Bed",
+            "options": "Hostel Bed",
             "reqd": 1,
-            "get_query": "slcm.slcm.doctype.hostel_allocation.hostel_allocation.get_room_query"
+            "get_query": "slcm.slcm.doctype.hostel_allocation.hostel_allocation.get_bed_query"
         },
         {
             "fieldname": "from_date",
@@ -65,23 +76,22 @@
             "label": "Keys Handed Over"
         },
         {
+            "default": "Allocated",
+            "fieldname": "status",
+            "fieldtype": "Data",
+            "in_list_view": 1,
+            "label": "Status"
+        },
+        {
             "default": "1",
             "fieldname": "is_active",
             "fieldtype": "Check",
             "label": "Is Active"
-        },
-        {
-            "default": "Allocated",
-            "fieldname": "status",
-            "fieldtype": "Select",
-            "label": "Status",
-            "options": "Allocated\nVacated\nDropped Out\nSuspended\nCancelled"
         }
     ],
     "index_web_pages_for_search": 1,
-    "is_submittable": 0,
     "links": [],
-    "modified": "2024-01-13 12:00:00.000000",
+    "modified": "2026-01-13 16:40:15.572991",
     "modified_by": "Administrator",
     "module": "SLCM",
     "name": "Hostel Allocation",
@@ -100,7 +110,9 @@
             "write": 1
         }
     ],
+    "row_format": "Dynamic",
     "sort_field": "modified",
     "sort_order": "DESC",
+    "states": [],
     "track_changes": 1
 }

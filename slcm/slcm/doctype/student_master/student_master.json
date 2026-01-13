@@ -75,8 +75,15 @@
         "parents",
         "tab_residence",
         "residence_section",
-        "hostel_allocated",
-        "room_number",
+        "is_hosteller",
+        "hostel",
+        "hostel_block",
+        "hostel_room",
+        "hostel_bed",
+        "allocation_date",
+        "vacated_date",
+        "hostel_status",
+        "hostel_remarks",
         "meal_plan",
         "signature_ppkg",
         "residence_agreement_signed",
@@ -461,16 +468,70 @@
             "label": "Hostel & Dining"
         },
         {
-            "fieldname": "hostel_allocated",
-            "fieldtype": "Link",
-            "label": "Hostel",
-            "options": "Hostel",
+            "default": "0",
+            "fieldname": "is_hosteller",
+            "fieldtype": "Check",
+            "label": "Is Hosteller",
+            "read_only": 1,
             "permlevel": 3
         },
         {
-            "fieldname": "room_number",
+            "fieldname": "hostel",
+            "fieldtype": "Link",
+            "label": "Hostel",
+            "options": "Hostel",
+            "read_only": 1,
+            "permlevel": 3
+        },
+        {
+            "fieldname": "hostel_block",
             "fieldtype": "Data",
-            "label": "Room Number",
+            "label": "Block / Building",
+            "read_only": 1,
+            "permlevel": 3
+        },
+        {
+            "fieldname": "hostel_room",
+            "fieldtype": "Link",
+            "label": "Room",
+            "options": "Hostel Room",
+            "read_only": 1,
+            "permlevel": 3
+        },
+        {
+            "fieldname": "hostel_bed",
+            "fieldtype": "Link",
+            "label": "Bed",
+            "options": "Hostel Bed",
+            "read_only": 1,
+            "permlevel": 3
+        },
+        {
+            "fieldname": "allocation_date",
+            "fieldtype": "Date",
+            "label": "Allocation Date",
+            "read_only": 1,
+            "permlevel": 3
+        },
+        {
+            "fieldname": "vacated_date",
+            "fieldtype": "Date",
+            "label": "Vacated Date",
+            "read_only": 1,
+            "permlevel": 3
+        },
+        {
+            "fieldname": "hostel_status",
+            "fieldtype": "Data",
+            "label": "Hostel Status",
+            "read_only": 1,
+            "permlevel": 3
+        },
+        {
+            "fieldname": "hostel_remarks",
+            "fieldtype": "Small Text",
+            "label": "Hostel Remarks",
+            "read_only": 1,
             "permlevel": 3
         },
         {
