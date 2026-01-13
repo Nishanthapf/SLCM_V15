@@ -115,6 +115,7 @@
   "tab_documents",
   "personal_documents_section",
   "aadhaar_card",
+  "aadhaar_verified",
   "pan_card",
   "passport",
   "passport_size_photo",
@@ -135,8 +136,9 @@
   "admission_fee_status",
   "student_status",
   "account_status",
-  "status_remarks",
   "status_remark",
+  "id_card_issued",
+  "laptop_issued",
   "tab_status_history",
   "status_history_section",
   "workflow_history",
@@ -419,7 +421,8 @@
   {
    "fieldname": "dob",
    "fieldtype": "Date",
-   "label": "Date of Birth"
+   "label": "Date of Birth",
+   "reqd": 1
   },
   {
    "fieldname": "gender",
@@ -515,12 +518,14 @@
    "fieldname": "email",
    "fieldtype": "Data",
    "label": "Email",
-   "options": "Email"
+   "options": "Email",
+   "reqd": 1
   },
   {
    "fieldname": "phone",
    "fieldtype": "Phone",
-   "label": "Phone"
+   "label": "Phone",
+   "reqd": 1
   },
   {
    "fieldname": "alternate_phone",
@@ -704,12 +709,20 @@
   {
    "fieldname": "aadhaar_card",
    "fieldtype": "Attach",
-   "label": "Aadhaar Card"
+   "label": "Aadhaar Card",
+   "reqd": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "aadhaar_verified",
+   "fieldtype": "Check",
+   "label": "Aadhaar Verified"
   },
   {
    "fieldname": "pan_card",
    "fieldtype": "Attach",
-   "label": "PAN Card"
+   "label": "PAN Card",
+   "reqd": 1
   },
   {
    "fieldname": "passport",
@@ -720,7 +733,8 @@
    "description": "Latest image",
    "fieldname": "passport_size_photo",
    "fieldtype": "Attach",
-   "label": "Passport size photo"
+   "label": "Passport size photo",
+   "reqd": 1
   },
   {
    "fieldname": "pwd_certificate",
@@ -735,7 +749,8 @@
   {
    "fieldname": "std_x_marksheet",
    "fieldtype": "Attach",
-   "label": "STD X Marksheet"
+   "label": "STD X Marksheet",
+   "reqd": 1
   },
   {
    "fieldname": "transfer_certificate",
@@ -831,6 +846,18 @@
    "label": "Term Year"
   },
   {
+   "default": "0",
+   "fieldname": "id_card_issued",
+   "fieldtype": "Check",
+   "label": "ID Card Issued"
+  },
+  {
+   "default": "0",
+   "fieldname": "laptop_issued",
+   "fieldtype": "Check",
+   "label": "Laptop Issued"
+  },
+  {
    "fieldname": "tab_status_history",
    "fieldtype": "Tab Break",
    "label": "Status History"
@@ -869,11 +896,6 @@
    "label": "Permanent Address"
   },
   {
-   "fieldname": "status_remarks",
-   "fieldtype": "Text",
-   "label": "Status Remark"
-  },
-  {
    "fieldname": "outstanding_balance",
    "fieldtype": "Currency",
    "label": "Due Balance"
@@ -892,7 +914,7 @@
   }
  ],
  "links": [],
- "modified": "2026-01-13 21:25:56.378363",
+ "modified": "2026-01-13 22:02:30.898859",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "Student Master",

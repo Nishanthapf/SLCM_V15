@@ -162,6 +162,9 @@ def update_registration_status(student_id, new_status, remarks=None):
 					).format(current_status, new_status)
 				)
 
+	# Validate specific requirements for transition
+	validate_transition_requirements(student, new_status)
+
 	# Update status
 	student.registration_status = new_status
 	student.status_updated_by = frappe.session.user
@@ -211,7 +214,7 @@ def get_available_status_actions(student_id):
 			"roles": ["FINO Officer", "System Manager"],
 		},
 		"Pending Registration": {
-			"action": "Complete Registration",
+			"action": "Submit for Print & Scan",
 			"next_state": "Pending Print & Scan",
 			"roles": ["Registration Officer", "System Manager"],
 		},
@@ -267,3 +270,85 @@ def get_available_status_actions(student_id):
 				)
 
 	return {"current_status": current_status, "available_actions": available_actions}
+
+
+def validate_transition_requirements(student, new_status):
+	"""
+	Validate strict requirements for moving to the next status
+	"""
+	if new_status == "Pending FINO":
+		# Pending REGO -> Pending FINO
+		# Required Docs: Aadhaar, PAN, 10th Marksheet, Photo
+		required_docs = [
+			"aadhaar_card",
+			"pan_card",
+			"std_x_marksheet",
+			"passport_size_photo",
+		]
+		missing_docs = [doc for doc in required_docs if not student.get(doc)]
+		if missing_docs:
+			frappe.throw(
+				_("Cannot move to Pending FINO. Missing documents: {0}").format(
+					", ".join([frappe.get_meta("Student Master").get_label(d) for d in missing_docs])
+				)
+			)
+
+	elif new_status == "Pending Registration":
+		# Pending FINO -> Pending Registration
+		# Fee Status must be Paid or Partially Paid
+		if student.fee_payment_status not in ["Paid", "Partially Paid"]:
+			frappe.throw(
+				_("Cannot move to Pending Registration. Fee Payment Status must be 'Paid' or 'Partially Paid'. Current: {0}").format(
+					student.fee_payment_status
+				)
+			)
+
+	elif new_status == "Pending Print & Scan":
+		# Pending Registration -> Pending Print & Scan
+		# Mandatory fields check
+		required_fields = [
+			"first_name",
+			"last_name",
+			"dob",
+			"gender",
+			"email",
+			"phone",
+			"programme",
+			"department",
+		]
+		missing_fields = [field for field in required_fields if not student.get(field)]
+		if missing_fields:
+			frappe.throw(
+				_("Cannot move to Pending Print & Scan. Missing mandatory details: {0}").format(
+					", ".join([frappe.get_meta("Student Master").get_label(f) for f in missing_fields])
+				)
+			)
+
+	elif new_status == "Pending Residences":
+		# Pending Print & Scan -> Pending Residences
+		# Check ID Card Issued and Aadhaar Verified
+		if not student.id_card_issued:
+			frappe.throw(_("Cannot move to Pending Residences. ID Card must be issued."))
+		
+		if not student.aadhaar_verified:
+			frappe.throw(_("Cannot move to Pending Residences. Aadhaar must be verified."))
+
+	elif new_status == "Pending IT":
+		# Pending Residences -> Pending IT
+		# Hostel check: Room must be allocated OR if not hosteller, skip
+		if student.is_hosteller:
+			if not student.hostel_room:
+				frappe.throw(_("Cannot move to Pending IT. Hostel Room must be allocated for hostellers."))
+			if not student.keys_handed_over:
+				frappe.throw(_("Cannot move to Pending IT. Keys must be handed over."))
+
+	elif new_status == "Completed":
+		# Pending IT -> Completed
+		# IT Check: Official Email, Laptop (if scholar)
+		if not student.official_email_id:
+			frappe.throw(_("Cannot complete. Official Email ID must be set."))
+
+		# Check if eligible for laptop (e.g., if Applying Scholarship is Yes)
+		if student.applying_scholarship == "Yes" and not student.laptop_issued:
+			frappe.throw(_("Cannot complete. Laptop must be issued for scholarship students."))
+
