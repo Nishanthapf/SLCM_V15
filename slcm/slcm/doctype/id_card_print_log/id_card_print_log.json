@@ -6,6 +6,9 @@
     "engine": "InnoDB",
     "field_order": [
         "student_id_card",
+        "bulk_print_id",
+        "print_action_type",
+        "total_cards_in_bulk",
         "printed_on",
         "printed_by",
         "printer_name",
@@ -15,18 +18,95 @@
     ],
     "fields": [
         {
-            "fieldname": "student_id_card",
+            "fieldname": "id_card_generation",
             "fieldtype": "Link",
             "in_list_view": 1,
-            "label": "Student ID Card",
-            "options": "Student ID Card",
+            "label": "ID Card Generation",
+            "options": "ID Card Generation",
+            "read_only": 1,
             "reqd": 1
+        },
+        {
+            "fieldname": "student",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "label": "Student",
+            "options": "Student Master",
+            "read_only": 1
+        },
+        {
+            "fieldname": "academic_year",
+            "fieldtype": "Link",
+            "label": "Academic Year",
+            "options": "Academic Year",
+            "read_only": 1
+        },
+        {
+            "fieldname": "department",
+            "fieldtype": "Link",
+            "label": "Department",
+            "options": "Department",
+            "read_only": 1
+        },
+        {
+            "fieldname": "program",
+            "fieldtype": "Link",
+            "label": "Program",
+            "options": "Program",
+            "read_only": 1
+        },
+        {
+            "fieldname": "batch",
+            "fieldtype": "Data",
+            "label": "Batch",
+            "read_only": 1
+        },
+        {
+            "fieldname": "print_type",
+            "fieldtype": "Select",
+            "in_list_view": 1,
+            "label": "Print Type",
+            "options": "Original\nReprint",
+            "read_only": 1
+        },
+        {
+            "fieldname": "print_layout",
+            "fieldtype": "Select",
+            "label": "Print Layout",
+            "options": "Single\nBulk\nDuplex",
+            "read_only": 1
+        },
+        {
+            "fieldname": "column_break_meta",
+            "fieldtype": "Column Break"
+        },
+        {
+            "fieldname": "bulk_print_id",
+            "fieldtype": "Data",
+            "in_list_view": 1,
+            "label": "Bulk Print ID",
+            "read_only": 1
+        },
+        {
+            "fieldname": "print_action_type",
+            "fieldtype": "Select",
+            "in_list_view": 1,
+            "label": "Print Action",
+            "options": "Single\nBulk",
+            "read_only": 1
+        },
+        {
+            "fieldname": "total_cards_in_bulk",
+            "fieldtype": "Int",
+            "label": "Cards in Bulk",
+            "read_only": 1
         },
         {
             "fieldname": "printed_on",
             "fieldtype": "Datetime",
             "in_list_view": 1,
             "label": "Printed On",
+            "read_only": 1,
             "reqd": 1
         },
         {
@@ -35,22 +115,31 @@
             "in_list_view": 1,
             "label": "Printed By",
             "options": "User",
+            "read_only": 1,
             "reqd": 1
-        },
-        {
-            "fieldname": "printer_name",
-            "fieldtype": "Data",
-            "label": "Printer Name"
-        },
-        {
-            "fieldname": "print_format",
-            "fieldtype": "Data",
-            "label": "Print Format"
         },
         {
             "fieldname": "reprint_reason",
             "fieldtype": "Small Text",
-            "label": "Reprint Reason"
+            "label": "Reason for Reprint",
+            "read_only": 1
+        },
+        {
+            "fieldname": "section_break_images",
+            "fieldtype": "Section Break",
+            "label": "Printed Images"
+        },
+        {
+            "fieldname": "front_image",
+            "fieldtype": "Attach Image",
+            "label": "Front Image",
+            "read_only": 1
+        },
+        {
+            "fieldname": "back_image",
+            "fieldtype": "Attach Image",
+            "label": "Back Image",
+            "read_only": 1
         },
         {
             "default": "IDPL-.#####",

@@ -36,7 +36,7 @@ class IDCardGenerationTool(Document):
 			row.student_name = f"{student.first_name} {student.last_name or ''}".strip()
 
 			existing_card = frappe.db.exists(
-				"Student ID Card",
+				"ID Card Generation",
 				{"student": student.name, "card_status": ["!=", "Cancelled"]},
 			)
 
@@ -58,9 +58,9 @@ class IDCardGenerationTool(Document):
 		for row in self.student_list:
 			try:
 				if row.current_id_card:
-					doc = frappe.get_doc("Student ID Card", row.current_id_card)
+					doc = frappe.get_doc("ID Card Generation", row.current_id_card)
 				else:
-					doc = frappe.new_doc("Student ID Card")
+					doc = frappe.new_doc("ID Card Generation")
 					doc.student = row.student
 					doc.issue_date = self.issue_date
 					doc.expiry_date = self.expiry_date
@@ -77,8 +77,30 @@ class IDCardGenerationTool(Document):
 				error_msg = f"ID Card Gen Error for {row.student}: {e!s}"
 				frappe.log_error(error_msg[:140], "ID Card Generation Error")
 
+		# Create Tool Log
+		log = frappe.get_doc(
+			{
+				"doctype": "ID Card Generation Tool Log",
+				"generated_on": frappe.utils.now(),
+				"generated_by": frappe.session.user,
+				"academic_year": self.academic_year,
+				"department": self.department,
+				"program": self.program,
+				"batch": self.batch,
+				"template_used": self.id_card_template,
+				"total_students_selected": len(self.student_list or []),
+				"total_id_cards_generated": generated_count,
+				"generation_mode": "Single" if generated_count == 1 else "Bulk",
+				"generation_status": "Success"
+				if generated_count == len(self.student_list)
+				else ("Failed" if generated_count == 0 else "Partial"),
+				"remarks": f"Generated {generated_count}/{len(self.student_list)} cards.",
+			}
+		)
+		log.insert(ignore_permissions=True)
+
 		self.save()
-		frappe.msgprint(f"Generated {generated_count} ID Cards.")
+		frappe.msgprint(f"Generated {generated_count} ID Cards. Log Run ID: {log.name}")
 
 	@frappe.whitelist()
 	def download_zip(self):
@@ -93,7 +115,7 @@ class IDCardGenerationTool(Document):
 					continue
 
 				card_images = frappe.db.get_value(
-					"Student ID Card",
+					"ID Card Generation",
 					row.current_id_card,
 					["front_id_image", "back_id_image"],
 					as_dict=True,
@@ -138,19 +160,30 @@ class IDCardGenerationTool(Document):
 	def generate_print_layout(self):
 		from PIL import Image
 
+		# Constants for A4 at 300 DPI
 		A4_WIDTH, A4_HEIGHT = 2480, 3508
 		CARD_WIDTH_MM, CARD_HEIGHT_MM = 86, 54
 		dpmm = 300 / 25.4
 
+		# Card size in pixels
 		card_w_px = int(CARD_WIDTH_MM * dpmm)
 		card_h_px = int(CARD_HEIGHT_MM * dpmm)
 
+		# Layout configuration
 		margin_x, margin_y = 100, 100
 		gap_x, gap_y = 20, 20
 
-		cols = (A4_WIDTH - 2 * margin_x) // (card_w_px + gap_x)
-		rows = (A4_HEIGHT - 2 * margin_y) // (card_h_px + gap_y)
-		cards_per_sheet = int(cols * rows)
+		# We want pairs: FRONT (Left) + BACK (Right)
+		# So a "unit" is 2 cards wide + gap
+		unit_w = (card_w_px * 2) + gap_x
+		unit_h = card_h_px
+
+		cols = (A4_WIDTH - 2 * margin_x) // (unit_w + gap_x)
+		rows = (A4_HEIGHT - 2 * margin_y) // (unit_h + gap_y)
+		units_per_sheet = int(cols * rows)
+
+		if units_per_sheet < 1:
+			frappe.throw("Card size too large for print layout dimensions.")
 
 		image_pairs = []
 
@@ -158,70 +191,88 @@ class IDCardGenerationTool(Document):
 			if not row.current_id_card:
 				continue
 
-			card_images = frappe.db.get_value(
-				"Student ID Card",
-				row.current_id_card,
-				["front_id_image", "back_id_image"],
-				as_dict=True,
-			)
+			# Fetch card details
+			card_doc = frappe.get_doc("ID Card Generation", row.current_id_card)
 
-			if card_images:
-				image_pairs.append(card_images)
+			if card_doc.card_status != "Generated":
+				# Skip non-generated cards? Or error?
+				# Let's skip to prevent printing drafts
+				continue
+
+			if card_doc.front_id_image:
+				image_pairs.append(
+					{"doc": card_doc, "front": card_doc.front_id_image, "back": card_doc.back_id_image}
+				)
 
 		if not image_pairs:
-			frappe.throw("No generated cards to print")
+			frappe.throw("No valid generated cards found to print.")
 
 		output_files = []
 
-		for i in range(0, len(image_pairs), cards_per_sheet):
-			batch = image_pairs[i : i + cards_per_sheet]
-			sheet_no = (i // cards_per_sheet) + 1
+		# Bulk Print Session ID
+		bulk_print_id = frappe.utils.generate_hash(length=10)
+		total_cards = len(image_pairs)
 
-			front_sheet = Image.new("RGB", (A4_WIDTH, A4_HEIGHT), "white")
-			back_sheet = Image.new("RGB", (A4_WIDTH, A4_HEIGHT), "white")
+		for i in range(0, len(image_pairs), units_per_sheet):
+			batch_items = image_pairs[i : i + units_per_sheet]
+			sheet_no = (i // units_per_sheet) + 1
 
-			for idx, pair in enumerate(batch):
+			# Create Sheet
+			sheet = Image.new("RGB", (A4_WIDTH, A4_HEIGHT), "white")
+
+			for idx, item in enumerate(batch_items):
 				col = idx % cols
-				row = idx // cols
+				row_idx = idx // cols
 
-				x = margin_x + col * (card_w_px + gap_x)
-				y = margin_y + row * (card_h_px + gap_y)
+				# Calculate positions
+				# Unit X Position
+				u_x = margin_x + col * (unit_w + gap_x)
+				u_y = margin_y + row_idx * (unit_h + gap_y)
 
-				if pair.front_id_image:
+				# Front Image (Left)
+				if item["front"]:
 					try:
-						img = Image.open(self._get_full_path(pair.front_id_image)).convert("RGBA")
-						img = img.resize(
-							(card_w_px, card_h_px),
-							Image.Resampling.LANCZOS,
-						)
-						front_sheet.paste(img, (x, y), img)
-					except Exception as e:
-						frappe.log_error(
-							f"Front image paste failed: {e!s}",
-							"ID Card Print Layout",
-						)
+						f_img = Image.open(self._get_full_path(item["front"])).convert("RGBA")
+						f_img = f_img.resize((card_w_px, card_h_px), Image.Resampling.LANCZOS)
+						sheet.paste(f_img, (u_x, u_y), f_img)
+					except Exception:
+						pass  # Log error preferably
 
-				if pair.back_id_image:
+				# Back Image (Right)
+				if item["back"]:
 					try:
-						img = Image.open(self._get_full_path(pair.back_id_image)).convert("RGBA")
-						img = img.resize(
-							(card_w_px, card_h_px),
-							Image.Resampling.LANCZOS,
-						)
-						back_sheet.paste(img, (x, y), img)
-					except Exception as e:
-						frappe.log_error(
-							f"Back image paste failed: {e!s}",
-							"ID Card Print Layout",
-						)
+						b_img = Image.open(self._get_full_path(item["back"])).convert("RGBA")
+						b_img = b_img.resize((card_w_px, card_h_px), Image.Resampling.LANCZOS)
+						# Position: x + card_width + gap
+						b_x = u_x + card_w_px + gap_x
+						sheet.paste(b_img, (b_x, u_y), b_img)
+					except Exception:
+						pass
 
-			front_name = f"Sheet_{sheet_no}_Front.png"
-			back_name = f"Sheet_{sheet_no}_Back.png"
+				# Prepare Log for this user
+				item["doc"].log_print(layout="Bulk", bulk_print_id=bulk_print_id, total_cards=total_cards)
 
-			self._save_temp_image(front_sheet, front_name)
-			self._save_temp_image(back_sheet, back_name)
+			# Save Sheet
+			sheet_name = f"Sheet_{sheet_no}.png"
+			self._save_temp_image(sheet, sheet_name)
+			output_files.append(sheet_name)
 
-			output_files.extend([front_name, back_name])
+		# Name the ZIP/PDF based on convention
+		# <AcademicYear>_<DepartmentCode>_<ProgramCode>_<Batch>_ID_Cards.pdf
+		# We use the Generation Tool's filters to name it
+		ay = self.academic_year or "AY"
+		# Get short codes if possible, else use full names passing regex cleanup
+		dept_code = self.department or "All_Dept"
+		prog_code = self.program or "All_Prog"
+		batch_code = self.batch or "Batch"
+
+		# Sanitize filename components
+		def sanitize(s):
+			return "".join([c for c in s if c.isalnum() or c in ("-", "_")]).strip()
+
+		final_name = (
+			f"{sanitize(ay)}_{sanitize(dept_code)}_{sanitize(prog_code)}_{sanitize(batch_code)}_ID_Cards.zip"
+		)
 
 		zip_buffer = io.BytesIO()
 		with zipfile.ZipFile(zip_buffer, "w", zipfile.ZIP_DEFLATED) as zip_file:
@@ -230,9 +281,8 @@ class IDCardGenerationTool(Document):
 				if os.path.exists(fpath):
 					zip_file.write(fpath, fname)
 
-		zip_filename = f"Print_Layout_{self.name}.zip"
 		saved_zip = save_file(
-			zip_filename,
+			final_name,
 			zip_buffer.getvalue(),
 			self.doctype,
 			self.name,
@@ -261,7 +311,7 @@ class IDCardGenerationTool(Document):
 		student_doc = frappe.get_doc("Student Master", student)
 
 		# Create a dummy ID Card doc for context
-		id_card = frappe.new_doc("Student ID Card")
+		id_card = frappe.new_doc("ID Card Generation")
 		id_card.student = student
 
 		# Create context (Flattened)

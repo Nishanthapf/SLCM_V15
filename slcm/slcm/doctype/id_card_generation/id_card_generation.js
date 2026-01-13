@@ -1,5 +1,5 @@
 /* global slcm */
-frappe.ui.form.on("Student ID Card", {
+frappe.ui.form.on("ID Card Generation", {
 	refresh: function (frm) {
 		// Dynamic Fetch for Faculty/Driver
 		frm.fields_dict["faculty"].df.onchange = () => {
@@ -66,41 +66,53 @@ frappe.ui.form.on("Student ID Card", {
 			frm.add_custom_button(__("Generate Card"), function () {
 				frm.call("generate_card").then((r) => {
 					frm.refresh();
-					frappe.msgprint("ID Card generated Successfully");
 				});
 			});
 
-			if (frm.doc.front_id_image) {
+			if (frm.doc.front_id_image && frm.doc.card_status === "Generated") {
 				frm.add_custom_button(__("Print Card"), function () {
-					// Open both sides in a print-friendly window
-					let front_url = frappe.utils.get_file_link(frm.doc.front_id_image);
-					let back_url = frm.doc.back_id_image
-						? frappe.utils.get_file_link(frm.doc.back_id_image)
-						: null;
+					// Log the print action first
+					frm.call({
+						doc: frm.doc,
+						method: "log_print",
+						args: {
+							layout: "Single",
+						},
+						callback: function (r) {
+							if (!r.exc) {
+								// Open both sides in a print-friendly window
+								let front_url = frappe.utils.get_file_link(frm.doc.front_id_image);
+								let back_url = frm.doc.back_id_image
+									? frappe.utils.get_file_link(frm.doc.back_id_image)
+									: null;
 
-					let w = window.open("", "_blank");
-					w.document.write(`
-						<html>
-						<head>
-							<title>Print ID Card - ${frm.doc.student_name}</title>
-							<style>
-								body { margin: 0; padding: 20px; text-align: center; }
-								img { max-width: 100%; border: 1px solid #ccc; margin-bottom: 20px; }
-								@media print {
-									img { page-break-after: always; }
-								}
-							</style>
-						</head>
-						<body>
-							<img src="${front_url}" />
-							${back_url ? `<br><img src="${back_url}" />` : ""}
-							<script>
-								window.onload = function() { window.print(); }
-							</script>
-						</body>
-						</html>
-					`);
-					w.document.close();
+								let w = window.open("", "_blank");
+								w.document.write(`
+									<html>
+									<head>
+										<title>Print ID Card - ${frm.doc.student_name}</title>
+										<style>
+											body { margin: 0; padding: 20px; text-align: center; font-family: sans-serif; }
+											img { max-width: 100%; border: 1px solid #ccc; margin-bottom: 20px; }
+											@media print {
+												img { page-break-after: always; }
+											}
+										</style>
+									</head>
+									<body>
+										<h3>${frm.doc.student_name} (${r.message || "Copy"})</h3>
+										<img src="${front_url}" />
+										${back_url ? `<br><img src="${back_url}" />` : ""}
+										<script>
+											window.onload = function() { window.print(); }
+										</script>
+									</body>
+									</html>
+								`);
+								w.document.close();
+							}
+						},
+					});
 				});
 			}
 		}
@@ -162,7 +174,7 @@ frappe.ui.form.on("Student ID Card", {
 		// that matches this definition, and link it.
 
 		frappe.call({
-			method: "slcm.slcm.doctype.student_id_card.student_id_card.create_or_update_template",
+			method: "slcm.slcm.doctype.id_card_generation.id_card_generation.create_or_update_template",
 			args: {
 				template_data: JSON.stringify(tmpl),
 			},
