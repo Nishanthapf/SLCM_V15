@@ -1,0 +1,13 @@
+{
+    "doctype": "Print Format",
+    "doc_type": "Student Master",
+    "format_data": "",
+    "line_breaks": 0,
+    "module": "SLCM",
+    "name": "Student Registration Slip",
+    "print_format_builder": 0,
+    "print_format_type": "Jinja",
+    "raw_printing": 0,
+    "show_section_headings": 0,
+    "standard": "Yes"
+}

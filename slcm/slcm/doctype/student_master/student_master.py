@@ -11,6 +11,25 @@ class StudentMaster(Document):
 	def validate(self):
 		self.validate_status_transition()
 
+	def on_update(self):
+		"""
+		Trigger actions on update.
+		- Send registration email if status changes to Completed.
+		"""
+		self.handle_registration_email()
+
+	def handle_registration_email(self):
+		# Check if status transitioned to "Completed"
+		doc_before_save = self.get_doc_before_save()
+		previous_status = doc_before_save.registration_status if doc_before_save else None
+
+		if self.registration_status == "Completed" and previous_status != "Completed":
+			# Call directly to ensure execution even if workers are down
+			# Import here to avoid potential circular import issues
+			from slcm.slcm.utils.student_email import handle_registration_completion
+
+			handle_registration_completion(self.name, frappe.session.user)
+
 	def validate_status_transition(self):
 		"""Validate status transitions follow the workflow sequence"""
 		if self.is_new():
@@ -185,9 +204,6 @@ def update_registration_status(student_id, new_status, remarks=None):
 		frappe.db.rollback()
 		frappe.throw(_("Error updating status: {0}").format(str(e)))
 
-	if new_status == "Completed":
-		send_completion_email(student)
-
 	return {"status": "success", "message": _("Status updated to {0}").format(new_status)}
 
 
@@ -309,9 +325,9 @@ def validate_transition_requirements(student, new_status):
 		# Fee Status must be Paid or Partially Paid
 		if student.fee_payment_status not in ["Paid", "Partially Paid"]:
 			frappe.throw(
-				_("Cannot move to Pending Registration. Fee Payment Status must be 'Paid' or 'Partially Paid'. Current: {0}").format(
-					student.fee_payment_status
-				)
+				_(
+					"Cannot move to Pending Registration. Fee Payment Status must be 'Paid' or 'Partially Paid'. Current: {0}"
+				).format(student.fee_payment_status)
 			)
 
 	elif new_status == "Pending Print & Scan":
@@ -340,7 +356,7 @@ def validate_transition_requirements(student, new_status):
 		# Check ID Card Issued and Aadhaar Verified
 		if not student.id_card_issued:
 			frappe.throw(_("Cannot move to Pending Residences. ID Card must be issued."))
-		
+
 		if not student.aadhaar_verified:
 			frappe.throw(_("Cannot move to Pending Residences. Aadhaar must be verified."))
 
@@ -363,16 +379,3 @@ def validate_transition_requirements(student, new_status):
 		# Final Verification REGO -> Completed
 		# No specific mandatory field check for this step, just final approval
 		pass
-
-
-def send_completion_email(student):
-	if student.email:
-		subject = "Registration Completed"
-		message = f"""
-			<p>Dear {student.first_name},</p>
-			<p>Congratulations! Your registration process is now complete.</p>
-			<p>Your official student email ID is: {student.official_email_id}</p>
-			<p>Regards,<br>Institute Administration</p>
-		"""
-		frappe.sendmail(recipients=[student.email], subject=subject, message=message)
-		frappe.msgprint(_("Completion email sent to {0}").format(student.email))

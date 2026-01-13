@@ -1,0 +1,62 @@
+<div class="print-format">
+    <div class="header" style="text-align: center; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 20px;">
+        <h2>Institute of SLCM</h2>
+        <h4>Student Registration Slip</h4>
+    </div>
+
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+        <tr>
+            <td style="width: 50%;">
+                <strong>Name:</strong> {{ doc.first_name }} {{ doc.middle_name or '' }} {{ doc.last_name }}<br>
+                <strong>Application No:</strong> {{ doc.application_number }}<br>
+                <strong>Date of Joining:</strong> {{ doc.date_of_registration or frappe.utils.today() }}
+            </td>
+            <td style="width: 50%; text-align: right;">
+                <strong>Programme:</strong> {{ doc.programme }}<br>
+                <strong>Department:</strong> {{ doc.department }}<br>
+                <strong>Batch:</strong> {{ doc.batch_year }}
+            </td>
+        </tr>
+    </table>
+
+    <div class="section" style="margin-bottom: 20px;">
+        <h4 style="background-color: #eee; padding: 5px;">Personal Details</h4>
+        <table style="width: 100%; border-collapse: collapse;">
+            <tr>
+                <td style="padding: 5px; border-bottom: 1px solid #ddd;"><strong>DOB:</strong> {{ doc.get_formatted("dob") }}</td>
+                <td style="padding: 5px; border-bottom: 1px solid #ddd;"><strong>Gender:</strong> {{ doc.gender }}</td>
+            </tr>
+            <tr>
+                <td style="padding: 5px; border-bottom: 1px solid #ddd;"><strong>Email:</strong> {{ doc.email }}</td>
+                <td style="padding: 5px; border-bottom: 1px solid #ddd;"><strong>Phone:</strong> {{ doc.phone }}</td>
+            </tr>
+            <tr>
+                <td style="padding: 5px; border-bottom: 1px solid #ddd;"><strong>Aadhaar No:</strong> {{ doc.aadhaar_number }}</td>
+                <td style="padding: 5px; border-bottom: 1px solid #ddd;"><strong>Blood Group:</strong> {{ doc.blood_group }}</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="section" style="margin-bottom: 20px;">
+        <h4 style="background-color: #eee; padding: 5px;">Parent / Guardian</h4>
+        <table style="width: 100%; border-collapse: collapse;">
+            {% for parent in doc.parents %}
+            <tr>
+                <td style="padding: 5px; border-bottom: 1px solid #ddd;"><strong>Name:</strong> {{ parent.parent_name }}</td>
+                <td style="padding: 5px; border-bottom: 1px solid #ddd;"><strong>Relation:</strong> {{ parent.relation }}</td>
+                <td style="padding: 5px; border-bottom: 1px solid #ddd;"><strong>Phone:</strong> {{ parent.phone }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div class="footer" style="margin-top: 50px; text-align: right;">
+        <p>__________________________</p>
+        <p><strong>Registrar Signature</strong></p>
+    </div>
+
+    <div style="font-size: 10px; text-align: center; margin-top: 30px; color: #666;">
+        <p>This is a computer-generated document. No signature is required.</p>
+        <p>Generated on: {{ frappe.utils.now() }}</p>
+    </div>
+</div>
