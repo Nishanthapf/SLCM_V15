@@ -87,6 +87,8 @@
         "meal_plan",
         "signature_ppkg",
         "residence_agreement_signed",
+        "keys_handed_over",
+        "allocation_end_date",
         "tab_education",
         "education_section",
         "qualifications",
@@ -544,7 +546,24 @@
             "default": "0",
             "fieldname": "residence_agreement_signed",
             "fieldtype": "Check",
-            "label": "Residence Agreement Signed"
+            "label": "Residence Agreement Signed",
+            "read_only": 1,
+            "permlevel": 3
+        },
+        {
+            "default": "0",
+            "fieldname": "keys_handed_over",
+            "fieldtype": "Check",
+            "label": "Keys Handed Over",
+            "read_only": 1,
+            "permlevel": 3
+        },
+        {
+            "fieldname": "allocation_end_date",
+            "fieldtype": "Date",
+            "label": "Allocation End Date",
+            "read_only": 1,
+            "permlevel": 3
         },
         {
             "fieldname": "tab_education",

@@ -109,8 +109,14 @@ class HostelAllocation(Document):
 		# Defensive coding as requested
 		student = frappe.get_doc("Student Master", self.student)
 
-		# Set is_hosteller flag
-		student.is_hosteller = 1
+		# Set is_hosteller flag based on status
+		if self.status == "Allocated":
+			student.is_hosteller = 1
+			student.vacated_date = None
+		else:
+			student.is_hosteller = 0
+			if self.to_date:
+				student.vacated_date = self.to_date
 
 		# Map fields
 		student.hostel = self.hostel
@@ -121,12 +127,12 @@ class HostelAllocation(Document):
 		student.hostel_block = self.hostel
 
 		student.allocation_date = self.from_date
+		student.allocation_end_date = self.to_date
 		student.hostel_status = self.status  # informational status
 
-		# If status implies vacated, set vacated date?
-		# User didn't specify strict rule, but "vacated_date" field exists.
-		# We'll leave it blank for now unless logic dictates, or maybe set to to_date if present?
-		# Let's keep it simple as requested.
+		# Map Agreement and Keys
+		student.residence_agreement_signed = self.agreement_signed
+		student.keys_handed_over = self.keys_handed_over
 
 		student.flags.ignore_validate = True
 		student.save(ignore_permissions=True)
