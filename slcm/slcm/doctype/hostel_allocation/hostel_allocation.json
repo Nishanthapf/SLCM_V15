@@ -87,6 +87,11 @@
             "fieldname": "is_active",
             "fieldtype": "Check",
             "label": "Is Active"
+        },
+        {
+            "fieldname": "remarks",
+            "fieldtype": "Small Text",
+            "label": "Remarks"
         }
     ],
     "index_web_pages_for_search": 1,

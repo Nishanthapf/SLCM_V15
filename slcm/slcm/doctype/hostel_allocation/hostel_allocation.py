@@ -108,31 +108,52 @@ class HostelAllocation(Document):
 
 		# Defensive coding as requested
 		student = frappe.get_doc("Student Master", self.student)
+		remarks = self.get("remarks")
 
 		# Set is_hosteller flag based on status
 		if self.status == "Allocated":
 			student.is_hosteller = 1
+			# Clear vacated date if re-allocated
 			student.vacated_date = None
+
+			# Map Fields for Active Allocation
+			student.hostel = self.hostel
+			student.hostel_room = self.room
+			student.hostel_bed = self.bed
+			student.hostel_block = self.hostel  # Derived from Hostel Name
+
+			student.allocation_date = self.from_date
+			student.allocation_end_date = self.to_date
+
+			student.hostel_status = self.status
+			student.hostel_remarks = remarks
+
+			student.residence_agreement_signed = self.agreement_signed
+			student.keys_handed_over = self.keys_handed_over
+
 		else:
+			# Vacated / Cleared / Other Status
 			student.is_hosteller = 0
+
+			# Set Vacated Date from to_date if available
 			if self.to_date:
 				student.vacated_date = self.to_date
 
-		# Map fields
-		student.hostel = self.hostel
-		student.hostel_room = self.room
-		student.hostel_bed = self.bed
+			# Clear Location Fields (Residence Tab)
+			student.hostel = None
+			student.hostel_room = None
+			student.hostel_bed = None
+			student.hostel_block = None
 
-		# Derive Block from Hostel Name (Safety check)
-		student.hostel_block = self.hostel
+			student.allocation_date = None
+			student.allocation_end_date = None
 
-		student.allocation_date = self.from_date
-		student.allocation_end_date = self.to_date
-		student.hostel_status = self.status  # informational status
+			student.residence_agreement_signed = 0
+			student.keys_handed_over = 0
 
-		# Map Agreement and Keys
-		student.residence_agreement_signed = self.agreement_signed
-		student.keys_handed_over = self.keys_handed_over
+			# Maintain Status and Remarks for history/info
+			student.hostel_status = self.status
+			student.hostel_remarks = remarks
 
 		student.flags.ignore_validate = True
 		student.save(ignore_permissions=True)
