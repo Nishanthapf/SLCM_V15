@@ -23,17 +23,52 @@ class HostelAllocation(Document):
 			if room_doc.occupied >= room_doc.capacity:
 				frappe.throw(_("Room {0} is fully occupied.").format(self.room))
 
-	def on_submit(self):
-		self.update_room_occupancy(1)
+	def on_update(self):
+		self.validate_room_availability()
+		self.update_occupancy_on_save()
 
-	def on_cancel(self):
-		self.update_room_occupancy(-1)
+	def on_trash(self):
+		# When deleting, if room was allocated, free it up
+		if self.status == "Allocated":
+			self.update_room_occupancy(-1)
 
-	def update_room_occupancy(self, change):
+	def update_occupancy_on_save(self):
 		if not self.room:
 			return
+
+		# New Document
+		if self.is_new():
+			if self.status == "Allocated":
+				self.update_room_occupancy(1)
+			return
+
+		# Existing Document - check for status change
+		before_save = self.get_doc_before_save()
+		if not before_save:
+			return
+
+		# Status changed: Allocated -> Vacated/etc (Decrease)
+		if before_save.status == "Allocated" and self.status != "Allocated":
+			self.update_room_occupancy(-1)
 		
-		room_doc = frappe.get_doc("Hostel Room", self.room)
+		# Status changed: Vacated/etc -> Allocated (Increase)
+		elif before_save.status != "Allocated" and self.status == "Allocated":
+			self.update_room_occupancy(1)
+		
+		# Edge Case: Room changed (Not typically allowed, but good to handle)
+		if before_save.room != self.room:
+			# Revert old room
+			if before_save.status == "Allocated":
+				self.update_occupancy_for_room(before_save.room, -1)
+			# Apply new room
+			if self.status == "Allocated":
+				self.update_occupancy_for_room(self.room, 1)
+
+	def update_room_occupancy(self, change):
+		self.update_occupancy_for_room(self.room, change)
+
+	def update_occupancy_for_room(self, room_id, change):
+		room_doc = frappe.get_doc("Hostel Room", room_id)
 		room_doc.occupied += change
 		room_doc.save()
 
@@ -53,3 +88,14 @@ def get_room_query(doctype, txt, searchfield, start, page_len, filters):
 		'hostel': hostel,
 		'txt': "%" + txt + "%"
 	})
+
+@frappe.whitelist()
+def bulk_update_status(names, status):
+	import json
+	if isinstance(names, str):
+		names = json.loads(names)
+	
+	for name in names:
+		doc = frappe.get_doc("Hostel Allocation", name)
+		doc.status = status
+		doc.save()

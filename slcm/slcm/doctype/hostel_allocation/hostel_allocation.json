@@ -69,10 +69,17 @@
             "fieldname": "is_active",
             "fieldtype": "Check",
             "label": "Is Active"
+        },
+        {
+            "default": "Allocated",
+            "fieldname": "status",
+            "fieldtype": "Select",
+            "label": "Status",
+            "options": "Allocated\nVacated\nDropped Out\nSuspended\nCancelled"
         }
     ],
     "index_web_pages_for_search": 1,
-    "is_submittable": 1,
+    "is_submittable": 0,
     "links": [],
     "modified": "2024-01-13 12:00:00.000000",
     "modified_by": "Administrator",
@@ -90,7 +97,6 @@
             "report": 1,
             "role": "System Manager",
             "share": 1,
-            "submit": 1,
             "write": 1
         }
     ],
