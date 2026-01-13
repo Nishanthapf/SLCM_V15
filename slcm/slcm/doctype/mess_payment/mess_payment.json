@@ -1,0 +1,88 @@
+{
+    "actions": [],
+    "allow_rename": 1,
+    "autoname": "format:MPAY-{student}-{date}-{####}",
+    "creation": "2026-01-13 15:05:00.000000",
+    "doctype": "DocType",
+    "engine": "InnoDB",
+    "field_order": [
+        "student",
+        "mess",
+        "payment_date",
+        "amount",
+        "mode_of_payment",
+        "transaction_reference",
+        "remarks"
+    ],
+    "fields": [
+        {
+            "fieldname": "student",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "label": "Student",
+            "options": "Student Master",
+            "reqd": 1
+        },
+        {
+            "fieldname": "mess",
+            "fieldtype": "Link",
+            "label": "Mess",
+            "options": "Mess",
+            "reqd": 1
+        },
+        {
+            "fieldname": "payment_date",
+            "fieldtype": "Date",
+            "label": "Payment Date",
+            "reqd": 1,
+            "default": "Today"
+        },
+        {
+            "fieldname": "amount",
+            "fieldtype": "Currency",
+            "in_list_view": 1,
+            "label": "Amount",
+            "reqd": 1
+        },
+        {
+            "fieldname": "mode_of_payment",
+            "fieldtype": "Select",
+            "label": "Mode of Payment",
+            "options": "Cash\nOnline\nCheque"
+        },
+        {
+            "fieldname": "transaction_reference",
+            "fieldtype": "Data",
+            "label": "Transaction Reference"
+        },
+        {
+            "fieldname": "remarks",
+            "fieldtype": "Small Text",
+            "label": "Remarks"
+        }
+    ],
+    "index_web_pages_for_search": 1,
+    "links": [],
+    "modified": "2026-01-13 15:05:00.000000",
+    "modified_by": "Administrator",
+    "module": "SLCM",
+    "name": "Mess Payment",
+    "owner": "Administrator",
+    "permissions": [
+        {
+            "create": 1,
+            "delete": 1,
+            "email": 1,
+            "export": 1,
+            "print": 1,
+            "read": 1,
+            "report": 1,
+            "role": "System Manager",
+            "share": 1,
+            "write": 1
+        }
+    ],
+    "sort_field": "modified",
+    "sort_order": "DESC",
+    "track_changes": 1
+}

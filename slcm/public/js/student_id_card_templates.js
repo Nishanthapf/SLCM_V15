@@ -21,6 +21,97 @@ slcm.templates.field_map = {
 
 slcm.templates.registry = [
 	{
+		template_id: "nlsiu_style",
+		template_name: "NLSIU Style",
+		orientation: "Horizontal",
+		card_size: "CR80",
+		front_template_html: `
+<div style="width: 1011px; height: 638px; background-color: white; color: black; font-family: 'Times New Roman', serif; position: relative; border: 1px solid #ccc; box-sizing: border-box; overflow: hidden;">
+    <!-- Main Content Area (Left side) -->
+    <div style="position: absolute; top: 0; left: 0; right: 128px; height: 100%; padding: 40px; display: flex; align-items: center;">
+
+        <!-- Photo -->
+        <div style="width: 180px; height: 220px; border: 1px solid black; flex-shrink: 0; margin-right: 40px;">
+            <img src="{{ passport_size_photo }}" style="width: 100%; height: 100%; object-fit: cover;">
+        </div>
+
+        <!-- Details -->
+        <div style="font-family: Arial, sans-serif; font-size: 24px; line-height: 2; flex-grow: 1;">
+            <div style="display: flex;">
+                <div style="width: 200px; font-weight: bold;">NAME</div>
+                <div style="margin-right: 15px;">:</div>
+                <div style="font-weight: bold; text-transform: uppercase;">{{ student_name }}</div>
+            </div>
+            <div style="display: flex;">
+                <div style="width: 200px; font-weight: bold;">ID No</div>
+                <div style="margin-right: 15px;">:</div>
+                <div style="font-weight: bold;">{{ name }}</div>
+            </div>
+             <div style="display: flex;">
+                <div style="width: 200px; font-weight: bold;">COURSE</div>
+                <div style="margin-right: 15px;">:</div>
+                <div style="font-weight: bold; text-transform: uppercase;">{{ program }}</div>
+            </div>
+             <div style="display: flex;">
+                <div style="width: 200px; font-weight: bold;">BLOOD GROUP</div>
+                <div style="margin-right: 15px;">:</div>
+                 <div style="font-weight: bold;">{{ blood_group }}</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Signature (Bottom Left) -->
+    <div style="position: absolute; bottom: 40px; left: 60px;">
+            <img src="{{ authority_signature }}" style="height: 60px; display: block; margin-bottom: 5px;">
+            <div style="font-family: Arial, sans-serif; font-weight: bold; font-size: 20px;">Registrar</div>
+    </div>
+
+    <!-- Vertical Header Strip (Right Edge) -->
+    <div style="position: absolute; top: 0; right: 0; width: 128px; height: 100%; border-left: 1px solid #000; display: flex; flex-direction: column; align-items: center; padding-top: 30px;">
+        <!-- Logo -->
+        <img src="{{ institute_logo }}" style="width: 90px; height: auto; margin-bottom: 20px;">
+
+        <!-- Divider -->
+        <div style="width: 100px; height: 1px; background-color: #000; margin-bottom: 20px;"></div>
+
+        <!-- Rotated Text -->
+        <div style="writing-mode: vertical-rl; text-orientation: mixed; font-weight: bold; font-size: 24px; letter-spacing: 0.5px; text-align: center; height: 480px; font-family: 'Times New Roman', serif;">
+            NATIONAL LAW SCHOOL OF INDIA UNIVERSITY
+            <br>
+            BENGALURU
+            <span style="font-family: Arial, sans-serif; font-size: 20px; margin-top: 30px; display: inline-block;">STUDENT IDENTITY CARD</span>
+        </div>
+    </div>
+</div>`,
+		back_template_html: `
+<div style="width: 1011px; height: 638px; background-color: white; color: black; font-family: Arial, sans-serif; position: relative; border: 1px solid #ccc; box-sizing: border-box; overflow: hidden;">
+
+    <!-- Warning Box -->
+    <div style="position: absolute; bottom: 40px; left: 60px; right: 160px; border: 2px solid black; padding: 15px; text-align: center;">
+        <div style="font-weight: bold; font-size: 22px; text-transform: uppercase;">THIS CARD IS TO BE CARRIED BY YOU AT ALL TIMES</div>
+    </div>
+
+    <!-- Instructions Area -->
+    <div style="position: absolute; top: 60px; left: 60px; right: 160px; bottom: 120px; display: flex; align-items: center;">
+        <div style="font-size: 24px; line-height: 1.5;">
+            <ol style="padding-left: 30px;">
+                <li style="margin-bottom: 15px;">The card should be produced on demand to security staff or any other authorised person.</li>
+                <li style="margin-bottom: 15px;">Loss of this card must be immediately reported to pmc@nls.ac.in or itsupport@nls.ac.in.</li>
+                <li style="margin-bottom: 15px;">This card is non-transferable and must be surrendered immediately after graduation or cessation of employment/contract.</li>
+                <li style="margin-bottom: 15px;">If found, please return the card to NLSIU Bangalore (Ph: 23213160/23160532/33/35)</li>
+            </ol>
+        </div>
+    </div>
+
+    <!-- Vertical Strip (Right) -->
+    <div style="position: absolute; top: 0; right: 0; width: 100px; height: 100%; border-left: 2px solid #000; display: flex; align-items: center; justify-content: center;">
+         <div style="writing-mode: vertical-rl; text-orientation: mixed; font-weight: bold; font-size: 32px; letter-spacing: 1px; font-family: 'Times New Roman', serif;">
+            INSTRUCTIONS :
+        </div>
+    </div>
+</div>`,
+	},
+	{
 		template_id: "uni_std_vert",
 		template_name: "University Standard - Vertical",
 		orientation: "Vertical",

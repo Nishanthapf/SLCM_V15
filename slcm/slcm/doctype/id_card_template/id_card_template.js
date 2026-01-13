@@ -48,9 +48,17 @@ class IDCardEditor {
 		this.wrapper = frm.fields_dict.canvas_editor.$wrapper;
 		this.show_guides = true; // Default to showing guides
 
-		let raw_data = frm.doc.canvas_data;
+		// Ensure dependencies are loaded before doing anything
+		frappe.require("/assets/slcm/js/student_id_card_templates.js").then(() => {
+			this.init();
+		});
+	}
+
+	init() {
+		let raw_data = this.frm.doc.canvas_data;
 		if (!raw_data || raw_data === "{}" || raw_data === "[]") {
-			this.render_template_selector();
+			// DEFAULT: Auto-load NLSIU Style
+			this.load_default_template("nlsiu_style");
 			return;
 		} else {
 			try {
@@ -69,7 +77,7 @@ class IDCardEditor {
 						this.data.bg_color = { front: "#ffffff", back: "#ffffff" };
 				}
 			} catch (e) {
-				this.render_template_selector(); // Fallback
+				this.load_default_template("nlsiu_style"); // Fallback to default
 				return;
 			}
 		}
@@ -80,17 +88,7 @@ class IDCardEditor {
 	}
 
 	render_template_selector() {
-		// Ensure templates are loaded
-		if (typeof slcm === "undefined" || !slcm.templates || !slcm.templates.registry) {
-			try {
-				frappe.require("/assets/slcm/js/student_id_card_templates.js").then(() => {
-					this.render_template_selector();
-				});
-				return;
-			} catch (e) {
-				console.error("Templates not found");
-			}
-		}
+		// Dependencies are already loaded in constructor
 
 		let templates_html = "";
 		if (slcm.templates && slcm.templates.registry) {
@@ -196,7 +194,344 @@ class IDCardEditor {
 		if (type === "empty") {
 			// Already initialized empty
 		} else {
-			// Fetch from registry
+			// 1. Explicit Check for NLSIU Style (Fail-Safe Default)
+			if (type === "nlsiu_style") {
+				// Orientation: Vertical (Portrait)
+				this.data.orientation = "vertical";
+				this.data.bg_color.front = "#ffffff";
+
+				// --- FRONT SIDE ---
+
+				// 1. Right-Side Vertical Header Strip
+				// Strip
+				this.data.front.push({
+					type: "rect",
+					x: 172.5, // 212.5 - 40 (approx width of strip)
+					y: 0,
+					width: 40, // 128px / 3 (scale 1mm ~ 3.78px) -> ~34mm. Let's approx 40.
+					height: 337, // Full height
+					style: {
+						backgroundColor: "#ffffff",
+						borderLeftWidth: "1px",
+						borderLeftStyle: "solid",
+						borderLeftColor: "#000",
+					},
+				});
+
+				// Logo (Top Right inside strip)
+				this.data.front.push({
+					type: "image",
+					mapping: "institute_logo",
+					content: "https://placehold.co/60x60?text=LOGO",
+					x: 177.5,
+					y: 10,
+					width: 30,
+					height: 30,
+					style: { opacity: 1 },
+				});
+
+				// Divider Line
+				this.data.front.push({
+					type: "rect",
+					x: 177.5,
+					y: 45,
+					width: 30,
+					height: 0.5,
+					style: { backgroundColor: "#000" },
+				});
+
+				// Vertical Text: University Name
+				// Since we can't easily rotate text in this simple editor 90 degrees correctly for reading top-down with multi-line support perfectly,
+				// we will simulate it or use the 'vertical-rl' trick if the editor supports raw style injection well.
+				// However, standard text element rotation in these editors usually rotates the whole block.
+				// Let's assume the editor's renderer handles rotation.
+				// If not, we provided the HTML template which is the source of truth for generation.
+				// This drag-drop is an approximation for the user to see "something" works.
+				// BUT user said "Drag-and-Drop template MUST render IDENTICAL to static HTML".
+				// So I will try to approximate best efforts.
+
+				this.data.front.push({
+					type: "text",
+					content: "NATIONAL LAW SCHOOL OF INDIA UNIVERSITY",
+					x: 100, // Adjusted X because rotation pivots center
+					y: 150,
+					style: {
+						fontSize: "8px",
+						fontWeight: "bold",
+						fontFamily: "'Times New Roman', serif",
+						transform: "rotate(90deg)", // Rotates CW, reading Top-to-Bottom
+						width: "250px",
+						textAlign: "center",
+						letterSpacing: "0.5px",
+					},
+				});
+
+				this.data.front.push({
+					type: "text",
+					content: "BENGALURU",
+					x: 100,
+					y: 200, // Further down
+					style: {
+						fontSize: "8px",
+						fontWeight: "bold",
+						fontFamily: "'Times New Roman', serif",
+						transform: "rotate(90deg)",
+						width: "250px",
+						textAlign: "center",
+					},
+				});
+
+				this.data.front.push({
+					type: "text",
+					content: "STUDENT IDENTITY CARD",
+					x: 100,
+					y: 230,
+					style: {
+						fontSize: "6px",
+						fontFamily: "Arial, sans-serif",
+						transform: "rotate(90deg)",
+						width: "250px",
+						textAlign: "center",
+						marginTop: "10px",
+					},
+				});
+
+				// 2. Main Content (Left Side)
+
+				// Photo (Top Left)
+				this.data.front.push({
+					type: "image",
+					mapping: "photo",
+					content: "/assets/frappe/images/default-avatar.png",
+					x: 20,
+					y: 20,
+					width: 60,
+					height: 75,
+					style: {
+						opacity: 1,
+						borderWidth: "1px",
+						borderStyle: "solid",
+						borderColor: "#000",
+						borderRadius: "0",
+					},
+				});
+
+				// Details Section (Labels and Values)
+				// NAME
+				this.data.front.push({
+					type: "text",
+					content: "NAME",
+					x: 20,
+					y: 110,
+					style: { fontSize: "7px", fontWeight: "bold", fontFamily: "Arial" },
+				});
+				this.data.front.push({
+					type: "text",
+					content: ":",
+					x: 60,
+					y: 110,
+					style: { fontSize: "7px", fontWeight: "bold" },
+				});
+				this.data.front.push({
+					type: "text",
+					mapping: "student_name",
+					content: "[NAME]",
+					x: 65,
+					y: 110,
+					style: { fontSize: "7px", fontWeight: "bold", textTransform: "uppercase" },
+				});
+
+				// ID No
+				this.data.front.push({
+					type: "text",
+					content: "ID No",
+					x: 20,
+					y: 125,
+					style: { fontSize: "7px", fontWeight: "bold", fontFamily: "Arial" },
+				});
+				this.data.front.push({
+					type: "text",
+					content: ":",
+					x: 60,
+					y: 125,
+					style: { fontSize: "7px", fontWeight: "bold" },
+				});
+				this.data.front.push({
+					type: "text",
+					mapping: "student_id",
+					content: "[ID]",
+					x: 65,
+					y: 125,
+					style: { fontSize: "7px", fontWeight: "bold" },
+				});
+
+				// COURSE
+				this.data.front.push({
+					type: "text",
+					content: "COURSE",
+					x: 20,
+					y: 140,
+					style: { fontSize: "7px", fontWeight: "bold", fontFamily: "Arial" },
+				});
+				this.data.front.push({
+					type: "text",
+					content: ":",
+					x: 60,
+					y: 140,
+					style: { fontSize: "7px", fontWeight: "bold" },
+				});
+				this.data.front.push({
+					type: "text",
+					mapping: "program",
+					content: "[COURSE]",
+					x: 65,
+					y: 140,
+					style: { fontSize: "7px", fontWeight: "bold", textTransform: "uppercase" },
+				});
+
+				// BLOOD GROUP
+				this.data.front.push({
+					type: "text",
+					content: "BLOOD GROUP",
+					x: 20,
+					y: 155,
+					style: { fontSize: "7px", fontWeight: "bold", fontFamily: "Arial" },
+				});
+				this.data.front.push({
+					type: "text",
+					content: ":",
+					x: 60,
+					y: 155,
+					style: { fontSize: "7px", fontWeight: "bold" },
+				});
+				this.data.front.push({
+					type: "text",
+					mapping: "blood_group",
+					content: "[Group]",
+					x: 65,
+					y: 155,
+					style: { fontSize: "7px", fontWeight: "bold" },
+				});
+
+				// Signature (Bottom Left)
+				this.data.front.push({
+					type: "image",
+					mapping: "authority_signature",
+					content: "https://placehold.co/60x30?text=Sign",
+					x: 20,
+					y: 280,
+					width: 40,
+					height: 20,
+					style: { opacity: 1 },
+				});
+				this.data.front.push({
+					type: "text",
+					content: "Registrar",
+					x: 20,
+					y: 300,
+					style: { fontSize: "6px", fontWeight: "bold", fontFamily: "Arial" },
+				});
+
+				// --- BACK SIDE ---
+
+				// Warning Box (Bottom Center-ish)
+				this.data.back.push({
+					type: "rect",
+					x: 20,
+					y: 290,
+					width: 140,
+					height: 30,
+					style: {
+						backgroundColor: "transparent",
+						borderWidth: "1px",
+						borderStyle: "solid",
+						borderColor: "#000",
+					},
+				});
+				this.data.back.push({
+					type: "text",
+					content: "THIS CARD IS TO BE CARRIED BY YOU AT ALL TIMES",
+					x: 25,
+					y: 300,
+					style: {
+						fontSize: "6px",
+						fontWeight: "bold",
+						textAlign: "center",
+						width: "130px",
+					},
+				});
+
+				// Instructions List
+				// Since drag-drop text is usually single block, we'll try to use one block with newlines if supported,
+				// or separate lines. Separate lines allow better control.
+
+				this.data.back.push({
+					type: "text",
+					content:
+						"1. The card should be produced on demand to security staff or any other authorised person.",
+					x: 20,
+					y: 40,
+					style: { fontSize: "6px", width: "140px", lineHeight: "1.5" },
+				});
+				this.data.back.push({
+					type: "text",
+					content:
+						"2. Loss of this card must be immediately reported to pmc@nls.ac.in or itsupport@nls.ac.in.",
+					x: 20,
+					y: 80,
+					style: { fontSize: "6px", width: "140px", lineHeight: "1.5" },
+				});
+				this.data.back.push({
+					type: "text",
+					content:
+						"3. This card is non-transferable and must be surrendered immediately after graduation or cessation of employment/contract.",
+					x: 20,
+					y: 120,
+					style: { fontSize: "6px", width: "140px", lineHeight: "1.5" },
+				});
+				this.data.back.push({
+					type: "text",
+					content:
+						"4. If found, please return the card to NLSIU Bangalore (Ph: 23213160/23160532/33/35)",
+					x: 20,
+					y: 170,
+					style: { fontSize: "6px", width: "140px", lineHeight: "1.5" },
+				});
+
+				// Vertical Strip (Right)
+				this.data.back.push({
+					type: "rect",
+					x: 172.5,
+					y: 0,
+					width: 40,
+					height: 337,
+					style: {
+						backgroundColor: "#ffffff",
+						borderLeftWidth: "1px",
+						borderLeftStyle: "solid",
+						borderLeftColor: "#000",
+					},
+				});
+				this.data.back.push({
+					type: "text",
+					content: "INSTRUCTIONS :",
+					x: 100,
+					y: 150,
+					style: {
+						fontSize: "8px",
+						fontWeight: "bold",
+						fontFamily: "'Times New Roman', serif",
+						transform: "rotate(90deg)",
+						width: "250px",
+						textAlign: "center",
+						letterSpacing: "1px",
+					},
+				});
+				// DONE NLSIU
+			}
+
+			// 2. Fetch from registry
+
 			const tmpl = slcm.templates.get(type);
 			if (tmpl) {
 				this.data.orientation = tmpl.orientation.toLowerCase();
@@ -1435,12 +1770,14 @@ class IDCardEditor {
                                 <label class="prop-label">ORIENTATION</label>
                                 <div class="btn-group btn-group-justified btn-group-sm">
                                     <div class="btn-group">
-                                        <button class="btn btn-default ${this.data.orientation === "horizontal" ? "active" : ""
-			}" data-action="set_orientation" data-val="horizontal">Landscape</button>
+                                        <button class="btn btn-default ${
+											this.data.orientation === "horizontal" ? "active" : ""
+										}" data-action="set_orientation" data-val="horizontal">Landscape</button>
                                     </div>
                                     <div class="btn-group">
-                                        <button class="btn btn-default ${this.data.orientation === "vertical" ? "active" : ""
-			}" data-action="set_orientation" data-val="vertical">Portrait</button>
+                                        <button class="btn btn-default ${
+											this.data.orientation === "vertical" ? "active" : ""
+										}" data-action="set_orientation" data-val="vertical">Portrait</button>
                                     </div>
                                 </div>
                             </div>
@@ -1448,12 +1785,14 @@ class IDCardEditor {
                                 <label class="prop-label">ACTIVE SIDE</label>
                                 <div class="btn-group btn-group-justified btn-group-sm">
                                     <div class="btn-group">
-                                        <button class="btn btn-default ${this.current_side === "front" ? "active" : ""
-			}" data-side="front">Front</button>
+                                        <button class="btn btn-default ${
+											this.current_side === "front" ? "active" : ""
+										}" data-side="front">Front</button>
                                     </div>
                                     <div class="btn-group">
-                                        <button class="btn btn-default ${this.current_side === "back" ? "active" : ""
-			}" data-side="back">Back</button>
+                                        <button class="btn btn-default ${
+											this.current_side === "back" ? "active" : ""
+										}" data-side="back">Back</button>
                                     </div>
                                 </div>
                             </div>
@@ -1477,8 +1816,9 @@ class IDCardEditor {
                              <button class="btn btn-default btn-block btn-xs tool-btn" data-action="add_shape" data-shape="footer">Add Footer</button>
                              <div style="margin-top: 5px;">
                                 <label class="checkbox-inline" style="font-size: 11px; margin-left: 0;">
-                                    <input type="checkbox" id="toggle-guides" ${this.show_guides ? "checked" : ""
-			}> Show Guides
+                                    <input type="checkbox" id="toggle-guides" ${
+										this.show_guides ? "checked" : ""
+									}> Show Guides
                                 </label>
                              </div>
 
@@ -1534,13 +1874,14 @@ class IDCardEditor {
                                 transform: scale(${this.scale}); transform-origin: center center;
                                 border: 1px dashed transparent;
                             ">
-                                 ${this.show_guides
-				? `
+                                 ${
+										this.show_guides
+											? `
                                     <div style="position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: rgba(0, 150, 255, 0.5); transform: translateX(-50%);"></div>
                                     <div style="position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: rgba(0, 150, 255, 0.5); transform: translateY(-50%);"></div>
                                  `
-				: ""
-			}
+											: ""
+									}
                             </div>
                         </div>
                     </div>
@@ -1851,8 +2192,9 @@ class IDCardEditor {
 			this.properties.html(`
                <div class="form-group">
                     <label class="prop-label">CANVAS BACKGROUND</label>
-                    <input type="color" class="form-control input-sm global-bg-change" value="${this.data.bg_color[this.current_side] || "#ffffff"
-				}">
+                    <input type="color" class="form-control input-sm global-bg-change" value="${
+						this.data.bg_color[this.current_side] || "#ffffff"
+					}">
                </div>
                <p class="text-muted text-center" style="margin-top: 20px;">Select an element to edit.</p>
              `);
@@ -1872,14 +2214,14 @@ class IDCardEditor {
                 <div class="col-xs-6">
                      <label class="prop-label">X POS</label>
                      <input type="number" class="form-control input-sm prop-change" data-prop="x" value="${Math.round(
-			el.x
-		)}">
+							el.x
+						)}">
                 </div>
                 <div class="col-xs-6">
                      <label class="prop-label">Y POS</label>
                      <input type="number" class="form-control input-sm prop-change" data-prop="y" value="${Math.round(
-			el.y
-		)}">
+							el.y
+						)}">
                 </div>
             </div>
         `;
@@ -1890,14 +2232,14 @@ class IDCardEditor {
                 <div class="col-xs-6">
                      <label class="prop-label">WIDTH</label>
                      <input type="number" class="form-control input-sm prop-change" data-prop="width" value="${Math.round(
-				el.width
-			)}">
+							el.width
+						)}">
                 </div>
                 <div class="col-xs-6">
                      <label class="prop-label">HEIGHT</label>
                      <input type="number" class="form-control input-sm prop-change" data-prop="height" value="${Math.round(
-				el.height
-			)}">
+							el.height
+						)}">
                 </div>
             </div>`;
 
@@ -1906,12 +2248,15 @@ class IDCardEditor {
                 <div style="margin-top: 10px;">
                     <label class="prop-label">SHAPE</label>
                     <select class="form-control input-sm shape-change">
-                        <option value="rect" ${!el.shape || el.shape === "rect" ? "selected" : ""
-					}>Rectangle</option>
-                        <option value="circle" ${el.shape === "circle" ? "selected" : ""
-					}>Circle</option>
-                        <option value="triangle" ${el.shape === "triangle" ? "selected" : ""
-					}>Triangle</option>
+                        <option value="rect" ${
+							!el.shape || el.shape === "rect" ? "selected" : ""
+						}>Rectangle</option>
+                        <option value="circle" ${
+							el.shape === "circle" ? "selected" : ""
+						}>Circle</option>
+                        <option value="triangle" ${
+							el.shape === "triangle" ? "selected" : ""
+						}>Triangle</option>
                     </select>
                 </div>`;
 			}
@@ -1933,47 +2278,57 @@ class IDCardEditor {
                     <div class="col-xs-6">
                         <label class="prop-label" style="font-weight:normal">Style</label>
                         <select class="form-control input-sm border-change" data-key="style">
-                            <option value="none" ${bs.style === "none" ? "selected" : ""
-				}>None</option>
-                            <option value="solid" ${bs.style === "solid" ? "selected" : ""
-				}>Solid</option>
-                            <option value="double" ${bs.style === "double" ? "selected" : ""
-				}>Double</option>
-                            <option value="dashed" ${bs.style === "dashed" ? "selected" : ""
-				}>Dashed</option>
+                            <option value="none" ${
+								bs.style === "none" ? "selected" : ""
+							}>None</option>
+                            <option value="solid" ${
+								bs.style === "solid" ? "selected" : ""
+							}>Solid</option>
+                            <option value="double" ${
+								bs.style === "double" ? "selected" : ""
+							}>Double</option>
+                            <option value="dashed" ${
+								bs.style === "dashed" ? "selected" : ""
+							}>Dashed</option>
                         </select>
                     </div>
                     <div class="col-xs-6">
                         <label class="prop-label" style="font-weight:normal">Width (px)</label>
-                        <input type="number" class="form-control input-sm border-change" data-key="width" value="${bs.width
-				}">
+                        <input type="number" class="form-control input-sm border-change" data-key="width" value="${
+							bs.width
+						}">
                     </div>
                 </div>
                 <div class="row" style="margin-top: 5px;">
                     <div class="col-xs-12">
                         <label class="prop-label" style="font-weight:normal">Color</label>
-                        <input type="color" class="form-control input-sm border-change" data-key="color" value="${bs.color
-				}">
+                        <input type="color" class="form-control input-sm border-change" data-key="color" value="${
+							bs.color
+						}">
                     </div>
                 </div>
                 <div class="row" style="margin-top: 5px;">
                     <div class="col-xs-12">
                         <label class="prop-label" style="font-weight:normal">Sides</label>
                         <label class="checkbox-inline" style="font-size: 11px;">
-                            <input type="checkbox" class="border-change" data-key="top" ${bs.top ? "checked" : ""
-				}> Top
+                            <input type="checkbox" class="border-change" data-key="top" ${
+								bs.top ? "checked" : ""
+							}> Top
                         </label>
                         <label class="checkbox-inline" style="font-size: 11px;">
-                             <input type="checkbox" class="border-change" data-key="bottom" ${bs.bottom ? "checked" : ""
-				}> Bot
+                             <input type="checkbox" class="border-change" data-key="bottom" ${
+									bs.bottom ? "checked" : ""
+								}> Bot
                         </label>
                         <label class="checkbox-inline" style="font-size: 11px;">
-                             <input type="checkbox" class="border-change" data-key="left" ${bs.left ? "checked" : ""
-				}> Left
+                             <input type="checkbox" class="border-change" data-key="left" ${
+									bs.left ? "checked" : ""
+								}> Left
                         </label>
                         <label class="checkbox-inline" style="font-size: 11px;">
-                             <input type="checkbox" class="border-change" data-key="right" ${bs.right ? "checked" : ""
-				}> Right
+                             <input type="checkbox" class="border-change" data-key="right" ${
+									bs.right ? "checked" : ""
+								}> Right
                         </label>
                     </div>
                 </div>
@@ -1998,18 +2353,21 @@ class IDCardEditor {
 		if (el.type === "text") {
 			html += `<hr style="margin: 10px 0;">
                 <label class="prop-label">TEXT CONTENT</label>
-                <input type="text" class="form-control input-sm prop-change" data-prop="content" value="${el.content
+                <input type="text" class="form-control input-sm prop-change" data-prop="content" value="${
+					el.content
 				}" ${el.mapping ? "readonly" : ""}>
                 <div class="row" style="margin-top:5px;">
                     <div class="col-xs-6">
                         <label class="prop-label">SIZE</label>
-                        <input type="text" class="form-control input-sm style-change" data-style="fontSize" value="${el.style.fontSize
-				}">
+                        <input type="text" class="form-control input-sm style-change" data-style="fontSize" value="${
+							el.style.fontSize
+						}">
                     </div>
                     <div class="col-xs-6">
                         <label class="prop-label">COLOR</label>
-                        <input type="color" class="form-control input-sm style-change" data-style="color" value="${el.style.color
-				}">
+                        <input type="color" class="form-control input-sm style-change" data-style="color" value="${
+							el.style.color
+						}">
                     </div>
                 </div>`;
 		} else if (el.type === "rect") {

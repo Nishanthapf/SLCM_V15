@@ -1,0 +1,70 @@
+{
+    "actions": [],
+    "allow_rename": 1,
+    "autoname": "format:BED-{room}-{bed_no}",
+    "creation": "2026-01-13 14:50:00.000000",
+    "doctype": "DocType",
+    "engine": "InnoDB",
+    "field_order": [
+        "hostel",
+        "room",
+        "bed_no",
+        "is_occupied"
+    ],
+    "fields": [
+        {
+            "fieldname": "hostel",
+            "fieldtype": "Link",
+            "label": "Hostel",
+            "options": "Hostel",
+            "read_only": 1,
+            "fetch_from": "room.hostel"
+        },
+        {
+            "fieldname": "room",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "label": "Room",
+            "options": "Hostel Room",
+            "reqd": 1
+        },
+        {
+            "fieldname": "bed_no",
+            "fieldtype": "Data",
+            "in_list_view": 1,
+            "label": "Bed No/Name",
+            "reqd": 1
+        },
+        {
+            "default": "0",
+            "fieldname": "is_occupied",
+            "fieldtype": "Check",
+            "label": "Is Occupied",
+            "read_only": 1
+        }
+    ],
+    "index_web_pages_for_search": 1,
+    "links": [],
+    "modified": "2026-01-13 14:50:00.000000",
+    "modified_by": "Administrator",
+    "module": "SLCM",
+    "name": "Hostel Bed",
+    "owner": "Administrator",
+    "permissions": [
+        {
+            "create": 1,
+            "delete": 1,
+            "email": 1,
+            "export": 1,
+            "print": 1,
+            "read": 1,
+            "report": 1,
+            "role": "System Manager",
+            "share": 1,
+            "write": 1
+        }
+    ],
+    "sort_field": "modified",
+    "sort_order": "DESC",
+    "track_changes": 1
+}

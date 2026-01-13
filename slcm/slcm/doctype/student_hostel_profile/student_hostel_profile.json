@@ -1,0 +1,80 @@
+{
+    "actions": [],
+    "allow_rename": 1,
+    "autoname": "format:SHP-{student}",
+    "creation": "2026-01-13 14:55:00.000000",
+    "doctype": "DocType",
+    "engine": "InnoDB",
+    "field_order": [
+        "student",
+        "current_hostel",
+        "current_room",
+        "current_bed",
+        "status"
+    ],
+    "fields": [
+        {
+            "fieldname": "student",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "label": "Student",
+            "options": "Student Master",
+            "reqd": 1,
+            "unique": 1
+        },
+        {
+            "fieldname": "current_hostel",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "label": "Current Hostel",
+            "options": "Hostel",
+            "read_only": 1
+        },
+        {
+            "fieldname": "current_room",
+            "fieldtype": "Link",
+            "label": "Current Room",
+            "options": "Hostel Room",
+            "read_only": 1
+        },
+        {
+            "fieldname": "current_bed",
+            "fieldtype": "Link",
+            "label": "Current Bed",
+            "options": "Hostel Bed",
+            "read_only": 1
+        },
+        {
+            "fieldname": "status",
+            "fieldtype": "Select",
+            "in_list_view": 1,
+            "label": "Status",
+            "options": "Active\nVacated\nExpelled",
+            "default": "Active"
+        }
+    ],
+    "index_web_pages_for_search": 1,
+    "links": [],
+    "modified": "2026-01-13 14:55:00.000000",
+    "modified_by": "Administrator",
+    "module": "SLCM",
+    "name": "Student Hostel Profile",
+    "owner": "Administrator",
+    "permissions": [
+        {
+            "create": 1,
+            "delete": 1,
+            "email": 1,
+            "export": 1,
+            "print": 1,
+            "read": 1,
+            "report": 1,
+            "role": "System Manager",
+            "share": 1,
+            "write": 1
+        }
+    ],
+    "sort_field": "modified",
+    "sort_order": "DESC",
+    "track_changes": 1
+}

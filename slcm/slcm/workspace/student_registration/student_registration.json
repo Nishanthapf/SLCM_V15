@@ -1,59 +1,66 @@
 {
-    "charts": [
-        {
-            "label": "Registrations by State",
-            "chart_name": "Registrations by State",
-            "type": "Donut"
-        }
-    ],
-    "content": "[{\"id\":\"header\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Student Registration</span>\",\"col\":12}},{\"id\":\"sc1\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"New Registration\",\"col\":3}},{\"id\":\"sc2\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Pending REGO\",\"col\":3}},{\"id\":\"sc3\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Pending FINO\",\"col\":3}},{\"id\":\"sc4\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Completed\",\"col\":3}}]",
-    "doctype": "Workspace",
-    "is_hidden": 0,
-    "label": "Student Registration",
-    "module": "SLCM",
-    "name": "Student Registration",
-    "public": 1,
-    "shortcuts": [
-        {
-            "color": "Blue",
-            "doc_view": "List",
-            "format": "{}",
-            "label": "New Registration",
-            "link_to": "Student Master",
-            "stats_filter": "[]",
-            "type": "DocType",
-            "url": "/app/student-master/view/list?registration_status=Draft"
-        },
-        {
-            "color": "Orange",
-            "doc_view": "List",
-            "format": "{}",
-            "label": "Pending REGO",
-            "link_to": "Student Master",
-            "stats_filter": "[]",
-            "type": "DocType",
-            "url": "/app/student-master/view/list?registration_status=Draft"
-        },
-        {
-            "color": "Red",
-            "doc_view": "List",
-            "format": "{}",
-            "label": "Pending FINO",
-            "link_to": "Student Master",
-            "stats_filter": "[]",
-            "type": "DocType",
-            "url": "/app/student-master/view/list?registration_status=REGO%20Verified"
-        },
-        {
-            "color": "Green",
-            "doc_view": "List",
-            "format": "{}",
-            "label": "Completed",
-            "link_to": "Student Master",
-            "stats_filter": "[]",
-            "type": "DocType",
-            "url": "/app/student-master/view/list?registration_status=Completed"
-        }
-    ],
-    "title": "Student Registration"
+ "charts": [],
+ "content": "[{\"id\":\"header\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Student Registration</span>\",\"col\":12}},{\"id\":\"sc1\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"New Registration\",\"col\":3}},{\"id\":\"sc2\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Pending REGO\",\"col\":3}},{\"id\":\"sc3\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Pending FINO\",\"col\":3}},{\"id\":\"sc4\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Completed\",\"col\":3}}]",
+ "creation": "2026-01-13 14:59:15.150858",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "hide_custom": 0,
+ "idx": 0,
+ "is_hidden": 0,
+ "label": "Student Registration",
+ "links": [],
+ "modified": "2026-01-13 15:01:40.864080",
+ "modified_by": "Administrator",
+ "module": "SLCM",
+ "name": "Student Registration",
+ "number_cards": [],
+ "owner": "Administrator",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [],
+ "sequence_id": 0.0,
+ "shortcuts": [
+  {
+   "color": "Blue",
+   "doc_view": "List",
+   "format": "{}",
+   "label": "New Registration",
+   "link_to": "Student Master",
+   "stats_filter": "[]",
+   "type": "DocType",
+   "url": "/app/student-master/view/list?registration_status=Draft"
+  },
+  {
+   "color": "Orange",
+   "doc_view": "List",
+   "format": "{}",
+   "label": "Pending REGO",
+   "link_to": "Student Master",
+   "stats_filter": "[]",
+   "type": "DocType",
+   "url": "/app/student-master/view/list?registration_status=Draft"
+  },
+  {
+   "color": "Red",
+   "doc_view": "List",
+   "format": "{}",
+   "label": "Pending FINO",
+   "link_to": "Student Master",
+   "stats_filter": "[]",
+   "type": "DocType",
+   "url": "/app/student-master/view/list?registration_status=REGO%20Verified"
+  },
+  {
+   "color": "Green",
+   "doc_view": "List",
+   "format": "{}",
+   "label": "Completed",
+   "link_to": "Student Master",
+   "stats_filter": "[]",
+   "type": "DocType",
+   "url": "/app/student-master/view/list?registration_status=Completed"
+  }
+ ],
+ "title": "Student Registration"
 }
