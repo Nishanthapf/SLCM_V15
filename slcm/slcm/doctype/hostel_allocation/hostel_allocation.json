@@ -1,0 +1,100 @@
+{
+    "actions": [],
+    "allow_rename": 1,
+    "autoname": "format:ALL-{student}-{hostel}",
+    "creation": "2024-01-13 12:00:00.000000",
+    "doctype": "DocType",
+    "engine": "InnoDB",
+    "field_order": [
+        "student",
+        "hostel",
+        "room",
+        "from_date",
+        "to_date",
+        "agreement_signed",
+        "keys_handed_over",
+        "is_active"
+    ],
+    "fields": [
+        {
+            "fieldname": "student",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "label": "Student",
+            "options": "Student Master",
+            "reqd": 1
+        },
+        {
+            "fieldname": "hostel",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "label": "Hostel",
+            "options": "Hostel",
+            "reqd": 1
+        },
+        {
+            "fieldname": "room",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "label": "Room",
+            "options": "Hostel Room",
+            "reqd": 1,
+            "get_query": "slcm.slcm.doctype.hostel_allocation.hostel_allocation.get_room_query"
+        },
+        {
+            "fieldname": "from_date",
+            "fieldtype": "Date",
+            "label": "From Date",
+            "reqd": 1
+        },
+        {
+            "fieldname": "to_date",
+            "fieldtype": "Date",
+            "label": "To Date"
+        },
+        {
+            "default": "0",
+            "fieldname": "agreement_signed",
+            "fieldtype": "Check",
+            "label": "Agreement Signed"
+        },
+        {
+            "default": "0",
+            "fieldname": "keys_handed_over",
+            "fieldtype": "Check",
+            "label": "Keys Handed Over"
+        },
+        {
+            "default": "1",
+            "fieldname": "is_active",
+            "fieldtype": "Check",
+            "label": "Is Active"
+        }
+    ],
+    "index_web_pages_for_search": 1,
+    "is_submittable": 1,
+    "links": [],
+    "modified": "2024-01-13 12:00:00.000000",
+    "modified_by": "Administrator",
+    "module": "SLCM",
+    "name": "Hostel Allocation",
+    "owner": "Administrator",
+    "permissions": [
+        {
+            "create": 1,
+            "delete": 1,
+            "email": 1,
+            "export": 1,
+            "print": 1,
+            "read": 1,
+            "report": 1,
+            "role": "System Manager",
+            "share": 1,
+            "submit": 1,
+            "write": 1
+        }
+    ],
+    "sort_field": "modified",
+    "sort_order": "DESC",
+    "track_changes": 1
+}

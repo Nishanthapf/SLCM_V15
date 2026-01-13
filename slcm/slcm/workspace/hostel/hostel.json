@@ -1,0 +1,84 @@
+{
+    "charts": [],
+    "content": "[{\"type\":\"header\",\"data\":{\"text\":\"Hostel Management\",\"level\":4,\"col\":12}},{\"type\":\"card\",\"data\":{\"card_name\":\"Hostel Management\",\"col\":12}}]",
+    "creation": "2024-01-13 12:00:00.000000",
+    "custom_blocks": [],
+    "doctype": "Workspace",
+    "engine": "InnoDB",
+    "hide_custom": 0,
+    "icon": "bed",
+    "indicator_color": "green",
+    "is_standard": 1,
+    "label": "Hostel",
+    "links": [
+        {
+            "dependencies": "",
+            "hidden": 0,
+            "is_query_report": 0,
+            "label": "Hostel",
+            "link_count": 0,
+            "link_to": "Hostel",
+            "link_type": "DocType",
+            "onboard": 1,
+            "type": "Link"
+        },
+        {
+            "dependencies": "",
+            "hidden": 0,
+            "is_query_report": 0,
+            "label": "Hostel Room",
+            "link_count": 0,
+            "link_to": "Hostel Room",
+            "link_type": "DocType",
+            "onboard": 1,
+            "type": "Link"
+        },
+        {
+            "dependencies": "",
+            "hidden": 0,
+            "is_query_report": 0,
+            "label": "Hostel Allocation",
+            "link_count": 0,
+            "link_to": "Hostel Allocation",
+            "link_type": "DocType",
+            "onboard": 1,
+            "type": "Link"
+        },
+        {
+            "dependencies": "",
+            "hidden": 0,
+            "is_query_report": 0,
+            "label": "Student Master",
+            "link_count": 0,
+            "link_to": "Student Master",
+            "link_type": "DocType",
+            "onboard": 0,
+            "type": "Link"
+        },
+        {
+            "dependencies": "",
+            "hidden": 0,
+            "is_query_report": 0,
+            "label": "Hostel Warden",
+            "link_count": 0,
+            "link_to": "Hostel Warden",
+            "link_type": "DocType",
+            "onboard": 0,
+            "type": "Link"
+        }
+    ],
+    "modified": "2024-01-13 12:00:00.000000",
+    "modified_by": "Administrator",
+    "module": "SLCM",
+    "name": "Hostel",
+    "owner": "Administrator",
+    "public": 1,
+    "roles": [
+        {
+            "role": "System Manager"
+        }
+    ],
+    "shortcuts": [],
+    "sort_order": "DESC",
+    "title": "Hostel"
+}

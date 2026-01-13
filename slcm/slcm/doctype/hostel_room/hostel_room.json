@@ -1,0 +1,95 @@
+{
+    "actions": [],
+    "allow_rename": 1,
+    "autoname": "format:{hostel}-{room_number}",
+    "creation": "2024-01-13 12:00:00.000000",
+    "doctype": "DocType",
+    "engine": "InnoDB",
+    "field_order": [
+        "hostel",
+        "room_number",
+        "floor",
+        "column_break_1",
+        "room_type",
+        "capacity",
+        "occupied",
+        "is_available"
+    ],
+    "fields": [
+        {
+            "fieldname": "hostel",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "label": "Hostel",
+            "options": "Hostel",
+            "reqd": 1
+        },
+        {
+            "fieldname": "room_number",
+            "fieldtype": "Data",
+            "in_list_view": 1,
+            "label": "Room Number",
+            "reqd": 1
+        },
+        {
+            "fieldname": "floor",
+            "fieldtype": "Data",
+            "label": "Floor"
+        },
+        {
+            "fieldname": "column_break_1",
+            "fieldtype": "Column Break"
+        },
+        {
+            "fieldname": "room_type",
+            "fieldtype": "Select",
+            "label": "Room Type",
+            "options": "Non-AC\nAC"
+        },
+        {
+            "fieldname": "capacity",
+            "fieldtype": "Int",
+            "in_list_view": 1,
+            "label": "Capacity",
+            "reqd": 1
+        },
+        {
+            "default": "0",
+            "fieldname": "occupied",
+            "fieldtype": "Int",
+            "label": "Occupied",
+            "read_only": 1
+        },
+        {
+            "fieldname": "is_available",
+            "fieldtype": "Check",
+            "label": "Is Available",
+            "read_only": 1,
+            "default": "1"
+        }
+    ],
+    "index_web_pages_for_search": 1,
+    "links": [],
+    "modified": "2024-01-13 12:00:00.000000",
+    "modified_by": "Administrator",
+    "module": "SLCM",
+    "name": "Hostel Room",
+    "owner": "Administrator",
+    "permissions": [
+        {
+            "create": 1,
+            "delete": 1,
+            "email": 1,
+            "export": 1,
+            "print": 1,
+            "read": 1,
+            "report": 1,
+            "role": "System Manager",
+            "share": 1,
+            "write": 1
+        }
+    ],
+    "sort_field": "modified",
+    "sort_order": "DESC",
+    "track_changes": 1
+}
