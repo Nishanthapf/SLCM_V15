@@ -16,10 +16,10 @@ frappe.listview_settings["Student Master"] = {
 	},
 
 	get_indicator(doc) {
-		const status = doc.registration_status || "Admitted";
+		const status = doc.registration_status || "Selected";
 
 		const status_config = {
-			Admitted: ["Admitted", "grey", "registration_status,=,Admitted"],
+			Selected: ["Selected", "grey", "registration_status,=,Selected"],
 			"Pending REGO": ["Pending REGO", "orange", "registration_status,=,Pending REGO"],
 			"Pending FINO": ["Pending FINO", "red", "registration_status,=,Pending FINO"],
 			"Pending Registration": [
@@ -51,9 +51,9 @@ frappe.listview_settings["Student Master"] = {
 
 	formatters: {
 		registration_status(value, field, doc) {
-			const status = value || "Admitted";
+			const status = value || "Selected";
 			const status_colors = {
-				Admitted: "grey",
+				Selected: "grey",
 				"Pending REGO": "orange",
 				"Pending FINO": "red",
 				"Pending Registration": "blue",
@@ -173,7 +173,7 @@ function add_bulk_delete_button(listview) {
 
 function show_bulk_status_dialog(listview, selected) {
 	const statuses = [
-		"Admitted",
+		"Selected",
 		"Pending REGO",
 		"Pending FINO",
 		"Pending Registration",
@@ -187,7 +187,7 @@ function show_bulk_status_dialog(listview, selected) {
 	// Get current statuses for selected students
 	const status_summary = {};
 	selected.forEach((student) => {
-		const status = student.registration_status || "Admitted";
+		const status = student.registration_status || "Selected";
 		status_summary[status] = (status_summary[status] || 0) + 1;
 	});
 

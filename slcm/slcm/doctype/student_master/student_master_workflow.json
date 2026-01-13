@@ -6,7 +6,7 @@
     "workflow_state_field": "registration_status",
     "states": [
         {
-            "state": "Admitted",
+            "state": "Selected",
             "doc_status": 0,
             "allow_edit": "System Manager"
         },
@@ -53,7 +53,7 @@
     ],
     "transitions": [
         {
-            "state": "Admitted",
+            "state": "Selected",
             "action": "Submit for REGO",
             "next_state": "Pending REGO",
             "allowed": "Student,Registration User"
@@ -103,7 +103,7 @@
         {
             "state": "Completed",
             "action": "Re-Open",
-            "next_state": "Admitted",
+            "next_state": "Selected",
             "allowed": "System Manager"
         }
     ]

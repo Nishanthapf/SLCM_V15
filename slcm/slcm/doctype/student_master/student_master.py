@@ -14,9 +14,9 @@ class StudentMaster(Document):
 	def validate_status_transition(self):
 		"""Validate status transitions follow the workflow sequence"""
 		if self.is_new():
-			# New documents start as Admitted
+			# New documents start as Selected
 			if not self.registration_status:
-				self.registration_status = "Admitted"
+				self.registration_status = "Selected"
 			return
 
 		# Get previous status from database
@@ -28,14 +28,14 @@ class StudentMaster(Document):
 
 		# Define valid transitions
 		valid_transitions = {
-			"Admitted": ["Pending REGO"],
+			"Selected": ["Pending REGO"],
 			"Pending REGO": ["Pending FINO"],
 			"Pending FINO": ["Pending Registration"],
 			"Pending Registration": ["Pending Print & Scan"],
 			"Pending Print & Scan": ["Pending Residences"],
 			"Pending Residences": ["Pending IT"],
 			"Pending IT": ["Completed"],
-			"Completed": ["Admitted"],  # Only System Manager can re-open
+			"Completed": ["Selected"],  # Only System Manager can re-open
 		}
 
 		# Check if transition is valid
@@ -82,7 +82,7 @@ class StudentMaster(Document):
 					"reference_doctype": self.doctype,
 					"reference_name": self.name,
 					"content": _("Status changed from {0} to {1} by {2}").format(
-						previous_status or "Admitted",
+						previous_status or "Selected",
 						self.registration_status,
 						get_fullname(frappe.session.user),
 					),
@@ -112,7 +112,7 @@ def update_registration_status(student_id, new_status, remarks=None):
 
 	# Get student document
 	student = frappe.get_doc("Student Master", student_id)
-	current_status = student.registration_status or "Admitted"
+	current_status = student.registration_status or "Selected"
 
 	# Define role mappings for transitioning TO each status
 	# This defines who can set the status to this value
@@ -125,7 +125,7 @@ def update_registration_status(student_id, new_status, remarks=None):
 		"Pending IT": ["Residence / Hostel Admin", "System Manager"],
 		"Final Verification REGO": ["IT Admin", "System Manager"],
 		"Completed": ["Registration Officer", "System Manager"],
-		"Admitted": ["System Manager"],  # Only System Manager can re-open
+		"Selected": ["System Manager"],  # Only System Manager can re-open
 	}
 
 	# Check if user has permission for this status transition
@@ -143,7 +143,7 @@ def update_registration_status(student_id, new_status, remarks=None):
 
 	# Validate transition sequence
 	valid_transitions = {
-		"Admitted": ["Pending REGO"],
+		"Selected": ["Pending REGO"],
 		"Pending REGO": ["Pending FINO"],
 		"Pending FINO": ["Pending Registration"],
 		"Pending Registration": ["Pending Print & Scan"],
@@ -151,7 +151,7 @@ def update_registration_status(student_id, new_status, remarks=None):
 		"Pending Residences": ["Pending IT"],
 		"Pending IT": ["Final Verification REGO"],
 		"Final Verification REGO": ["Completed"],
-		"Completed": ["Admitted"],
+		"Completed": ["Selected"],
 	}
 
 	# Admin and System Manager can change to any status
@@ -197,13 +197,13 @@ def get_available_status_actions(student_id):
 	Get available status actions based on current status and user roles
 	"""
 	student = frappe.get_doc("Student Master", student_id)
-	current_status = student.registration_status or "Admitted"
+	current_status = student.registration_status or "Selected"
 	user_roles = frappe.get_roles()
 	is_admin = "System Manager" in user_roles or frappe.session.user == "Administrator"
 
 	# Define workflow transitions
 	workflow_transitions = {
-		"Admitted": {
+		"Selected": {
 			"action": "Submit for REGO",
 			"next_state": "Pending REGO",
 			"roles": ["Student", "Registration User", "System Manager"],
@@ -243,7 +243,7 @@ def get_available_status_actions(student_id):
 			"next_state": "Completed",
 			"roles": ["Registration Officer", "System Manager"],
 		},
-		"Completed": {"action": "Re-Open", "next_state": "Admitted", "roles": ["System Manager"]},
+		"Completed": {"action": "Re-Open", "next_state": "Selected", "roles": ["System Manager"]},
 	}
 
 	available_actions = []
@@ -251,7 +251,7 @@ def get_available_status_actions(student_id):
 	# Admin and System Manager can see all possible statuses
 	if is_admin:
 		all_states = [
-			"Admitted",
+			"Selected",
 			"Pending REGO",
 			"Pending FINO",
 			"Pending Registration",
