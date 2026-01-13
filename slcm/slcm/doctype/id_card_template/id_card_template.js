@@ -20,6 +20,10 @@ frappe.ui.form.on("ID Card Template", {
 		frm.trigger("render_editor");
 	},
 
+	card_type(frm) {
+		frm.trigger("render_editor");
+	},
+
 	render_editor(frm) {
 		if (frm.doc.template_creation_mode === "Drag and Drop") {
 			new IDCardEditor(frm);
@@ -1431,14 +1435,12 @@ class IDCardEditor {
                                 <label class="prop-label">ORIENTATION</label>
                                 <div class="btn-group btn-group-justified btn-group-sm">
                                     <div class="btn-group">
-                                        <button class="btn btn-default ${
-											this.data.orientation === "horizontal" ? "active" : ""
-										}" data-action="set_orientation" data-val="horizontal">Landscape</button>
+                                        <button class="btn btn-default ${this.data.orientation === "horizontal" ? "active" : ""
+			}" data-action="set_orientation" data-val="horizontal">Landscape</button>
                                     </div>
                                     <div class="btn-group">
-                                        <button class="btn btn-default ${
-											this.data.orientation === "vertical" ? "active" : ""
-										}" data-action="set_orientation" data-val="vertical">Portrait</button>
+                                        <button class="btn btn-default ${this.data.orientation === "vertical" ? "active" : ""
+			}" data-action="set_orientation" data-val="vertical">Portrait</button>
                                     </div>
                                 </div>
                             </div>
@@ -1446,14 +1448,12 @@ class IDCardEditor {
                                 <label class="prop-label">ACTIVE SIDE</label>
                                 <div class="btn-group btn-group-justified btn-group-sm">
                                     <div class="btn-group">
-                                        <button class="btn btn-default ${
-											this.current_side === "front" ? "active" : ""
-										}" data-side="front">Front</button>
+                                        <button class="btn btn-default ${this.current_side === "front" ? "active" : ""
+			}" data-side="front">Front</button>
                                     </div>
                                     <div class="btn-group">
-                                        <button class="btn btn-default ${
-											this.current_side === "back" ? "active" : ""
-										}" data-side="back">Back</button>
+                                        <button class="btn btn-default ${this.current_side === "back" ? "active" : ""
+			}" data-side="back">Back</button>
                                     </div>
                                 </div>
                             </div>
@@ -1477,24 +1477,16 @@ class IDCardEditor {
                              <button class="btn btn-default btn-block btn-xs tool-btn" data-action="add_shape" data-shape="footer">Add Footer</button>
                              <div style="margin-top: 5px;">
                                 <label class="checkbox-inline" style="font-size: 11px; margin-left: 0;">
-                                    <input type="checkbox" id="toggle-guides" ${
-										this.show_guides ? "checked" : ""
-									}> Show Guides
+                                    <input type="checkbox" id="toggle-guides" ${this.show_guides ? "checked" : ""
+			}> Show Guides
                                 </label>
                              </div>
 
                             <hr style="margin: 10px 0;">
                             <label class="prop-label">FIELDS</label>
-                            <button class="btn btn-default btn-block btn-xs tool-btn" data-action="add_field" data-field="student_name">Student Name</button>
-                            <button class="btn btn-default btn-block btn-xs tool-btn" data-action="add_field" data-field="photo">Student Photo</button>
-                            <button class="btn btn-default btn-block btn-xs tool-btn" data-action="add_field" data-field="student_id">Student ID</button>
-                            <button class="btn btn-default btn-block btn-xs tool-btn" data-action="add_field" data-field="blood_group">Blood Group</button>
-                            <button class="btn btn-default btn-block btn-xs tool-btn" data-action="add_field" data-field="qr_code_image">QR Code</button>
-                            <button class="btn btn-default btn-block btn-xs tool-btn" data-action="add_field" data-field="date_of_birth">Date of Birth</button>
-                            <button class="btn btn-default btn-block btn-xs tool-btn" data-action="add_field" data-field="academic_year">Academic Year</button>
-                            <button class="btn btn-default btn-block btn-xs tool-btn" data-action="add_field" data-field="program">Program</button>
-                            <button class="btn btn-default btn-block btn-xs tool-btn" data-action="add_field" data-field="email">Email</button>
-                            <button class="btn btn-default btn-block btn-xs tool-btn" data-action="add_field" data-field="phone">Phone</button>
+                            <hr style="margin: 10px 0;">
+                            <label class="prop-label">FIELDS</label>
+                            ${this.get_field_buttons_html()}
 
                             <hr style="margin: 10px 0;">
                             <label class="prop-label">INSTITUTE</label>
@@ -1542,14 +1534,13 @@ class IDCardEditor {
                                 transform: scale(${this.scale}); transform-origin: center center;
                                 border: 1px dashed transparent;
                             ">
-                                 ${
-										this.show_guides
-											? `
+                                 ${this.show_guides
+				? `
                                     <div style="position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: rgba(0, 150, 255, 0.5); transform: translateX(-50%);"></div>
                                     <div style="position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: rgba(0, 150, 255, 0.5); transform: translateY(-50%);"></div>
                                  `
-											: ""
-									}
+				: ""
+			}
                             </div>
                         </div>
                     </div>
@@ -1568,6 +1559,80 @@ class IDCardEditor {
 		this.show_properties(-1); // Default view
 		this.bind_events();
 		this.load_elements();
+	}
+
+	get_field_buttons_html() {
+		let type = this.frm.doc.card_type || "Student";
+		let fields = [];
+
+		// Common Fields
+		let common = [
+			{ label: "QR Code", field: "qr_code_image" },
+			{ label: "Issue Date", field: "issue_date" },
+			{ label: "Expiry Date", field: "expiry_date" },
+		];
+
+		if (type === "Student") {
+			fields = [
+				{ label: "Student Name", field: "student_name" },
+				{ label: "Student Photo", field: "photo" },
+				{ label: "Student ID", field: "student_id" },
+				{ label: "Blood Group", field: "blood_group" },
+				{ label: "Date of Birth", field: "date_of_birth" },
+				{ label: "Academic Year", field: "academic_year" },
+				{ label: "Program", field: "program" },
+				{ label: "Department", field: "department" },
+				{ label: "Email", field: "email" },
+				{ label: "Phone", field: "phone" },
+				{ label: "Address", field: "address" },
+			];
+		} else if (type === "Faculty") {
+			fields = [
+				{ label: "Faculty Name", field: "student_name", content: "[Faculty Name]" },
+				{ label: "Photo", field: "photo" },
+				{ label: "Employee ID", field: "student_id", content: "[Employee ID]" },
+				{ label: "Designation", field: "designation", content: "[Designation]" },
+				{ label: "Department", field: "department" },
+				{ label: "Email", field: "email" },
+				{ label: "Phone", field: "phone" },
+				{ label: "Blood Group", field: "blood_group" },
+			];
+		} else if (type === "Driver") {
+			fields = [
+				{ label: "Driver Name", field: "student_name", content: "[Driver Name]" },
+				{ label: "Photo", field: "photo" },
+				{ label: "Driver ID", field: "student_id", content: "[Driver ID]" },
+				{ label: "License No", field: "license_number", content: "[License No]" },
+				{ label: "Phone", field: "phone" },
+				{ label: "Blood Group", field: "blood_group" },
+			];
+		} else if (type === "Visitor") {
+			fields = [
+				{ label: "Visitor Name", field: "student_name", content: "[Visitor Name]" },
+				{ label: "Company", field: "visitor_company", content: "[Company]" },
+				{ label: "Phone", field: "phone" },
+				{ label: "Purpose", field: "purpose", content: "[Purpose]" },
+			];
+		} else if (type === "Non-Faculty") {
+			fields = [
+				{ label: "Staff Name", field: "student_name", content: "[Staff Name]" },
+				{ label: "Designation", field: "designation", content: "[Designation]" },
+				{ label: "Department", field: "department" },
+				{ label: "Company", field: "visitor_company", content: "[Company]" },
+				{ label: "Email", field: "email" },
+				{ label: "Phone", field: "phone" },
+			];
+		}
+
+		// Merge common
+		fields = fields.concat(common);
+
+		return fields
+			.map((f) => {
+				let contentAttr = f.content ? `data-content="${f.content}"` : "";
+				return `<button class="btn btn-default btn-block btn-xs tool-btn" data-action="add_field" data-field="${f.field}" ${contentAttr}>${f.label}</button>`;
+			})
+			.join("");
 	}
 
 	bind_events() {
@@ -1688,7 +1753,8 @@ class IDCardEditor {
 			} else {
 				el.type = "text";
 				el.mapping = field;
-				el.content = `[${$(e.currentTarget).text()}]`;
+				let customContent = $(e.currentTarget).data("content");
+				el.content = customContent ? customContent : `[${$(e.currentTarget).text()}]`;
 				el.style.fontSize = "12px";
 				el.style.fontWeight = "bold";
 				el.style.color = "#000000";
@@ -1785,9 +1851,8 @@ class IDCardEditor {
 			this.properties.html(`
                <div class="form-group">
                     <label class="prop-label">CANVAS BACKGROUND</label>
-                    <input type="color" class="form-control input-sm global-bg-change" value="${
-						this.data.bg_color[this.current_side] || "#ffffff"
-					}">
+                    <input type="color" class="form-control input-sm global-bg-change" value="${this.data.bg_color[this.current_side] || "#ffffff"
+				}">
                </div>
                <p class="text-muted text-center" style="margin-top: 20px;">Select an element to edit.</p>
              `);
@@ -1807,14 +1872,14 @@ class IDCardEditor {
                 <div class="col-xs-6">
                      <label class="prop-label">X POS</label>
                      <input type="number" class="form-control input-sm prop-change" data-prop="x" value="${Math.round(
-							el.x
-						)}">
+			el.x
+		)}">
                 </div>
                 <div class="col-xs-6">
                      <label class="prop-label">Y POS</label>
                      <input type="number" class="form-control input-sm prop-change" data-prop="y" value="${Math.round(
-							el.y
-						)}">
+			el.y
+		)}">
                 </div>
             </div>
         `;
@@ -1825,14 +1890,14 @@ class IDCardEditor {
                 <div class="col-xs-6">
                      <label class="prop-label">WIDTH</label>
                      <input type="number" class="form-control input-sm prop-change" data-prop="width" value="${Math.round(
-							el.width
-						)}">
+				el.width
+			)}">
                 </div>
                 <div class="col-xs-6">
                      <label class="prop-label">HEIGHT</label>
                      <input type="number" class="form-control input-sm prop-change" data-prop="height" value="${Math.round(
-							el.height
-						)}">
+				el.height
+			)}">
                 </div>
             </div>`;
 
@@ -1841,15 +1906,12 @@ class IDCardEditor {
                 <div style="margin-top: 10px;">
                     <label class="prop-label">SHAPE</label>
                     <select class="form-control input-sm shape-change">
-                        <option value="rect" ${
-							!el.shape || el.shape === "rect" ? "selected" : ""
-						}>Rectangle</option>
-                        <option value="circle" ${
-							el.shape === "circle" ? "selected" : ""
-						}>Circle</option>
-                        <option value="triangle" ${
-							el.shape === "triangle" ? "selected" : ""
-						}>Triangle</option>
+                        <option value="rect" ${!el.shape || el.shape === "rect" ? "selected" : ""
+					}>Rectangle</option>
+                        <option value="circle" ${el.shape === "circle" ? "selected" : ""
+					}>Circle</option>
+                        <option value="triangle" ${el.shape === "triangle" ? "selected" : ""
+					}>Triangle</option>
                     </select>
                 </div>`;
 			}
@@ -1871,57 +1933,47 @@ class IDCardEditor {
                     <div class="col-xs-6">
                         <label class="prop-label" style="font-weight:normal">Style</label>
                         <select class="form-control input-sm border-change" data-key="style">
-                            <option value="none" ${
-								bs.style === "none" ? "selected" : ""
-							}>None</option>
-                            <option value="solid" ${
-								bs.style === "solid" ? "selected" : ""
-							}>Solid</option>
-                            <option value="double" ${
-								bs.style === "double" ? "selected" : ""
-							}>Double</option>
-                            <option value="dashed" ${
-								bs.style === "dashed" ? "selected" : ""
-							}>Dashed</option>
+                            <option value="none" ${bs.style === "none" ? "selected" : ""
+				}>None</option>
+                            <option value="solid" ${bs.style === "solid" ? "selected" : ""
+				}>Solid</option>
+                            <option value="double" ${bs.style === "double" ? "selected" : ""
+				}>Double</option>
+                            <option value="dashed" ${bs.style === "dashed" ? "selected" : ""
+				}>Dashed</option>
                         </select>
                     </div>
                     <div class="col-xs-6">
                         <label class="prop-label" style="font-weight:normal">Width (px)</label>
-                        <input type="number" class="form-control input-sm border-change" data-key="width" value="${
-							bs.width
-						}">
+                        <input type="number" class="form-control input-sm border-change" data-key="width" value="${bs.width
+				}">
                     </div>
                 </div>
                 <div class="row" style="margin-top: 5px;">
                     <div class="col-xs-12">
                         <label class="prop-label" style="font-weight:normal">Color</label>
-                        <input type="color" class="form-control input-sm border-change" data-key="color" value="${
-							bs.color
-						}">
+                        <input type="color" class="form-control input-sm border-change" data-key="color" value="${bs.color
+				}">
                     </div>
                 </div>
                 <div class="row" style="margin-top: 5px;">
                     <div class="col-xs-12">
                         <label class="prop-label" style="font-weight:normal">Sides</label>
                         <label class="checkbox-inline" style="font-size: 11px;">
-                            <input type="checkbox" class="border-change" data-key="top" ${
-								bs.top ? "checked" : ""
-							}> Top
+                            <input type="checkbox" class="border-change" data-key="top" ${bs.top ? "checked" : ""
+				}> Top
                         </label>
                         <label class="checkbox-inline" style="font-size: 11px;">
-                             <input type="checkbox" class="border-change" data-key="bottom" ${
-									bs.bottom ? "checked" : ""
-								}> Bot
+                             <input type="checkbox" class="border-change" data-key="bottom" ${bs.bottom ? "checked" : ""
+				}> Bot
                         </label>
                         <label class="checkbox-inline" style="font-size: 11px;">
-                             <input type="checkbox" class="border-change" data-key="left" ${
-									bs.left ? "checked" : ""
-								}> Left
+                             <input type="checkbox" class="border-change" data-key="left" ${bs.left ? "checked" : ""
+				}> Left
                         </label>
                         <label class="checkbox-inline" style="font-size: 11px;">
-                             <input type="checkbox" class="border-change" data-key="right" ${
-									bs.right ? "checked" : ""
-								}> Right
+                             <input type="checkbox" class="border-change" data-key="right" ${bs.right ? "checked" : ""
+				}> Right
                         </label>
                     </div>
                 </div>
@@ -1946,21 +1998,18 @@ class IDCardEditor {
 		if (el.type === "text") {
 			html += `<hr style="margin: 10px 0;">
                 <label class="prop-label">TEXT CONTENT</label>
-                <input type="text" class="form-control input-sm prop-change" data-prop="content" value="${
-					el.content
+                <input type="text" class="form-control input-sm prop-change" data-prop="content" value="${el.content
 				}" ${el.mapping ? "readonly" : ""}>
                 <div class="row" style="margin-top:5px;">
                     <div class="col-xs-6">
                         <label class="prop-label">SIZE</label>
-                        <input type="text" class="form-control input-sm style-change" data-style="fontSize" value="${
-							el.style.fontSize
-						}">
+                        <input type="text" class="form-control input-sm style-change" data-style="fontSize" value="${el.style.fontSize
+				}">
                     </div>
                     <div class="col-xs-6">
                         <label class="prop-label">COLOR</label>
-                        <input type="color" class="form-control input-sm style-change" data-style="color" value="${
-							el.style.color
-						}">
+                        <input type="color" class="form-control input-sm style-change" data-style="color" value="${el.style.color
+				}">
                     </div>
                 </div>`;
 		} else if (el.type === "rect") {

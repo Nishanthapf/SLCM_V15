@@ -427,7 +427,13 @@ class IDCardGeneration(Document):
 			# Helper map
 			field_map = {
 				"[Student Name]": self.student_name,
+				"[Faculty Name]": self.student_name,
+				"[Driver Name]": self.student_name,
+				"[Visitor Name]": self.student_name,
+				"[Staff Name]": self.student_name,
 				"[Student ID]": self.name,
+				"[Employee ID]": self.faculty,
+				"[Driver ID]": self.driver,
 				"[Blood Group]": getattr(student, "blood_group", ""),
 				"[Phone]": self.phone,
 				"[Email]": self.email,
@@ -438,6 +444,10 @@ class IDCardGeneration(Document):
 				"[Institute Name]": template.institute_name,
 				"[Institute Address]": template.institute_address,
 				"[Address]": getattr(student, "state_of_domicile", ""),
+				"[Designation]": self.designation,
+				"[Company]": self.visitor_company,
+				"[License No]": getattr(student, "license_number", ""),
+				"[Purpose]": self.remarks,
 			}
 
 			for key, val in field_map.items():

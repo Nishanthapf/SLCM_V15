@@ -162,7 +162,7 @@ class IDCardGenerationTool(Document):
 
 		# Constants for A4 at 300 DPI
 		A4_WIDTH, A4_HEIGHT = 2480, 3508
-		CARD_WIDTH_MM, CARD_HEIGHT_MM = 86, 54
+		CARD_WIDTH_MM, CARD_HEIGHT_MM = 85.6, 53.98
 		dpmm = 300 / 25.4
 
 		# Card size in pixels
