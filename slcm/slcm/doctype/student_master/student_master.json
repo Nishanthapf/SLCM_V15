@@ -18,11 +18,6 @@
         "academic_year",
         "current_year",
         "academic_status",
-        "applying_scholarship",
-        "scholarship_amount",
-        "scholarship_percentage",
-        "scholarship_approval_date",
-        "number_of_instalments",
         "official_email_id",
         "user",
         "naming_series",
@@ -99,6 +94,27 @@
         "student_status",
         "account_status",
         "status_remark",
+        "status_remark",
+        "tab_finance",
+        "finance_section",
+        "applying_scholarship",
+        "scholarship_amount",
+        "scholarship_percentage",
+        "scholarship_approval_date",
+        "number_of_instalments",
+        "fee_details_section",
+        "total_program_fee",
+        "discount_amount",
+        "net_program_fee",
+        "total_paid_amount",
+        "outstanding_balance",
+        "fee_payment_status",
+        "bank_details_section",
+        "bank_name",
+        "bank_account_number",
+        "ifsc_code",
+        "branch_name",
+        "account_holder_name",
         "tab_documents",
         "personal_documents_section",
         "aadhaar_card",
@@ -181,6 +197,16 @@
             "options": "Active\nInactive"
         },
         {
+            "fieldname": "tab_finance",
+            "fieldtype": "Tab Break",
+            "label": "Finance"
+        },
+        {
+            "fieldname": "finance_section",
+            "fieldtype": "Section Break",
+            "label": "Scholarship Details"
+        },
+        {
             "fieldname": "applying_scholarship",
             "fieldtype": "Select",
             "label": "Applying for Scholarship",
@@ -208,6 +234,74 @@
             "fieldname": "number_of_instalments",
             "fieldtype": "Int",
             "label": "Number of Instalments"
+        },
+        {
+            "fieldname": "fee_details_section",
+            "fieldtype": "Section Break",
+            "label": "Fee Details"
+        },
+        {
+            "fieldname": "total_program_fee",
+            "fieldtype": "Currency",
+            "label": "Total Program Fee"
+        },
+        {
+            "fieldname": "discount_amount",
+            "fieldtype": "Currency",
+            "label": "Discount Amount",
+            "read_only": 1
+        },
+        {
+            "fieldname": "net_program_fee",
+            "fieldtype": "Currency",
+            "label": "Net Program Fee",
+            "read_only": 1
+        },
+        {
+            "fieldname": "total_paid_amount",
+            "fieldtype": "Currency",
+            "label": "Total Paid Amount"
+        },
+        {
+            "fieldname": "outstanding_balance",
+            "fieldtype": "Currency",
+            "label": "Outstanding Balance"
+        },
+        {
+            "fieldname": "fee_payment_status",
+            "fieldtype": "Select",
+            "label": "Fee Payment Status",
+            "options": "Paid\nPartially Paid\nUnpaid"
+        },
+        {
+            "fieldname": "bank_details_section",
+            "fieldtype": "Section Break",
+            "label": "Bank Details"
+        },
+        {
+            "fieldname": "bank_name",
+            "fieldtype": "Data",
+            "label": "Bank Name"
+        },
+        {
+            "fieldname": "bank_account_number",
+            "fieldtype": "Data",
+            "label": "Bank Account Number"
+        },
+        {
+            "fieldname": "ifsc_code",
+            "fieldtype": "Data",
+            "label": "IFSC Code"
+        },
+        {
+            "fieldname": "branch_name",
+            "fieldtype": "Data",
+            "label": "Branch Name"
+        },
+        {
+            "fieldname": "account_holder_name",
+            "fieldtype": "Data",
+            "label": "Account Holder Name"
         },
         {
             "fieldname": "tab_program_mapping",

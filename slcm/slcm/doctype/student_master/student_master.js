@@ -76,6 +76,43 @@ frappe.ui.form.on("Student Master", {
 			});
 		}
 	},
+
+	total_program_fee(frm) {
+		frm.trigger("calculate_fees");
+	},
+
+	scholarship_percentage(frm) {
+		frm.trigger("calculate_fees");
+	},
+
+	total_paid_amount(frm) {
+		frm.trigger("calculate_fees");
+	},
+
+	applying_scholarship(frm) {
+		if (frm.doc.applying_scholarship !== "Yes") {
+			frm.set_value("scholarship_percentage", 0);
+		}
+		frm.trigger("calculate_fees");
+	},
+
+	calculate_fees(frm) {
+		let total_fee = frm.doc.total_program_fee || 0;
+		let scholarship_pct = frm.doc.scholarship_percentage || 0;
+		let paid_amount = frm.doc.total_paid_amount || 0;
+
+		if (frm.doc.applying_scholarship !== "Yes") {
+			scholarship_pct = 0;
+		}
+
+		let discount = (total_fee * scholarship_pct) / 100;
+		let net_fee = total_fee - discount;
+		let balance = net_fee - paid_amount;
+
+		frm.set_value("discount_amount", discount);
+		frm.set_value("net_program_fee", net_fee);
+		frm.set_value("outstanding_balance", balance);
+	},
 });
 
 function show_status_transition_dialog(frm, data) {
