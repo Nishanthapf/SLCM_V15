@@ -16,10 +16,10 @@ frappe.listview_settings["Student Master"] = {
 	},
 
 	get_indicator(doc) {
-		const status = doc.registration_status || "Draft";
+		const status = doc.registration_status || "Selected";
 
 		const status_config = {
-			Draft: ["Draft", "grey", "registration_status,=,Draft"],
+			Selected: ["Selected", "grey", "registration_status,=,Selected"],
 			"Pending REGO": ["Pending REGO", "orange", "registration_status,=,Pending REGO"],
 			"Pending FINO": ["Pending FINO", "red", "registration_status,=,Pending FINO"],
 			"Pending Registration": [
@@ -38,6 +38,7 @@ frappe.listview_settings["Student Master"] = {
 				"registration_status,=,Pending Residences",
 			],
 			"Pending IT": ["Pending IT", "pink", "registration_status,=,Pending IT"],
+			"Final Verification REGO": ["Final Verification REGO", "cyan", "registration_status,=,Final Verification REGO"],
 			Completed: ["Completed", "green", "registration_status,=,Completed"],
 		};
 
@@ -50,15 +51,16 @@ frappe.listview_settings["Student Master"] = {
 
 	formatters: {
 		registration_status(value, field, doc) {
-			const status = value || "Draft";
+			const status = value || "Selected";
 			const status_colors = {
-				Draft: "grey",
+				Selected: "grey",
 				"Pending REGO": "orange",
 				"Pending FINO": "red",
 				"Pending Registration": "blue",
 				"Pending Print & Scan": "yellow",
 				"Pending Residences": "purple",
 				"Pending IT": "pink",
+				"Final Verification REGO": "cyan",
 				Completed: "green",
 			};
 
@@ -171,20 +173,21 @@ function add_bulk_delete_button(listview) {
 
 function show_bulk_status_dialog(listview, selected) {
 	const statuses = [
-		"Draft",
+		"Selected",
 		"Pending REGO",
 		"Pending FINO",
 		"Pending Registration",
 		"Pending Print & Scan",
 		"Pending Residences",
 		"Pending IT",
+		"Final Verification REGO",
 		"Completed",
 	];
 
 	// Get current statuses for selected students
 	const status_summary = {};
 	selected.forEach((student) => {
-		const status = student.registration_status || "Draft";
+		const status = student.registration_status || "Selected";
 		status_summary[status] = (status_summary[status] || 0) + 1;
 	});
 
@@ -267,10 +270,9 @@ function show_bulk_status_dialog(listview, selected) {
 								} else {
 									error_count++;
 									errors.push(
-										`${student.name}: ${
-											r.message
-												? r.message.message || r.message
-												: "Unknown error"
+										`${student.name}: ${r.message
+											? r.message.message || r.message
+											: "Unknown error"
 										}`
 									);
 								}
@@ -390,6 +392,11 @@ function inject_status_css() {
 		.indicator-pill.pink {
 			background-color: #fce4ec !important;
 			color: #c2185b !important;
+			font-weight: 600;
+		}
+		.indicator-pill.cyan {
+			background-color: #e0f7fa !important;
+			color: #006064 !important;
 			font-weight: 600;
 		}
 		.indicator-pill.green {
