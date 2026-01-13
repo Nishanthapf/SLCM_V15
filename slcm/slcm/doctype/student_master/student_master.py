@@ -123,7 +123,8 @@ def update_registration_status(student_id, new_status, remarks=None):
 		"Pending Print & Scan": ["Registration Officer", "System Manager"],
 		"Pending Residences": ["Documentation Officer", "System Manager"],
 		"Pending IT": ["Residence / Hostel Admin", "System Manager"],
-		"Completed": ["IT Admin", "System Manager"],
+		"Final Verification REGO": ["IT Admin", "System Manager"],
+		"Completed": ["Registration Officer", "System Manager"],
 		"Draft": ["System Manager"],  # Only System Manager can re-open
 	}
 
@@ -148,7 +149,8 @@ def update_registration_status(student_id, new_status, remarks=None):
 		"Pending Registration": ["Pending Print & Scan"],
 		"Pending Print & Scan": ["Pending Residences"],
 		"Pending Residences": ["Pending IT"],
-		"Pending IT": ["Completed"],
+		"Pending IT": ["Final Verification REGO"],
+		"Final Verification REGO": ["Completed"],
 		"Completed": ["Draft"],
 	}
 
@@ -182,6 +184,9 @@ def update_registration_status(student_id, new_status, remarks=None):
 	except Exception as e:
 		frappe.db.rollback()
 		frappe.throw(_("Error updating status: {0}").format(str(e)))
+
+	if new_status == "Completed":
+		send_completion_email(student)
 
 	return {"status": "success", "message": _("Status updated to {0}").format(new_status)}
 
@@ -230,8 +235,13 @@ def get_available_status_actions(student_id):
 		},
 		"Pending IT": {
 			"action": "Allocate Assets",
-			"next_state": "Completed",
+			"next_state": "Final Verification REGO",
 			"roles": ["IT Admin", "System Manager"],
+		},
+		"Final Verification REGO": {
+			"action": "Complete Registration",
+			"next_state": "Completed",
+			"roles": ["Registration Officer", "System Manager"],
 		},
 		"Completed": {"action": "Re-Open", "next_state": "Draft", "roles": ["System Manager"]},
 	}
@@ -248,6 +258,7 @@ def get_available_status_actions(student_id):
 			"Pending Print & Scan",
 			"Pending Residences",
 			"Pending IT",
+			"Final Verification REGO",
 			"Completed",
 		]
 		for state in all_states:
@@ -342,9 +353,26 @@ def validate_transition_requirements(student, new_status):
 			if not student.keys_handed_over:
 				frappe.throw(_("Cannot move to Pending IT. Keys must be handed over."))
 
-	elif new_status == "Completed":
-		# Pending IT -> Completed
-		# IT Check: Official Email
+	elif new_status == "Final Verification REGO":
+		# Pending IT -> Final Verification REGO
+		# Check Official Email ID
 		if not student.official_email_id:
-			frappe.throw(_("Cannot complete. Official Email ID must be set."))
+			frappe.throw(_("Cannot move to Final Verification. Official Email ID must be set."))
 
+	elif new_status == "Completed":
+		# Final Verification REGO -> Completed
+		# No specific mandatory field check for this step, just final approval
+		pass
+
+
+def send_completion_email(student):
+	if student.email:
+		subject = "Registration Completed"
+		message = f"""
+			<p>Dear {student.first_name},</p>
+			<p>Congratulations! Your registration process is now complete.</p>
+			<p>Your official student email ID is: {student.official_email_id}</p>
+			<p>Regards,<br>Institute Administration</p>
+		"""
+		frappe.sendmail(recipients=[student.email], subject=subject, message=message)
+		frappe.msgprint(_("Completion email sent to {0}").format(student.email))
