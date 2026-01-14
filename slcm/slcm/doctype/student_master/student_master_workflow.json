@@ -46,6 +46,11 @@
             "allow_edit": "IT Admin"
         },
         {
+            "state": "Draft",
+            "doc_status": 0,
+            "allow_edit": "System Manager"
+        },
+        {
             "state": "Completed",
             "doc_status": 1,
             "allow_edit": "System Manager"
@@ -53,10 +58,22 @@
     ],
     "transitions": [
         {
+            "state": "Draft",
+            "action": "Select",
+            "next_state": "Selected",
+            "allowed": "System Manager"
+        },
+        {
             "state": "Selected",
             "action": "Submit for REGO",
             "next_state": "Pending REGO",
-            "allowed": "Student,Registration User"
+            "allowed": "Student"
+        },
+        {
+            "state": "Selected",
+            "action": "Submit for REGO",
+            "next_state": "Pending REGO",
+            "allowed": "Registration User"
         },
         {
             "state": "Pending REGO",

@@ -19,6 +19,7 @@ frappe.listview_settings["Student Master"] = {
 		const status = doc.registration_status || "Selected";
 
 		const status_config = {
+			Draft: ["Draft", "grey", "registration_status,=,Draft"],
 			Selected: ["Selected", "grey", "registration_status,=,Selected"],
 			"Pending REGO": ["Pending REGO", "orange", "registration_status,=,Pending REGO"],
 			"Pending FINO": ["Pending FINO", "red", "registration_status,=,Pending FINO"],

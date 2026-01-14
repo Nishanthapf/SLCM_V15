@@ -47,6 +47,7 @@ class StudentMaster(Document):
 
 		# Define valid transitions
 		valid_transitions = {
+			"Draft": ["Selected"],
 			"Selected": ["Pending REGO"],
 			"Pending REGO": ["Pending FINO"],
 			"Pending FINO": ["Pending Registration"],
@@ -162,6 +163,7 @@ def update_registration_status(student_id, new_status, remarks=None):
 
 	# Validate transition sequence
 	valid_transitions = {
+		"Draft": ["Selected"],
 		"Selected": ["Pending REGO"],
 		"Pending REGO": ["Pending FINO"],
 		"Pending FINO": ["Pending Registration"],
