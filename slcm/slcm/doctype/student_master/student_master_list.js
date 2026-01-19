@@ -11,6 +11,7 @@ frappe.listview_settings["Student Master"] = {
 		add_listview_status_actions(listview);
 		add_listview_status_button(listview);
 		add_bulk_delete_button(listview);
+		add_bulk_enroll_button(listview);
 		// Ensure status column is visible
 		ensure_status_column_visible(listview);
 	},
@@ -39,7 +40,11 @@ frappe.listview_settings["Student Master"] = {
 				"registration_status,=,Pending Residences",
 			],
 			"Pending IT": ["Pending IT", "pink", "registration_status,=,Pending IT"],
-			"Final Verification REGO": ["Final Verification REGO", "cyan", "registration_status,=,Final Verification REGO"],
+			"Final Verification REGO": [
+				"Final Verification REGO",
+				"cyan",
+				"registration_status,=,Final Verification REGO",
+			],
 			Completed: ["Completed", "green", "registration_status,=,Completed"],
 		};
 
@@ -172,6 +177,89 @@ function add_bulk_delete_button(listview) {
 	);
 }
 
+/* --------------------------------------------------
+   List View → Bulk Enroll
+-------------------------------------------------- */
+function add_bulk_enroll_button(listview) {
+	const btn = listview.page.add_inner_button(__("Enroll"), function () {
+		const selected = listview.get_checked_items();
+
+		if (selected.length === 0) {
+			frappe.msgprint({
+				title: __("No Selection"),
+				message: __("Please select at least one student to enroll."),
+				indicator: "orange",
+			});
+			return;
+		}
+
+		frappe.confirm(
+			__(
+				"Are you sure you want to enroll {0} student(s)? This will create new Enrollment records for eligible students.",
+				[selected.length]
+			),
+			function () {
+				const names = selected.map((row) => row.name);
+
+				frappe.call({
+					method: "slcm.slcm.doctype.student_master.student_master.bulk_student_enrollment",
+					args: {
+						students: names,
+					},
+					freeze: true,
+					freeze_message: __("Enrolling students..."),
+					callback: function (r) {
+						if (r.message) {
+							const success_count = r.message.success.length;
+							const failure_count = r.message.failed.length;
+
+							let message = `Successfully enrolled: <b>${success_count}</b>`;
+							let indicator = "green";
+
+							if (failure_count > 0) {
+								indicator = "orange"; // Warning if some failed
+								message += `<br>Failed: <b>${failure_count}</b>`;
+								message += "<br><br><b>Reasons:</b><ul>";
+								r.message.failed.forEach((f) => {
+									message += `<li>${f.student}: ${f.reason}</li>`;
+								});
+								message += "</ul>";
+
+								// Clean up message if too long
+								if (r.message.failed.length > 5) {
+									message = `Successfully enrolled: <b>${success_count}</b><br>Failed: <b>${failure_count}</b><br>(Check logs for details)`;
+								}
+
+								frappe.msgprint({
+									title: __("Bulk Enrollment Results"),
+									message: message,
+									indicator: indicator,
+								});
+							} else {
+								frappe.show_alert({
+									message: message,
+									indicator: "green",
+								});
+							}
+
+							listview.refresh();
+						}
+					},
+				});
+			}
+		);
+	});
+
+	// Style the button
+	btn.css({
+		"background-color": "black",
+		color: "white",
+		"border-color": "black",
+		"box-shadow": "none",
+	});
+	btn.addClass("btn-black-enroll");
+}
+
 function show_bulk_status_dialog(listview, selected) {
 	const statuses = [
 		"Selected",
@@ -271,9 +359,10 @@ function show_bulk_status_dialog(listview, selected) {
 								} else {
 									error_count++;
 									errors.push(
-										`${student.name}: ${r.message
-											? r.message.message || r.message
-											: "Unknown error"
+										`${student.name}: ${
+											r.message
+												? r.message.message || r.message
+												: "Unknown error"
 										}`
 									);
 								}

@@ -381,3 +381,108 @@ def validate_transition_requirements(student, new_status):
 		# Final Verification REGO -> Completed
 		# No specific mandatory field check for this step, just final approval
 		pass
+
+
+@frappe.whitelist()
+def validate_new_enrollment(student_id):
+	"""
+	Validate if a student can be enrolled.
+	Checks:
+	1. Student is Active
+	2. Registration is saved (implicitly true if calling this)
+	3. No existing enrollment for the same Cohort
+	"""
+	try:
+		student = frappe.get_doc("Student Master", student_id)
+	except frappe.DoesNotExistError:
+		return {"allowed": False, "message": "Student record not found."}
+
+	# Check if disabled/inactive
+	# Checking both academic_status and student_status for safety
+	if student.academic_status == "Inactive":
+		return {"allowed": False, "message": "Student Academic Status is Inactive."}
+
+	if student.student_status == "Inactive":
+		return {"allowed": False, "message": "Student Status is Inactive."}
+
+	# Check if registration workflow is completed
+	if student.registration_status != "Completed":
+		return {
+			"allowed": False,
+			"message": f"Student Registration Status is '{student.registration_status}'. Must be 'Completed' to enroll.",
+		}
+
+	# Check required fields for enrollment
+	if not student.programme:
+		return {"allowed": False, "message": "Programme (Cohort) is not set in Student Master."}
+
+	# Check for duplicate enrollment
+	# We check for same Student AND Same Cohort
+	existing_enrollment = frappe.db.exists(
+		"Student Enrollment",
+		{
+			"student": student.name,
+			"cohort": student.programme,
+			"docstatus": ["<", 2],  # Not cancelled
+		},
+	)
+
+	if existing_enrollment:
+		return {
+			"allowed": False,
+			"message": f"Student is already enrolled in this Cohort ({student.programme}). Enrollment ID: {existing_enrollment}",
+		}
+
+	return {"allowed": True}
+
+
+@frappe.whitelist()
+def bulk_student_enrollment(students):
+	"""
+	Bulk enroll students.
+	Args:
+		students: List of student IDs or JSON string of list
+	"""
+	import json
+
+	if isinstance(students, str):
+		students = json.loads(students)
+
+	success = []
+	failed = []
+
+	for student_id in students:
+		# Repurpose the validation logic we just wrote
+		validation = validate_new_enrollment(student_id)
+
+		if not validation.get("allowed"):
+			failed.append({"student": student_id, "reason": validation.get("message")})
+			continue
+
+		try:
+			student = frappe.get_doc("Student Master", student_id)
+
+			new_enrollment = frappe.get_doc(
+				{
+					"doctype": "Student Enrollment",
+					"student": student.name,
+					"student_name": " ".join(
+						filter(None, [student.first_name, student.middle_name, student.last_name])
+					),
+					"cohort": student.programme,
+					"data_xgxm": student.batch_year,
+					"academic_year": student.academic_year,
+					# Default status is typically handled by DocType default, but can ensure here
+					"status": "Enrolled",
+					"enrollment_date": frappe.utils.today(),
+				}
+			)
+
+			new_enrollment.insert()
+			success.append(student_id)
+
+		except Exception as e:
+			frappe.log_error("Bulk Enrollment Error", str(e))
+			failed.append({"student": student_id, "reason": str(e)})
+
+	return {"success": success, "failed": failed}

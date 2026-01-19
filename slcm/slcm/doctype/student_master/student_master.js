@@ -18,6 +18,52 @@ frappe.ui.form.on("Student Master", {
 				},
 				__("Update Status")
 			).addClass("btn-primary");
+
+			// Check Enrollment Eligibility and Add Button
+			frappe.call({
+				method: "slcm.slcm.doctype.student_master.student_master.validate_new_enrollment",
+				args: {
+					student_id: frm.doc.name,
+				},
+				callback: function (r) {
+					if (r.message && r.message.allowed) {
+						frm.add_custom_button(__("Enroll"), function () {
+							// Re-validate on click to prevent race conditions
+							frappe.call({
+								method: "slcm.slcm.doctype.student_master.student_master.validate_new_enrollment",
+								args: {
+									student_id: frm.doc.name,
+								},
+								callback: function (r2) {
+									if (r2.message && r2.message.allowed) {
+										frappe.new_doc("Student Enrollment", {
+											student: frm.doc.name,
+											student_name: [
+												frm.doc.first_name,
+												frm.doc.middle_name,
+												frm.doc.last_name,
+											]
+												.filter(Boolean)
+												.join(" "),
+											cohort: frm.doc.programme,
+											data_xgxm: frm.doc.batch_year, // Batch
+											academic_year: frm.doc.academic_year,
+										});
+									} else {
+										frappe.msgprint({
+											title: __("Not Allowed"),
+											message: r2.message
+												? r2.message.message
+												: __("Enrollment not allowed."),
+											indicator: "orange",
+										});
+									}
+								},
+							});
+						}).addClass("btn-primary");
+					}
+				},
+			});
 		}
 	},
 

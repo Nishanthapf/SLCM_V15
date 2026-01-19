@@ -10,6 +10,31 @@ class StudentEnrollment(Document):
 	def validate(self):
 		self.validate_duplicate_enrollment()
 
+	def before_save(self):
+		self.fetch_program_and_courses()
+
+	def fetch_program_and_courses(self):
+		# 1. Ensure Program is set if Cohort is present
+		if not self.program and self.cohort:
+			self.program = frappe.db.get_value("Cohort", self.cohort, "program")
+
+		# 2. Fetch courses if program is set and table is empty
+		if self.program and not self.table_hxbo:
+			program_doc = frappe.get_doc("Program", self.program)
+
+			if program_doc.table_fela:
+				for pc in program_doc.table_fela:
+					self.append(
+						"table_hxbo",
+						{
+							"course": pc.course,
+							"course_name": pc.course_name,
+							"course_type": pc.course_type,
+							"course_status": pc.course_status,
+							"credit_value": pc.credit_value,
+						},
+					)
+
 	def validate_duplicate_enrollment(self):
 		"""Prevent duplicate enrollment for same student, cohort, and academic year"""
 		filters = {

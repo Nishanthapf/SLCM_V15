@@ -3,7 +3,7 @@
  "allow_import": 1,
  "allow_rename": 1,
  "autoname": "FS-.YYYY.-.#####",
- "creation": "2025-12-31 12:00:00.000000",
+ "creation": "2025-12-31 12:00:00",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
@@ -93,7 +93,7 @@
   }
  ],
  "links": [],
- "modified": "2025-12-31 12:00:00.000000",
+ "modified": "2026-01-19 16:59:34.238479",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "Fee Structure",
@@ -119,4 +119,3 @@
  "states": [],
  "title_field": "fee_structure_name"
 }
-
