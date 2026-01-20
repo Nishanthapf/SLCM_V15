@@ -1,0 +1,86 @@
+{
+    "actions": [],
+    "allow_import": 1,
+    "allow_rename": 1,
+    "creation": "2026-01-20 15:00:00.000000",
+    "doctype": "DocType",
+    "engine": "InnoDB",
+    "field_order": [
+        "setup_curriculum_tab",
+        "department",
+        "program",
+        "academic_year",
+        "section_break_ui",
+        "ui_container",
+        "settings_tab",
+        "enrollment_types"
+    ],
+    "fields": [
+        {
+            "fieldname": "setup_curriculum_tab",
+            "fieldtype": "Tab Break",
+            "label": "Set-Up Curriculum"
+        },
+        {
+            "fieldname": "department",
+            "fieldtype": "Link",
+            "label": "Department",
+            "options": "Department"
+        },
+        {
+            "fieldname": "program",
+            "fieldtype": "Link",
+            "label": "Programmes",
+            "options": "Program"
+        },
+        {
+            "fieldname": "academic_year",
+            "fieldtype": "Link",
+            "label": "Year",
+            "options": "Academic Year"
+        },
+        {
+            "fieldname": "section_break_ui",
+            "fieldtype": "Section Break"
+        },
+        {
+            "fieldname": "ui_container",
+            "fieldtype": "HTML",
+            "label": "UI Container"
+        },
+        {
+            "fieldname": "settings_tab",
+            "fieldtype": "Tab Break",
+            "label": "Settings"
+        },
+        {
+            "fieldname": "enrollment_types",
+            "fieldtype": "Table",
+            "label": "Enrollment Types",
+            "options": "Curriculum Enrollment Type"
+        }
+    ],
+    "issingle": 1,
+    "links": [],
+    "modified": "2026-01-20 15:00:00.000000",
+    "modified_by": "Administrator",
+    "module": "SLCM",
+    "name": "Curriculum Management",
+    "owner": "Administrator",
+    "permissions": [
+        {
+            "create": 1,
+            "delete": 1,
+            "email": 1,
+            "print": 1,
+            "read": 1,
+            "report": 1,
+            "role": "System Manager",
+            "share": 1,
+            "write": 1
+        }
+    ],
+    "sort_field": "modified",
+    "sort_order": "DESC",
+    "states": []
+}

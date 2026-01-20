@@ -1,0 +1,88 @@
+{
+    "actions": [],
+    "allow_rename": 1,
+    "creation": "2026-01-20 15:00:00.000000",
+    "doctype": "DocType",
+    "editable_grid": 1,
+    "engine": "InnoDB",
+    "field_order": [
+        "semester",
+        "course_group_type",
+        "course",
+        "enrollment_type",
+        "cluster_name",
+        "min_courses",
+        "max_courses",
+        "credits"
+    ],
+    "fields": [
+        {
+            "fieldname": "semester",
+            "fieldtype": "Data",
+            "in_list_view": 1,
+            "label": "Semester",
+            "reqd": 1
+        },
+        {
+            "default": "Course",
+            "fieldname": "course_group_type",
+            "fieldtype": "Select",
+            "in_list_view": 1,
+            "label": "Type",
+            "options": "Course\nCluster",
+            "reqd": 1
+        },
+        {
+            "depends_on": "eval:doc.course_group_type=='Course'",
+            "fieldname": "course",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "label": "Course",
+            "options": "Course"
+        },
+        {
+            "fieldname": "enrollment_type",
+            "fieldtype": "Data",
+            "in_list_view": 1,
+            "label": "Enrollment Type"
+        },
+        {
+            "depends_on": "eval:doc.course_group_type=='Cluster'",
+            "fieldname": "cluster_name",
+            "fieldtype": "Data",
+            "in_list_view": 1,
+            "label": "Cluster Name"
+        },
+        {
+            "depends_on": "eval:doc.course_group_type=='Cluster'",
+            "fieldname": "min_courses",
+            "fieldtype": "Int",
+            "label": "Minimum Courses"
+        },
+        {
+            "depends_on": "eval:doc.course_group_type=='Cluster'",
+            "fieldname": "max_courses",
+            "fieldtype": "Int",
+            "label": "Maximum Courses"
+        },
+        {
+            "fetch_from": "course.credit_value",
+            "fieldname": "credits",
+            "fieldtype": "Int",
+            "in_list_view": 1,
+            "label": "Credits",
+            "read_only": 1
+        }
+    ],
+    "istable": 1,
+    "links": [],
+    "modified": "2026-01-20 15:00:00.000000",
+    "modified_by": "Administrator",
+    "module": "SLCM",
+    "name": "Curriculum Course",
+    "owner": "Administrator",
+    "permissions": [],
+    "sort_field": "modified",
+    "sort_order": "DESC",
+    "states": []
+}
