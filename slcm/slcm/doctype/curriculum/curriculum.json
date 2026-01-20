@@ -10,6 +10,7 @@
         "department",
         "program",
         "academic_year",
+        "academic_system",
         "section_break_courses",
         "curriculum_courses"
     ],
@@ -39,6 +40,15 @@
             "in_standard_filter": 1,
             "label": "Academic Year",
             "options": "Academic Year",
+            "reqd": 1
+        },
+        {
+            "default": "Semester",
+            "fieldname": "academic_system",
+            "fieldtype": "Select",
+            "in_list_view": 1,
+            "label": "Academic System",
+            "options": "Semester\nTrimester\nQuarter\nYear",
             "reqd": 1
         },
         {

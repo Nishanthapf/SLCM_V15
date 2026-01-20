@@ -10,6 +10,7 @@
         "department",
         "program",
         "academic_year",
+        "academic_system",
         "section_break_ui",
         "ui_container",
         "settings_tab",
@@ -38,6 +39,14 @@
             "fieldtype": "Link",
             "label": "Year",
             "options": "Academic Year"
+        },
+        {
+            "default": "Semester",
+            "fieldname": "academic_system",
+            "fieldtype": "Select",
+            "label": "Academic System",
+            "options": "Semester\nTrimester\nQuarter\nYear",
+            "reqd": 1
         },
         {
             "fieldname": "section_break_ui",
