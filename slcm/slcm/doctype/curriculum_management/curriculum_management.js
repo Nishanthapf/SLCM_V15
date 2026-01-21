@@ -7,7 +7,7 @@ frappe.ui.form.on("Curriculum Management", {
 
         // Load UI if data already present (e.g. after refresh)
         if (frm.doc.department && frm.doc.program && frm.doc.academic_year) {
-            frm.trigger("load_curriculum");
+            frm.trigger("autorefresh");
         }
 
 
@@ -43,11 +43,11 @@ frappe.ui.form.on("Curriculum Management", {
     },
 
     department: function (frm) {
-        frm.trigger("load_curriculum");
+        frm.trigger("autorefresh");
     },
 
     program: function (frm) {
-        frm.trigger("load_curriculum");
+        frm.trigger("autorefresh");
     },
 
     academic_year: function (frm) {
@@ -57,19 +57,23 @@ frappe.ui.form.on("Curriculum Management", {
                 .then((r) => {
                     if (r.message && r.message.academic_system) {
                         frm.set_value("academic_system", r.message.academic_system).then(() => {
-                            frm.trigger("load_curriculum");
+                            frm.trigger("autorefresh");
                         });
                     } else {
-                        frm.trigger("load_curriculum");
+                        frm.trigger("autorefresh");
                     }
                 });
         } else {
-            frm.trigger("load_curriculum");
+            frm.trigger("autorefresh");
         }
     },
 
     academic_system: function (frm) {
         frm.trigger("render_ui");
+    },
+
+    autorefresh: function (frm) {
+        frm.trigger("load_curriculum");
     },
 
     load_curriculum: function (frm) {
@@ -445,7 +449,7 @@ frappe.ui.form.on("Curriculum Management", {
                     message: __("Curriculum Saved Successfully"),
                     indicator: "green",
                 });
-                frm.trigger("load_curriculum");
+                frm.trigger("autorefresh");
             },
         });
     },

@@ -10,7 +10,7 @@
  "is_hidden": 0,
  "label": "Student Registration",
  "links": [],
- "modified": "2026-01-13 17:41:58.777787",
+ "modified": "2026-01-21 10:03:48.772733",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "Student Registration",
@@ -20,7 +20,7 @@
  "public": 1,
  "quick_lists": [],
  "roles": [],
- "sequence_id": 1.0,
+ "sequence_id": 2.0,
  "shortcuts": [
   {
    "color": "Blue",
