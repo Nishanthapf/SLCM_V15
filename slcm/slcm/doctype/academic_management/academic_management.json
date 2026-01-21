@@ -1,0 +1,69 @@
+{
+    "actions": [],
+    "creation": "2026-01-21 10:20:00.000000",
+    "doctype": "DocType",
+    "engine": "InnoDB",
+    "field_order": [
+        "term_tab",
+        "term_ui_container",
+        "class_tab",
+        "class_ui_container",
+        "schedule_tab",
+        "schedule_ui_container"
+    ],
+    "fields": [
+        {
+            "fieldname": "term_tab",
+            "fieldtype": "Tab Break",
+            "label": "Terms"
+        },
+        {
+            "fieldname": "term_ui_container",
+            "fieldtype": "HTML",
+            "label": "Term UI Container"
+        },
+        {
+            "fieldname": "class_tab",
+            "fieldtype": "Tab Break",
+            "label": "Class"
+        },
+        {
+            "fieldname": "class_ui_container",
+            "fieldtype": "HTML",
+            "label": "Class UI Container"
+        },
+        {
+            "fieldname": "schedule_tab",
+            "fieldtype": "Tab Break",
+            "label": "Class Schedule"
+        },
+        {
+            "fieldname": "schedule_ui_container",
+            "fieldtype": "HTML",
+            "label": "Schedule UI Container"
+        }
+    ],
+    "issingle": 1,
+    "links": [],
+    "modified": "2026-01-21 10:20:00.000000",
+    "modified_by": "Administrator",
+    "module": "SLCM",
+    "name": "Academic Management",
+    "owner": "Administrator",
+    "permissions": [
+        {
+            "create": 1,
+            "delete": 1,
+            "email": 1,
+            "print": 1,
+            "read": 1,
+            "report": 1,
+            "role": "System Manager",
+            "share": 1,
+            "write": 1
+        }
+    ],
+    "sort_field": "modified",
+    "sort_order": "DESC",
+    "states": []
+}

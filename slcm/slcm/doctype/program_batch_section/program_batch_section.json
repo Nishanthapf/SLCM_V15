@@ -1,0 +1,86 @@
+{
+    "actions": [],
+    "creation": "2026-01-21 10:40:00.000000",
+    "doctype": "DocType",
+    "engine": "InnoDB",
+    "field_order": [
+        "department",
+        "program",
+        "academic_year",
+        "batch",
+        "section_name",
+        "capacity"
+    ],
+    "fields": [
+        {
+            "fieldname": "department",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "label": "Department",
+            "options": "Department",
+            "reqd": 1
+        },
+        {
+            "fieldname": "program",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "label": "Program",
+            "options": "Program",
+            "reqd": 1
+        },
+        {
+            "fieldname": "academic_year",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "label": "Academic Year",
+            "options": "Academic Year",
+            "reqd": 1
+        },
+        {
+            "fieldname": "batch",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "label": "Batch",
+            "options": "Student Batch Name",
+            "reqd": 1
+        },
+        {
+            "fieldname": "section_name",
+            "fieldtype": "Data",
+            "in_list_view": 1,
+            "label": "Section Name",
+            "reqd": 1
+        },
+        {
+            "fieldname": "capacity",
+            "fieldtype": "Int",
+            "label": "Capacity",
+            "reqd": 1
+        }
+    ],
+    "istable": 0,
+    "links": [],
+    "modified": "2026-01-21 10:40:00.000000",
+    "modified_by": "Administrator",
+    "module": "SLCM",
+    "name": "Program Batch Section",
+    "naming_rule": "Expression",
+    "autoname": "format:{program}-{batch}-{section_name}",
+    "owner": "Administrator",
+    "permissions": [
+        {
+            "create": 1,
+            "delete": 1,
+            "email": 1,
+            "print": 1,
+            "read": 1,
+            "report": 1,
+            "role": "System Manager",
+            "share": 1,
+            "write": 1
+        }
+    ],
+    "sort_field": "modified",
+    "sort_order": "DESC",
+    "states": []
+}
