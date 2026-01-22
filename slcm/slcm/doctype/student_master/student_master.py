@@ -83,11 +83,16 @@ class StudentMaster(Document):
 			self.status_updated_on = now_datetime()
 
 			# Update Status History Child Table
+			# Ensure previous_status is a valid Workflow State to avoid LinkValidationError
+			confirmed_previous_state = None
+			if previous_status and frappe.db.exists("Workflow State", previous_status):
+				confirmed_previous_state = previous_status
+			
 			self.append(
 				"workflow_history",
 				{
 					"workflow_state": self.registration_status,
-					"previous_state": previous_status,
+					"previous_state": confirmed_previous_state,
 					"updated_by": frappe.session.user,
 					"updated_on": now_datetime(),
 					"remarks": self.status_remarks,
