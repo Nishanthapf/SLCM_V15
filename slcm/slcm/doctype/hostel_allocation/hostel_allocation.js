@@ -21,15 +21,15 @@ frappe.ui.form.on("Hostel Allocation", {
 						fieldtype: "Select",
 						options: "Allocated\nVacated\nDropped Out\nSuspended\nCancelled",
 						default: frm.doc.status,
-						reqd: 1
-					}
+						reqd: 1,
+					},
 				],
 				primary_action_label: "Update",
 				primary_action(values) {
 					frm.set_value("status", values.status);
 					frm.save();
 					d.hide();
-				}
+				},
 			});
 			d.show();
 		});

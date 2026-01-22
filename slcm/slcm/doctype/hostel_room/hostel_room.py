@@ -4,6 +4,7 @@
 import frappe
 from frappe.model.document import Document
 
+
 class HostelRoom(Document):
 	def validate(self):
 		self.update_availability()

@@ -83,3 +83,21 @@ def save_curriculum(program, academic_year, department, courses, academic_system
 
 	doc.save()
 	return doc.name
+
+
+@frappe.whitelist()
+def get_course_dialog_columns():
+	meta = frappe.get_meta("Course")
+	columns = []
+	for df in meta.fields:
+		if (
+			df.in_list_view
+			and not df.hidden
+			and df.fieldtype not in ["Section Break", "Column Break", "HTML", "Table", "Button"]
+		):
+			columns.append(df.fieldname)
+
+	if not columns:
+		columns = ["course_name", "department"]
+
+	return columns
