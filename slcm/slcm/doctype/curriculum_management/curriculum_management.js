@@ -532,7 +532,8 @@ function remove_term_dialog(frm, system, defaultCount) {
 
 function add_course_dialog(frm, semester, enrollment_type, course_fields) {
 	// Ensure we map to 'fieldname' and exclude internal ones if any slip through
-	const columns = course_fields.map((df) => df.fieldname);
+	// Also exclude 'department' as it's redundant (filtered) and shows ID "3"
+	const columns = course_fields.map((df) => df.fieldname).filter((f) => f !== "department");
 
 	const msd = new frappe.ui.form.MultiSelectDialog({
 		doctype: "Course",
@@ -562,7 +563,25 @@ function add_course_dialog(frm, semester, enrollment_type, course_fields) {
 					if (!frm.curriculum_data.curriculum_courses)
 						frm.curriculum_data.curriculum_courses = [];
 
+					let addedCount = 0;
+					let duplicateNames = [];
+
 					courses.forEach((c) => {
+						// DUPLICATE VALIDATION
+						// Check if course already exists in THIS Semester AND THIS Enrollment Type.
+						const exists = frm.curriculum_data.curriculum_courses.find(
+							(existing) =>
+								existing.semester === semester &&
+								existing.enrollment_type === enrollment_type &&
+								existing.course_group_type === "Course" &&
+								existing.course === c.name
+						);
+
+						if (exists) {
+							duplicateNames.push(c.course_name || c.name);
+							return; // Skip adding
+						}
+
 						let entry = {
 							semester: semester,
 							enrollment_type: enrollment_type,
@@ -574,11 +593,25 @@ function add_course_dialog(frm, semester, enrollment_type, course_fields) {
 						// Merge all dynamic fields
 						Object.assign(entry, c);
 						frm.curriculum_data.curriculum_courses.push(entry);
+						addedCount++;
 					});
 
-					frm.active_term_name = semester;
-					frm.trigger("render_ui");
-					frm.trigger("save_curriculum");
+					if (duplicateNames.length > 0) {
+						frappe.msgprint({
+							title: __("Duplicates Skipped"),
+							message: __(
+								"The following courses are already present in <b>{0} - {1}</b>:<br><ul><li>{2}</li></ul>",
+								[semester, enrollment_type, duplicateNames.join("</li><li>")]
+							),
+							indicator: "orange",
+						});
+					}
+
+					if (addedCount > 0) {
+						frm.active_term_name = semester;
+						frm.trigger("render_ui");
+						frm.trigger("save_curriculum"); // This will use our overridden save
+					}
 
 					// Safely close the dialog using the instance reference
 					if (msd && msd.dialog) {
