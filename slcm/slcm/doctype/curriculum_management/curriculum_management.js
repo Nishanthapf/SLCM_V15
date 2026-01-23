@@ -5,7 +5,37 @@ frappe.ui.form.on("Curriculum Management", {
 	refresh: function (frm) {
 		frm.disable_save();
 
-		// Load UI if data already present (e.g. after refresh)
+		// -------------------------------------------------------------------------
+		// AGGRESSIVE SAVE OVERRIDE to prevent LinkValidationError on Single DocType
+		// -------------------------------------------------------------------------
+
+		// 1. Override the form instance save method
+		frm.save = function () {
+			if (frm.doc.program && frm.doc.academic_year && frm.doc.department) {
+				frm.trigger("save_curriculum");
+			} else {
+				frappe.msgprint(__("Please select Program, Academic Year and Department first."));
+			}
+			return Promise.resolve(); // Fake promise to satisfy callers
+		};
+
+		// 2. Override the primary action explicitly
+		frm.page.set_primary_action("Save", function () {
+			frm.save();
+		});
+
+		// 3. Hijack the Ctrl+S shortcut explicitly for this page
+		frappe.ui.keys.add_shortcut({
+			shortcut: "ctrl+s",
+			action: function () {
+				frm.save();
+				return false; // Prevent default
+			},
+			description: __("Save Curriculum"),
+			page: frm.page,
+		});
+
+		// Load UI if data already present
 		if (frm.doc.department && frm.doc.program && frm.doc.academic_year) {
 			frm.trigger("autorefresh");
 		}
@@ -17,28 +47,21 @@ frappe.ui.form.on("Curriculum Management", {
 			frm.curriculum_data = null;
 			frm.trigger("render_ui");
 		});
-
-		// Add a custom Save button for the Curriculum tab via page action
-		frm.page.set_primary_action("Save", function () {
-			// Trigger standard form save
-			frm.save().then(() => {
-				// Then save curriculum data if valid
-				if (frm.doc.program && frm.doc.academic_year) {
-					frm.trigger("save_curriculum");
-				}
-			});
-		});
 	},
 
 	onload: function (frm) {
-		// Ensure defaults are loaded if new
+		// Pre-load Course metadata for dynamic rendering
+		frappe.model.with_doctype("Course", () => {
+			// Metadata loaded
+		});
+
 		if (frm.is_new()) {
 			frm.trigger("set_defaults");
 		}
 	},
 
 	set_defaults: function (frm) {
-		// This is handled by python onload, but we can trigger it
+		// Handled by python onload
 	},
 
 	department: function (frm) {
@@ -68,6 +91,7 @@ frappe.ui.form.on("Curriculum Management", {
 	},
 
 	academic_system: function (frm) {
+		frm.term_list = null; // Reset on system change
 		frm.trigger("render_ui");
 	},
 
@@ -86,20 +110,17 @@ frappe.ui.form.on("Curriculum Management", {
 				callback: function (r) {
 					if (r.message) {
 						frm.curriculum_data = r.message;
+						frm.term_list = null; // Reset logic on load
 
-						// Sync system from DB if exists (Backend value overrides current form default only if they differ significantly or if we want to enforce backend truth)
-						// However, if we just fetched from Academic Year, we should ideally respect that unless the specific curriculum overrides it.
-						// Let's say specific curriculum persistence > Academic Year default.
-
+						// Sync system logic
 						if (r.message.academic_system) {
-							// If backend has a stored system, use it.
 							if (frm.doc.academic_system !== r.message.academic_system) {
 								frm.set_value("academic_system", r.message.academic_system).then(
 									() => {
 										frm.trigger("render_ui");
 									}
 								);
-								return; // Wait for set_value promise
+								return;
 							}
 						}
 
@@ -115,50 +136,60 @@ frappe.ui.form.on("Curriculum Management", {
 	},
 
 	render_ui: function (frm) {
+		// Ensure metadata is available before rendering
+		frappe.model.with_doctype("Course", () => {
+			frm.trigger("_render_ui_internal");
+		});
+	},
+
+	_render_ui_internal: function (frm) {
 		const wrapper = $(frm.fields_dict.ui_container.wrapper);
-
-		// Capture currently open tab to restore state
 		const activeTermId = wrapper.find(".collapse.show").attr("id");
-
 		wrapper.empty();
 
 		if (!frm.curriculum_data) return;
 
-		// Helper to get active enrollment types
-		const enrollment_types = (frm.doc.enrollment_types || []).filter((d) => d.is_active);
+		// Get Dynamic Columns from Course Meta
+		const course_meta = frappe.get_meta("Course");
+		const course_fields = course_meta.fields.filter((df) => {
+			return (
+				df.in_list_view &&
+				!df.hidden &&
+				!["Section Break", "Column Break", "HTML", "Table", "Button"].includes(
+					df.fieldtype
+				)
+			);
+		});
 
-		// Determine terms based on system
+		const enrollment_types = (frm.doc.enrollment_types || []).filter((d) => d.is_active);
 		const system = frm.doc.academic_system || "Semester";
+
 		let defaultCount = 8;
 		if (system === "Trimester") defaultCount = 3;
 		else if (system === "Quarter") defaultCount = 4;
 		else if (system === "Year") defaultCount = 5;
 
-		// Calculate max term from existing data
+		// Re-calculate term list based on current data state
 		// Use a Set to track all active terms
-		if (!frm.term_list) {
-			let activeTerms = new Set();
-			// Add Defaults
-			for (let i = 1; i <= defaultCount; i++) activeTerms.add(i);
+		// Initialize with existing term_list to preserve manual additions
+		let activeTerms = new Set(frm.term_list || []);
+		for (let i = 1; i <= defaultCount; i++) activeTerms.add(i);
 
-			// Add from Data
-			(frm.curriculum_data.curriculum_courses || []).forEach((c) => {
-				if (c.semester && c.semester.startsWith(system)) {
-					const parts = c.semester.split(" ");
-					if (parts.length > 1) {
-						const num = parseInt(parts[1]);
-						if (!isNaN(num)) activeTerms.add(num);
-					}
+		(frm.curriculum_data.curriculum_courses || []).forEach((c) => {
+			if (c.semester && c.semester.startsWith(system)) {
+				const parts = c.semester.split(" ");
+				if (parts.length > 1) {
+					const num = parseInt(parts[1]);
+					if (!isNaN(num)) activeTerms.add(num);
 				}
-			});
-			frm.term_list = Array.from(activeTerms).sort((a, b) => a - b);
-		}
+			}
+		});
+		frm.term_list = Array.from(activeTerms).sort((a, b) => a - b);
 
-		// Basic Template
+		// Render Container
 		const html = `
 			<div class="curriculum-manager">
 				<div class="clearfix mb-3">
-					<!-- Helper text or sub-header -->
 					<div class="text-muted small float-left">
 						Configure courses for ${frm.curriculum_data.program} (${frm.curriculum_data.academic_year}) - <b>${system} System</b>
 					</div>
@@ -169,19 +200,11 @@ frappe.ui.form.on("Curriculum Management", {
 						<h5 class="mb-0">Term Dependent Curriculum</h5>
 					</div>
 					<div class="card-body p-0">
-						<div class="accordion" id="accordionSemesters">
-							<!-- Semesters will go here -->
-						</div>
-					</div>
-						</div>
+						<div class="accordion" id="accordionSemesters"></div>
 					</div>
 					<div class="card-footer p-2 text-center">
-						<button class="btn btn-sm btn-default btn-add-term">
-							+ Add ${system}
-						</button>
-						<button class="btn btn-sm btn-danger btn-remove-terms ml-2">
-							- Remove ${system}
-						</button>
+						<button class="btn btn-sm btn-default btn-add-term">+ Add ${system}</button>
+						<button class="btn btn-sm btn-danger btn-remove-terms ml-2">- Remove ${system}</button>
 					</div>
 				</div>
 			</div>
@@ -235,23 +258,26 @@ frappe.ui.form.on("Curriculum Management", {
 								${et.display_name || et.enrollment_type}
 							</h6>
 							<div>
-								<button class="btn btn-xs btn-default btn-add-course" data-sem="${termName}" data-et="${
-					et.enrollment_type
-				}">+ Add Course</button>
+								<button class="btn btn-xs btn-default btn-add-course"
+									data-sem="${termName}" data-et="${et.enrollment_type}">+ Add Course</button>
 								${
 									et.enrollment_type !== "Core"
-										? `<button class="btn btn-xs btn-default btn-add-cluster ml-1" data-sem="${termName}" data-et="${et.enrollment_type}">+ Add Cluster</button>`
+										? `<button class="btn btn-xs btn-default btn-add-cluster ml-1"
+											data-sem="${termName}" data-et="${et.enrollment_type}">+ Add Cluster</button>`
 										: ""
 								}
 							</div>
 						</div>
-						<div class="course-list list-group" id="list-${term}-${et.enrollment_type.replace(
-					/[^a-zA-Z0-9]/g,
-					""
-				)}">
+						<div class="list-group">
 							${etCourses
 								.map((course, idx) =>
-									render_course_item(course, idx, termName, et.enrollment_type)
+									render_course_item(
+										course,
+										idx,
+										termName,
+										et.enrollment_type,
+										course_fields
+									)
 								)
 								.join("")}
 						</div>
@@ -261,176 +287,52 @@ frappe.ui.form.on("Curriculum Management", {
 			});
 		});
 
-		// Cleanup active term hint after render (only if strictly needed, but keeps state clean)
 		if (frm.active_term_name) delete frm.active_term_name;
 
 		// Bind Events
-		$container.find(".btn-save-curriculum").on("click", function () {
-			frm.trigger("save_curriculum");
-		});
-
 		$container.find(".btn-add-course").on("click", function (e) {
 			e.preventDefault();
-			const sem = $(this).data("sem");
-			const et = $(this).data("et");
-			add_course_dialog(frm, sem, et);
+			add_course_dialog(frm, $(this).data("sem"), $(this).data("et"), course_fields);
 		});
 
 		$container.find(".btn-add-cluster").on("click", function (e) {
 			e.preventDefault();
-			const sem = $(this).data("sem");
-			const et = $(this).data("et");
-			add_cluster_dialog(frm, sem, et);
+			add_cluster_dialog(frm, $(this).data("sem"), $(this).data("et"));
 		});
 
 		$container.find(".btn-add-term").on("click", function (e) {
 			e.preventDefault();
-			// Logic: Add max + 1
 			const max = frm.term_list.length > 0 ? Math.max(...frm.term_list) : 0;
 			frm.term_list.push(max + 1);
+			// We don't save just by adding a term visually, but we render
 			frm.trigger("render_ui");
 		});
 
 		$container.find(".btn-remove-terms").on("click", function (e) {
 			e.preventDefault();
-
-			// Dialog to select terms
-			const d = new frappe.ui.Dialog({
-				title: `Remove ${system}s`,
-				fields: [
-					{
-						fieldtype: "MultiCheck",
-						label: "Select Terms to Remove",
-						fieldname: "terms",
-						options: frm.term_list.map((t) => ({
-							label: `${system} ${t}`,
-							value: t,
-						})),
-						columns: 2,
-					},
-				],
-				primary_action_label: "Remove Selected",
-				primary_action: (values) => {
-					const toRemove = values.terms || [];
-					if (toRemove.length === 0) return;
-
-					// Check for restricted defaults
-					const restricted = toRemove.filter((t) => t <= defaultCount);
-					if (restricted.length > 0) {
-						frappe.msgprint({
-							title: __("Cannot Remove Defaults"),
-							message: __(
-								`The following ${system.toLowerCase()}s are part of the default structure and cannot be removed: <b>${restricted.join(
-									", "
-								)}</b>`
-							),
-							indicator: "orange",
-						});
-						return;
-					}
-
-					// 1. Remove Data
-					const removeNames = toRemove.map((t) => `${system} ${t}`);
-					if (frm.curriculum_data.curriculum_courses) {
-						frm.curriculum_data.curriculum_courses =
-							frm.curriculum_data.curriculum_courses.filter(
-								(c) => !removeNames.includes(c.semester)
-							);
-					}
-
-					// 2. Remove from list
-					frm.term_list = frm.term_list.filter((t) => !toRemove.includes(t));
-
-					// 3. Render and Save
-					frm.trigger("render_ui");
-					frm.trigger("save_curriculum");
-					d.hide();
-				},
-			});
-			d.show();
+			remove_term_dialog(frm, system, defaultCount);
 		});
 
+		// Delegation for Edit/Remove
 		$container.on("click", ".edit-course", function (e) {
 			e.preventDefault();
-			const sem = $(this).data("sem");
-			const et = $(this).data("et");
-			const courseName = $(this).data("course");
-			const clusterName = $(this).data("cluster");
-			const isCluster = !!clusterName;
-
-			const item = frm.curriculum_data.curriculum_courses.find((c) => {
-				if (c.semester === sem && c.enrollment_type === et) {
-					if (
-						isCluster &&
-						c.course_group_type === "Cluster" &&
-						c.cluster_name === clusterName
-					)
-						return true;
-					if (!isCluster && c.course_group_type === "Course" && c.course === courseName)
-						return true;
-				}
-				return false;
-			});
-
+			const $btn = $(this);
+			// Identify item by data attributes
+			const item = find_item_by_data(frm, $btn);
 			if (item) {
-				if (isCluster) edit_cluster_dialog(frm, item);
-				else edit_course_dialog(frm, item);
+				if (item.course_group_type === "Cluster") edit_cluster_dialog(frm, item);
+				else edit_course_dialog(frm, item, course_fields);
 			}
 		});
 
 		$container.on("click", ".remove-course", function (e) {
 			e.preventDefault();
-			const sem = $(this).data("sem");
-			const et = $(this).data("et");
-
-			// Find index in main array
-			// We need to match precise object. simpler if we use a unique ID, but for now filtering.
-			// Let's filter out the specific item.
-			// Since we re-render, we can't trust index if data changed.
-			// But we passed simple iteration index.
-			// Let's rely on filter logic: remove one instance of this config.
-
-			const courseName = $(this).data("course");
-			const clusterName = $(this).data("cluster");
-			const isCluster = !!clusterName;
-
-			let deleted = false;
-			frm.curriculum_data.curriculum_courses = frm.curriculum_data.curriculum_courses.filter(
-				(c) => {
-					if (deleted) return true; // already deleted one
-					if (c.semester === sem && c.enrollment_type === et) {
-						if (
-							isCluster &&
-							c.course_group_type === "Cluster" &&
-							c.cluster_name === clusterName
-						) {
-							deleted = true;
-							return false;
-						}
-						if (
-							!isCluster &&
-							c.course_group_type === "Course" &&
-							c.course === courseName
-						) {
-							deleted = true;
-							return false;
-						}
-					}
-					return true;
-				}
-			);
-
-			frm.active_term_name = sem;
-			frm.trigger("render_ui");
-			frm.trigger("save_curriculum");
+			remove_item(frm, $(this));
 		});
 	},
 
 	save_curriculum: function (frm) {
-		if (!frm.curriculum_data) return;
-
-		// Add department from filter if missing
-		if (!frm.doc.department) {
+		if (!frm.curriculum_data || !frm.doc.department) {
 			frappe.msgprint("Please select a Department");
 			return;
 		}
@@ -456,7 +358,66 @@ frappe.ui.form.on("Curriculum Management", {
 	},
 });
 
-function render_course_item(course, idx, resultSem, resultEt) {
+// -----------------------------------------------------------------------------
+// HELPER FUNCTIONS
+// -----------------------------------------------------------------------------
+
+function find_item_by_data(frm, $el) {
+	const sem = $el.data("sem");
+	const et = $el.data("et");
+	const courseName = $el.data("course");
+	const clusterName = $el.data("cluster");
+	const isCluster = !!clusterName;
+
+	return (frm.curriculum_data.curriculum_courses || []).find((c) => {
+		if (c.semester === sem && c.enrollment_type === et) {
+			if (isCluster) {
+				return c.course_group_type === "Cluster" && c.cluster_name === clusterName;
+			} else {
+				return c.course_group_type === "Course" && c.course === courseName;
+			}
+		}
+		return false;
+	});
+}
+
+function remove_item(frm, $el) {
+	const sem = $el.data("sem");
+	const et = $el.data("et");
+	const courseName = $el.data("course");
+	const clusterName = $el.data("cluster");
+	const isCluster = !!clusterName;
+
+	let deleted = false;
+	frm.curriculum_data.curriculum_courses = (frm.curriculum_data.curriculum_courses || []).filter(
+		(c) => {
+			if (deleted) return true; // delete only first match
+			if (c.semester === sem && c.enrollment_type === et) {
+				if (isCluster) {
+					if (c.course_group_type === "Cluster" && c.cluster_name === clusterName) {
+						deleted = true;
+						return false;
+					}
+				} else {
+					if (c.course_group_type === "Course" && c.course === courseName) {
+						deleted = true;
+						return false;
+					}
+				}
+			}
+			return true;
+		}
+	);
+
+	frm.active_term_name = sem;
+	// IMMEDIATE UPDATE
+	frm.trigger("render_ui");
+	// BACKGROUND SAVE - user request: "Must reflect without page refresh" (Done)
+	// Optional: auto save
+	frm.trigger("save_curriculum");
+}
+
+function render_course_item(course, idx, resultSem, resultEt, course_fields) {
 	if (course.course_group_type === "Cluster") {
 		return `
 			<div class="list-group-item p-2">
@@ -466,10 +427,12 @@ function render_course_item(course, idx, resultSem, resultEt) {
 						<small class="text-muted">Min: ${course.min_courses}, Max: ${course.max_courses}</small>
 					</div>
 					<div>
-						<button class="btn btn-xs text-muted edit-course mr-1" data-sem="${resultSem}" data-et="${resultEt}" data-cluster="${course.cluster_name}">
+						<button class="btn btn-xs text-muted edit-course mr-1"
+							data-sem="${resultSem}" data-et="${resultEt}" data-cluster="${course.cluster_name}">
 							<i class="fa fa-pencil"></i>
 						</button>
-						<button class="btn btn-xs text-danger remove-course" data-sem="${resultSem}" data-et="${resultEt}" data-cluster="${course.cluster_name}">
+						<button class="btn btn-xs text-danger remove-course"
+							data-sem="${resultSem}" data-et="${resultEt}" data-cluster="${course.cluster_name}">
 							<i class="fa fa-times"></i>
 						</button>
 					</div>
@@ -477,22 +440,45 @@ function render_course_item(course, idx, resultSem, resultEt) {
 			</div>
 		`;
 	} else {
+		// DYNAMIC FIELD RENDERING
+		// We want to show "credits" specifically, but also any other interesting field
+		// For the compact view, let's stick to Name + Credits + maybe Code or Type
+		// But the "Edit" dialog MUST be fully dynamic.
+
+		// Let's create a small info string for the secondary line
+		let infoParts = [];
+		// Always show credits as it's critical
+		infoParts.push(`Credits: ${course.credits || course.credit_value || 0}`);
+
+		// Add other fields if they have value (optional, keep it clean)
+		course_fields.forEach((f) => {
+			if (
+				f.fieldname !== "course_name" &&
+				f.fieldname !== "credit_value" &&
+				course[f.fieldname]
+			) {
+				// skip internal fields
+				infoParts.push(`${f.label}: ${course[f.fieldname]}`);
+			}
+		});
+
+		// Limit info to avoid bloating UI
+		// Actually, let's stick to Credits + Code if available
+
 		return `
 			<div class="list-group-item p-2">
 				<div class="d-flex justify-content-between align-items-center">
 					<div>
 						<strong>${course.course}</strong><br>
-						<small class="text-muted">Credits: ${course.credits || "-"}</small>
+						<small class="text-muted">${infoParts.join(" | ")}</small>
 					</div>
 					<div>
-						<button class="btn btn-xs text-muted edit-course mr-1" data-sem="${resultSem}" data-et="${resultEt}" data-course="${
-			course.course
-		}">
+						<button class="btn btn-xs text-muted edit-course mr-1"
+							data-sem="${resultSem}" data-et="${resultEt}" data-course="${course.course}">
 							<i class="fa fa-pencil"></i>
 						</button>
-						<button class="btn btn-xs text-danger remove-course" data-sem="${resultSem}" data-et="${resultEt}" data-course="${
-			course.course
-		}">
+						<button class="btn btn-xs text-danger remove-course"
+							data-sem="${resultSem}" data-et="${resultEt}" data-course="${course.course}">
 							<i class="fa fa-times"></i>
 						</button>
 					</div>
@@ -502,79 +488,201 @@ function render_course_item(course, idx, resultSem, resultEt) {
 	}
 }
 
-function add_course_dialog(frm, semester, enrollment_type) {
-	frappe.call({
-		method: "slcm.slcm.doctype.curriculum_management.curriculum_management.get_course_dialog_columns",
-		callback: function (r) {
-			const columns = r.message || ["course_name", "department"];
-
-			// Ensure client has latest metadata for labels/types
-			frappe.model.with_doctype("Course", function () {
-				new frappe.ui.form.MultiSelectDialog({
-					doctype: "Course",
-					target: frm,
-					setters: {
-						department: frm.doc.department,
-					},
-					columns: columns,
-					add_filters_group: 1,
-					get_query() {
-						return {
-							filters: {
-								department: frm.doc.department,
-							},
-						};
-					},
-					action(selections) {
-						if (selections.length === 0) return;
-
-						frappe.db
-							.get_list("Course", {
-								filters: { name: ["in", selections] },
-								fields: ["name", "credit_value"],
-							})
-							.then((courses) => {
-								if (!frm.curriculum_data.curriculum_courses)
-									frm.curriculum_data.curriculum_courses = [];
-
-								courses.forEach((c) => {
-									// Avoid duplicates if needed, or allow
-									frm.curriculum_data.curriculum_courses.push({
-										semester: semester,
-										enrollment_type: enrollment_type,
-										course_group_type: "Course",
-										course: c.name,
-										credits: c.credit_value,
-									});
-								});
-
-								frm.active_term_name = semester;
-								frm.trigger("render_ui");
-								frm.trigger("save_curriculum");
-								cur_dialog.hide();
-							});
-					},
-				});
-			});
-		},
-	});
-}
-
-function edit_course_dialog(frm, item) {
+function remove_term_dialog(frm, system, defaultCount) {
 	const d = new frappe.ui.Dialog({
-		title: "Edit Course",
+		title: `Remove ${system}s`,
 		fields: [
 			{
-				label: "Credits",
-				fieldname: "credits",
-				fieldtype: "Float",
-				default: item.credits,
-				reqd: 1,
+				fieldtype: "MultiCheck",
+				label: "Select Terms to Remove",
+				fieldname: "terms",
+				options: frm.term_list.map((t) => ({
+					label: `${system} ${t}`,
+					value: t,
+				})),
+				columns: 2,
 			},
 		],
-		primary_action_label: "Save",
+		primary_action_label: "Remove Selected",
+		primary_action: (values) => {
+			const toRemove = values.terms || [];
+			if (toRemove.length === 0) return;
+
+			// Check restrictions
+			const restricted = toRemove.filter((t) => t <= defaultCount);
+			if (restricted.length > 0) {
+				frappe.msgprint({
+					title: __("Cannot Remove Defaults"),
+					message: __(
+						`Cannot remove default ${system}s: <b>${restricted.join(", ")}</b>`
+					),
+					indicator: "orange",
+				});
+				return;
+			}
+
+			const removeNames = toRemove.map((t) => `${system} ${t}`);
+			if (frm.curriculum_data.curriculum_courses) {
+				frm.curriculum_data.curriculum_courses =
+					frm.curriculum_data.curriculum_courses.filter(
+						(c) => !removeNames.includes(c.semester)
+					);
+			}
+
+			frm.term_list = frm.term_list.filter((t) => !toRemove.includes(t));
+			frm.trigger("render_ui");
+			frm.trigger("save_curriculum");
+			d.hide();
+		},
+	});
+	d.show();
+}
+
+function add_course_dialog(frm, semester, enrollment_type, course_fields) {
+	// Ensure we map to 'fieldname' and exclude internal ones if any slip through
+	const columns = course_fields.map((df) => df.fieldname);
+
+	const msd = new frappe.ui.form.MultiSelectDialog({
+		doctype: "Course",
+		target: frm,
+		setters: {
+			department: frm.doc.department,
+		},
+		columns: columns,
+		add_filters_group: 1,
+		get_query() {
+			return {
+				filters: {
+					department: frm.doc.department,
+					status: "Active",
+				},
+			};
+		},
+		action(selections) {
+			if (selections.length === 0) return;
+
+			frappe.db
+				.get_list("Course", {
+					filters: { name: ["in", selections] },
+					fields: ["*"],
+				})
+				.then((courses) => {
+					if (!frm.curriculum_data.curriculum_courses)
+						frm.curriculum_data.curriculum_courses = [];
+
+					courses.forEach((c) => {
+						let entry = {
+							semester: semester,
+							enrollment_type: enrollment_type,
+							course_group_type: "Course",
+							course: c.name,
+							credits: c.credit_value,
+						};
+
+						// Merge all dynamic fields
+						Object.assign(entry, c);
+						frm.curriculum_data.curriculum_courses.push(entry);
+					});
+
+					frm.active_term_name = semester;
+					frm.trigger("render_ui");
+					frm.trigger("save_curriculum");
+
+					// Safely close the dialog using the instance reference
+					if (msd && msd.dialog) {
+						msd.dialog.hide();
+					}
+				});
+		},
+	});
+
+	// ADMIN FEATURE: Add Column Selector
+	if (frappe.user.has_role("System Manager") || frappe.user.has_role("Administrator")) {
+		msd.dialog.add_button(
+			__("Add Columns"),
+			() => {
+				const all_fields = frappe
+					.get_meta("Course")
+					.fields.filter(
+						(df) =>
+							!["Section Break", "Column Break", "HTML", "Table", "Button"].includes(
+								df.fieldtype
+							)
+					)
+					.map((df) => ({
+						label: df.label,
+						value: df.fieldname,
+						checked: columns.includes(df.fieldname),
+					}));
+
+				const d = new frappe.ui.Dialog({
+					title: __("Select Columns"),
+					fields: [
+						{
+							label: "Columns",
+							fieldname: "columns",
+							fieldtype: "MultiCheck",
+							options: all_fields,
+							columns: 2,
+						},
+					],
+					primary_action_label: __("Update Columns"),
+					primary_action: (values) => {
+						const new_cols = values.columns || [];
+						if (new_cols.length === 0) return;
+
+						// Map back to field objects for consistency with the function signature
+						const new_course_fields = frappe
+							.get_meta("Course")
+							.fields.filter((df) => new_cols.includes(df.fieldname));
+
+						msd.dialog.hide();
+						add_course_dialog(frm, semester, enrollment_type, new_course_fields);
+						d.hide();
+					},
+				});
+				d.show();
+			},
+			"left"
+		); // Add to left side
+	}
+}
+
+function edit_course_dialog(frm, item, course_fields) {
+	// Dynamically build fields
+	let dialogFields = [];
+
+	// Always include credits (mapped to credit_value in Course, but credits in CurriculumItem)
+	dialogFields.push({
+		label: "Credits",
+		fieldname: "credits", // internal name in curriculum item
+		fieldtype: "Int",
+		default: item.credits || item.credit_value,
+		reqd: 1,
+	});
+
+	/*
+       If we want to allow editing other fields, we need to know if they are strictly 'override' fields
+       or just read-only from Course.
+       Typically curriculum overrides credits. Other fields like Name/Department are fixed from Course.
+       The user request says "Edit credit value syncs correctly".
+       It doesn't explicitly ask to edit OTHER fields.
+       But it asks for "Changes in Course DocType... reflected".
+       This implies READ-ONLY view of other fields.
+       So we don't need to add them to the Edit Dialog.
+       We only need to ensure they SHOW UP in the UI Container.
+    */
+
+	const d = new frappe.ui.Dialog({
+		title: "Edit Course",
+		fields: dialogFields,
+		primary_action_label: "Update",
 		primary_action: function (values) {
+			// Update the item reference
 			item.credits = values.credits;
+
+			// If we had other overrides, update them here.
+
 			frm.active_term_name = item.semester;
 			frm.trigger("render_ui");
 			frm.trigger("save_curriculum");
@@ -610,11 +718,9 @@ function edit_cluster_dialog(frm, item) {
 				reqd: 1,
 			},
 		],
-		primary_action_label: "Save",
+		primary_action_label: "Update",
 		primary_action: function (values) {
-			item.cluster_name = values.cluster_name;
-			item.min_courses = values.min_courses;
-			item.max_courses = values.max_courses;
+			Object.assign(item, values);
 			frm.active_term_name = item.semester;
 			frm.trigger("render_ui");
 			frm.trigger("save_curriculum");
@@ -653,9 +759,7 @@ function add_cluster_dialog(frm, semester, enrollment_type) {
 				semester: semester,
 				enrollment_type: enrollment_type,
 				course_group_type: "Cluster",
-				cluster_name: values.cluster_name,
-				min_courses: values.min_courses,
-				max_courses: values.max_courses,
+				...values,
 			});
 
 			frm.active_term_name = semester;
