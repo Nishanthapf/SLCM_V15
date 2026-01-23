@@ -254,7 +254,7 @@ frappe.ui.form.on("Curriculum Management", {
 				const etHtml = `
 					<div class="enrollment-section mb-4">
 						<div class="d-flex justify-content-between align-items-center mb-2">
-							<h6 class="font-weight-bold" style="text-transform: uppercase; font-size: 11px; letter-spacing: 1px; color: #777;">
+							<h6 class="font-weight-bold text-dark" style="text-transform: uppercase; font-size: 13px; letter-spacing: 0.5px;">
 								${et.display_name || et.enrollment_type}
 							</h6>
 							<div>
@@ -427,10 +427,6 @@ function render_course_item(course, idx, resultSem, resultEt, course_fields) {
 						<small class="text-muted">Min: ${course.min_courses}, Max: ${course.max_courses}</small>
 					</div>
 					<div>
-						<button class="btn btn-xs text-muted edit-course mr-1"
-							data-sem="${resultSem}" data-et="${resultEt}" data-cluster="${course.cluster_name}">
-							<i class="fa fa-pencil"></i>
-						</button>
 						<button class="btn btn-xs text-danger remove-course"
 							data-sem="${resultSem}" data-et="${resultEt}" data-cluster="${course.cluster_name}">
 							<i class="fa fa-times"></i>
@@ -473,10 +469,6 @@ function render_course_item(course, idx, resultSem, resultEt, course_fields) {
 						<small class="text-muted">${infoParts.join(" | ")}</small>
 					</div>
 					<div>
-						<button class="btn btn-xs text-muted edit-course mr-1"
-							data-sem="${resultSem}" data-et="${resultEt}" data-course="${course.course}">
-							<i class="fa fa-pencil"></i>
-						</button>
 						<button class="btn btn-xs text-danger remove-course"
 							data-sem="${resultSem}" data-et="${resultEt}" data-course="${course.course}">
 							<i class="fa fa-times"></i>
