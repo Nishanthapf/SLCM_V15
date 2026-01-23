@@ -158,3 +158,33 @@ def get_course_dialog_columns():
 	if not columns:
 		columns = ["course_name", "department"]
 	return columns
+
+
+@frappe.whitelist()
+def get_courses_for_curriculum(department, txt=None, start=0, page_length=20):
+	# Ensure correct types (VERY IMPORTANT)
+	start = int(start or 0)
+	page_length = int(page_length or 20)
+
+	txt = f"%{txt}%" if txt else "%"
+
+	return frappe.db.sql(
+		"""
+		SELECT
+			c.name,
+			c.course_name,
+			c.credit_value,
+			COALESCE(d.department_name, d.name) AS department_name
+		FROM `tabCourse` c
+		LEFT JOIN `tabDepartment` d
+			ON d.name = c.department
+		WHERE
+			c.department = %s
+			AND c.status = 'Active'
+			AND c.course_name LIKE %s
+		ORDER BY c.course_name
+		LIMIT %s, %s
+		""",
+		(department, txt, start, page_length),
+		as_dict=True,
+	)

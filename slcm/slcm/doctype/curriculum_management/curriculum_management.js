@@ -188,27 +188,27 @@ frappe.ui.form.on("Curriculum Management", {
 
 		// Render Container
 		const html = `
-			<div class="curriculum-manager">
-				<div class="clearfix mb-3">
-					<div class="text-muted small float-left">
-						Configure courses for ${frm.curriculum_data.program} (${frm.curriculum_data.academic_year}) - <b>${system} System</b>
-					</div>
-				</div>
+            <div class="curriculum-manager">
+                <div class="clearfix mb-3">
+                    <div class="text-muted small float-left">
+                        Configure courses for ${frm.curriculum_data.program} (${frm.curriculum_data.academic_year}) - <b>${system} System</b>
+                    </div>
+                </div>
 
-				<div class="card mb-3">
-					<div class="card-header">
-						<h5 class="mb-0">Term Dependent Curriculum</h5>
-					</div>
-					<div class="card-body p-0">
-						<div class="accordion" id="accordionSemesters"></div>
-					</div>
-					<div class="card-footer p-2 text-center">
-						<button class="btn btn-sm btn-default btn-add-term">+ Add ${system}</button>
-						<button class="btn btn-sm btn-danger btn-remove-terms ml-2">- Remove ${system}</button>
-					</div>
-				</div>
-			</div>
-		`;
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h5 class="mb-0">Term Dependent Curriculum</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="accordion" id="accordionSemesters"></div>
+                    </div>
+                    <div class="card-footer p-2 text-center">
+                        <button class="btn btn-sm btn-default btn-add-term">+ Add ${system}</button>
+                        <button class="btn btn-sm btn-danger btn-remove-terms ml-2">- Remove ${system}</button>
+                    </div>
+                </div>
+            </div>
+        `;
 
 		const $container = $(html).appendTo(wrapper);
 		const $accordion = $container.find("#accordionSemesters");
@@ -226,22 +226,22 @@ frappe.ui.form.on("Curriculum Management", {
 			const showClass = isVisible ? "show" : "";
 
 			const semHtml = `
-				<div class="card">
-					<div class="card-header" id="heading${term}">
-						<h2 class="mb-0">
-							<button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapse${term}">
-								${termName}
-							</button>
-						</h2>
-					</div>
+                <div class="card">
+                    <div class="card-header" id="heading${term}">
+                        <h2 class="mb-0">
+                            <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapse${term}">
+                                ${termName}
+                            </button>
+                        </h2>
+                    </div>
 
-					<div id="collapse${term}" class="collapse ${showClass}" data-parent="#accordionSemesters">
-						<div class="card-body">
-							<div class="enrollment-types-container-${term}"></div>
-						</div>
-					</div>
-				</div>
-			`;
+                    <div id="collapse${term}" class="collapse ${showClass}" data-parent="#accordionSemesters">
+                        <div class="card-body">
+                            <div class="enrollment-types-container-${term}"></div>
+                        </div>
+                    </div>
+                </div>
+            `;
 
 			const $semBlock = $(semHtml).appendTo($accordion);
 			const $etContainer = $semBlock.find(`.enrollment-types-container-${term}`);
@@ -252,24 +252,26 @@ frappe.ui.form.on("Curriculum Management", {
 				);
 
 				const etHtml = `
-					<div class="enrollment-section mb-4">
-						<div class="d-flex justify-content-between align-items-center mb-2">
-							<h6 class="font-weight-bold text-dark" style="text-transform: uppercase; font-size: 13px; letter-spacing: 0.5px;">
-								${et.display_name || et.enrollment_type}
-							</h6>
-							<div>
-								<button class="btn btn-xs btn-default btn-add-course"
-									data-sem="${termName}" data-et="${et.enrollment_type}">+ Add Course</button>
-								${
+                    <div class="enrollment-section mb-4">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h6 class="font-weight-bold text-dark" style="text-transform: uppercase; font-size: 13px; letter-spacing: 0.5px;">
+                                ${et.display_name || et.enrollment_type}
+                            </h6>
+                            <div>
+                                <button class="btn btn-xs btn-default btn-add-course"
+                                    data-sem="${termName}" data-et="${
+					et.enrollment_type
+				}">+ Add Course</button>
+                                ${
 									et.enrollment_type !== "Core"
 										? `<button class="btn btn-xs btn-default btn-add-cluster ml-1"
-											data-sem="${termName}" data-et="${et.enrollment_type}">+ Add Cluster</button>`
+                                            data-sem="${termName}" data-et="${et.enrollment_type}">+ Add Cluster</button>`
 										: ""
 								}
-							</div>
-						</div>
-						<div class="list-group">
-							${etCourses
+                            </div>
+                        </div>
+                        <div class="list-group">
+                            ${etCourses
 								.map((course, idx) =>
 									render_course_item(
 										course,
@@ -280,9 +282,9 @@ frappe.ui.form.on("Curriculum Management", {
 									)
 								)
 								.join("")}
-						</div>
-					</div>
-				`;
+                        </div>
+                    </div>
+                `;
 				$etContainer.append(etHtml);
 			});
 		});
@@ -420,21 +422,21 @@ function remove_item(frm, $el) {
 function render_course_item(course, idx, resultSem, resultEt, course_fields) {
 	if (course.course_group_type === "Cluster") {
 		return `
-			<div class="list-group-item p-2">
-				<div class="d-flex justify-content-between align-items-center">
-					<div>
-						<strong>${course.cluster_name}</strong> <span class="badge badge-info ml-1">Cluster</span><br>
-						<small class="text-muted">Min: ${course.min_courses}, Max: ${course.max_courses}</small>
-					</div>
-					<div>
-						<button class="btn btn-xs text-danger remove-course"
-							data-sem="${resultSem}" data-et="${resultEt}" data-cluster="${course.cluster_name}">
-							<i class="fa fa-times"></i>
-						</button>
-					</div>
-				</div>
-			</div>
-		`;
+            <div class="list-group-item p-2">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong>${course.cluster_name}</strong> <span class="badge badge-info ml-1">Cluster</span><br>
+                        <small class="text-muted">Min: ${course.min_courses}, Max: ${course.max_courses}</small>
+                    </div>
+                    <div>
+                        <button class="btn btn-xs text-danger remove-course"
+                            data-sem="${resultSem}" data-et="${resultEt}" data-cluster="${course.cluster_name}">
+                            <i class="fa fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
 	} else {
 		// DYNAMIC FIELD RENDERING
 		// We want to show "credits" specifically, but also any other interesting field
@@ -462,21 +464,23 @@ function render_course_item(course, idx, resultSem, resultEt, course_fields) {
 		// Actually, let's stick to Credits + Code if available
 
 		return `
-			<div class="list-group-item p-2">
-				<div class="d-flex justify-content-between align-items-center">
-					<div>
-						<strong>${course.course}</strong><br>
-						<small class="text-muted">${infoParts.join(" | ")}</small>
-					</div>
-					<div>
-						<button class="btn btn-xs text-danger remove-course"
-							data-sem="${resultSem}" data-et="${resultEt}" data-course="${course.course}">
-							<i class="fa fa-times"></i>
-						</button>
-					</div>
-				</div>
-			</div>
-		`;
+            <div class="list-group-item p-2">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong>${course.course}</strong><br>
+                        <small class="text-muted">${infoParts.join(" | ")}</small>
+                    </div>
+                    <div>
+                        <button class="btn btn-xs text-danger remove-course"
+                            data-sem="${resultSem}" data-et="${resultEt}" data-course="${
+			course.course
+		}">
+                            <i class="fa fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
 	}
 }
 
@@ -530,16 +534,32 @@ function remove_term_dialog(frm, system, defaultCount) {
 	d.show();
 }
 
-function add_course_dialog(frm, semester, enrollment_type, course_fields) {
-	// Ensure we map to 'fieldname' and exclude internal ones if any slip through
-	// Also exclude 'department' as it's redundant (filtered) and shows ID "3"
-	const columns = course_fields.map((df) => df.fieldname).filter((f) => f !== "department");
+function add_course_dialog(frm, semester, enrollment_type, course_fields_arg) {
+	// MASTER FIX: Re-fetch meta to ensure we have the latest fields (like department_name)
+	const meta = frappe.get_meta("Course");
+	const all_fields = meta.fields;
 
-	const msd = new frappe.ui.form.MultiSelectDialog({
+	// 1. Get all list view fields, excluding raw 'department' (Link)
+	let columns = all_fields
+		.filter((df) => df.in_list_view && !df.hidden && df.fieldname !== "department")
+		.map((df) => df.fieldname);
+
+	// 2. Ensure 'department_name' is included
+	if (!columns.includes("department_name")) {
+		const idx = columns.indexOf("course_name");
+		if (idx >= 0) columns.splice(idx + 1, 0, "department_name");
+		else columns.unshift("department_name");
+	}
+
+	// 3. Ensure 'course_name' is first
+	if (!columns.includes("course_name")) columns.unshift("course_name");
+
+	new frappe.ui.form.MultiSelectDialog({
 		doctype: "Course",
 		target: frm,
 		setters: {
 			department: frm.doc.department,
+			status: "Active",
 		},
 		columns: columns,
 		add_filters_group: 1,
@@ -568,7 +588,6 @@ function add_course_dialog(frm, semester, enrollment_type, course_fields) {
 
 					courses.forEach((c) => {
 						// DUPLICATE VALIDATION
-						// Check if course already exists in THIS Semester AND THIS Enrollment Type.
 						const exists = frm.curriculum_data.curriculum_courses.find(
 							(existing) =>
 								existing.semester === semester &&
@@ -579,7 +598,7 @@ function add_course_dialog(frm, semester, enrollment_type, course_fields) {
 
 						if (exists) {
 							duplicateNames.push(c.course_name || c.name);
-							return; // Skip adding
+							return;
 						}
 
 						let entry = {
@@ -588,9 +607,10 @@ function add_course_dialog(frm, semester, enrollment_type, course_fields) {
 							course_group_type: "Course",
 							course: c.name,
 							credits: c.credit_value,
+							// Ensure fetched name is stored if useful for UI
+							department_name: c.department_name,
 						};
 
-						// Merge all dynamic fields
 						Object.assign(entry, c);
 						frm.curriculum_data.curriculum_courses.push(entry);
 						addedCount++;
@@ -610,67 +630,11 @@ function add_course_dialog(frm, semester, enrollment_type, course_fields) {
 					if (addedCount > 0) {
 						frm.active_term_name = semester;
 						frm.trigger("render_ui");
-						frm.trigger("save_curriculum"); // This will use our overridden save
-					}
-
-					// Safely close the dialog using the instance reference
-					if (msd && msd.dialog) {
-						msd.dialog.hide();
+						frm.trigger("save_curriculum");
 					}
 				});
 		},
 	});
-
-	// ADMIN FEATURE: Add Column Selector
-	if (frappe.user.has_role("System Manager") || frappe.user.has_role("Administrator")) {
-		msd.dialog.add_button(
-			__("Add Columns"),
-			() => {
-				const all_fields = frappe
-					.get_meta("Course")
-					.fields.filter(
-						(df) =>
-							!["Section Break", "Column Break", "HTML", "Table", "Button"].includes(
-								df.fieldtype
-							)
-					)
-					.map((df) => ({
-						label: df.label,
-						value: df.fieldname,
-						checked: columns.includes(df.fieldname),
-					}));
-
-				const d = new frappe.ui.Dialog({
-					title: __("Select Columns"),
-					fields: [
-						{
-							label: "Columns",
-							fieldname: "columns",
-							fieldtype: "MultiCheck",
-							options: all_fields,
-							columns: 2,
-						},
-					],
-					primary_action_label: __("Update Columns"),
-					primary_action: (values) => {
-						const new_cols = values.columns || [];
-						if (new_cols.length === 0) return;
-
-						// Map back to field objects for consistency with the function signature
-						const new_course_fields = frappe
-							.get_meta("Course")
-							.fields.filter((df) => new_cols.includes(df.fieldname));
-
-						msd.dialog.hide();
-						add_course_dialog(frm, semester, enrollment_type, new_course_fields);
-						d.hide();
-					},
-				});
-				d.show();
-			},
-			"left"
-		); // Add to left side
-	}
 }
 
 function edit_course_dialog(frm, item, course_fields) {
