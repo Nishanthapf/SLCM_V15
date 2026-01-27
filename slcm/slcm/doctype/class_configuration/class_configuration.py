@@ -37,7 +37,9 @@ class ClassConfiguration(Document):
 @frappe.whitelist()
 def get_students_by_filter(programme=None, batch=None, section=None):
     """Get students based on programme, batch, and section filters"""
-    filters = {}
+    filters = {
+        'registration_status': 'Completed'  # Only fetch students with completed registration
+    }
     
     if programme:
         filters['programme'] = programme

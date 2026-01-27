@@ -20,7 +20,6 @@
             "reqd": 1
         },
         {
-            "fetch_from": "student.student_name",
             "fieldname": "student_name",
             "fieldtype": "Data",
             "in_list_view": 1,
@@ -32,7 +31,6 @@
             "fieldtype": "Column Break"
         },
         {
-            "fetch_from": "student.registration_id",
             "fieldname": "registration_id",
             "fieldtype": "Data",
             "in_list_view": 1,
@@ -40,7 +38,6 @@
             "read_only": 1
         },
         {
-            "fetch_from": "student.email_id",
             "fieldname": "email",
             "fieldtype": "Data",
             "label": "Email",
