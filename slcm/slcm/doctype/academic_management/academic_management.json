@@ -7,7 +7,9 @@
         "terms_tab",
         "terms_ui_container",
         "class_tab",
-        "class_ui_container"
+        "class_ui_container",
+        "schedule_tab",
+        "schedule_ui_container"
     ],
     "fields": [
         {
@@ -29,6 +31,16 @@
             "fieldname": "class_ui_container",
             "fieldtype": "HTML",
             "label": "Class UI Container"
+        },
+        {
+            "fieldname": "schedule_tab",
+            "fieldtype": "Tab Break",
+            "label": "Schedule"
+        },
+        {
+            "fieldname": "schedule_ui_container",
+            "fieldtype": "HTML",
+            "label": "Schedule UI Container"
         }
     ],
     "issingle": 1,

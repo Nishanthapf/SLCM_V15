@@ -1,0 +1,106 @@
+{
+    "actions": [],
+    "allow_rename": 1,
+    "autoname": "format:{class_configuration}-{schedule_date}-{from_time}",
+    "creation": "2026-01-27 14:47:00.000000",
+    "doctype": "DocType",
+    "engine": "InnoDB",
+    "field_order": [
+        "class_configuration",
+        "course",
+        "faculty",
+        "color",
+        "column_break_1",
+        "schedule_date",
+        "from_time",
+        "to_time",
+        "room"
+    ],
+    "fields": [
+        {
+            "fieldname": "class_configuration",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Class",
+            "options": "Class Configuration",
+            "reqd": 1
+        },
+        {
+            "fetch_from": "class_configuration.course",
+            "fieldname": "course",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Course",
+            "options": "Course",
+            "read_only": 1
+        },
+        {
+            "fetch_from": "class_configuration.faculty",
+            "fieldname": "faculty",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Faculty",
+            "options": "Faculty"
+        },
+        {
+            "fieldname": "color",
+            "fieldtype": "Color",
+            "label": "Color"
+        },
+        {
+            "fieldname": "column_break_1",
+            "fieldtype": "Column Break"
+        },
+        {
+            "fieldname": "schedule_date",
+            "fieldtype": "Date",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Date",
+            "reqd": 1
+        },
+        {
+            "fieldname": "from_time",
+            "fieldtype": "Time",
+            "in_list_view": 1,
+            "label": "From Time",
+            "reqd": 1
+        },
+        {
+            "fieldname": "to_time",
+            "fieldtype": "Time",
+            "in_list_view": 1,
+            "label": "To Time",
+            "reqd": 1
+        },
+        {
+            "fieldname": "room",
+            "fieldtype": "Link",
+            "label": "Room",
+            "options": "Room"
+        }
+    ],
+    "issingle": 0,
+    "links": [],
+    "modified": "2026-01-27 14:47:00.000000",
+    "modified_by": "Administrator",
+    "module": "SLCM",
+    "name": "Class Schedule",
+    "owner": "Administrator",
+    "permissions": [
+        {
+            "create": 1,
+            "delete": 1,
+            "email": 1,
+            "print": 1,
+            "read": 1,
+            "report": 1,
+            "role": "System Manager",
+            "share": 1,
+            "write": 1
+        }
+    ]
+}
