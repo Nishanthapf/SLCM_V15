@@ -275,7 +275,7 @@
    "fieldname": "fee_payment_status",
    "fieldtype": "Select",
    "label": "Fee Payment Status",
-   "options": "Paid\nPartially Paid\nUnpaid"
+   "options": "\nPaid\nPartially Paid\nUnpaid"
   },
   {
    "fieldname": "bank_details_section",
@@ -915,7 +915,7 @@
   }
  ],
  "links": [],
- "modified": "2026-01-27 11:41:34.534180",
+ "modified": "2026-01-27 12:48:22.699785",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "Student Master",
