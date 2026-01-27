@@ -2,6 +2,49 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on("Student Master", {
+	before_save(frm) {
+		if (frm.doc.program_shortcode && frm.doc.current_year) {
+			frm.set_value(
+				"naming_series",
+				`${frm.doc.program_shortcode}${frm.doc.current_year}.###`
+			);
+		}
+	},
+
+	dob(frm) {
+		if (!frm.doc.dob) return;
+
+		const dob = frappe.datetime.str_to_obj(frm.doc.dob);
+		const today = frappe.datetime.str_to_obj(frappe.datetime.now_date());
+
+		// DOB cannot be today or future
+		if (dob >= today) {
+			frappe.msgprint(__("Date of Birth cannot be today or a future date."));
+			frm.set_value("dob", "");
+			return;
+		}
+
+		// DOB cannot be current year
+		if (dob.getFullYear() === today.getFullYear()) {
+			frappe.msgprint(__("Date of Birth cannot be in the current year."));
+			frm.set_value("dob", "");
+			return;
+		}
+
+		// Minimum age = 15
+		let age = today.getFullYear() - dob.getFullYear();
+		const m = today.getMonth() - dob.getMonth();
+
+		if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
+			age--;
+		}
+
+		if (age < 15) {
+			frappe.msgprint(__("Student must be at least 15 years old."));
+			frm.set_value("dob", "");
+		}
+	},
+
 	refresh(frm) {
 		// Hide default left sidebar
 		$(".layout-side-section").hide();

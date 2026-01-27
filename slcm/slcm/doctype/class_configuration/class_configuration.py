@@ -40,16 +40,14 @@ def get_students_by_filter(programme=None, batch=None, section=None):
     filters = {}
     
     if programme:
-        filters['program'] = programme
+        filters['programme'] = programme
     if batch:
-        filters['batch'] = batch
-    if section:
-        filters['section'] = section
+        filters['batch_year'] = batch
     
     students = frappe.get_all(
         'Student Master',
         filters=filters,
-        fields=['name', 'student_name', 'registration_id', 'email_id']
+        fields=['name', 'first_name', 'middle_name', 'last_name', 'registration_id', 'email']
     )
     
     return students

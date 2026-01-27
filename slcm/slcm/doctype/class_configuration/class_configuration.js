@@ -63,11 +63,12 @@ frappe.ui.form.on('Class Student', {
         if (row.student) {
             // Fetch student details
             frappe.db.get_value('Student Master', row.student,
-                ['student_name', 'registration_id', 'email_id'], (r) => {
+                ['first_name', 'middle_name', 'last_name', 'registration_id', 'email'], (r) => {
                     if (r) {
-                        frappe.model.set_value(cdt, cdn, 'student_name', r.student_name);
+                        let student_name = [r.first_name, r.middle_name, r.last_name].filter(Boolean).join(" ");
+                        frappe.model.set_value(cdt, cdn, 'student_name', student_name);
                         frappe.model.set_value(cdt, cdn, 'registration_id', r.registration_id);
-                        frappe.model.set_value(cdt, cdn, 'email', r.email_id);
+                        frappe.model.set_value(cdt, cdn, 'email', r.email);
                     }
                 });
         }
@@ -80,13 +81,10 @@ function set_link_filters(frm) {
         frm.set_query('student', 'students', function () {
             let filters = {};
             if (frm.doc.programme) {
-                filters['program'] = frm.doc.programme;
+                filters['programme'] = frm.doc.programme;
             }
             if (frm.doc.batch) {
-                filters['batch'] = frm.doc.batch;
-            }
-            if (frm.doc.section) {
-                filters['section'] = frm.doc.section;
+                filters['batch_year'] = frm.doc.batch;
             }
             return { filters: filters };
         });
@@ -157,9 +155,9 @@ function add_students_by_filter(frm) {
                             if (!exists) {
                                 let row = frm.add_child('students');
                                 row.student = student.name;
-                                row.student_name = student.student_name;
+                                row.student_name = [student.first_name, student.middle_name, student.last_name].filter(Boolean).join(" ");
                                 row.registration_id = student.registration_id;
-                                row.email = student.email_id;
+                                row.email = student.email;
                             }
                         });
                         frm.refresh_field('students');
