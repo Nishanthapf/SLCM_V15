@@ -1,0 +1,142 @@
+<div class="timetable-configuration-page">
+    <div class="page-header">
+        <div class="page-title">
+            <h3>Academic Management - Timetable Configuration</h3>
+        </div>
+    </div>
+
+    <div class="page-content">
+        <!-- Filters Section -->
+        <div class="filter-section card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Term</label>
+                            <div id="term-filter"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Department</label>
+                            <div id="department-filter"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Course</label>
+                            <div id="course-filter"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Type</label>
+                            <div id="type-filter"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons" style="margin: 20px 0;">
+            <button class="btn btn-primary btn-sm" id="btn-add-class">
+                <i class="fa fa-plus"></i> Class Schedule
+            </button>
+            <button class="btn btn-default btn-sm" id="btn-upload-timetable">
+                <i class="fa fa-upload"></i> Upload Timetable
+            </button>
+            <button class="btn btn-default btn-sm" id="btn-download-report">
+                <i class="fa fa-download"></i> Download Report
+            </button>
+        </div>
+
+        <!-- Calendar View -->
+        <div class="calendar-section card">
+            <div class="card-body">
+                <div class="calendar-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <button class="btn btn-default btn-sm" id="btn-prev-week">
+                        <i class="fa fa-chevron-left"></i>
+                    </button>
+                    <h4 id="calendar-title">May 8 - 14, 2022</h4>
+                    <button class="btn btn-default btn-sm" id="btn-next-week">
+                        <i class="fa fa-chevron-right"></i>
+                    </button>
+                </div>
+                <div id="timetable-calendar"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.timetable-configuration-page {
+    padding: 20px;
+}
+
+.filter-section {
+    margin-bottom: 20px;
+}
+
+#timetable-calendar {
+    min-height: 500px;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: 80px repeat(7, 1fr);
+    border: 1px solid #d1d8dd;
+}
+
+.calendar-header-cell {
+    padding: 15px;
+    text-align: center;
+    background-color: #f5f7fa;
+    border: 1px solid #d1d8dd;
+    font-weight: 600;
+}
+
+.calendar-time-cell {
+    padding: 15px 10px;
+    text-align: center;
+    background-color: #f5f7fa;
+    border: 1px solid #d1d8dd;
+    font-size: 12px;
+}
+
+.calendar-event-cell {
+    padding: 5px;
+    border: 1px solid #d1d8dd;
+    min-height: 80px;
+    position: relative;
+}
+
+.calendar-event {
+    background-color: #e3f2fd;
+    border-left: 3px solid #2196f3;
+    padding: 8px;
+    margin: 2px 0;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.calendar-event:hover {
+    background-color: #bbdefb;
+}
+
+.calendar-event-title {
+    font-weight: 600;
+    margin-bottom: 3px;
+}
+
+.calendar-event-time {
+    color: #666;
+    font-size: 11px;
+}
+
+.calendar-event-instructor {
+    color: #666;
+    font-size: 11px;
+}
+</style>

@@ -1,65 +1,121 @@
 {
     "actions": [],
     "allow_rename": 1,
-    "autoname": "format:{class_configuration}-{schedule_date}-{from_time}",
+    "autoname": "naming_series:",
     "creation": "2026-01-27 14:47:00.000000",
     "doctype": "DocType",
     "engine": "InnoDB",
     "field_order": [
+        "naming_series",
         "class_configuration",
-        "course",
-        "faculty",
-        "color",
         "column_break_1",
+        "instructor",
+        "section_break_details",
+        "term",
+        "department",
+        "programme",
+        "course",
+        "column_break_2",
+        "student_group",
+        "section_break_schedule",
         "schedule_date",
         "from_time",
+        "column_break_3",
         "to_time",
-        "room"
+        "room",
+        "venue",
+        "section_break_repeat",
+        "repeat_frequency",
+        "repeats_till",
+        "parent_schedule",
+        "section_break_display",
+        "title",
+        "color",
+        "column_break_4",
+        "class_schedule_color"
     ],
     "fields": [
+        {
+            "fieldname": "naming_series",
+            "fieldtype": "Select",
+            "label": "Naming Series",
+            "options": "CSH-.YYYY.-\nCLS-.YYYY.-",
+            "reqd": 1
+        },
         {
             "fieldname": "class_configuration",
             "fieldtype": "Link",
             "in_list_view": 1,
             "in_standard_filter": 1,
-            "label": "Class",
-            "options": "Class Configuration",
-            "reqd": 1
-        },
-        {
-            "fetch_from": "class_configuration.course",
-            "fieldname": "course",
-            "fieldtype": "Link",
-            "in_list_view": 1,
-            "in_standard_filter": 1,
-            "label": "Course",
-            "options": "Course",
-            "read_only": 1
-        },
-        {
-            "fetch_from": "class_configuration.faculty",
-            "fieldname": "faculty",
-            "fieldtype": "Link",
-            "in_list_view": 1,
-            "in_standard_filter": 1,
-            "label": "Faculty",
-            "options": "Faculty"
-        },
-        {
-            "fieldname": "color",
-            "fieldtype": "Color",
-            "label": "Color"
+            "label": "Class Configuration",
+            "options": "Class Configuration"
         },
         {
             "fieldname": "column_break_1",
             "fieldtype": "Column Break"
         },
         {
+            "fieldname": "instructor",
+            "fieldtype": "Link",
+            "label": "Instructor",
+            "options": "Faculty"
+        },
+        {
+            "fieldname": "section_break_details",
+            "fieldtype": "Section Break",
+            "label": "Course Details"
+        },
+        {
+            "fieldname": "term",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Term",
+            "options": "Term Configuration"
+        },
+        {
+            "fieldname": "department",
+            "fieldtype": "Link",
+            "in_standard_filter": 1,
+            "label": "Department",
+            "options": "Department"
+        },
+        {
+            "fieldname": "programme",
+            "fieldtype": "Link",
+            "in_standard_filter": 1,
+            "label": "Program",
+            "options": "Program"
+        },
+        {
+            "fieldname": "course",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Course",
+            "options": "Course Master"
+        },
+        {
+            "fieldname": "column_break_2",
+            "fieldtype": "Column Break"
+        },
+        {
+            "fieldname": "student_group",
+            "fieldtype": "Link",
+            "label": "Student Group",
+            "options": "Student Group"
+        },
+        {
+            "fieldname": "section_break_schedule",
+            "fieldtype": "Section Break",
+            "label": "Schedule"
+        },
+        {
             "fieldname": "schedule_date",
             "fieldtype": "Date",
             "in_list_view": 1,
             "in_standard_filter": 1,
-            "label": "Date",
+            "label": "Schedule Date",
             "reqd": 1
         },
         {
@@ -70,6 +126,10 @@
             "reqd": 1
         },
         {
+            "fieldname": "column_break_3",
+            "fieldtype": "Column Break"
+        },
+        {
             "fieldname": "to_time",
             "fieldtype": "Time",
             "in_list_view": 1,
@@ -78,17 +138,72 @@
         },
         {
             "fieldname": "room",
+            "fieldtype": "Data",
+            "label": "Room"
+        },
+        {
+            "fieldname": "venue",
+            "fieldtype": "Data",
+            "label": "Venue"
+        },
+        {
+            "fieldname": "section_break_repeat",
+            "fieldtype": "Section Break",
+            "label": "Repeat Settings"
+        },
+        {
+            "fieldname": "repeat_frequency",
+            "fieldtype": "Select",
+            "label": "Repeat",
+            "options": "Never\nDaily\nWeekly"
+        },
+        {
+            "fieldname": "repeats_till",
+            "fieldtype": "Date",
+            "depends_on": "eval:doc.repeat_frequency && doc.repeat_frequency != 'Never'",
+            "label": "Repeats Till"
+        },
+        {
+            "fieldname": "parent_schedule",
             "fieldtype": "Link",
-            "label": "Room",
-            "options": "Room"
+            "label": "Parent Schedule",
+            "options": "Class Schedule",
+            "read_only": 1,
+            "hidden": 1
+        },
+        {
+            "fieldname": "section_break_display",
+            "fieldtype": "Section Break",
+            "label": "Display Settings"
+        },
+        {
+            "fieldname": "title",
+            "fieldtype": "Data",
+            "label": "Title"
+        },
+        {
+            "fieldname": "color",
+            "fieldtype": "Color",
+            "label": "Color"
+        },
+        {
+            "fieldname": "column_break_4",
+            "fieldtype": "Column Break"
+        },
+        {
+            "fieldname": "class_schedule_color",
+            "fieldtype": "Select",
+            "label": "Class Schedule Color",
+            "options": "Blue\nGreen\nRed\nYellow\nOrange\nPurple\nPink\nGray"
         }
     ],
     "issingle": 0,
     "links": [],
-    "modified": "2026-01-27 14:47:00.000000",
+    "modified": "2026-01-27 16:31:00.000000",
     "modified_by": "Administrator",
     "module": "SLCM",
     "name": "Class Schedule",
+    "naming_rule": "By \"Naming Series\" field",
     "owner": "Administrator",
     "permissions": [
         {
@@ -101,6 +216,21 @@
             "role": "System Manager",
             "share": 1,
             "write": 1
+        },
+        {
+            "create": 1,
+            "delete": 1,
+            "email": 1,
+            "print": 1,
+            "read": 1,
+            "report": 1,
+            "role": "Academics User",
+            "share": 1,
+            "write": 1
         }
-    ]
+    ],
+    "sort_field": "modified",
+    "sort_order": "DESC",
+    "states": [],
+    "track_changes": 1
 }

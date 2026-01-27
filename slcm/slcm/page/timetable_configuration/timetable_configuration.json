@@ -1,0 +1,23 @@
+{
+    "creation": "2026-01-27 16:37:00.000000",
+    "doctype": "Page",
+    "icon": "fa fa-calendar",
+    "idx": 0,
+    "modified": "2026-01-27 16:37:00.000000",
+    "modified_by": "Administrator",
+    "module": "SLCM",
+    "name": "timetable-configuration",
+    "owner": "Administrator",
+    "page_name": "Timetable Configuration",
+    "roles": [
+        {
+            "role": "System Manager"
+        },
+        {
+            "role": "Academics User"
+        }
+    ],
+    "standard": "Yes",
+    "system_page": 0,
+    "title": "Timetable Configuration"
+}
