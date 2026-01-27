@@ -1,0 +1,157 @@
+{
+    "actions": [],
+    "allow_import": 1,
+    "allow_rename": 1,
+    "autoname": "field:class_name",
+    "creation": "2026-01-27 10:40:00.000000",
+    "doctype": "DocType",
+    "engine": "InnoDB",
+    "field_order": [
+        "class_name",
+        "term",
+        "department",
+        "column_break_1",
+        "programme",
+        "batch",
+        "section",
+        "section_break_course",
+        "course",
+        "type",
+        "column_break_2",
+        "faculty",
+        "seat_limit",
+        "section_break_students",
+        "students"
+    ],
+    "fields": [
+        {
+            "fieldname": "class_name",
+            "fieldtype": "Data",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Class Name",
+            "reqd": 1,
+            "unique": 1
+        },
+        {
+            "fieldname": "term",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Term",
+            "options": "Term Configuration",
+            "reqd": 1
+        },
+        {
+            "fieldname": "department",
+            "fieldtype": "Link",
+            "in_standard_filter": 1,
+            "label": "Department",
+            "options": "Department"
+        },
+        {
+            "fieldname": "column_break_1",
+            "fieldtype": "Column Break"
+        },
+        {
+            "fieldname": "programme",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Programme",
+            "options": "Program",
+            "reqd": 1
+        },
+        {
+            "fieldname": "batch",
+            "fieldtype": "Data",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Batch"
+        },
+        {
+            "fieldname": "section",
+            "fieldtype": "Data",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Section"
+        },
+        {
+            "fieldname": "section_break_course",
+            "fieldtype": "Section Break",
+            "label": "Course Details"
+        },
+        {
+            "fieldname": "course",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Course",
+            "options": "Course Master",
+            "reqd": 1
+        },
+        {
+            "fieldname": "type",
+            "fieldtype": "Select",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Type",
+            "options": "Theory\nPractical\nLab\nTutorial",
+            "reqd": 1
+        },
+        {
+            "fieldname": "column_break_2",
+            "fieldtype": "Column Break"
+        },
+        {
+            "fieldname": "faculty",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Faculty",
+            "options": "Faculty"
+        },
+        {
+            "fieldname": "seat_limit",
+            "fieldtype": "Int",
+            "label": "Seat Limit"
+        },
+        {
+            "fieldname": "section_break_students",
+            "fieldtype": "Section Break",
+            "label": "Students"
+        },
+        {
+            "fieldname": "students",
+            "fieldtype": "Table",
+            "label": "Students",
+            "options": "Class Student"
+        }
+    ],
+    "links": [],
+    "modified": "2026-01-27 10:40:00.000000",
+    "modified_by": "Administrator",
+    "module": "SLCM",
+    "name": "Class Configuration",
+    "naming_rule": "By fieldname",
+    "owner": "Administrator",
+    "permissions": [
+        {
+            "create": 1,
+            "delete": 1,
+            "email": 1,
+            "export": 1,
+            "print": 1,
+            "read": 1,
+            "report": 1,
+            "role": "System Manager",
+            "share": 1,
+            "write": 1
+        }
+    ],
+    "sort_field": "modified",
+    "sort_order": "DESC",
+    "states": [],
+    "title_field": "class_name",
+    "track_changes": 1
+}

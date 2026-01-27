@@ -1,0 +1,132 @@
+{
+ "actions": [],
+ "allow_import": 1,
+ "allow_rename": 1,
+ "autoname": "field:term_name",
+ "creation": "2026-01-27 10:40:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "term_name",
+  "academic_year",
+  "column_break_1",
+  "system",
+  "sequence",
+  "section_break_dates",
+  "starts",
+  "column_break_2",
+  "ends",
+  "section_break_previous",
+  "previous_term",
+  "section_break_programmes",
+  "programme_mapping"
+ ],
+ "fields": [
+  {
+   "fieldname": "term_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Term Name",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "academic_year",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Academic Year",
+   "options": "Academic Year",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "system",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "System",
+   "options": "Semester\nTrimester\nQuarter\nYear",
+   "reqd": 1
+  },
+  {
+   "fieldname": "sequence",
+   "fieldtype": "Int",
+   "label": "Sequence"
+  },
+  {
+   "fieldname": "section_break_dates",
+   "fieldtype": "Section Break",
+   "label": "Term Duration"
+  },
+  {
+   "fieldname": "starts",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Starts",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "ends",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Ends",
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_break_previous",
+   "fieldtype": "Section Break",
+   "label": "Previous Term"
+  },
+  {
+   "fieldname": "previous_term",
+   "fieldtype": "Link",
+   "label": "Previous Term",
+   "options": "Term Configuration"
+  },
+  {
+   "fieldname": "section_break_programmes",
+   "fieldtype": "Section Break",
+   "label": "Map Programmes and Batches"
+  },
+  {
+   "fieldname": "programme_mapping",
+   "fieldtype": "Table",
+   "label": "Programme Mapping",
+   "options": "Term Programme Mapping"
+  }
+ ],
+ "links": [],
+ "modified": "2026-01-27 10:40:00.000000",
+ "modified_by": "Administrator",
+ "module": "SLCM",
+ "name": "Term Configuration",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "term_name",
+ "track_changes": 1
+}

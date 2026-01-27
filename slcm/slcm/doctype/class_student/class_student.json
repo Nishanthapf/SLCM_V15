@@ -1,0 +1,62 @@
+{
+    "actions": [],
+    "creation": "2026-01-27 10:40:00.000000",
+    "doctype": "DocType",
+    "engine": "InnoDB",
+    "field_order": [
+        "student",
+        "student_name",
+        "column_break_1",
+        "registration_id",
+        "email"
+    ],
+    "fields": [
+        {
+            "fieldname": "student",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "label": "Student",
+            "options": "Student Master",
+            "reqd": 1
+        },
+        {
+            "fetch_from": "student.student_name",
+            "fieldname": "student_name",
+            "fieldtype": "Data",
+            "in_list_view": 1,
+            "label": "Student Name",
+            "read_only": 1
+        },
+        {
+            "fieldname": "column_break_1",
+            "fieldtype": "Column Break"
+        },
+        {
+            "fetch_from": "student.registration_id",
+            "fieldname": "registration_id",
+            "fieldtype": "Data",
+            "in_list_view": 1,
+            "label": "Registration ID",
+            "read_only": 1
+        },
+        {
+            "fetch_from": "student.email_id",
+            "fieldname": "email",
+            "fieldtype": "Data",
+            "label": "Email",
+            "read_only": 1
+        }
+    ],
+    "index_web_pages_for_search": 1,
+    "istable": 1,
+    "links": [],
+    "modified": "2026-01-27 10:40:00.000000",
+    "modified_by": "Administrator",
+    "module": "SLCM",
+    "name": "Class Student",
+    "owner": "Administrator",
+    "permissions": [],
+    "sort_field": "modified",
+    "sort_order": "DESC",
+    "states": []
+}
