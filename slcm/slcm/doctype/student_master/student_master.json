@@ -22,6 +22,7 @@
   "academic_status",
   "official_email_id",
   "intake",
+  "sample",
   "tab_program_mapping",
   "program_mapping_section",
   "department",
@@ -906,10 +907,15 @@
   {
    "fieldname": "column_break_mlne",
    "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "sample",
+   "fieldtype": "Data",
+   "label": "Sample"
   }
  ],
  "links": [],
- "modified": "2026-01-19 12:54:42.127547",
+ "modified": "2026-01-27 11:41:34.534180",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "Student Master",
