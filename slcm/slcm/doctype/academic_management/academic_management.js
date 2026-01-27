@@ -191,70 +191,20 @@ frappe.ui.form.on("Academic Management", {
 	/* --------------------------------------------------------------------------
 	 * SCHEDULE UI (FRAPPE NATIVE CALENDAR – STABLE)
 	 * -------------------------------------------------------------------------- */
-	render_schedule_ui(frm) {
+	render_schedule_ui: function (frm) {
 		const $wrapper = frm.get_field("schedule_ui_container").$wrapper;
-		$wrapper.empty();
 
-		// Prevent re-render on refresh
-		if (frm.schedule_calendar) return;
+		// Simple placeholder for Timetable - better implemented with full calendar library later
+		let html = `
+			<div class="text-center">
+				<p>To view the Class Schedule, please check the <a href="/app/course-schedule">Course Schedule</a> list or Calendar view.</p>
+				<button class="btn btn-default btn-view-calendar">View Calendar</button>
+			</div>
+		`;
+		$wrapper.html(html);
 
-		const calendar = new frappe.views.Calendar({
-			parent: $wrapper,
-			doctype: "Class Schedule",
-			date_field: "schedule_date",
-			start_time_field: "from_time",
-			end_time_field: "to_time",
-			title_field: "class_configuration",
-			color_field: "color",
-
-			get_events_method: "frappe.desk.calendar.get_events",
-
-			onload() {
-				frm.schedule_calendar = calendar;
-			},
-
-			on_event_click(event) {
-				frappe.set_route("Form", "Class Schedule", event.name);
-			},
-
-			on_date_click(date) {
-				frappe.new_doc("Class Schedule", {
-					schedule_date: date,
-				});
-			},
-
-			on_event_drop(info) {
-				update_schedule(info);
-			},
-
-			on_event_resize(info) {
-				update_schedule(info);
-			},
+		$wrapper.find(".btn-view-calendar").on("click", function () {
+			frappe.set_route("List", "Class Schedule", "Calendar");
 		});
-
-		function update_schedule(info) {
-			if (!info.start || !info.end) return;
-
-			frappe.call({
-				method: "frappe.client.set_value",
-				args: {
-					doctype: "Class Schedule",
-					name: info.name,
-					fieldname: {
-						schedule_date: frappe.datetime.obj_to_str(info.start).split(" ")[0],
-						from_time: frappe.datetime.get_time(info.start),
-						to_time: frappe.datetime.get_time(info.end),
-					},
-				},
-				callback(r) {
-					if (!r.exc) {
-						frappe.show_alert({
-							message: __("Schedule Updated"),
-							indicator: "green",
-						});
-					}
-				},
-			});
-		}
 	},
 });

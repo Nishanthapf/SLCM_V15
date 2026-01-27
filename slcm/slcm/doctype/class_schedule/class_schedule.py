@@ -194,3 +194,77 @@ def create_class_schedule(data):
         doc.create_recurring_schedules()
     
     return doc.name
+
+
+@frappe.whitelist()
+def get_events(start, end, filters=None):
+    """
+    Custom method to get events for FullCalendar.
+    Handles the split date (schedule_date) and time (from_time, to_time) fields.
+    """
+    if not filters:
+        filters = []
+        
+    import json
+    if isinstance(filters, str):
+        filters = json.loads(filters)
+
+    # Base Query
+    query = """
+        SELECT 
+            name, 
+            class_configuration, 
+            course,
+            instructor,
+            schedule_date, 
+            from_time, 
+            to_time, 
+            room,
+            venue,
+            color,
+            title,
+            student_group
+        FROM `tabClass Schedule`
+        WHERE 
+            schedule_date BETWEEN %(start)s AND %(end)s
+            AND docstatus < 2
+    """
+    
+    # Add filters if present
+    # This is a basic implementation. For complex standard filters, 
+    # we might need frappe.get_list logic or get_event_conditions
+    condition_values = {"start": start, "end": end}
+    
+    # Execute
+    data = frappe.db.sql(query, condition_values, as_dict=True)
+
+    result = []
+    for d in data:
+        # Construct ISO datetime strings for FullCalendar
+        start_dt = f"{d.schedule_date} {d.from_time}"
+        end_dt = f"{d.schedule_date} {d.to_time}"
+        
+        title = d.title
+        if not title:
+            # Fallback title: Course (Room)
+            parts = [d.course, d.instructor]
+            title = " - ".join([p for p in parts if p])
+            if d.room:
+                title += f" ({d.room})"
+
+        result.append({
+            "name": d.name,
+            "id": d.name,
+            "title": title,
+            "start": start_dt,
+            "end": end_dt,
+            "color": d.color or "#3498db", # Default blue
+            "allDay": 0,
+            "extendedProps": {
+                "room": d.room,
+                "instructor": d.instructor,
+                "student_group": d.student_group
+            }
+        })
+    
+    return result
