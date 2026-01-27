@@ -1,0 +1,97 @@
+.academic-management-container {
+    padding: 15px;
+}
+
+/* Terms Table Styling */
+.terms-table-container {
+    background: white;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.terms-table {
+    margin-bottom: 0;
+}
+
+.terms-table thead {
+    background-color: #f5f7fa;
+}
+
+.terms-table thead th {
+    font-weight: 600;
+    color: #4a5568;
+    border-bottom: 2px solid #e2e8f0;
+    padding: 12px;
+}
+
+.terms-table tbody td {
+    padding: 12px;
+    vertical-align: middle;
+}
+
+.term-row:hover {
+    background-color: #f7fafc;
+}
+
+.term-row:nth-child(even) {
+    background-color: #e6ffed;
+}
+
+/* Class Table Styling */
+.class-filters {
+    margin-bottom: 20px;
+    padding: 15px;
+    background: white;
+    border-radius: 4px;
+}
+
+.class-table-container {
+    background: white;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.class-table {
+    margin-bottom: 0;
+}
+
+.class-table thead {
+    background-color: #f5f7fa;
+}
+
+.class-table thead th {
+    font-weight: 600;
+    color: #4a5568;
+    border-bottom: 2px solid #e2e8f0;
+    padding: 12px;
+}
+
+.class-table tbody td {
+    padding: 12px;
+    vertical-align: middle;
+}
+
+.class-row:hover {
+    background-color: #f7fafc;
+}
+
+/* Tab Styling */
+.page-head .btn-group .btn {
+    margin-right: 5px;
+}
+
+/* Dialog Styling */
+.modal-dialog {
+    max-width: 600px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .academic-management-container {
+        padding: 10px;
+    }
+    
+    .terms-table, .class-table {
+        font-size: 14px;
+    }
+}
