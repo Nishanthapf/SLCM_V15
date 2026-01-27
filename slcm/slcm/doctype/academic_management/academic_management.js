@@ -326,9 +326,8 @@ frappe.ui.form.on("Academic Management", {
 					classes.forEach((c) => {
 						html += `
                             <tr>
-                                <td><a href="/app/student-group/${
-									c.name
-								}" style="font-weight: bold;">${c.student_group_name}</a></td>
+                                <td><a href="/app/student-group/${c.name
+							}" style="font-weight: bold;">${c.student_group_name}</a></td>
                                 <td>${c.class_type || "-"}</td>
                                 <td>${c.course || "-"}</td>
                                 <td>${c.academic_term || "-"}</td>
@@ -416,9 +415,8 @@ frappe.ui.form.on("Academic Management", {
 			primary_action_label: "Create",
 			primary_action: function (values) {
 				if (!values.student_group_name) {
-					values.student_group_name = `${values.course}-${
-						values.class_type
-					}-${frappe.datetime.now_date()}`; // Fallback, better to let server handle
+					values.student_group_name = `${values.course}-${values.class_type
+						}-${frappe.datetime.now_date()}`; // Fallback, better to let server handle
 				}
 
 				frappe.call({

@@ -54,8 +54,10 @@ class StudentMaster(Document):
 			"Pending Registration": ["Pending Print & Scan"],
 			"Pending Print & Scan": ["Pending Residences"],
 			"Pending Residences": ["Pending IT"],
-			"Pending IT": ["Completed"],
-			"Completed": ["Selected"],  # Only System Manager can re-open
+			"Pending IT": ["Final Verification REGO"],  # Corrected from "Completed" based on workflow
+			"Final Verification REGO": ["Completed"],
+			"Completed": ["Re-Open"],  # Only System Manager can re-open
+			"Re-Open": ["Pending REGO"],
 		}
 
 		# Check if transition is valid
@@ -150,7 +152,7 @@ def update_registration_status(student_id, new_status, remarks=None):
 		"Pending IT": ["Residence / Hostel Admin", "System Manager"],
 		"Final Verification REGO": ["IT Admin", "System Manager"],
 		"Completed": ["Registration Officer", "System Manager"],
-		"Selected": ["System Manager"],  # Only System Manager can re-open
+		"Re-Open": ["System Manager"],
 	}
 
 	# Check if user has permission for this status transition
@@ -177,7 +179,8 @@ def update_registration_status(student_id, new_status, remarks=None):
 		"Pending Residences": ["Pending IT"],
 		"Pending IT": ["Final Verification REGO"],
 		"Final Verification REGO": ["Completed"],
-		"Completed": ["Selected"],
+		"Completed": ["Re-Open"],
+		"Re-Open": ["Pending REGO"],
 	}
 
 	# Admin and System Manager can change to any status
@@ -266,7 +269,8 @@ def get_available_status_actions(student_id):
 			"next_state": "Completed",
 			"roles": ["Registration Officer", "System Manager"],
 		},
-		"Completed": {"action": "Re-Open", "next_state": "Selected", "roles": ["System Manager"]},
+		"Completed": {"action": "Re-Open", "next_state": "Re-Open", "roles": ["System Manager"]},
+		"Re-Open": {"action": "Submit for REGO", "next_state": "Pending REGO", "roles": ["System Manager"]},
 	}
 
 	available_actions = []
@@ -283,6 +287,7 @@ def get_available_status_actions(student_id):
 			"Pending IT",
 			"Final Verification REGO",
 			"Completed",
+			"Re-Open",
 		]
 		for state in all_states:
 			if state != current_status:

@@ -54,6 +54,11 @@
             "state": "Completed",
             "doc_status": 1,
             "allow_edit": "System Manager"
+        },
+        {
+            "state": "Re-Open",
+            "doc_status": 0,
+            "allow_edit": "System Manager"
         }
     ],
     "transitions": [
@@ -120,7 +125,13 @@
         {
             "state": "Completed",
             "action": "Re-Open",
-            "next_state": "Selected",
+            "next_state": "Re-Open",
+            "allowed": "System Manager"
+        },
+        {
+            "state": "Re-Open",
+            "action": "Submit for REGO",
+            "next_state": "Pending REGO",
             "allowed": "System Manager"
         }
     ]

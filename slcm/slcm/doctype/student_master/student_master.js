@@ -264,12 +264,18 @@ function show_status_transition_dialog(frm, data) {
 				return;
 			}
 
+			let confirm_message = __("Are you sure you want to change status from <b>{0}</b> to <b>{1}</b>?", [
+				current_status,
+				values.new_status,
+			]);
+
+			if (values.new_status === "Re-Open") {
+				confirm_message = __("Are you sure you want to <b>Re-Open</b> this application? <br>This might require re-verification of all details.");
+			}
+
 			// Confirm action
 			frappe.confirm(
-				__("Are you sure you want to change status from <b>{0}</b> to <b>{1}</b>?", [
-					current_status,
-					values.new_status,
-				]),
+				confirm_message,
 				function () {
 					// Yes
 					frappe.call({
