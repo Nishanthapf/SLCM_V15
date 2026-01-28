@@ -268,3 +268,44 @@ def get_events(start, end, filters=None):
         })
     
     return result
+
+
+@frappe.whitelist()
+def create_class_schedule_on_select(start, end, filters=None):
+    """
+    Create a Class Schedule when a user selects a time range in the calendar.
+    Uses current filters to populate mandatory fields.
+    """
+    import json
+    from frappe.utils import get_datetime
+
+    start_dt = get_datetime(start)
+    end_dt = get_datetime(end)
+
+    # Extract date and time
+    schedule_date = start_dt.date()
+    from_time = start_dt.time()
+    to_time = end_dt.time()
+
+    # Create new doc
+    doc = frappe.new_doc("Class Schedule")
+    doc.schedule_date = schedule_date
+    doc.from_time = from_time
+    doc.to_time = to_time
+    
+    # Process filters to populate fields
+    if filters:
+        if isinstance(filters, str):
+            filters = json.loads(filters)
+        
+        # filters structure is usually [[doctype, fieldname, operator, value], ...]
+        # We only care about simple '=' filters to pre-fill data
+        for f in filters:
+            if len(f) >= 4 and f[2] == "=":
+                fieldname = f[1]
+                value = f[3]
+                if doc.meta.has_field(fieldname):
+                    doc.set(fieldname, value)
+
+    doc.insert()
+    return doc.name
