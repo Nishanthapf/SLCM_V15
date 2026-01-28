@@ -4,6 +4,7 @@
 import frappe
 from frappe.model.document import Document
 from datetime import datetime, timedelta
+from dateutil.relativedelta import relativedelta
 
 
 class ClassSchedule(Document):
@@ -59,7 +60,7 @@ class ClassSchedule(Document):
         """Check if two time ranges overlap"""
         return start1 < end2 and end1 > start2
 
-    def on_submit(self):
+    def after_insert(self):
         """Create recurring schedules if repeat is enabled"""
         if self.repeat_frequency and self.repeat_frequency != "Never":
             self.create_recurring_schedules()
@@ -68,40 +69,94 @@ class ClassSchedule(Document):
         """Create recurring class schedules based on repeat frequency"""
         if not self.repeats_till:
             return
-
-        current_date = datetime.strptime(str(self.schedule_date), "%Y-%m-%d")
-        end_date = datetime.strptime(str(self.repeats_till), "%Y-%m-%d")
-
-        # Determine increment based on frequency
-        if self.repeat_frequency == "Daily":
-            increment = timedelta(days=1)
-        elif self.repeat_frequency == "Weekly":
-            increment = timedelta(weeks=1)
-        else:
+        
+        # Prevent duplicate creation if this method is called multiple times
+        if frappe.db.exists("Class Schedule", {"parent_schedule": self.name}):
             return
 
-        # Create schedules
-        current_date += increment  # Skip the first date (already created)
-        created_count = 0
+        try:
+            current_date = datetime.strptime(str(self.schedule_date), "%Y-%m-%d")
+            end_date = datetime.strptime(str(self.repeats_till), "%Y-%m-%d")
 
-        while current_date <= end_date:
-            # Create a new schedule
-            new_schedule = frappe.copy_doc(self)
-            new_schedule.schedule_date = current_date.strftime("%Y-%m-%d")
-            new_schedule.parent_schedule = self.name
-            new_schedule.repeat_frequency = "Never"  # Don't repeat the child schedules
-            new_schedule.repeats_till = None
-            new_schedule.insert(ignore_permissions=True)
-            created_count += 1
+            # Determine increment based on frequency
+            if self.repeat_frequency == "Daily":
+                increment = timedelta(days=1)
+            elif self.repeat_frequency == "Weekly":
+                increment = timedelta(weeks=1)
+            elif self.repeat_frequency == "Monthly":
+                increment = relativedelta(months=1)
+            else:
+                return
 
-            current_date += increment
+            # Create schedules
+            current_date += increment  # Skip the first date (already created)
+            created_count = 0
+            conflict_count = 0
+            schedules_to_create = []
 
-        if created_count > 0:
-            frappe.msgprint(
-                f"Created {created_count} recurring class schedule(s)",
-                indicator="green",
-                alert=True,
-            )
+            # First, collect all schedules to create and check for conflicts
+            while current_date <= end_date:
+                # Check for conflicts on this date
+                has_conflict = False
+                if self.instructor:
+                    conflicts = frappe.get_all(
+                        "Class Schedule",
+                        filters={
+                            "instructor": self.instructor,
+                            "schedule_date": current_date.strftime("%Y-%m-%d"),
+                        },
+                        fields=["name", "from_time", "to_time", "course"],
+                    )
+                    
+                    for conflict in conflicts:
+                        if self.times_overlap(
+                            self.from_time, self.to_time, conflict.from_time, conflict.to_time
+                        ):
+                            has_conflict = True
+                            conflict_count += 1
+                            frappe.logger().warning(
+                                f"Skipping schedule on {current_date.strftime('%Y-%m-%d')} due to conflict with {conflict.name}"
+                            )
+                            break
+                
+                if not has_conflict:
+                    schedules_to_create.append(current_date.strftime("%Y-%m-%d"))
+                
+                # Increment based on frequency
+                if self.repeat_frequency == "Monthly":
+                    current_date += increment
+                else:
+                    current_date += increment
+
+            # Now create all schedules in a transaction
+            for schedule_date in schedules_to_create:
+                new_schedule = frappe.copy_doc(self)
+                new_schedule.schedule_date = schedule_date
+                new_schedule.parent_schedule = self.name
+                new_schedule.repeat_frequency = "Never"  # Don't repeat the child schedules
+                new_schedule.repeats_till = None
+                new_schedule.insert(ignore_permissions=True)
+                created_count += 1
+
+            # Provide feedback to user
+            if created_count > 0:
+                message = f"Created {created_count} recurring class schedule(s)"
+                if conflict_count > 0:
+                    message += f" (Skipped {conflict_count} due to conflicts)"
+                frappe.msgprint(
+                    message,
+                    indicator="green" if conflict_count == 0 else "orange",
+                    alert=True,
+                )
+            elif conflict_count > 0:
+                frappe.msgprint(
+                    f"Could not create recurring schedules. All {conflict_count} dates have conflicts.",
+                    indicator="red",
+                    alert=True,
+                )
+        except Exception as e:
+            frappe.log_error(f"Error creating recurring schedules: {str(e)}")
+            frappe.throw(f"Error creating recurring schedules: {str(e)}")
 
 
 @frappe.whitelist()
@@ -269,43 +324,3 @@ def get_events(start, end, filters=None):
     
     return result
 
-
-@frappe.whitelist()
-def create_class_schedule_on_select(start, end, filters=None):
-    """
-    Create a Class Schedule when a user selects a time range in the calendar.
-    Uses current filters to populate mandatory fields.
-    """
-    import json
-    from frappe.utils import get_datetime
-
-    start_dt = get_datetime(start)
-    end_dt = get_datetime(end)
-
-    # Extract date and time
-    schedule_date = start_dt.date()
-    from_time = start_dt.time()
-    to_time = end_dt.time()
-
-    # Create new doc
-    doc = frappe.new_doc("Class Schedule")
-    doc.schedule_date = schedule_date
-    doc.from_time = from_time
-    doc.to_time = to_time
-    
-    # Process filters to populate fields
-    if filters:
-        if isinstance(filters, str):
-            filters = json.loads(filters)
-        
-        # filters structure is usually [[doctype, fieldname, operator, value], ...]
-        # We only care about simple '=' filters to pre-fill data
-        for f in filters:
-            if len(f) >= 4 and f[2] == "=":
-                fieldname = f[1]
-                value = f[3]
-                if doc.meta.has_field(fieldname):
-                    doc.set(fieldname, value)
-
-    doc.insert()
-    return doc.name

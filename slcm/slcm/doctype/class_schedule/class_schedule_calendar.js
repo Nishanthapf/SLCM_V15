@@ -11,26 +11,43 @@ frappe.views.calendar["Class Schedule"] = {
     options: {
         selectable: true,
         select: function (info) {
-            // Auto-save on selection
-            let args = {
-                start: info.startStr,
-                end: info.endStr,
-                filters: cur_list.filter_area.get(),
+            // Redirect to new Class Schedule form with pre-filled date/time
+            let schedule_date = null;
+            let from_time = null;
+            let to_time = null;
+
+            // Extract date and time from the selection
+            if (info.start) {
+                schedule_date = frappe.datetime.obj_to_str(info.start);
+                from_time = frappe.datetime.get_time(info.start);
+            }
+
+            if (info.end) {
+                to_time = frappe.datetime.get_time(info.end);
+            }
+
+            // Get current filters to pre-populate fields
+            let filters = cur_list.filter_area.get();
+            let doc_fields = {
+                schedule_date: schedule_date,
+                from_time: from_time,
+                to_time: to_time
             };
 
-            frappe.call({
-                method: "slcm.slcm.doctype.class_schedule.class_schedule.create_class_schedule_on_select",
-                args: args,
-                callback: function (r) {
-                    if (!r.exc) {
-                        frappe.show_alert({
-                            message: __("Class Schedule Created"),
-                            indicator: "green",
-                        });
-                        cur_list.refresh();
+            // Parse filters and add them to the new doc
+            if (filters && filters.length > 0) {
+                filters.forEach(filter => {
+                    // Filter format: [doctype, fieldname, operator, value, hidden]
+                    if (filter.length >= 4 && filter[2] === "=") {
+                        let fieldname = filter[1];
+                        let value = filter[3];
+                        doc_fields[fieldname] = value;
                     }
-                },
-            });
+                });
+            }
+
+            // Open new Class Schedule form with pre-filled values
+            frappe.new_doc("Class Schedule", doc_fields);
         },
     },
     onload: function (view) {
