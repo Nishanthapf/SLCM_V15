@@ -64,6 +64,7 @@
   "tab_contact",
   "contact_details_section",
   "email",
+  "personal_email",
   "phone",
   "alternate_phone",
   "emergency_contact",
@@ -192,7 +193,8 @@
    "fieldname": "quota",
    "fieldtype": "Select",
    "label": "Quota / Category",
-   "options": "General\nSC\nST\nOBC\nEWS\nNRI"
+   "options": "General\nSC\nST\nOBC\nEWS\nNRI",
+   "permlevel": 1
   },
   {
    "fieldname": "intake",
@@ -417,8 +419,7 @@
   {
    "fieldname": "last_name",
    "fieldtype": "Data",
-   "label": "Last Name",
-   "reqd": 1
+   "label": "Last Name"
   },
   {
    "fieldname": "dob",
@@ -460,11 +461,13 @@
    "depends_on": "eval:doc.pwd==1",
    "fieldname": "disability_special_needs",
    "fieldtype": "Small Text",
+   "hidden": 1,
    "label": "Disability/Special Needs"
   },
   {
    "fieldname": "pre_existing_conditions",
    "fieldtype": "Small Text",
+   "hidden": 1,
    "label": "Pre-existing Conditions"
   },
   {
@@ -912,10 +915,17 @@
    "fieldname": "sample",
    "fieldtype": "Data",
    "label": "Sample"
+  },
+  {
+   "fieldname": "personal_email",
+   "fieldtype": "Data",
+   "label": "Personal Email",
+   "options": "Email",
+   "reqd": 1
   }
  ],
  "links": [],
- "modified": "2026-01-27 12:48:22.699785",
+ "modified": "2026-01-28 14:38:49.689598",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "Student Master",
