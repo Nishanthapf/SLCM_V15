@@ -1,5 +1,4 @@
 import json
-
 import frappe
 from frappe.model.document import Document
 
@@ -21,209 +20,193 @@ class CurriculumManagement(Document):
 			self.append("enrollment_types", d)
 
 
+# ---------------------------------------------------------------------
+# GET CURRICULUM
+# ---------------------------------------------------------------------
 @frappe.whitelist()
 def get_curriculum(program, academic_year, batch=None, section=None):
 	if not program or not academic_year:
 		return None
 
-	try:
-		# NAMING STRATEGY:
-		# If Batch is present, we try to find a Curriculum specific to that Batch.
-		# Name Format: {program}-{academic_year}-{batch}
-		# Fallback: {program}-{academic_year} (Generic)
-		
-		curriculum_name = None
-		if batch:
-			# Try specific batch curriculum
-			batch_c_name = f"{program}-{academic_year}-{batch}"
-			if frappe.db.exists("Curriculum", batch_c_name):
-				curriculum_name = batch_c_name
-		
-		# If no batch-specific found, fallback to generic?
-		# User requirement: "configure the term department curriculum" based on batch/section
-		# This implies if they select a batch, they WANT to see/edit that batch's curriculum.
-		# If it doesn't exist yet, we should probably return empty or the generic one as 'template'?
-		# For now, let's look for the generic one if specific doesn't exist, 
-		# BUT if they save, it will create a new specific one (in save_curriculum).
-		
-		if not curriculum_name:
-			generic_name = f"{program}-{academic_year}"
-			if frappe.db.exists("Curriculum", generic_name):
-				curriculum_name = generic_name
+	# Prefer batch-specific curriculum
+	filters = {
+		"program": program,
+		"academic_year": academic_year,
+	}
 
-		data = {}
+	if batch:
+		filters["batch"] = batch
 
-		if curriculum_name and frappe.db.exists("Curriculum", curriculum_name):
-			doc = frappe.get_doc("Curriculum", curriculum_name)
-			data = doc.as_dict()
-			
-			# If we fell back to generic, but user selected a batch, 
-			# we might want to warn or indicate this is "inherited".
-			# But for simplicity, we just load it. 
-			# The frontend "Save" will trigger `save_curriculum` with the batch, creating a new record.
-		else:
-			# Return empty structure with defaults
-			data = {
-				"program": program,
-				"academic_year": academic_year,
-				"batch": batch,
-				"academic_system": "Semester",  # Default
-				"curriculum_courses": [],
-			}
+	name = frappe.db.get_value("Curriculum", filters, "name")
 
-		# ---------------------------------------------------------
-		# DYNAMIC SYNC: Enrich with latest Course Master Data
-		# ---------------------------------------------------------
-		if data.get("curriculum_courses"):
-			# Collect all course names
-			course_names = [
-				d.get("course")
-				for d in data["curriculum_courses"]
-				if d.get("course_group_type") == "Course" and d.get("course")
-			]
+	# Fallback to generic curriculum
+	if not name and batch:
+		name = frappe.db.get_value(
+			"Curriculum",
+			{"program": program, "academic_year": academic_year, "batch": ["is", "not set"]},
+			"name",
+		)
 
-			if course_names:
-				# Fetch latest details for these courses
-				# We fetch ALL fields to support dynamic UI rendering
-				courses_info = frappe.get_all("Course", filters={"name": ["in", course_names]}, fields=["*"])
-				course_map = {c.name: c for c in courses_info}
+	if name:
+		doc = frappe.get_doc("Curriculum", name)
+		return doc.as_dict()
 
-				# Update the list in-memory
-				for row in data["curriculum_courses"]:
-					if row.get("course_group_type") == "Course" and row.get("course"):
-						c_info = course_map.get(row.get("course"))
-						if c_info:
-							# Update Credit Value if strictly tied to master?
-							# Requirement says "Changes in Course DocType... not reflected properly"
-							# This implies we should show Master value, OR update stored value.
-							# Let's update the 'read' value.
-							# We also merge ALL logic fields so the UI can verify them.
-							row.update(c_info)
-							# explicitly ensure 'credits' matches 'credit_value' from master
-							# unless we want to allow override?
-							# Usually Curriculum overrides Master. But 'credit value edits are not syncing correctly'
-							# implies the user wants to EDIT it.
-							# If I overwrite it here, I reset user edits!
-							# WAIT. "Changes in Course DocType are not reflected" vs "Edit credit value... not saved"
-							# If user Edits credit in Curriculum, it should stay.
-							# If user changes Master, does it update Curriculum?
-							# Standard logic: Master is default. Curriculum is override.
-							# If Curriculum 'credits' is 0 or None, take Master.
-							# If Master changed from 3 to 4, and Curriculum was 3 (default), should it become 4?
-							# If it was manually set to 3, it should stay 3.
-							# HOW to distinguish? Hard.
-
-							# Let's take a safe approach:
-							# 1. Merge all OTHER descriptive fields (Description, Code, Custom Fields)
-							# 2. For Credits, only update if it looks like a default?
-							# Ref user complaint: "Changes in Course DocType are not reflected properly".
-							# Likely referring to metadata (Name, new fields).
-							# Ref complaint 3: "Edit credit value... updated credit value is NOT saved".
-							# This means they DO want to save overrides.
-
-							# Strategy:
-							# - Map `credit_value` from Course to `master_credits` just in case UI wants to show diff.
-							# - Copy all other fields.
-							pass
-
-		return data
-
-	except Exception as e:
-		frappe.log_error(f"Error fetching curriculum: {e}")
-		return None
+	# Return empty structure
+	return {
+		"program": program,
+		"academic_year": academic_year,
+		"batch": batch,
+		"academic_system": "Semester",
+		"curriculum_courses": [],
+	}
 
 
+# ---------------------------------------------------------------------
+# SAVE CURRICULUM (MASTER FIX)
+# ---------------------------------------------------------------------
 @frappe.whitelist()
-def save_curriculum(program, academic_year, department, courses, academic_system="Semester", batch=None, section=None):
+def save_curriculum(
+	program,
+	academic_year,
+	department,
+	courses,
+	academic_system="Semester",
+	batch=None,
+	section=None,
+):
+
+
 	if isinstance(courses, str):
 		courses = json.loads(courses)
 
-	# Naming Logic:
-	# If batch is provided, create/update Program-Year-Batch
-	# Else create/update Program-Year
-	
+	# ----------------------------------
+	# Determine EXISTING document NAME
+	# ----------------------------------
+	filters = {
+		"program": program,
+		"academic_year": academic_year,
+	}
+
 	if batch:
-		curriculum_name = f"{program}-{academic_year}-{batch}"
-	else:
-		curriculum_name = f"{program}-{academic_year}"
+		filters["batch"] = batch
 
-	if frappe.db.exists("Curriculum", curriculum_name):
-		doc = frappe.get_doc("Curriculum", curriculum_name)
-	else:
-		doc = frappe.new_doc("Curriculum")
-		doc.program = program
-		doc.academic_year = academic_year
-		doc.batch = batch # Set batch if new
-		# Department is required for creation
+	name = frappe.db.get_value("Curriculum", filters, "name")
+	
+	# If not found with batch, try without batch (fallback for existing records without batch)
+	if not name and batch:
+		name = frappe.db.get_value("Curriculum", {
+			"program": program,
+			"academic_year": academic_year,
+		}, "name")
+
+	# ----------------------------------
+	# CASE 1: UPDATE EXISTING
+	# ----------------------------------
+	if name:
+		doc = frappe.get_doc("Curriculum", name)
+
+		# Update fields
 		doc.department = department
+		doc.academic_system = academic_system
+		doc.batch = batch
+		doc.section = section
 
+		# Replace child table
+		doc.set("curriculum_courses", [])
+
+		for course in courses:
+			doc.append("curriculum_courses", {
+				"semester": course.get("semester"),
+				"enrollment_type": course.get("enrollment_type"),
+				"course_group_type": course.get("course_group_type", "Course"),
+				"course": course.get("course"),
+				"cluster_name": course.get("cluster_name"),
+				"min_courses": course.get("min_courses"),
+				"max_courses": course.get("max_courses"),
+				"credits": course.get("credits"),
+			})
+
+		# Save the document properly
+		doc.save(ignore_permissions=True)
+		frappe.db.commit()
+
+		return {"status": "updated", "name": doc.name}
+
+	# ----------------------------------
+	# CASE 2: CREATE NEW (ONCE)
+	# ----------------------------------
+	doc = frappe.new_doc("Curriculum")
+	doc.program = program
+	doc.academic_year = academic_year
 	doc.department = department
 	doc.academic_system = academic_system
-	if batch:
-		doc.batch = batch
-
-	# Clear existing courses and re-add
-	doc.set("curriculum_courses", [])
+	doc.batch = batch
+	doc.section = section
 
 	for course in courses:
-		row = {
+		doc.append("curriculum_courses", {
 			"semester": course.get("semester"),
+			"enrollment_type": course.get("enrollment_type"),
 			"course_group_type": course.get("course_group_type", "Course"),
 			"course": course.get("course"),
-			"enrollment_type": course.get("enrollment_type"),
 			"cluster_name": course.get("cluster_name"),
 			"min_courses": course.get("min_courses"),
 			"max_courses": course.get("max_courses"),
-			"credits": course.get("credits"),  # Persist user edit
-		}
-		doc.append("curriculum_courses", row)
+			"credits": course.get("credits"),
+		})
 
-	doc.save()
-	return doc.name
+	# 🔥 INSERT ONLY ONCE
+	doc.insert(ignore_permissions=True)
+	frappe.db.commit()
+
+	return {"status": "created", "name": doc.name}
 
 
+
+# ---------------------------------------------------------------------
+# COURSE DIALOG COLUMNS
+# ---------------------------------------------------------------------
 @frappe.whitelist()
 def get_course_dialog_columns():
 	meta = frappe.get_meta("Course")
-	columns = []
-	for df in meta.fields:
-		if (
-			df.in_list_view
-			and not df.hidden
-			and df.fieldtype not in ["Section Break", "Column Break", "HTML", "Table", "Button"]
-		):
-			columns.append(df.fieldname)
+	columns = [
+		df.fieldname
+		for df in meta.fields
+		if df.in_list_view
+		and not df.hidden
+		and df.fieldtype not in ["Section Break", "Column Break", "HTML", "Table", "Button"]
+	]
 
-	if not columns:
-		columns = ["course_name", "department"]
-
-	# Ensure critical fields are present
 	for field in ["course_name", "course_code", "department_name"]:
 		if field not in columns and any(f.fieldname == field for f in meta.fields):
 			columns.insert(0, field)
 
-	return columns
+	return columns or ["course_name", "department_name"]
 
 
+# ---------------------------------------------------------------------
+# SECTION DETAILS
+# ---------------------------------------------------------------------
 @frappe.whitelist()
 def get_details_from_section(section):
 	if not section:
 		return {}
-	
+
 	return frappe.db.get_value(
-		"Program Batch Section", 
-		section, 
-		["department", "program", "academic_year", "batch"], 
-		as_dict=True
+		"Program Batch Section",
+		section,
+		["department", "program", "academic_year", "batch"],
+		as_dict=True,
 	)
 
 
+# ---------------------------------------------------------------------
+# COURSE SEARCH (CUSTOM DIALOG)
+# ---------------------------------------------------------------------
 @frappe.whitelist()
 def get_courses_for_curriculum(department, txt=None, start=0, page_length=20):
-	# Ensure correct types (VERY IMPORTANT)
 	start = int(start or 0)
 	page_length = int(page_length or 20)
-
 	txt = f"%{txt}%" if txt else "%"
 
 	return frappe.db.sql(
@@ -231,11 +214,11 @@ def get_courses_for_curriculum(department, txt=None, start=0, page_length=20):
 		SELECT
 			c.name,
 			c.course_name,
+			c.course_code,
 			c.credit_value,
 			COALESCE(d.department_name, d.name) AS department_name
 		FROM `tabCourse` c
-		LEFT JOIN `tabDepartment` d
-			ON d.name = c.department
+		LEFT JOIN `tabDepartment` d ON d.name = c.department
 		WHERE
 			c.department = %s
 			AND c.status = 'Active'

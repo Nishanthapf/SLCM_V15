@@ -582,105 +582,160 @@ function remove_term_dialog(frm, system, defaultCount) {
 	d.show();
 }
 
-function add_course_dialog(frm, semester, enrollment_type, course_fields_arg) {
-	// MASTER FIX: Re-fetch meta to ensure we have the latest fields
-	const meta = frappe.get_meta("Course");
-	const all_fields = meta.fields;
+function add_course_dialog(frm, semester, enrollment_type) {
+	let selected = new Set();
 
-	// Define priority fields in desired order
-	const priority_fields = ["course_name", "course_code", "department_name", "credit_value", "status"];
-
-	// Get other list view fields
-	const other_fields = all_fields
-		.filter((df) => df.in_list_view && !df.hidden && !priority_fields.includes(df.fieldname) && df.fieldname !== "department")
-		.map((df) => df.fieldname);
-
-	// Combine: Priority (if they exist) + Other
-	let columns = priority_fields.filter(col => all_fields.some(f => f.fieldname === col));
-	columns = [...columns, ...other_fields];
-
-	new frappe.ui.form.MultiSelectDialog({
-		doctype: "Course",
-		target: frm,
-		setters: {
-			department: frm.doc.department,
-			status: "Active",
-		},
-		columns: columns,
-		add_filters_group: 1,
-		get_query() {
-			return {
-				filters: {
-					department: frm.doc.department,
-					status: "Active",
+	const d = new frappe.ui.Dialog({
+		title: "Select Courses",
+		size: "extra-large",
+		fields: [
+			{
+				fieldtype: "Data",
+				fieldname: "search",
+				label: "Search",
+				onchange() {
+					load_courses();
 				},
-			};
-		},
-		action(selections) {
-			if (selections.length === 0) return;
+			},
+			{
+				fieldtype: "Link",
+				fieldname: "department",
+				label: "Department",
+				options: "Department",
+				default: frm.doc.department,
+				onchange() {
+					load_courses();
+				},
+			},
+			{
+				fieldtype: "HTML",
+				fieldname: "course_table",
+			},
+		],
+		primary_action_label: "Add Selected Courses",
+		primary_action() {
+			if (!frm.curriculum_data.curriculum_courses) {
+				frm.curriculum_data.curriculum_courses = [];
+			}
 
-			frappe.db
-				.get_list("Course", {
-					filters: { name: ["in", selections] },
-					fields: ["*"],
-				})
-				.then((courses) => {
-					if (!frm.curriculum_data.curriculum_courses)
-						frm.curriculum_data.curriculum_courses = [];
+			let added = 0;
 
-					let addedCount = 0;
-					let duplicateNames = [];
+			selected.forEach((c) => {
+				const exists = frm.curriculum_data.curriculum_courses.find(
+					(e) =>
+						e.semester === semester &&
+						e.enrollment_type === enrollment_type &&
+						e.course_group_type === "Course" &&
+						e.course === c.name
+				);
 
-					courses.forEach((c) => {
-						// DUPLICATE VALIDATION
-						const exists = frm.curriculum_data.curriculum_courses.find(
-							(existing) =>
-								existing.semester === semester &&
-								existing.enrollment_type === enrollment_type &&
-								existing.course_group_type === "Course" &&
-								existing.course === c.name
-						);
+				if (exists) return;
 
-						if (exists) {
-							duplicateNames.push(c.course_name || c.name);
-							return;
-						}
-
-						let entry = {
-							semester: semester,
-							enrollment_type: enrollment_type,
-							course_group_type: "Course",
-							course: c.name,
-							credits: c.credit_value,
-							// Ensure fetched name is stored if useful for UI
-							department_name: c.department_name,
-						};
-
-						Object.assign(entry, c);
-						frm.curriculum_data.curriculum_courses.push(entry);
-						addedCount++;
-					});
-
-					if (duplicateNames.length > 0) {
-						frappe.msgprint({
-							title: __("Duplicates Skipped"),
-							message: __(
-								"The following courses are already present in <b>{0} - {1}</b>:<br><ul><li>{2}</li></ul>",
-								[semester, enrollment_type, duplicateNames.join("</li><li>")]
-							),
-							indicator: "orange",
-						});
-					}
-
-					if (addedCount > 0) {
-						frm.active_term_name = semester;
-						frm.trigger("render_ui");
-						frm.trigger("save_curriculum");
-					}
+				frm.curriculum_data.curriculum_courses.push({
+					semester: semester,
+					enrollment_type: enrollment_type,
+					course_group_type: "Course",
+					course: c.name,
+					course_code: c.course_code,
+					credits: c.credit_value,
+					department_name: c.department_name,
 				});
+
+				added++;
+			});
+
+			if (added > 0) {
+				frm.active_term_name = semester;
+				frm.trigger("render_ui");
+				frm.trigger("save_curriculum");
+			}
+
+			d.hide();
 		},
 	});
+
+	d.show();
+
+	function load_courses() {
+		const values = d.get_values() || {};
+		const filters = {
+			status: "Active",
+		};
+
+		if (values.department) filters.department = values.department;
+		if (values.search) {
+			filters.course_name = ["like", `%${values.search}%`];
+		}
+
+		frappe.db
+			.get_list("Course", {
+				fields: [
+					"name",
+					"course_name",
+					"course_code",
+					"department_name",
+					"credit_value",
+					"status",
+				],
+				filters: filters,
+				limit: 100,
+			})
+			.then((rows) => {
+				render_table(rows);
+			});
+	}
+
+	function render_table(rows) {
+		const wrapper = d.fields_dict.course_table.$wrapper;
+		wrapper.empty();
+
+		const table = $(`
+			<table class="table table-bordered table-hover">
+				<thead>
+					<tr>
+						<th style="width:40px"></th>
+						<th>Course Name</th>
+						<th>Course Code</th>
+						<th>Department</th>
+						<th>Credits</th>
+						<th>Status</th>
+					</tr>
+				</thead>
+				<tbody></tbody>
+			</table>
+		`);
+
+		const tbody = table.find("tbody");
+
+		rows.forEach((r) => {
+			const checked = selected.has(r.name) ? "checked" : "";
+			const tr = $(`
+				<tr>
+					<td><input type="checkbox" ${checked}></td>
+					<td>${r.course_name || ""}</td>
+					<td>${r.course_code || ""}</td>
+					<td>${r.department_name || ""}</td>
+					<td>${r.credit_value || 0}</td>
+					<td>${r.status}</td>
+				</tr>
+			`);
+
+			tr.find("input").on("change", function () {
+				if (this.checked) selected.add(r);
+				else selected.delete(r);
+			});
+
+			tbody.append(tr);
+		});
+
+		wrapper.append(table);
+	}
+
+	// Initial load
+	load_courses();
 }
+
+
 
 function edit_course_dialog(frm, item, course_fields) {
 	// Dynamically build fields
