@@ -54,6 +54,8 @@
   "column_break_mlne",
   "state",
   "district",
+  "city",
+  "pincode",
   "aadhaar_number",
   "pan_number",
   "passport_number",
@@ -1021,10 +1023,22 @@
    "fieldtype": "Table",
    "label": "Qualifications",
    "options": "Student Qualification"
+  },
+  {
+   "depends_on": "eval:doc.state",
+   "fieldname": "city",
+   "fieldtype": "Data",
+   "label": "City"
+  },
+  {
+   "depends_on": "eval:doc.state",
+   "fieldname": "pincode",
+   "fieldtype": "Data",
+   "label": "Pincode"
   }
  ],
  "links": [],
- "modified": "2026-01-29 10:33:43.249981",
+ "modified": "2026-01-29 10:37:58.579530",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "Student Master",
