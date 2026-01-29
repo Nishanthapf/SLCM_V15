@@ -194,17 +194,30 @@ frappe.ui.form.on("Academic Management", {
 	render_schedule_ui: function (frm) {
 		const $wrapper = frm.get_field("schedule_ui_container").$wrapper;
 
-		// Simple placeholder for Timetable - better implemented with full calendar library later
+		// Placeholder with buttons to navigate to calendar views
 		let html = `
-			<div class="text-center">
-				<p>To view the Class Schedule, please check the <a href="/app/course-schedule">Course Schedule</a> list or Calendar view.</p>
-				<button class="btn btn-default btn-view-calendar">View Calendar</button>
+			<div class="text-center" style="padding: 40px 20px;">
+				<p style="margin-bottom: 25px; color: #6c757d;">
+					To view the Class Schedule, please check the Course Schedule list or Calendar view.
+				</p>
+				<div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+					<button class="btn btn-primary btn-view-class-calendar" style="min-width: 180px;">
+						${frappe.utils.icon("calendar", "sm")} Class Schedule Calendar
+					</button>
+					<button class="btn btn-default btn-view-event-calendar" style="min-width: 180px;">
+						${frappe.utils.icon("calendar", "sm")} Event Calendar
+					</button>
+				</div>
 			</div>
 		`;
 		$wrapper.html(html);
 
-		$wrapper.find(".btn-view-calendar").on("click", function () {
+		$wrapper.find(".btn-view-class-calendar").on("click", function () {
 			frappe.set_route("List", "Class Schedule", "Calendar");
+		});
+
+		$wrapper.find(".btn-view-event-calendar").on("click", function () {
+			frappe.set_route("List", "Event", "Calendar");
 		});
 	},
 });
