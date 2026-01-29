@@ -47,7 +47,7 @@
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "Academic System",
-   "options": "Semester\nTrimester\nQuarter\nYear",
+   "options": "\nSemester\nTrimester\nQuarter\nYear",
    "reqd": 1
   },
   {
@@ -85,7 +85,7 @@
  ],
  "issingle": 1,
  "links": [],
- "modified": "2026-01-29 10:47:09.436134",
+ "modified": "2026-01-29 12:12:48.097384",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "Curriculum Management",

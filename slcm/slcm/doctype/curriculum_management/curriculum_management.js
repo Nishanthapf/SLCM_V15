@@ -44,6 +44,8 @@ frappe.ui.form.on("Curriculum Management", {
 			frm.set_value("department", "");
 			frm.set_value("program", "");
 			frm.set_value("academic_year", "");
+			frm.set_value("batch", "");
+			frm.set_value("section", "");
 			frm.curriculum_data = null;
 			frm.trigger("render_ui");
 		});
@@ -673,6 +675,7 @@ function add_course_dialog(frm, semester, enrollment_type) {
 					"name",
 					"course_name",
 					"course_code",
+					"department",
 					"department_name",
 					"credit_value",
 					"status",
@@ -693,7 +696,7 @@ function add_course_dialog(frm, semester, enrollment_type) {
 			<table class="table table-bordered table-hover">
 				<thead>
 					<tr>
-						<th style="width:40px"></th>
+						<th style="width:40px; text-align: center;"><input type="checkbox" class="select-all"></th>
 						<th>Course Name</th>
 						<th>Course Code</th>
 						<th>Department</th>
@@ -706,24 +709,82 @@ function add_course_dialog(frm, semester, enrollment_type) {
 		`);
 
 		const tbody = table.find("tbody");
+		const selectAll = table.find(".select-all");
+
+		// Check already existing courses in this semester
+		const existingCourses = new Set();
+		if (frm.curriculum_data.curriculum_courses) {
+			frm.curriculum_data.curriculum_courses.forEach(c => {
+				if (c.semester === semester && c.course_group_type === "Course") {
+					existingCourses.add(c.course);
+				}
+			});
+		}
+
+		// Filter out rows that are already added (for master checkbox logic)
+		const selectableRows = rows.filter(r => !existingCourses.has(r.name));
+
+		// Check if all selectable rows are currently selected
+		const allSelected = selectableRows.length > 0 && selectableRows.every(r => selected.has(r.name));
+		selectAll.prop("checked", allSelected);
+
+		// If no rows are selectable, disable master checkbox
+		if (selectableRows.length === 0) {
+			selectAll.prop("disabled", true);
+		}
+
+		selectAll.on("change", function () {
+			const isChecked = $(this).prop("checked");
+
+			selectableRows.forEach(r => {
+				// Only toggle valid rows
+				const $checkbox = tbody.find(`input[data-name='${r.name}']`);
+				$checkbox.prop("checked", isChecked);
+
+				if (isChecked) selected.add(r);
+				else selected.delete(r);
+			});
+		});
 
 		rows.forEach((r) => {
+			const isAlreadyAdded = existingCourses.has(r.name);
 			const checked = selected.has(r.name) ? "checked" : "";
+			const disabled = isAlreadyAdded ? "disabled" : "";
+
+			let statusHtml = r.status;
+			if (isAlreadyAdded) {
+				statusHtml = `<span class="text-muted">Already Added</span>`;
+			}
+
 			const tr = $(`
-				<tr>
-					<td><input type="checkbox" ${checked}></td>
+				<tr class="${isAlreadyAdded ? 'text-muted' : ''}" style="${isAlreadyAdded ? 'background-color: #f8f9fa;' : ''}">
+					<td class="text-center"><input type="checkbox" ${checked} ${disabled} data-name="${r.name}"></td>
 					<td>${r.course_name || ""}</td>
 					<td>${r.course_code || ""}</td>
-					<td>${r.department_name || ""}</td>
+					<td>${r.department_name || r.department || ""}</td>
 					<td>${r.credit_value || 0}</td>
-					<td>${r.status}</td>
+					<td>${statusHtml}</td>
 				</tr>
 			`);
 
-			tr.find("input").on("change", function () {
-				if (this.checked) selected.add(r);
-				else selected.delete(r);
-			});
+			if (!isAlreadyAdded) {
+				tr.find("input").on("change", function () {
+					if (this.checked) selected.add(r);
+					else selected.delete(r);
+
+					// Update master checkbox state
+					const allNowSelected = selectableRows.every(row => selected.has(row.name));
+					selectAll.prop("checked", allNowSelected);
+				});
+
+				// Allow clicking row to toggle (user experience improvement)
+				tr.on("click", function (e) {
+					if (e.target.type !== 'checkbox') {
+						const $cb = $(this).find("input[type='checkbox']");
+						$cb.prop("checked", !$cb.prop("checked")).trigger("change");
+					}
+				});
+			}
 
 			tbody.append(tr);
 		});
