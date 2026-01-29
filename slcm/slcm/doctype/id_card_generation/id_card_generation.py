@@ -9,11 +9,8 @@ from frappe.model.document import Document
 from frappe.utils import get_url, now
 from frappe.utils.file_manager import save_file
 
-try:
-	import qrcode
-	from PIL import Image, ImageDraw, ImageFont, ImageOps
-except ImportError:
-	frappe.msgprint("Please install PIL (Pillow) and qrcode libraries.")
+import qrcode
+from PIL import Image, ImageDraw, ImageFont, ImageOps
 
 
 def hex_to_rgb(hex_color):
