@@ -51,9 +51,9 @@
   "religion",
   "blood_group",
   "state_of_domicile",
+  "column_break_mlne",
   "state",
   "district",
-  "column_break_mlne",
   "aadhaar_number",
   "pan_number",
   "passport_number",
@@ -95,27 +95,8 @@
   "key_number",
   "allocation_end_date",
   "tab_education",
-  "class_x_details_section",
-  "class_x_completion_year",
-  "class_x_percentage",
-  "class_x_school",
-  "class_x_board",
-  "class_x_max_cgpa",
-  "column_break_academics_1",
-  "class_xii_details_section",
-  "class_xii_exam_name",
-  "class_xii_completion_year",
-  "class_xii_school",
-  "class_xii_board",
-  "class_xii_percentage",
-  "class_xii_max_cgpa",
-  "ug_degree_details_section",
-  "ug_degree_completed",
-  "ug_degree_name",
-  "ug_completion_year",
-  "ug_college",
-  "ug_percentage",
-  "ug_max_cgpa",
+  "education_section",
+  "qualifications",
   "tab_finance",
   "finance_section",
   "applying_scholarship",
@@ -149,9 +130,6 @@
   "pwd_verified",
   "educational_documents_section",
   "std_x_marksheet",
-  "class_xii_marksheet",
-  "ug_certificate",
-  "ug_transcripts",
   "transfer_certificate",
   "entrance_exam_score_marksheet",
   "offer_letter",
@@ -465,11 +443,11 @@
   },
   {
    "fieldname": "gender",
-   "fieldtype": "Select",
+   "fieldtype": "Link",
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Gender",
-   "options": "Male\nFemale\nOther"
+   "options": "Genders"
   },
   {
    "fieldname": "nationality",
@@ -708,132 +686,7 @@
   {
    "fieldname": "tab_education",
    "fieldtype": "Tab Break",
-   "label": "Academic Qualification"
-  },
-  {
-   "fieldname": "class_x_details_section",
-   "fieldtype": "Section Break",
-   "label": "Class X details"
-  },
-  {
-   "fieldname": "class_x_completion_year",
-   "fieldtype": "Data",
-   "label": "Year of Completion (Class X)",
-   "reqd": 1
-  },
-  {
-   "fieldname": "class_x_percentage",
-   "fieldtype": "Float",
-   "label": "Percentage/CGPA obtained (Class X)",
-   "reqd": 1
-  },
-  {
-   "fieldname": "class_x_school",
-   "fieldtype": "Data",
-   "label": "School/College/University (Class X)",
-   "reqd": 1
-  },
-  {
-   "fieldname": "class_x_board",
-   "fieldtype": "Data",
-   "label": "Board (Class X)",
-   "reqd": 1
-  },
-  {
-   "fieldname": "class_x_max_cgpa",
-   "fieldtype": "Float",
-   "label": "If CGPA, maximum CGPA (Class X)"
-  },
-  {
-   "fieldname": "column_break_academics_1",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "class_xii_details_section",
-   "fieldtype": "Section Break",
-   "label": "Class XII/Equivalent details"
-  },
-  {
-   "fieldname": "class_xii_exam_name",
-   "fieldtype": "Data",
-   "label": "Name of Examination (Class XII/Equivalent - as per marksheet)",
-   "reqd": 1
-  },
-  {
-   "fieldname": "class_xii_completion_year",
-   "fieldtype": "Data",
-   "label": "Year of Completion (Class XII/Equivalent)",
-   "reqd": 1
-  },
-  {
-   "fieldname": "class_xii_school",
-   "fieldtype": "Data",
-   "label": "School/College/University (Class XII/Equivalent)",
-   "reqd": 1
-  },
-  {
-   "fieldname": "class_xii_board",
-   "fieldtype": "Data",
-   "label": "Board (Class XII/Equivalent)",
-   "reqd": 1
-  },
-  {
-   "fieldname": "class_xii_percentage",
-   "fieldtype": "Float",
-   "label": "Percentage/CGPA obtained (Class XII/Equivalent)",
-   "reqd": 1
-  },
-  {
-   "fieldname": "class_xii_max_cgpa",
-   "fieldtype": "Float",
-   "label": "If CGPA, maximum CGPA (Class XII/Equivalent)"
-  },
-  {
-   "fieldname": "ug_degree_details_section",
-   "fieldtype": "Section Break",
-   "label": "UG Degree details"
-  },
-  {
-   "fieldname": "ug_degree_completed",
-   "fieldtype": "Select",
-   "label": "Have you completed your UG degree",
-   "options": "\nYes\nNo",
-   "reqd": 1
-  },
-  {
-   "depends_on": "eval:doc.ug_degree_completed=='Yes'",
-   "fieldname": "ug_degree_name",
-   "fieldtype": "Data",
-   "label": "Name of Degree (UG)",
-   "mandatory_depends_on": "eval:doc.ug_degree_completed=='Yes'"
-  },
-  {
-   "depends_on": "eval:doc.ug_degree_completed=='Yes'",
-   "fieldname": "ug_completion_year",
-   "fieldtype": "Data",
-   "label": "Year of Completion (UG Degree)",
-   "mandatory_depends_on": "eval:doc.ug_degree_completed=='Yes'"
-  },
-  {
-   "depends_on": "eval:doc.ug_degree_completed=='Yes'",
-   "fieldname": "ug_college",
-   "fieldtype": "Data",
-   "label": "College/University (UG Degree)",
-   "mandatory_depends_on": "eval:doc.ug_degree_completed=='Yes'"
-  },
-  {
-   "depends_on": "eval:doc.ug_degree_completed=='Yes'",
-   "fieldname": "ug_percentage",
-   "fieldtype": "Float",
-   "label": "Percentage/CGPA obtained (UG Degree)",
-   "mandatory_depends_on": "eval:doc.ug_degree_completed=='Yes'"
-  },
-  {
-   "depends_on": "eval:doc.ug_degree_completed=='Yes'",
-   "fieldname": "ug_max_cgpa",
-   "fieldtype": "Float",
-   "label": "If CGPA, maximum CGPA (UG Degree)",
-   "mandatory_depends_on": "eval:doc.ug_degree_completed=='Yes'"
+   "label": "Education"
   },
   {
    "fieldname": "tab_account",
@@ -919,26 +772,6 @@
    "fieldtype": "Attach",
    "label": "STD X Marksheet",
    "reqd": 1
-  },
-  {
-   "fieldname": "class_xii_marksheet",
-   "fieldtype": "Attach",
-   "label": "Class XII Marksheet/Equivalent documents to be uploaded",
-   "reqd": 1
-  },
-  {
-   "depends_on": "eval:doc.ug_degree_completed=='Yes'",
-   "fieldname": "ug_certificate",
-   "fieldtype": "Attach",
-   "label": "UG Degree Certificate/Bonafide Certificate to be uploaded",
-   "mandatory_depends_on": "eval:doc.ug_degree_completed=='Yes'"
-  },
-  {
-   "depends_on": "eval:doc.ug_degree_completed=='Yes'",
-   "fieldname": "ug_transcripts",
-   "fieldtype": "Attach",
-   "label": "Transcripts/Marksheets to be uploaded",
-   "mandatory_depends_on": "eval:doc.ug_degree_completed=='Yes'"
   },
   {
    "fieldname": "transfer_certificate",
@@ -1177,10 +1010,21 @@
    "fieldname": "laptop_return_date",
    "fieldtype": "Date",
    "label": "Return Date"
+  },
+  {
+   "fieldname": "education_section",
+   "fieldtype": "Section Break",
+   "label": "Educational Background"
+  },
+  {
+   "fieldname": "qualifications",
+   "fieldtype": "Table",
+   "label": "Qualifications",
+   "options": "Student Qualification"
   }
  ],
  "links": [],
- "modified": "2026-01-29 10:24:42.865495",
+ "modified": "2026-01-29 10:33:43.249981",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "Student Master",
