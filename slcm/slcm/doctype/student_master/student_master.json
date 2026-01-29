@@ -50,10 +50,6 @@
   "nationality",
   "religion",
   "blood_group",
-  "pwd",
-  "disability_special_needs",
-  "pre_existing_conditions",
-  "dietary_restrictions",
   "state_of_domicile",
   "state",
   "district",
@@ -63,6 +59,10 @@
   "passport_number",
   "date_of_registration",
   "passport_available",
+  "pwd",
+  "disability_special_needs",
+  "pre_existing_conditions",
+  "dietary_restrictions",
   "tab_contact",
   "contact_details_section",
   "email",
@@ -501,11 +501,11 @@
    "options": "State"
   },
   {
+   "depends_on": "eval:doc.state",
    "fieldname": "district",
    "fieldtype": "Link",
    "label": "District",
-   "options": "District",
-   "depends_on": "eval:doc.state"
+   "options": "District"
   },
   {
    "fieldname": "aadhaar_number",
@@ -983,48 +983,48 @@
    "options": "\nYes\nNo"
   },
   {
+   "depends_on": "eval:doc.laptop_issued=='Yes'",
    "fieldname": "laptop_details_section",
    "fieldtype": "Section Break",
-   "label": "Laptop Details",
-   "depends_on": "eval:doc.laptop_issued=='Yes'"
+   "label": "Laptop Details"
   },
   {
+   "depends_on": "eval:doc.laptop_issued=='Yes'",
    "fieldname": "laptop_brand",
    "fieldtype": "Data",
-   "label": "Laptop Brand",
-   "depends_on": "eval:doc.laptop_issued=='Yes'"
+   "label": "Laptop Brand"
   },
   {
+   "depends_on": "eval:doc.laptop_issued=='Yes'",
    "fieldname": "laptop_model",
    "fieldtype": "Data",
-   "label": "Laptop Model",
-   "depends_on": "eval:doc.laptop_issued=='Yes'"
+   "label": "Laptop Model"
   },
   {
    "fieldname": "column_break_laptop",
    "fieldtype": "Column Break"
   },
   {
+   "depends_on": "eval:doc.laptop_issued=='Yes'",
    "fieldname": "laptop_serial_number",
    "fieldtype": "Data",
-   "label": "Serial Number",
-   "depends_on": "eval:doc.laptop_issued=='Yes'"
+   "label": "Serial Number"
   },
   {
+   "depends_on": "eval:doc.laptop_issued=='Yes'",
    "fieldname": "laptop_issue_date",
    "fieldtype": "Date",
-   "label": "Issue Date",
-   "depends_on": "eval:doc.laptop_issued=='Yes'"
+   "label": "Issue Date"
   },
   {
+   "depends_on": "eval:doc.laptop_issued=='Yes'",
    "fieldname": "laptop_return_date",
    "fieldtype": "Date",
-   "label": "Return Date",
-   "depends_on": "eval:doc.laptop_issued=='Yes'"
+   "label": "Return Date"
   }
  ],
  "links": [],
- "modified": "2026-01-28 22:46:51.556650",
+ "modified": "2026-01-29 09:29:40.720222",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "Student Master",
