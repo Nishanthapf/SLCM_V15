@@ -2,29 +2,36 @@
  "actions": [],
  "allow_import": 1,
  "allow_rename": 1,
- "autoname": "prompt",
+ "autoname": "field:state_name",
  "creation": "2026-01-28 22:45:00",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "state_name"
+  "state_name",
+  "state_code"
  ],
  "fields": [
   {
    "fieldname": "state_name",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "in_standard_filter": 1,
    "label": "State Name",
+   "reqd": 1,
    "unique": 1
+  },
+  {
+   "fieldname": "state_code",
+   "fieldtype": "Data",
+   "label": "State Code",
+   "length": 10
   }
  ],
  "links": [],
- "modified": "2026-01-29 10:15:33.319857",
+ "modified": "2026-01-29 10:28:19.454790",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "State",
- "naming_rule": "Set by user",
+ "naming_rule": "By fieldname",
  "owner": "Administrator",
  "permissions": [
   {
@@ -35,6 +42,17 @@
    "read": 1,
    "report": 1,
    "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Academics User",
    "share": 1,
    "write": 1
   }
