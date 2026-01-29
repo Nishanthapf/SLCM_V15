@@ -324,3 +324,48 @@ def get_events(start, end, filters=None):
     
     return result
 
+
+@frappe.whitelist()
+def update_event(args, field_map):
+    """
+    Custom update method for Class Schedule calendar drag-and-drop.
+    Handles the split date (schedule_date) and time (from_time, to_time) fields.
+    """
+    import json
+    from datetime import datetime
+    
+    if isinstance(args, str):
+        args = json.loads(args)
+    if isinstance(field_map, str):
+        field_map = json.loads(field_map)
+    
+    args = frappe._dict(args)
+    field_map = frappe._dict(field_map)
+    
+    # Get the document
+    doc = frappe.get_doc(args.doctype, args.name)
+    
+    # Parse the start datetime
+    if field_map.start and args.get(field_map.start):
+        start_dt = args[field_map.start]
+        if isinstance(start_dt, str):
+            start_dt = datetime.strptime(start_dt, "%Y-%m-%d %H:%M:%S")
+        
+        # Update schedule_date and from_time
+        doc.schedule_date = start_dt.date()
+        doc.from_time = start_dt.time()
+    
+    # Parse the end datetime
+    if field_map.end and args.get(field_map.end):
+        end_dt = args[field_map.end]
+        if isinstance(end_dt, str):
+            end_dt = datetime.strptime(end_dt, "%Y-%m-%d %H:%M:%S")
+        
+        # Update to_time (date should remain the same as schedule_date)
+        doc.to_time = end_dt.time()
+    
+    # Save the document
+    doc.save()
+    
+    return doc.name
+
