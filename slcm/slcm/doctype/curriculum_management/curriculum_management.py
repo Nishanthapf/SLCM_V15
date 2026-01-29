@@ -22,22 +22,51 @@ class CurriculumManagement(Document):
 
 
 @frappe.whitelist()
-def get_curriculum(program, academic_year):
+def get_curriculum(program, academic_year, batch=None, section=None):
 	if not program or not academic_year:
 		return None
 
 	try:
-		curriculum_name = f"{program}-{academic_year}"
+		# NAMING STRATEGY:
+		# If Batch is present, we try to find a Curriculum specific to that Batch.
+		# Name Format: {program}-{academic_year}-{batch}
+		# Fallback: {program}-{academic_year} (Generic)
+		
+		curriculum_name = None
+		if batch:
+			# Try specific batch curriculum
+			batch_c_name = f"{program}-{academic_year}-{batch}"
+			if frappe.db.exists("Curriculum", batch_c_name):
+				curriculum_name = batch_c_name
+		
+		# If no batch-specific found, fallback to generic?
+		# User requirement: "configure the term department curriculum" based on batch/section
+		# This implies if they select a batch, they WANT to see/edit that batch's curriculum.
+		# If it doesn't exist yet, we should probably return empty or the generic one as 'template'?
+		# For now, let's look for the generic one if specific doesn't exist, 
+		# BUT if they save, it will create a new specific one (in save_curriculum).
+		
+		if not curriculum_name:
+			generic_name = f"{program}-{academic_year}"
+			if frappe.db.exists("Curriculum", generic_name):
+				curriculum_name = generic_name
+
 		data = {}
 
-		if frappe.db.exists("Curriculum", curriculum_name):
+		if curriculum_name and frappe.db.exists("Curriculum", curriculum_name):
 			doc = frappe.get_doc("Curriculum", curriculum_name)
 			data = doc.as_dict()
+			
+			# If we fell back to generic, but user selected a batch, 
+			# we might want to warn or indicate this is "inherited".
+			# But for simplicity, we just load it. 
+			# The frontend "Save" will trigger `save_curriculum` with the batch, creating a new record.
 		else:
 			# Return empty structure with defaults
 			data = {
 				"program": program,
 				"academic_year": academic_year,
+				"batch": batch,
 				"academic_system": "Semester",  # Default
 				"curriculum_courses": [],
 			}
@@ -105,11 +134,18 @@ def get_curriculum(program, academic_year):
 
 
 @frappe.whitelist()
-def save_curriculum(program, academic_year, department, courses, academic_system="Semester"):
+def save_curriculum(program, academic_year, department, courses, academic_system="Semester", batch=None, section=None):
 	if isinstance(courses, str):
 		courses = json.loads(courses)
 
-	curriculum_name = f"{program}-{academic_year}"
+	# Naming Logic:
+	# If batch is provided, create/update Program-Year-Batch
+	# Else create/update Program-Year
+	
+	if batch:
+		curriculum_name = f"{program}-{academic_year}-{batch}"
+	else:
+		curriculum_name = f"{program}-{academic_year}"
 
 	if frappe.db.exists("Curriculum", curriculum_name):
 		doc = frappe.get_doc("Curriculum", curriculum_name)
@@ -117,11 +153,14 @@ def save_curriculum(program, academic_year, department, courses, academic_system
 		doc = frappe.new_doc("Curriculum")
 		doc.program = program
 		doc.academic_year = academic_year
+		doc.batch = batch # Set batch if new
 		# Department is required for creation
 		doc.department = department
 
 	doc.department = department
 	doc.academic_system = academic_system
+	if batch:
+		doc.batch = batch
 
 	# Clear existing courses and re-add
 	doc.set("curriculum_courses", [])
@@ -157,7 +196,26 @@ def get_course_dialog_columns():
 
 	if not columns:
 		columns = ["course_name", "department"]
+
+	# Ensure critical fields are present
+	for field in ["course_name", "course_code", "department_name"]:
+		if field not in columns and any(f.fieldname == field for f in meta.fields):
+			columns.insert(0, field)
+
 	return columns
+
+
+@frappe.whitelist()
+def get_details_from_section(section):
+	if not section:
+		return {}
+	
+	return frappe.db.get_value(
+		"Program Batch Section", 
+		section, 
+		["department", "program", "academic_year", "batch"], 
+		as_dict=True
+	)
 
 
 @frappe.whitelist()
