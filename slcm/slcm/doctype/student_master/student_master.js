@@ -202,6 +202,22 @@ frappe.ui.form.on("Student Master", {
 		frm.set_value("net_program_fee", net_fee);
 		frm.set_value("outstanding_balance", balance);
 	},
+
+	state(frm) {
+		// Clear district when state changes
+		if (frm.doc.district) {
+			frm.set_value('district', '');
+		}
+
+		// Set filter for district based on selected state
+		frm.set_query('district', function () {
+			return {
+				filters: {
+					'state': frm.doc.state
+				}
+			};
+		});
+	}
 });
 
 function show_status_transition_dialog(frm, data) {

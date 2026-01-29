@@ -24,7 +24,7 @@
   "column_break_3",
   "to_time",
   "room",
-  "venue",
+  "block",
   "section_break_repeat",
   "repeat_frequency",
   "repeats_till",
@@ -138,13 +138,9 @@
   },
   {
    "fieldname": "room",
-   "fieldtype": "Data",
-   "label": "Room"
-  },
-  {
-   "fieldname": "venue",
-   "fieldtype": "Data",
-   "label": "Venue"
+   "fieldtype": "Link",
+   "label": "Room",
+   "options": "Room"
   },
   {
    "fieldname": "section_break_repeat",
@@ -195,10 +191,15 @@
    "fieldtype": "Select",
    "label": "Class Schedule Color",
    "options": "Blue\nGreen\nRed\nYellow\nOrange\nPurple\nPink\nGray"
+  },
+  {
+   "fieldname": "block",
+   "fieldtype": "Data",
+   "label": "Block"
   }
  ],
  "links": [],
- "modified": "2026-01-28 13:07:40.214456",
+ "modified": "2026-01-29 08:48:57.234429",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "Class Schedule",

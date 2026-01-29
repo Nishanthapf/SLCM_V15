@@ -22,7 +22,6 @@
   "academic_status",
   "official_email_id",
   "intake",
-  "sample",
   "tab_program_mapping",
   "program_mapping_section",
   "department",
@@ -47,6 +46,7 @@
   "last_name",
   "dob",
   "gender",
+  "marital_status",
   "nationality",
   "religion",
   "blood_group",
@@ -55,12 +55,14 @@
   "pre_existing_conditions",
   "dietary_restrictions",
   "state_of_domicile",
+  "state",
+  "district",
   "column_break_mlne",
   "aadhaar_number",
   "pan_number",
-  "passport_available",
   "passport_number",
   "date_of_registration",
+  "passport_available",
   "tab_contact",
   "contact_details_section",
   "email",
@@ -90,6 +92,7 @@
   "signature_ppkg",
   "residence_agreement_signed",
   "keys_handed_over",
+  "key_number",
   "allocation_end_date",
   "tab_education",
   "education_section",
@@ -119,9 +122,12 @@
   "aadhaar_card",
   "aadhaar_verified",
   "pan_card",
+  "pan_verified",
   "passport",
+  "passport_verified",
   "passport_size_photo",
   "pwd_certificate",
+  "pwd_verified",
   "educational_documents_section",
   "std_x_marksheet",
   "transfer_certificate",
@@ -131,6 +137,7 @@
   "rules_and_regulations_section",
   "posh_anti_ragging_declaration",
   "student_declaration",
+  "student_declaration_verified",
   "parent_declaration",
   "tab_account",
   "account_status_section",
@@ -140,6 +147,13 @@
   "status_remark",
   "id_card_issued",
   "laptop_issued",
+  "laptop_details_section",
+  "laptop_brand",
+  "laptop_model",
+  "column_break_laptop",
+  "laptop_serial_number",
+  "laptop_issue_date",
+  "laptop_return_date",
   "tab_status_history",
   "status_history_section",
   "workflow_history",
@@ -479,6 +493,19 @@
    "fieldname": "state_of_domicile",
    "fieldtype": "Data",
    "label": "State of Domicile"
+  },
+  {
+   "fieldname": "state",
+   "fieldtype": "Link",
+   "label": "State",
+   "options": "State"
+  },
+  {
+   "fieldname": "district",
+   "fieldtype": "Link",
+   "label": "District",
+   "options": "District",
+   "depends_on": "eval:doc.state"
   },
   {
    "fieldname": "aadhaar_number",
@@ -857,12 +884,6 @@
    "label": "ID Card Issued"
   },
   {
-   "default": "0",
-   "fieldname": "laptop_issued",
-   "fieldtype": "Check",
-   "label": "Laptop Issued"
-  },
-  {
    "fieldname": "tab_status_history",
    "fieldtype": "Tab Break",
    "label": "Status History"
@@ -912,20 +933,98 @@
    "fieldtype": "Column Break"
   },
   {
-   "fieldname": "sample",
-   "fieldtype": "Data",
-   "label": "Sample"
-  },
-  {
    "fieldname": "personal_email",
    "fieldtype": "Data",
    "label": "Personal Email",
    "options": "Email",
    "reqd": 1
+  },
+  {
+   "fieldname": "key_number",
+   "fieldtype": "Data",
+   "label": "Key Number"
+  },
+  {
+   "default": "0",
+   "fieldname": "pan_verified",
+   "fieldtype": "Check",
+   "label": "Pan Verified"
+  },
+  {
+   "default": "0",
+   "fieldname": "passport_verified",
+   "fieldtype": "Check",
+   "label": "Passport Verified"
+  },
+  {
+   "default": "0",
+   "fieldname": "pwd_verified",
+   "fieldtype": "Check",
+   "label": "PWD Verified"
+  },
+  {
+   "default": "0",
+   "fieldname": "student_declaration_verified",
+   "fieldtype": "Check",
+   "label": "Student Declaration Verified",
+   "permlevel": 1
+  },
+  {
+   "fieldname": "marital_status",
+   "fieldtype": "Select",
+   "label": "Marital status",
+   "options": "\nMarried\nUnmarried\nWidowed\nDivorced\nSeparated",
+   "reqd": 1
+  },
+  {
+   "fieldname": "laptop_issued",
+   "fieldtype": "Select",
+   "label": "Laptop Issued",
+   "options": "\nYes\nNo"
+  },
+  {
+   "fieldname": "laptop_details_section",
+   "fieldtype": "Section Break",
+   "label": "Laptop Details",
+   "depends_on": "eval:doc.laptop_issued=='Yes'"
+  },
+  {
+   "fieldname": "laptop_brand",
+   "fieldtype": "Data",
+   "label": "Laptop Brand",
+   "depends_on": "eval:doc.laptop_issued=='Yes'"
+  },
+  {
+   "fieldname": "laptop_model",
+   "fieldtype": "Data",
+   "label": "Laptop Model",
+   "depends_on": "eval:doc.laptop_issued=='Yes'"
+  },
+  {
+   "fieldname": "column_break_laptop",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "laptop_serial_number",
+   "fieldtype": "Data",
+   "label": "Serial Number",
+   "depends_on": "eval:doc.laptop_issued=='Yes'"
+  },
+  {
+   "fieldname": "laptop_issue_date",
+   "fieldtype": "Date",
+   "label": "Issue Date",
+   "depends_on": "eval:doc.laptop_issued=='Yes'"
+  },
+  {
+   "fieldname": "laptop_return_date",
+   "fieldtype": "Date",
+   "label": "Return Date",
+   "depends_on": "eval:doc.laptop_issued=='Yes'"
   }
  ],
  "links": [],
- "modified": "2026-01-28 14:38:49.689598",
+ "modified": "2026-01-28 22:46:51.556650",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "Student Master",
