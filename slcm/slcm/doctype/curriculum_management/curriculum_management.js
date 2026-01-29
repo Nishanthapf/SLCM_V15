@@ -289,11 +289,17 @@ frappe.ui.form.on("Curriculum Management", {
 					(c) => c.enrollment_type === et.enrollment_type
 				);
 
+				// Calculate counts
+				const courseCount = etCourses.length;
+				const countBadge = courseCount > 0
+					? `<span class="badge badge-secondary ml-2" style="font-size: 11px;">${courseCount} Selected</span>`
+					: `<span class="badge badge-light ml-2 text-muted" style="font-size: 11px;">0 Selected</span>`;
+
 				const etHtml = `
                     <div class="enrollment-section mb-4">
                         <div class="d-flex justify-content-between align-items-center mb-2">
                             <h6 class="font-weight-bold text-dark" style="text-transform: uppercase; font-size: 13px; letter-spacing: 0.5px;">
-                                ${et.display_name || et.enrollment_type}
+                                ${et.display_name || et.enrollment_type} ${countBadge}
                             </h6>
                             <div>
                                 <button class="btn btn-xs btn-default btn-add-course"
