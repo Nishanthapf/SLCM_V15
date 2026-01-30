@@ -106,21 +106,7 @@ frappe.ui.form.on("Term Administration", {
 		$wrapper.html("<p>Loading Classes...</p>");
 
 		frappe.call({
-			method: "frappe.client.get_list",
-			args: {
-				doctype: "Class Configuration",
-				fields: [
-					"name",
-					"class_name",
-					"term",
-					"programme",
-					"course",
-					"type",
-					"faculty",
-				],
-				limit_page_length: 100,
-				order_by: "creation desc",
-			},
+			method: "slcm.slcm.doctype.term_administration.term_administration.get_classes_with_faculty",
 			callback(r) {
 				const classes = r.message || [];
 
@@ -164,7 +150,7 @@ frappe.ui.form.on("Term Administration", {
 								<td>${c.programme || "-"}</td>
 								<td>${c.course || "-"}</td>
 								<td>${c.type || "-"}</td>
-								<td>${c.faculty || "-"}</td>
+								<td>${c.faculty_name || "-"}</td>
 							</tr>
 						`;
 					});

@@ -5,6 +5,27 @@ class TermAdministration(Document):
 	pass
 
 @frappe.whitelist()
+def get_classes_with_faculty():
+	"""Get all classes with faculty names instead of IDs"""
+	classes = frappe.db.sql("""
+		SELECT 
+			cc.name,
+			cc.class_name,
+			cc.term,
+			cc.programme,
+			cc.course,
+			cc.type,
+			cc.faculty,
+			CONCAT(f.first_name, ' ', COALESCE(f.last_name, '')) as faculty_name
+		FROM `tabClass Configuration` cc
+		LEFT JOIN `tabFaculty` f ON cc.faculty = f.name
+		ORDER BY cc.creation DESC
+		LIMIT 100
+	""", as_dict=True)
+	
+	return classes
+
+@frappe.whitelist()
 def create_class(data):
 	if isinstance(data, str):
 		data = frappe.parse_json(data)
