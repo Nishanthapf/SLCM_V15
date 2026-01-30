@@ -2,7 +2,7 @@ import json
 
 import frappe
 
-from slcm.slcm.doctype.curriculum_management.curriculum_management import get_curriculum, save_curriculum
+from slcm.slcm.doctype.course_management.course_management import get_curriculum, save_curriculum
 
 
 def test():

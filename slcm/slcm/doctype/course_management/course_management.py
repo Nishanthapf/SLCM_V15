@@ -3,7 +3,7 @@ import frappe
 from frappe.model.document import Document
 
 
-class CurriculumManagement(Document):
+class CourseManagement(Document):
 	def onload(self):
 		if not self.enrollment_types:
 			self.set_default_enrollment_types()

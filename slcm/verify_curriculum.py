@@ -1,13 +1,13 @@
 import frappe
 
-from slcm.slcm.doctype.curriculum_management.curriculum_management import get_curriculum, save_curriculum
+from slcm.slcm.doctype.course_management.course_management import get_curriculum, save_curriculum
 
 
 def verify():
-	print("Verifying Curriculum Management...")
+	print("Verifying Course Management...")
 
 	# 1. Check Default Settings
-	cm = frappe.get_doc("Curriculum Management", "Curriculum Management")
+	cm = frappe.get_doc("Course Management", "Course Management")
 	# Force onload if not triggered automatically by validation? Single doctypes usually run onload on get...
 	# But get_doc might not trigger onload.
 	# Let's check if rows exist.

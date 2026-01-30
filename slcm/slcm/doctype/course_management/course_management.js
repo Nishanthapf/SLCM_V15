@@ -1,7 +1,7 @@
 // Copyright (c) 2026, Administrator and contributors
 // For license information, please see license.txt
 
-frappe.ui.form.on("Curriculum Management", {
+frappe.ui.form.on("Course Management", {
 	refresh: function (frm) {
 		frm.disable_save();
 
@@ -116,7 +116,7 @@ frappe.ui.form.on("Curriculum Management", {
 	section: function (frm) {
 		if (frm.doc.section) {
 			frappe.call({
-				method: "slcm.slcm.doctype.curriculum_management.curriculum_management.get_details_from_section",
+				method: "slcm.slcm.doctype.course_management.course_management.get_details_from_section",
 				args: { section: frm.doc.section },
 				callback: function (r) {
 					if (r.message) {
@@ -138,7 +138,7 @@ frappe.ui.form.on("Curriculum Management", {
 	load_curriculum: function (frm) {
 		if (frm.doc.department && frm.doc.program && frm.doc.academic_year) {
 			frappe.call({
-				method: "slcm.slcm.doctype.curriculum_management.curriculum_management.get_curriculum",
+				method: "slcm.slcm.doctype.course_management.course_management.get_curriculum",
 				args: {
 					program: frm.doc.program,
 					academic_year: frm.doc.academic_year,
@@ -382,7 +382,7 @@ frappe.ui.form.on("Curriculum Management", {
 		}
 
 		frappe.call({
-			method: "slcm.slcm.doctype.curriculum_management.curriculum_management.save_curriculum",
+			method: "slcm.slcm.doctype.course_management.course_management.save_curriculum",
 			args: {
 				program: frm.doc.program,
 				academic_year: frm.doc.academic_year,

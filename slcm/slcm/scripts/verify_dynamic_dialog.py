@@ -1,6 +1,6 @@
 import frappe
 
-from slcm.slcm.doctype.curriculum_management.curriculum_management import get_course_dialog_columns
+from slcm.slcm.doctype.course_management.course_management import get_course_dialog_columns
 
 
 def run_test():
