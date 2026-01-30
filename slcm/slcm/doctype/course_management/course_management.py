@@ -37,18 +37,18 @@ def get_curriculum(program, academic_year, batch=None, section=None):
 	if batch:
 		filters["batch"] = batch
 
-	name = frappe.db.get_value("Curriculum", filters, "name")
+	name = frappe.db.get_value("Course List", filters, "name")
 
 	# Fallback to generic curriculum
 	if not name and batch:
 		name = frappe.db.get_value(
-			"Curriculum",
+			"Course List",
 			{"program": program, "academic_year": academic_year, "batch": ["is", "not set"]},
 			"name",
 		)
 
 	if name:
-		doc = frappe.get_doc("Curriculum", name)
+		doc = frappe.get_doc("Course List", name)
 		return doc.as_dict()
 
 	# Return empty structure
@@ -90,11 +90,11 @@ def save_curriculum(
 	if batch:
 		filters["batch"] = batch
 
-	name = frappe.db.get_value("Curriculum", filters, "name")
+	name = frappe.db.get_value("Course List", filters, "name")
 	
 	# If not found with batch, try without batch (fallback for existing records without batch)
 	if not name and batch:
-		name = frappe.db.get_value("Curriculum", {
+		name = frappe.db.get_value("Course List", {
 			"program": program,
 			"academic_year": academic_year,
 		}, "name")
@@ -103,7 +103,7 @@ def save_curriculum(
 	# CASE 1: UPDATE EXISTING
 	# ----------------------------------
 	if name:
-		doc = frappe.get_doc("Curriculum", name)
+		doc = frappe.get_doc("Course List", name)
 
 		# Update fields
 		doc.department = department
@@ -135,7 +135,7 @@ def save_curriculum(
 	# ----------------------------------
 	# CASE 2: CREATE NEW (ONCE)
 	# ----------------------------------
-	doc = frappe.new_doc("Curriculum")
+	doc = frappe.new_doc("Course List")
 	doc.program = program
 	doc.academic_year = academic_year
 	doc.department = department

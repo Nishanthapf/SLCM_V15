@@ -1,0 +1,95 @@
+{
+    "actions": [],
+    "allow_import": 1,
+    "allow_rename": 1,
+    "autoname": "format:{program}-{academic_year}",
+    "creation": "2026-01-20 15:00:00",
+    "doctype": "DocType",
+    "engine": "InnoDB",
+    "field_order": [
+        "academic_year",
+        "department",
+        "program",
+        "batch",
+        "academic_system",
+        "section_break_courses",
+        "curriculum_courses"
+    ],
+    "fields": [
+        {
+            "fieldname": "department",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Department",
+            "options": "Department",
+            "reqd": 1
+        },
+        {
+            "fieldname": "program",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Program",
+            "options": "Program",
+            "reqd": 1
+        },
+        {
+            "fieldname": "academic_year",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Academic Year",
+            "options": "Academic Year",
+            "reqd": 1
+        },
+        {
+            "default": "Semester",
+            "fieldname": "academic_system",
+            "fieldtype": "Select",
+            "in_list_view": 1,
+            "label": "Academic System",
+            "options": "Semester\nTrimester\nQuarter\nYear",
+            "reqd": 1
+        },
+        {
+            "fieldname": "section_break_courses",
+            "fieldtype": "Section Break"
+        },
+        {
+            "fieldname": "curriculum_courses",
+            "fieldtype": "Table",
+            "label": "Courses",
+            "options": "Curriculum Course"
+        },
+        {
+            "fieldname": "batch",
+            "fieldtype": "Data",
+            "label": "Batch"
+        }
+    ],
+    "links": [],
+    "modified": "2026-01-29 10:42:46.390843",
+    "modified_by": "Administrator",
+    "module": "SLCM",
+    "name": "Course List",
+    "naming_rule": "Expression",
+    "owner": "Administrator",
+    "permissions": [
+        {
+            "create": 1,
+            "delete": 1,
+            "email": 1,
+            "print": 1,
+            "read": 1,
+            "report": 1,
+            "role": "System Manager",
+            "share": 1,
+            "write": 1
+        }
+    ],
+    "row_format": "Dynamic",
+    "sort_field": "modified",
+    "sort_order": "DESC",
+    "states": []
+}
