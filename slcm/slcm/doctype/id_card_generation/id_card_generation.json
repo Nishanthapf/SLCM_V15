@@ -42,7 +42,8 @@
   "print_count",
   "remarks",
   "section_break_history",
-  "events"
+  "events",
+  "demo"
  ],
  "fields": [
   {
@@ -296,10 +297,16 @@
   {
    "fieldname": "column_break_lknt",
    "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "demo",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "demo"
   }
  ],
  "links": [],
- "modified": "2026-01-13 09:35:23.697804",
+ "modified": "2026-01-30 09:19:11.643285",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "ID Card Generation",
