@@ -1,7 +1,7 @@
 {
  "actions": [],
  "allow_import": 1,
- "autoname": "prompt",
+ "autoname": "field:country_name",
  "creation": "2026-01-30 09:39:04.279518",
  "default_view": "List",
  "doctype": "DocType",
@@ -52,11 +52,11 @@
  ],
  "icon": "fa fa-globe",
  "links": [],
- "modified": "2026-01-30 10:02:00.693330",
+ "modified": "2026-01-30 10:10:40.416029",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "Countries",
- "naming_rule": "Set by user",
+ "naming_rule": "By fieldname",
  "owner": "Administrator",
  "permissions": [
   {
