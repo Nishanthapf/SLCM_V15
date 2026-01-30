@@ -1,109 +1,116 @@
 {
- "actions": [],
- "allow_rename": 1,
- "creation": "2026-01-20 15:00:00",
- "doctype": "DocType",
- "engine": "InnoDB",
- "field_order": [
-  "setup_curriculum_tab",
-  "academic_year",
-  "department",
-  "program",
-  "batch",
-  "section",
-  "academic_system",
-  "section_break_ui",
-  "ui_container",
-  "settings_tab",
-  "enrollment_types"
- ],
- "fields": [
-  {
-   "fieldname": "setup_curriculum_tab",
-   "fieldtype": "Tab Break",
-   "label": "Set-Up Course"
-  },
-  {
-   "fieldname": "department",
-   "fieldtype": "Link",
-   "label": "Department",
-   "options": "Department"
-  },
-  {
-   "fieldname": "program",
-   "fieldtype": "Link",
-   "label": "Programmes",
-   "options": "Program"
-  },
-  {
-   "fieldname": "academic_year",
-   "fieldtype": "Link",
-   "label": "Academic Year",
-   "options": "Academic Year"
-  },
-  {
-   "default": "Semester",
-   "fieldname": "academic_system",
-   "fieldtype": "Select",
-   "in_list_view": 1,
-   "label": "Academic System",
-   "options": "\nSemester\nTrimester\nQuarter\nYear",
-   "reqd": 1
-  },
-  {
-   "fieldname": "section_break_ui",
-   "fieldtype": "Section Break"
-  },
-  {
-   "fieldname": "ui_container",
-   "fieldtype": "HTML",
-   "label": "UI Container"
-  },
-  {
-   "fieldname": "settings_tab",
-   "fieldtype": "Tab Break",
-   "label": "Settings"
-  },
-  {
-   "fieldname": "enrollment_types",
-   "fieldtype": "Table",
-   "label": "Enrollment Types",
-   "options": "Course Enrollment Type"
-  },
-  {
-   "fieldname": "batch",
-   "fieldtype": "Link",
-   "label": "Batch",
-   "options": "Student Batch Name"
-  },
-  {
-   "fieldname": "section",
-   "fieldtype": "Link",
-   "label": "Section",
-   "options": "Program Batch Section"
-  }
- ],
- "issingle": 1,
- "links": [],
- "modified": "2026-01-30 11:35:45.881068",
- "modified_by": "Administrator",
- "module": "SLCM",
- "name": "Course Management",
- "owner": "Administrator",
- "permissions": [
-  {
-   "create": 1,
-   "delete": 1,
-   "email": 1,
-   "print": 1,
-   "read": 1,
-   "role": "System Manager",
-   "share": 1,
-   "write": 1
-  }
- ],
- "row_format": "Dynamic",
- "sort_field": "modified",
- "sort_order": "DESC",
- "states": []
+    "actions": [],
+    "allow_rename": 1,
+    "creation": "2026-01-20 15:00:00",
+    "doctype": "DocType",
+    "engine": "InnoDB",
+    "field_order": [
+        "setup_curriculum_tab",
+        "academic_year",
+        "department",
+        "program",
+        "batch",
+        "section",
+        "academic_system",
+        "section_break_ui",
+        "ui_container",
+        "settings_tab",
+        "course_types",
+        "enrollment_types"
+    ],
+    "fields": [
+        {
+            "fieldname": "setup_curriculum_tab",
+            "fieldtype": "Tab Break",
+            "label": "Set-Up Course"
+        },
+        {
+            "fieldname": "department",
+            "fieldtype": "Link",
+            "label": "Department",
+            "options": "Department"
+        },
+        {
+            "fieldname": "program",
+            "fieldtype": "Link",
+            "label": "Programmes",
+            "options": "Program"
+        },
+        {
+            "fieldname": "academic_year",
+            "fieldtype": "Link",
+            "label": "Academic Year",
+            "options": "Academic Year"
+        },
+        {
+            "default": "Semester",
+            "fieldname": "academic_system",
+            "fieldtype": "Select",
+            "in_list_view": 1,
+            "label": "Academic System",
+            "options": "\nSemester\nTrimester\nQuarter\nYear",
+            "reqd": 1
+        },
+        {
+            "fieldname": "section_break_ui",
+            "fieldtype": "Section Break"
+        },
+        {
+            "fieldname": "ui_container",
+            "fieldtype": "HTML",
+            "label": "UI Container"
+        },
+        {
+            "fieldname": "settings_tab",
+            "fieldtype": "Tab Break",
+            "label": "Settings"
+        },
+        {
+            "fieldname": "course_types",
+            "fieldtype": "Table",
+            "label": "Course Types",
+            "options": "Course Type"
+        },
+        {
+            "fieldname": "enrollment_types",
+            "fieldtype": "Table",
+            "label": "Enrollment Types",
+            "options": "Course Enrollment Type"
+        },
+        {
+            "fieldname": "batch",
+            "fieldtype": "Link",
+            "label": "Batch",
+            "options": "Student Batch Name"
+        },
+        {
+            "fieldname": "section",
+            "fieldtype": "Link",
+            "label": "Section",
+            "options": "Program Batch Section"
+        }
+    ],
+    "issingle": 1,
+    "links": [],
+    "modified": "2026-01-30 11:35:45.881068",
+    "modified_by": "Administrator",
+    "module": "SLCM",
+    "name": "Course Management",
+    "owner": "Administrator",
+    "permissions": [
+        {
+            "create": 1,
+            "delete": 1,
+            "email": 1,
+            "print": 1,
+            "read": 1,
+            "role": "System Manager",
+            "share": 1,
+            "write": 1
+        }
+    ],
+    "row_format": "Dynamic",
+    "sort_field": "modified",
+    "sort_order": "DESC",
+    "states": []
 }
