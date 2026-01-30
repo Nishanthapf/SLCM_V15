@@ -5,19 +5,73 @@ from frappe.model.document import Document
 
 class CourseManagement(Document):
 	def onload(self):
-		if not self.enrollment_types:
-			self.set_default_enrollment_types()
+		self.set_default_course_types()
+		self.set_default_enrollment_types()
+
+	def set_default_course_types(self):
+		defaults = [
+			{"course_type": "Core", "is_active": 1, "display_name": "Core"},
+			{"course_type": "Open Elective", "is_active": 1, "display_name": "Open Elective"},
+			{"course_type": "Program Elective", "is_active": 1, "display_name": "Program Elective"},
+			{"course_type": "Seminar", "is_active": 1, "display_name": "Seminar"},
+		]
+		
+		# If empty, populate all
+		if not self.course_types:
+			for d in defaults:
+				self.append("course_types", d)
+		else:
+			# Ensure missing ones are added
+			existing = [d.course_type for d in self.course_types]
+			for d in defaults:
+				if d["course_type"] not in existing:
+					self.append("course_types", d)
 
 	def set_default_enrollment_types(self):
 		defaults = [
-			{"enrollment_type": "Core", "is_active": 1, "display_name": "Core"},
-			{"enrollment_type": "Programme Elective", "is_active": 1, "display_name": "Programme Elective"},
-			{"enrollment_type": "Open Elective", "is_active": 1, "display_name": "Open Elective"},
-			{"enrollment_type": "Zero Credit", "is_active": 0, "display_name": "Zero Credit"},
+			{"enrollment_type": "Full", "is_active": 1, "display_name": "Full"},
+			{"enrollment_type": "Zero Credit", "is_active": 0, "display_name": "Zero Credit"}, # Default inactive per screenshot logic if needed, but user said "Load these". Check screenshot users defaults.
+			# Screenshot shows: Core, Prog Elective... in Enrollment Types (OLD BAD STATE). 
+			# User REQUIREMENT: Enrollment Type: Full, Zero Credit, Audit.
+			# Screenshot 1 shows Enrollment Types with: Core, Prog El, Open El, Zero Credit, Audit.
+			# This implies 'Zero Credit' and 'Audit' were ALREADY there but mixed with Course Types.
+			# And 'Full' is missing.
+			
 			{"enrollment_type": "Audit", "is_active": 0, "display_name": "Audit"},
 		]
-		for d in defaults:
-			self.append("enrollment_types", d)
+		
+		# User wanted: Enrollment_type: Full, Zero Credit, Audit.
+		# I will ensure these exist.
+		
+		# Clean up WRONG types from Enrollment Types if they exist?
+		# The user screenshot shows "Core", "Programme Elective", "Open Elective" INSIDE Enrollment Types.
+		# These are WRONG. They belong in Course Types.
+		# I should probably remove them from Enrollment Types to be clean, OR just leave them if user didn't ask to remove.
+		# "so based on that the screenshot details should load" implies I should match the requirement.
+		# Requirement: "Enrollment_type: Data field for the type name (Full, Zero credit, Audit) this need to show in default"
+		
+		# I'll simply ensure Full, Zero Credit, Audit are present.
+		
+		desired_types = ["Full", "Zero Credit", "Audit"]
+		
+		if not self.enrollment_types:
+			# Completley empty, easy.
+			self.append("enrollment_types", {"enrollment_type": "Full", "is_active": 1, "display_name": "Full"})
+			self.append("enrollment_types", {"enrollment_type": "Zero Credit", "is_active": 1, "display_name": "Zero Credit"})
+			self.append("enrollment_types", {"enrollment_type": "Audit", "is_active": 1, "display_name": "Audit"})
+		else:
+			# Check existing
+			existing_map = {d.enrollment_type: d for d in self.enrollment_types}
+			
+			if "Full" not in existing_map:
+				self.append("enrollment_types", {"enrollment_type": "Full", "is_active": 1, "display_name": "Full"})
+			
+			if "Zero Credit" not in existing_map:
+				self.append("enrollment_types", {"enrollment_type": "Zero Credit", "is_active": 1, "display_name": "Zero Credit"})
+			
+			if "Audit" not in existing_map:
+				self.append("enrollment_types", {"enrollment_type": "Audit", "is_active": 1, "display_name": "Audit"})
+
 
 
 # ---------------------------------------------------------------------
@@ -118,6 +172,7 @@ def save_curriculum(
 			doc.append("curriculum_courses", {
 				"semester": course.get("semester"),
 				"enrollment_type": course.get("enrollment_type"),
+				"course_type": course.get("course_type"),
 				"course_group_type": course.get("course_group_type", "Course"),
 				"course": course.get("course"),
 				"cluster_name": course.get("cluster_name"),
@@ -147,6 +202,7 @@ def save_curriculum(
 		doc.append("curriculum_courses", {
 			"semester": course.get("semester"),
 			"enrollment_type": course.get("enrollment_type"),
+			"course_type": course.get("course_type"),
 			"course_group_type": course.get("course_group_type", "Course"),
 			"course": course.get("course"),
 			"cluster_name": course.get("cluster_name"),

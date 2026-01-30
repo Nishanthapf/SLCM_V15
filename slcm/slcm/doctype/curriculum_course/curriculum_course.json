@@ -9,6 +9,7 @@
         "semester",
         "course_group_type",
         "course",
+        "course_type",
         "enrollment_type",
         "cluster_name",
         "min_courses",
@@ -39,6 +40,12 @@
             "in_list_view": 1,
             "label": "Course",
             "options": "Course"
+        },
+        {
+            "fieldname": "course_type",
+            "fieldtype": "Data",
+            "in_list_view": 1,
+            "label": "Course Type"
         },
         {
             "fieldname": "enrollment_type",
