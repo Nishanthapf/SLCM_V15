@@ -16,13 +16,16 @@ class CourseManagement(Document):
 			{"course_type": "Seminar", "is_active": 1, "display_name": "Seminar"},
 		]
 		
+		# Get course_types safely (might not exist for Single DocType on first load)
+		course_types = getattr(self, "course_types", None) or []
+		
 		# If empty, populate all
-		if not self.course_types:
+		if not course_types:
 			for d in defaults:
 				self.append("course_types", d)
 		else:
 			# Ensure missing ones are added
-			existing = [d.course_type for d in self.course_types]
+			existing = [d.course_type for d in course_types]
 			for d in defaults:
 				if d["course_type"] not in existing:
 					self.append("course_types", d)
@@ -53,15 +56,18 @@ class CourseManagement(Document):
 		# I'll simply ensure Full, Zero Credit, Audit are present.
 		
 		desired_types = ["Full", "Zero Credit", "Audit"]
+	
+		# Get enrollment_types safely (might not exist for Single DocType on first load)
+		enrollment_types = getattr(self, "enrollment_types", None) or []
 		
-		if not self.enrollment_types:
+		if not enrollment_types:
 			# Completley empty, easy.
 			self.append("enrollment_types", {"enrollment_type": "Full", "is_active": 1, "display_name": "Full"})
 			self.append("enrollment_types", {"enrollment_type": "Zero Credit", "is_active": 1, "display_name": "Zero Credit"})
 			self.append("enrollment_types", {"enrollment_type": "Audit", "is_active": 1, "display_name": "Audit"})
 		else:
 			# Check existing
-			existing_map = {d.enrollment_type: d for d in self.enrollment_types}
+			existing_map = {d.enrollment_type: d for d in enrollment_types}
 			
 			if "Full" not in existing_map:
 				self.append("enrollment_types", {"enrollment_type": "Full", "is_active": 1, "display_name": "Full"})

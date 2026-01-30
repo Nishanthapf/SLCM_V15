@@ -35,9 +35,24 @@ frappe.ui.form.on("Course Management", {
 			page: frm.page,
 		});
 
+		// Persistence: Restore filters
+		if (!frm.doc.department && !frm.doc.program && !frm.doc.academic_year) {
+			const settings = frappe.model.user_settings[frm.doctype] || {};
+			if (settings.filters) {
+				if (settings.filters.department) frm.set_value("department", settings.filters.department);
+				if (settings.filters.program) frm.set_value("program", settings.filters.program);
+				if (settings.filters.academic_year) frm.set_value("academic_year", settings.filters.academic_year);
+				if (settings.filters.batch) frm.set_value("batch", settings.filters.batch);
+				if (settings.filters.section) frm.set_value("section", settings.filters.section);
+			}
+		}
+
 		// Load UI if data already present
 		if (frm.doc.department && frm.doc.program && frm.doc.academic_year) {
 			frm.trigger("autorefresh");
+		} else if (frm.curriculum_data) {
+			// If we have curriculum data but filters changed, re-render to pick up settings changes
+			frm.trigger("render_ui");
 		}
 
 		frm.add_custom_button(__("Reset Filters"), function () {
@@ -47,6 +62,8 @@ frappe.ui.form.on("Course Management", {
 			frm.set_value("batch", "");
 			frm.set_value("section", "");
 			frm.curriculum_data = null;
+			// Clear persistence
+			frappe.model.user_settings.save(frm.doctype, "filters", null);
 			frm.trigger("render_ui");
 		});
 	},
@@ -98,6 +115,14 @@ frappe.ui.form.on("Course Management", {
 	},
 
 	autorefresh: function (frm) {
+		// Persistence: Save filters
+		frappe.model.user_settings.save(frm.doctype, "filters", {
+			department: frm.doc.department,
+			program: frm.doc.program,
+			academic_year: frm.doc.academic_year,
+			batch: frm.doc.batch,
+			section: frm.doc.section
+		});
 		frm.trigger("load_curriculum");
 	},
 
@@ -276,6 +301,9 @@ frappe.ui.form.on("Course Management", {
 		const $container = $(html).appendTo(wrapper);
 		const $accordion = $container.find("#accordionSemesters");
 
+		// Get active enrollment types from settings
+		const enrollment_types = (frm.doc.enrollment_types || []).filter((d) => d.is_active);
+
 		frm.term_list.forEach((term) => {
 			const termName = `${system} ${term}`;
 			const coursesInSem = (frm.curriculum_data.curriculum_courses || []).filter(
@@ -309,54 +337,113 @@ frappe.ui.form.on("Course Management", {
 			const $semBlock = $(semHtml).appendTo($accordion);
 			const $etContainer = $semBlock.find(`.enrollment-types-container-${term}`);
 
-			course_types.forEach((ct) => {
-				const sectionCourses = coursesInSem.filter(
-					(c) => c.course_type === ct.course_type
-				);
+			// GROUP 1: Course Types
+			if (course_types.length > 0) {
+				$etContainer.append(`<h6 class="text-uppercase text-muted font-weight-bold mb-3 mt-2" style="font-size: 11px; letter-spacing: 1px;">Course Types</h6>`);
 
-				// Calculate counts
-				const courseCount = sectionCourses.length;
-				const countBadge = courseCount > 0
-					? `<span class="badge badge-secondary ml-2" style="font-size: 11px;">${courseCount} Selected</span>`
-					: `<span class="badge badge-light ml-2 text-muted" style="font-size: 11px;">0 Selected</span>`;
+				course_types.forEach((ct) => {
+					const sectionCourses = coursesInSem.filter(
+						(c) => c.course_type === ct.course_type
+					);
 
-				const customButtons = `
-					<button class="btn btn-xs btn-default btn-add-course"
-						data-sem="${termName}" data-ct="${ct.course_type}">+ Add Course</button>
-					${ct.course_type !== "Core"
-						? `<button class="btn btn-xs btn-default btn-add-cluster ml-1"
-							data-sem="${termName}" data-ct="${ct.course_type}">+ Add Cluster</button>`
-						: ""
-					}
-				`;
+					const courseCount = sectionCourses.length;
+					const countBadge = courseCount > 0
+						? `<span class="badge badge-secondary ml-2" style="font-size: 10px;">${courseCount} Selected</span>`
+						: `<span class="badge badge-light ml-2 text-muted" style="font-size: 10px;">0 Selected</span>`;
 
-				const etHtml = `
-                    <div class="enrollment-section mb-4">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <h6 class="font-weight-bold text-dark" style="text-transform: uppercase; font-size: 13px; letter-spacing: 0.5px;">
-                                ${ct.display_name || ct.course_type} ${countBadge}
-                            </h6>
-                            <div>
-                                ${customButtons}
-                            </div>
-                        </div>
-                        <div class="list-group">
-                            ${sectionCourses
-						.map((course, idx) =>
-							render_course_item(
-								course,
-								idx,
-								termName,
-								ct.course_type,
-								course_fields
+					const customButtons = `
+						<button class="btn btn-xs btn-default btn-add-course"
+							data-sem="${termName}" data-ct="${ct.course_type}">+ Add Course</button>
+						${ct.course_type !== "Core"
+							? `<button class="btn btn-xs btn-default btn-add-cluster ml-1"
+								data-sem="${termName}" data-ct="${ct.course_type}">+ Add Cluster</button>`
+							: ""
+						}
+					`;
+
+					const courseTypeHtml = `
+	                    <div class="course-type-section mb-4" style="border-left: 3px solid #333; padding-left: 15px;">
+	                        <div class="d-flex justify-content-between align-items-center mb-2">
+	                            <h6 class="font-weight-bold text-dark mb-0" style="font-size: 13px;">
+	                                ${ct.display_name || ct.course_type}
+	                                ${countBadge}
+	                            </h6>
+	                            <div>
+	                                ${customButtons}
+	                            </div>
+	                        </div>
+	                        <div class="list-group">
+	                            ${sectionCourses
+							.map((course, idx) =>
+								render_course_item(
+									course,
+									idx,
+									termName,
+									ct.course_type,
+									course_fields,
+									null
+								)
 							)
-						)
-						.join("")}
-                        </div>
-                    </div>
-                `;
-				$etContainer.append(etHtml);
-			});
+							.join("")}
+	                        </div>
+	                    </div>
+	                `;
+					$etContainer.append(courseTypeHtml);
+				});
+			}
+
+			// GROUP 2: Enrollment Types
+			if (enrollment_types.length > 0) {
+				$etContainer.append(`<h6 class="text-uppercase text-muted font-weight-bold mb-3 mt-4" style="font-size: 11px; letter-spacing: 1px;">Enrollment Types</h6>`);
+
+				enrollment_types.forEach((et) => {
+					// Only show if no Course Type defined (avoids duplication with Group 1)
+					const sectionCourses = coursesInSem.filter(
+						(c) => c.enrollment_type === et.enrollment_type && !c.course_type
+					);
+
+					const totalCount = sectionCourses.length;
+					const enrollmentCountBadge = totalCount > 0
+						? `<span class="badge badge-secondary ml-2" style="font-size: 10px;">${totalCount} Selected</span>`
+						: `<span class="badge badge-light ml-2 text-muted" style="font-size: 10px;">0 Selected</span>`;
+
+					const customButtons = `
+						<button class="btn btn-xs btn-default btn-add-course"
+							data-sem="${termName}" data-et="${et.enrollment_type}">+ Add Course</button>
+						<button class="btn btn-xs btn-default btn-add-cluster ml-1"
+							data-sem="${termName}" data-et="${et.enrollment_type}">+ Add Cluster</button>
+					`;
+
+					const enrollmentTypeHtml = `
+	                    <div class="enrollment-type-section mb-4" style="border-left: 3px solid #007bff; padding-left: 15px;">
+	                        <div class="d-flex justify-content-between align-items-center mb-3">
+	                            <h6 class="font-weight-bold mb-0 text-dark" style="font-size: 13px;">
+	                                ${et.display_name || et.enrollment_type}
+	                                ${enrollmentCountBadge}
+	                            </h6>
+	                             <div>
+	                                ${customButtons}
+	                            </div>
+	                        </div>
+	                        <div class="list-group">
+	                             ${sectionCourses
+							.map((course, idx) =>
+								render_course_item(
+									course,
+									idx,
+									termName,
+									null,
+									course_fields,
+									et.enrollment_type
+								)
+							)
+							.join("")}
+	                        </div>
+	                    </div>
+	                `;
+					$etContainer.append(enrollmentTypeHtml);
+				});
+			}
 		});
 
 		if (frm.active_term_name) delete frm.active_term_name;
@@ -364,12 +451,14 @@ frappe.ui.form.on("Course Management", {
 		// Bind Events
 		$container.find(".btn-add-course").on("click", function (e) {
 			e.preventDefault();
-			add_course_dialog(frm, $(this).data("sem"), $(this).data("ct"), course_fields);
+			const enrollmentType = $(this).data("et");
+			add_course_dialog(frm, $(this).data("sem"), $(this).data("ct"), course_fields, enrollmentType);
 		});
 
 		$container.find(".btn-add-cluster").on("click", function (e) {
 			e.preventDefault();
-			add_cluster_dialog(frm, $(this).data("sem"), $(this).data("ct"));
+			const enrollmentType = $(this).data("et");
+			add_cluster_dialog(frm, $(this).data("sem"), $(this).data("ct"), enrollmentType);
 		});
 
 		$container.find(".btn-add-term").on("click", function (e) {
@@ -459,57 +548,62 @@ function find_item_by_data(frm, $el) {
 }
 
 function remove_item(frm, $el) {
-	const sem = $el.data("sem");
-	const ct = $el.data("ct"); // Changed from et
 	const courseName = $el.data("course");
 	const clusterName = $el.data("cluster");
 	const isCluster = !!clusterName;
-
-	// Find item first to get details for message
-	const itemToRemove = find_item_by_data(frm, $el);
-	if (!itemToRemove) return;
+	const sem = $el.data("sem");
+	const ct = $el.data("ct");
+	const et = $el.data("et");
 
 	let confirmMsg = "";
 	if (isCluster) {
 		confirmMsg = __("Are you sure you want to remove cluster <b>{0}</b>?", [clusterName]);
 	} else {
-		const codeStr = itemToRemove.course_code ? ` (${itemToRemove.course_code})` : "";
-		confirmMsg = __("Are you sure you want to remove course <b>{0}</b>{1}?", [courseName, codeStr]);
+		confirmMsg = __("Are you sure you want to remove course <b>{0}</b>?", [courseName]);
 	}
 
 	frappe.confirm(confirmMsg, () => {
+		let list = frm.curriculum_data.curriculum_courses || [];
 		let deleted = false;
-		frm.curriculum_data.curriculum_courses = (frm.curriculum_data.curriculum_courses || []).filter(
-			(c) => {
-				if (deleted) return true; // delete only first match
-				const cType = c.course_type || c.enrollment_type;
 
-				if (c.semester === sem && cType === ct) {
-					if (isCluster) {
-						if (c.course_group_type === "Cluster" && c.cluster_name === clusterName) {
-							deleted = true;
-							return false;
-						}
-					} else {
-						if (c.course_group_type === "Course" && c.course === courseName) {
-							deleted = true;
-							return false;
-						}
-					}
+		// Update finding logic to be specific
+		frm.curriculum_data.curriculum_courses = list.filter((c) => {
+			// If already deleted one instance (for this specific button click), keep others
+			if (deleted) return true;
+
+			// Match Semester
+			if (c.semester !== sem) return true;
+
+			// Match Context
+			// If button has CT, course must match CT
+			if (ct && c.course_type !== ct) return true;
+			// If button has ET, course must match ET
+			if (et && c.enrollment_type !== et) return true;
+
+			// Match Item
+			if (isCluster) {
+				if (c.course_group_type === "Cluster" && c.cluster_name === clusterName) {
+					deleted = true;
+					return false;
 				}
-				return true;
+			} else {
+				if (c.course_group_type === "Course" && c.course === courseName) {
+					deleted = true;
+					return false;
+				}
 			}
-		);
+			return true;
+		});
 
-		frm.active_term_name = sem;
-		// IMMEDIATE UPDATE
-		frm.trigger("render_ui");
-		// BACKGROUND SAVE
-		frm.trigger("save_curriculum");
+		if (deleted) {
+			frm.active_term_name = sem;
+			frm.trigger("render_ui");
+			frm.trigger("save_curriculum");
+		}
 	});
 }
 
-function render_course_item(course, idx, resultSem, resultCt, course_fields) {
+function render_course_item(course, idx, resultSem, resultCt, course_fields, resultEt) {
 	if (course.course_group_type === "Cluster") {
 		return `
             <div class="list-group-item p-2">
@@ -520,7 +614,7 @@ function render_course_item(course, idx, resultSem, resultCt, course_fields) {
                     </div>
                     <div>
                         <button class="btn btn-xs text-danger remove-course"
-                            data-sem="${resultSem}" data-ct="${resultCt}" data-cluster="${course.cluster_name}">
+                            data-sem="${resultSem}" data-ct="${resultCt}" data-et="${resultEt || ''}" data-cluster="${course.cluster_name}">
                             <i class="fa fa-times"></i>
                         </button>
                     </div>
@@ -530,26 +624,39 @@ function render_course_item(course, idx, resultSem, resultCt, course_fields) {
 	} else {
 		// DYNAMIC FIELD RENDERING
 		let infoParts = [];
-		// Always show credits as it's critical
+		// Always show credits
 		infoParts.push(`Credits: ${course.credits || course.credit_value || 0}`);
 
-		// Show Course Type as requested in screenshot (e.g. "Course Type: Core")
-		// Ideally resultCt is the course type, we can use that.
-		if (resultCt) {
-			infoParts.push(`Course Type: ${resultCt}`);
+		// COURSE TYPE DISPLAY
+		// Show internal Course Type only if it's NOT the current Section Header context
+		if (course.course_type && course.course_type !== resultCt) {
+			infoParts.push(`<strong>Type:</strong> ${course.course_type}`);
 		}
 
-		// Show Enrollment Type if present (Full/Audit) - This is key for the user's new requirement
-		if (course.enrollment_type && !["Core", "Programme Elective", "Open Elective", "Seminar"].includes(course.enrollment_type)) {
-			// Only show if it matches the NEW enrollment types (Full, Audit, Zero Credit)
-			infoParts.push(`<span class="badge badge-light">${course.enrollment_type}</span>`);
+		// ENROLLMENT TYPE DISPLAY
+		// Show Enrollment Type only if:
+		// 1. It is NOT the current Section Header context
+		// 2. It is NOT "Full" (Implicit default, redudant info)
+		// 3. It is a special type (Audit, Zero Credit, etc.)
+		if (course.enrollment_type &&
+			course.enrollment_type !== resultEt &&
+			course.enrollment_type !== "Full" &&
+			!["Core", "Programme Elective", "Open Elective", "Seminar"].includes(course.enrollment_type)) {
+
+			let badgeClass = "badge-secondary";
+			if (course.enrollment_type === "Audit") badgeClass = "badge-warning";
+			else if (course.enrollment_type === "Zero Credit") badgeClass = "badge-info";
+
+			infoParts.push(`<strong>Enrollment:</strong> <span class="badge ${badgeClass}">${course.enrollment_type}</span>`);
 		}
 
-		// Add other fields if they have value (optional, keep it clean)
+		// Add other fields if they have value (optional)
 		course_fields.forEach((f) => {
 			if (
 				f.fieldname !== "course_name" &&
 				f.fieldname !== "credit_value" &&
+				f.fieldname !== "course_type" &&
+				f.fieldname !== "enrollment_type" &&
 				course[f.fieldname]
 			) {
 				// skip internal fields
@@ -565,9 +672,8 @@ function render_course_item(course, idx, resultSem, resultCt, course_fields) {
                         <small class="text-muted">${infoParts.join(" | ")}</small>
                     </div>
                     <div>
-                        <button class="btn btn-xs text-danger remove-course"
-                            data-sem="${resultSem}" data-ct="${resultCt}" data-course="${course.course
-			}">
+                         <button class="btn btn-xs text-danger remove-course"
+                            data-sem="${resultSem}" data-ct="${resultCt}" data-et="${resultEt || ''}" data-course="${course.course}">
                             <i class="fa fa-times"></i>
                         </button>
                     </div>
@@ -579,30 +685,36 @@ function render_course_item(course, idx, resultSem, resultCt, course_fields) {
 
 // remove_term_dialog skipped in this chunk because it doesn't need specific changes (it filters by semester)
 
-function add_course_dialog(frm, semester, course_type, course_fields) {
-	let selected = new Set();
+function add_course_dialog(frm, semester, course_type, course_fields, enrollment_type) {
+	let selected = new Map(); // Use Map for ID-based tracking
+	// Logic: "Not Both". If context is CT, hide ET. If context is ET, hide CT.
 
-	// Get available Enrollment Types from settings to populate dropdown
+	// Get available Enrollment Types
 	const enrollment_types_opts = (frm.doc.enrollment_types || [])
 		.filter(d => d.is_active && !["Core", "Programme Elective", "Open Elective", "Seminar"].includes(d.enrollment_type))
 		.map(d => d.enrollment_type);
 
-	// If empty (e.g. migration validation not done yet), fallback to defaults
-	if (enrollment_types_opts.length === 0) {
-		enrollment_types_opts.push("Full", "Audit", "Zero Credit");
-	}
+	if (enrollment_types_opts.length === 0) enrollment_types_opts.push("Full", "Audit", "Zero Credit");
+
+	// Get available Course Types
+	const course_types_opts = (frm.doc.course_types || [])
+		.filter(d => d.is_active)
+		.map(d => d.course_type);
+
+	// Context Title
+	let titleSuffix = "";
+	if (course_type) titleSuffix = `Course Type: ${course_type}`;
+	else if (enrollment_type) titleSuffix = `Enrollment: ${enrollment_type}`;
 
 	const d = new frappe.ui.Dialog({
-		title: `Select Courses for ${course_type}`,
+		title: `Add Courses - ${titleSuffix}`,
 		size: "extra-large",
 		fields: [
 			{
 				fieldtype: "Data",
 				fieldname: "search",
 				label: "Search",
-				onchange() {
-					load_courses();
-				},
+				onchange() { load_courses(); },
 			},
 			{
 				fieldtype: "Link",
@@ -610,17 +722,27 @@ function add_course_dialog(frm, semester, course_type, course_fields) {
 				label: "Department",
 				options: "Department",
 				default: frm.doc.department,
-				onchange() {
-					load_courses();
-				},
+				onchange() { load_courses(); },
 			},
 			{
 				fieldtype: "Select",
 				fieldname: "enrollment_type",
 				label: "Enrollment Type",
 				options: enrollment_types_opts,
-				default: "Full", // Default to Full
-				reqd: 1
+				default: enrollment_type || "Full",
+				read_only: !!enrollment_type,
+				reqd: 1,
+				hidden: !!course_type // Hide if adding to Course Type (Implicitly Full)
+			},
+			{
+				fieldtype: "Select",
+				fieldname: "course_type",
+				label: "Course Type",
+				options: course_types_opts,
+				default: course_type || null,
+				read_only: !!course_type,
+				reqd: 0, // Not required if adding to Enrollment Type
+				hidden: !!enrollment_type // Hide if adding to Enrollment Type
 			},
 			{
 				fieldtype: "HTML",
@@ -634,15 +756,25 @@ function add_course_dialog(frm, semester, course_type, course_fields) {
 			}
 
 			let added = 0;
-			const selectedEt = d.get_value("enrollment_type");
+			let selectedEt = d.get_value("enrollment_type");
+			let selectedCt = d.get_value("course_type");
+
+			// If hidden/empty, ensure clean values
+			if (d.fields_dict.course_type.df.hidden) selectedCt = null;
+			// If et hidden, it defaults to 'Full' via field default logic, or we enforce it here
+			if (d.fields_dict.enrollment_type.df.hidden && !selectedEt) selectedEt = "Full";
 
 			selected.forEach((c) => {
-				// Check duplicate: Same Course, Same Semester, Same Course Type
-				// Allow same course in different sem or different type?? Usually not.
+				// Check duplicate using BOTH types for uniqueness?
+				// Actually, duplicate implies "Same Course" appearing in "Same Context".
+				// But here we allow duplicates if checking from different view.
+				// However, data structure is list.
+				// If I add SAME course with SAME CT and SAME ET, it is duplicate.
 				const exists = frm.curriculum_data.curriculum_courses.find(
 					(e) =>
 						e.semester === semester &&
-						e.course_type === course_type &&
+						e.course_type === selectedCt &&
+						e.enrollment_type === selectedEt &&
 						e.course_group_type === "Course" &&
 						e.course === c.name
 				);
@@ -651,8 +783,8 @@ function add_course_dialog(frm, semester, course_type, course_fields) {
 
 				frm.curriculum_data.curriculum_courses.push({
 					semester: semester,
-					course_type: course_type,
-					enrollment_type: selectedEt, // Store the selected Full/Audit type
+					course_type: selectedCt,
+					enrollment_type: selectedEt,
 					course_group_type: "Course",
 					course: c.name,
 					course_code: c.course_code,
@@ -708,104 +840,65 @@ function add_course_dialog(frm, semester, course_type, course_fields) {
 	function render_table(rows) {
 		const wrapper = d.fields_dict.course_table.$wrapper;
 		wrapper.empty();
-
-		const table = $(`
-			<table class="table table-bordered table-hover">
-				<thead>
-					<tr>
-						<th style="width:40px; text-align: center;"><input type="checkbox" class="select-all"></th>
-						<th>Course Name</th>
-						<th>Course Code</th>
-						<th>Department</th>
-						<th>Credits</th>
-						<th>Status</th>
-					</tr>
-				</thead>
-				<tbody></tbody>
-			</table>
-		`);
-
+		const table = $(`<table class="table table-bordered table-hover"><thead><tr><th style="width:40px; text-align: center;"><input type="checkbox" class="select-all"></th><th>Course Name</th><th>Course Code</th><th>Department</th><th>Credits</th><th>Status</th></tr></thead><tbody></tbody></table>`);
 		const tbody = table.find("tbody");
 		const selectAll = table.find(".select-all");
 
-		// Check already existing courses in this semester
+		// Logic to check existing
 		const existingCourses = new Set();
 		if (frm.curriculum_data.curriculum_courses) {
 			frm.curriculum_data.curriculum_courses.forEach(c => {
-				if (c.semester === semester && c.course_group_type === "Course") {
-					existingCourses.add(c.course);
+				if (c.semester === semester && c.course_group_type === "Course") existingCourses.add(c.course);
+			});
+		}
+
+		const selectableRows = rows.filter(r => !existingCourses.has(r.name));
+
+		// Update master check state based on Map
+		const allSelected = selectableRows.length > 0 && selectableRows.every(r => selected.has(r.name));
+		selectAll.prop("checked", allSelected);
+		if (selectableRows.length === 0) selectAll.prop("disabled", true);
+
+		// Handle Select All Click
+		selectAll.on("change", function () {
+			const isChecked = $(this).prop("checked");
+			selectableRows.forEach(r => {
+				const $cb = tbody.find(`.course-checkbox[data-name='${r.name}']`);
+				$cb.prop("checked", isChecked); // Update UI
+				if (isChecked) selected.set(r.name, r);
+				else selected.delete(r.name);
+			});
+		});
+
+		if (rows.length === 0) {
+			tbody.append(`<tr><td colspan="6" class="text-center text-muted">No courses found</td></tr>`);
+		} else {
+			rows.forEach(r => {
+				const isExisting = existingCourses.has(r.name);
+				const isSelected = selected.has(r.name); // Correct check for Map
+				const tr = $(`<tr class="${isExisting ? 'table-active text-muted' : ''}"><td class="text-center"><input type="checkbox" class="course-checkbox" data-name="${r.name}" ${isExisting ? 'disabled checked' : ''} ${isSelected ? 'checked' : ''}></td><td>${r.course_name} <br><small class="text-muted">${r.name}</small></td><td>${r.course_code}</td><td>${r.department}</td><td>${r.credit_value} Credit(s)</td><td>${r.status}</td></tr>`).appendTo(tbody);
+
+				if (!isExisting) {
+					// Handle Individual Click
+					tr.find(".course-checkbox").on("change", function () {
+						if ($(this).is(":checked")) selected.set(r.name, r);
+						else selected.delete(r.name);
+
+						// Update master checkbox state
+						const currentAll = selectableRows.every(row => selected.has(row.name));
+						selectAll.prop("checked", currentAll);
+					});
+
+					// Row click convenience
+					tr.on("click", function (e) {
+						if (e.target.type !== 'checkbox') {
+							const $cb = $(this).find("input[type='checkbox']");
+							$cb.prop("checked", !$cb.prop("checked")).trigger("change");
+						}
+					});
 				}
 			});
 		}
-
-		// Filter out rows that are already added (for master checkbox logic)
-		const selectableRows = rows.filter(r => !existingCourses.has(r.name));
-
-		// Check if all selectable rows are currently selected
-		const allSelected = selectableRows.length > 0 && selectableRows.every(r => selected.has(r.name));
-		selectAll.prop("checked", allSelected);
-
-		// If no rows are selectable, disable master checkbox
-		if (selectableRows.length === 0) {
-			selectAll.prop("disabled", true);
-		}
-
-		selectAll.on("change", function () {
-			const isChecked = $(this).prop("checked");
-
-			selectableRows.forEach(r => {
-				// Only toggle valid rows
-				const $checkbox = tbody.find(`input[data-name='${r.name}']`);
-				$checkbox.prop("checked", isChecked);
-
-				if (isChecked) selected.add(r);
-				else selected.delete(r);
-			});
-		});
-
-		rows.forEach((r) => {
-			const isAlreadyAdded = existingCourses.has(r.name);
-			const checked = selected.has(r.name) ? "checked" : "";
-			const disabled = isAlreadyAdded ? "disabled" : "";
-
-			let statusHtml = r.status;
-			if (isAlreadyAdded) {
-				statusHtml = `<span class="text-muted">Already Added</span>`;
-			}
-
-			const tr = $(`
-				<tr class="${isAlreadyAdded ? 'text-muted' : ''}" style="${isAlreadyAdded ? 'background-color: #f8f9fa;' : ''}">
-					<td class="text-center"><input type="checkbox" ${checked} ${disabled} data-name="${r.name}"></td>
-					<td>${r.course_name || ""}</td>
-					<td>${r.course_code || ""}</td>
-					<td>${r.department_name || r.department || ""}</td>
-					<td>${r.credit_value || 0}</td>
-					<td>${statusHtml}</td>
-				</tr>
-			`);
-
-			if (!isAlreadyAdded) {
-				tr.find("input").on("change", function () {
-					if (this.checked) selected.add(r);
-					else selected.delete(r);
-
-					// Update master checkbox state
-					const allNowSelected = selectableRows.every(row => selected.has(row.name));
-					selectAll.prop("checked", allNowSelected);
-				});
-
-				// Allow clicking row to toggle (user experience improvement)
-				tr.on("click", function (e) {
-					if (e.target.type !== 'checkbox') {
-						const $cb = $(this).find("input[type='checkbox']");
-						$cb.prop("checked", !$cb.prop("checked")).trigger("change");
-					}
-				});
-			}
-
-			tbody.append(tr);
-		});
-
 		wrapper.append(table);
 	}
 
@@ -897,11 +990,44 @@ function edit_cluster_dialog(frm, item) {
 	d.show();
 }
 
-function add_cluster_dialog(frm, semester, course_type) {
+function add_cluster_dialog(frm, semester, course_type, enrollment_type) {
+	// Get available Course Types
+	const course_types_opts = (frm.doc.course_types || [])
+		.filter(d => d.is_active)
+		.map(d => d.course_type);
+
+	// Get available Enrollment Types
+	const enrollment_types_opts = (frm.doc.enrollment_types || [])
+		.filter(d => d.is_active && !["Core", "Programme Elective", "Open Elective", "Seminar"].includes(d.enrollment_type))
+		.map(d => d.enrollment_type);
+
+	if (enrollment_types_opts.length === 0) enrollment_types_opts.push("Full", "Audit", "Zero Credit");
+
+	const titleSuffix = course_type ? `Course Type: ${course_type}` : `Enrollment: ${enrollment_type}`;
+
 	const d = new frappe.ui.Dialog({
-		title: "Add Cluster",
+		title: `Add Cluster - ${titleSuffix}`,
 		fields: [
 			{ label: "Cluster Name", fieldname: "cluster_name", fieldtype: "Data", reqd: 1 },
+			{
+				label: "Course Type",
+				fieldname: "course_type",
+				fieldtype: "Select",
+				options: course_types_opts,
+				default: course_type || null,
+				read_only: !!course_type,
+				hidden: !!course_type,
+				reqd: 1
+			},
+			{
+				label: "Enrollment Type",
+				fieldname: "enrollment_type",
+				fieldtype: "Select",
+				options: enrollment_types_opts,
+				default: enrollment_type || "Full",
+				read_only: !!enrollment_type,
+				reqd: 1
+			},
 			{
 				label: "Min Courses",
 				fieldname: "min_courses",
@@ -922,11 +1048,13 @@ function add_cluster_dialog(frm, semester, course_type) {
 			if (!frm.curriculum_data.curriculum_courses)
 				frm.curriculum_data.curriculum_courses = [];
 
+			const selectedCt = values.course_type || course_type;
+			const selectedEt = values.enrollment_type || enrollment_type || "Full";
+
 			frm.curriculum_data.curriculum_courses.push({
 				semester: semester,
-				course_type: course_type, // Use course_type
-				enrollment_type: "Full", // Default to Full or leave empty for Clusters? Clusters define requirements.
-				// Probably "Full" is safe default or user doesn't care for clusters.
+				course_type: selectedCt,
+				enrollment_type: selectedEt,
 				course_group_type: "Cluster",
 				...values,
 			});
