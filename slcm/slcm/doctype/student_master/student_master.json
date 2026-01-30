@@ -52,6 +52,7 @@
   "blood_group",
   "state_of_domicile",
   "column_break_mlne",
+  "country",
   "state",
   "district",
   "city",
@@ -59,6 +60,7 @@
   "aadhaar_number",
   "pan_number",
   "passport_number",
+  "passport_expiry_date",
   "date_of_registration",
   "passport_available",
   "pwd",
@@ -1066,7 +1068,7 @@
   {
    "fieldname": "present_address",
    "fieldtype": "Small Text",
-   "label": "Present Address"
+   "label": "Comminication Address"
   },
   {
    "fieldname": "permanent_address",
@@ -1191,10 +1193,20 @@
    "fieldname": "pincode",
    "fieldtype": "Data",
    "label": "Pincode"
+  },
+  {
+   "fieldname": "country",
+   "fieldtype": "Data",
+   "label": "Country"
+  },
+  {
+   "fieldname": "passport_expiry_date",
+   "fieldtype": "Date",
+   "label": "Passport Expiry Date"
   }
  ],
  "links": [],
- "modified": "2026-01-29 17:28:22.406993",
+ "modified": "2026-01-30 09:55:17.210711",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "Student Master",
