@@ -7,15 +7,16 @@
  "doctype": "Workspace",
  "for_user": "",
  "hide_custom": 0,
+ "icon": "",
  "idx": 0,
- "indicator_color": "green",
+ "indicator_color": "",
  "is_hidden": 0,
- "label": "Academic",
+ "label": "Programme Management",
  "links": [],
- "modified": "2026-01-29 16:40:41.399082",
+ "modified": "2026-01-30 09:43:39.216086",
  "modified_by": "Administrator",
  "module": "SLCM",
- "name": "Academic",
+ "name": "Programme Management",
  "number_cards": [],
  "owner": "Administrator",
  "parent_page": "",
@@ -79,5 +80,5 @@
    "type": "DocType"
   }
  ],
- "title": "Academic"
+ "title": "Programme Management"
 }

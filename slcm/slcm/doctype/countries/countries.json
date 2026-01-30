@@ -1,0 +1,81 @@
+{
+ "actions": [],
+ "allow_import": 1,
+ "autoname": "prompt",
+ "creation": "2026-01-30 09:39:04.279518",
+ "default_view": "List",
+ "doctype": "DocType",
+ "document_type": "Setup",
+ "engine": "InnoDB",
+ "field_order": [
+  "country_name",
+  "date_format",
+  "time_format",
+  "time_zones",
+  "code"
+ ],
+ "fields": [
+  {
+   "fieldname": "country_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Country Name",
+   "oldfieldname": "country_name",
+   "oldfieldtype": "Data",
+   "unique": 1
+  },
+  {
+   "fieldname": "date_format",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Date Format"
+  },
+  {
+   "default": "HH:mm:ss",
+   "fieldname": "time_format",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Time format"
+  },
+  {
+   "fieldname": "time_zones",
+   "fieldtype": "Text",
+   "in_list_view": 1,
+   "label": "Time Zones"
+  },
+  {
+   "fieldname": "code",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Code"
+  }
+ ],
+ "icon": "fa fa-globe",
+ "links": [],
+ "modified": "2026-01-30 10:02:00.693330",
+ "modified_by": "Administrator",
+ "module": "SLCM",
+ "name": "Countries",
+ "naming_rule": "Set by user",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "import": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "country_name",
+ "sort_order": "ASC",
+ "states": [],
+ "track_changes": 1,
+ "translated_doctype": 1
+}
