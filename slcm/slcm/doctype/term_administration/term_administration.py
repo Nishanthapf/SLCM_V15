@@ -1,7 +1,7 @@
 import frappe
 from frappe.model.document import Document
 
-class AcademicManagement(Document):
+class TermAdministration(Document):
 	pass
 
 @frappe.whitelist()
@@ -44,7 +44,7 @@ def create_classes_by_section(
 ):
 	# Enqueue this to run in background
 	frappe.enqueue(
-		"slcm.slcm.doctype.academic_management.academic_management.process_bulk_class_creation",
+		"slcm.slcm.doctype.term_administration.term_administration.process_bulk_class_creation",
 		queue="long",
 		timeout=1500,
 		department=department,

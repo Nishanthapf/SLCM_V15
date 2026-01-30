@@ -1,84 +1,84 @@
 {
-    "charts": [],
-    "content": "[{\"id\":\"gYoF6oN_cf\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Programme Management</span>\",\"col\":12}},{\"id\":\"wKu8xQmjnB\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b><span class=\\\"h4\\\"></span><span class=\\\"h4\\\">Course Structure</span></b></span>\",\"col\":12}},{\"id\":\"gguzzRccbt\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Course Management Tool\",\"col\":3}},{\"id\":\"HFZKa15-sr\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Course List\",\"col\":3}},{\"id\":\"i0tWMxPVLS\",\"type\":\"header\",\"data\":{\"text\":\"<span style=\\\"font-size: 18px; letter-spacing: 0.18px;\\\"><b>Course Administration</b></span>\",\"col\":12}},{\"id\":\"gpB_CGp_cU\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Term Administration\",\"col\":3}},{\"id\":\"5YSEmWP30p\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Term Configuration List\",\"col\":3}},{\"id\":\"ouQKhjN6H1\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Class Configuration List\",\"col\":3}},{\"id\":\"4X3NnMthuL\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Class Schedule List\",\"col\":3}},{\"id\":\"edqafmbSbt\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Event Schedule List\",\"col\":3}}]",
-    "creation": "2026-01-27 15:40:37.225864",
-    "custom_blocks": [],
-    "docstatus": 0,
-    "doctype": "Workspace",
-    "for_user": "",
-    "hide_custom": 0,
-    "icon": "",
-    "idx": 0,
-    "indicator_color": "",
-    "is_hidden": 0,
-    "label": "Programme Management",
-    "links": [],
-    "modified": "2026-01-30 09:43:39.216086",
-    "modified_by": "Administrator",
-    "module": "SLCM",
-    "name": "Programme Management",
-    "number_cards": [],
-    "owner": "Administrator",
-    "parent_page": "",
-    "public": 1,
-    "quick_lists": [],
-    "roles": [],
-    "sequence_id": 6.0,
-    "shortcuts": [
-        {
-            "color": "Grey",
-            "doc_view": "List",
-            "label": "Term Administration",
-            "link_to": "Academic Management",
-            "type": "DocType"
-        },
-        {
-            "color": "Grey",
-            "doc_view": "List",
-            "label": "Event Schedule List",
-            "link_to": "Event",
-            "stats_filter": "[]",
-            "type": "DocType"
-        },
-        {
-            "color": "Blue",
-            "doc_view": "List",
-            "label": "Class Schedule List",
-            "link_to": "Class Schedule",
-            "stats_filter": "[]",
-            "type": "DocType"
-        },
-        {
-            "color": "Grey",
-            "doc_view": "List",
-            "label": "Course Management Tool",
-            "link_to": "Course Management",
-            "type": "DocType"
-        },
-        {
-            "color": "Green",
-            "doc_view": "List",
-            "label": "Course List",
-            "link_to": "Curriculum",
-            "stats_filter": "[]",
-            "type": "DocType"
-        },
-        {
-            "color": "Grey",
-            "doc_view": "List",
-            "label": "Term Configuration List",
-            "link_to": "Term Configuration",
-            "stats_filter": "[]",
-            "type": "DocType"
-        },
-        {
-            "color": "Green",
-            "doc_view": "List",
-            "label": "Class Configuration List",
-            "link_to": "Class Configuration",
-            "stats_filter": "[]",
-            "type": "DocType"
-        }
-    ],
-    "title": "Programme Management"
+ "charts": [],
+ "content": "[{\"id\":\"gYoF6oN_cf\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Programme Management</span>\",\"col\":12}},{\"id\":\"wKu8xQmjnB\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b><span class=\\\"h4\\\"></span><span class=\\\"h4\\\">Course Structure</span></b></span>\",\"col\":12}},{\"id\":\"DaaWLQsB_x\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Course Management Tool\",\"col\":3}},{\"id\":\"MdIN8n7tRc\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Course List\",\"col\":3}},{\"id\":\"i0tWMxPVLS\",\"type\":\"header\",\"data\":{\"text\":\"<span style=\\\"font-size: 18px; letter-spacing: 0.18px;\\\"><b>Course Administration</b></span>\",\"col\":12}},{\"id\":\"joRKKwB-D3\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Term Administration\",\"col\":3}},{\"id\":\"5YSEmWP30p\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Term Configuration List\",\"col\":3}},{\"id\":\"ouQKhjN6H1\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Class Configuration List\",\"col\":3}},{\"id\":\"4X3NnMthuL\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Class Schedule List\",\"col\":3}},{\"id\":\"edqafmbSbt\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Event Schedule List\",\"col\":3}}]",
+ "creation": "2026-01-27 15:40:37.225864",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "",
+ "idx": 1,
+ "indicator_color": "",
+ "is_hidden": 0,
+ "label": "Programme Management",
+ "links": [],
+ "modified": "2026-01-30 13:08:31.139713",
+ "modified_by": "Administrator",
+ "module": "SLCM",
+ "name": "Programme Management",
+ "number_cards": [],
+ "owner": "Administrator",
+ "parent_page": "",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [],
+ "sequence_id": 6.0,
+ "shortcuts": [
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Event Schedule List",
+   "link_to": "Event",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Course Management Tool",
+   "link_to": "Course Management",
+   "type": "DocType"
+  },
+  {
+   "color": "Blue",
+   "doc_view": "List",
+   "label": "Class Schedule List",
+   "link_to": "Class Schedule",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Course List",
+   "link_to": "Course List",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Term Configuration List",
+   "link_to": "Term Configuration",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Term Administration",
+   "link_to": "Term Administration",
+   "type": "DocType"
+  },
+  {
+   "color": "Green",
+   "doc_view": "List",
+   "label": "Class Configuration List",
+   "link_to": "Class Configuration",
+   "stats_filter": "[]",
+   "type": "DocType"
+  }
+ ],
+ "title": "Programme Management"
 }

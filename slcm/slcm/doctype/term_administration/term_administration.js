@@ -1,7 +1,7 @@
 // Copyright (c) 2026, CU and contributors
 // For license information, please see license.txt
 
-frappe.ui.form.on("Academic Management", {
+frappe.ui.form.on("Term Administration", {
 	refresh(frm) {
 		frm.trigger("render_terms_ui");
 		frm.trigger("render_class_ui");
