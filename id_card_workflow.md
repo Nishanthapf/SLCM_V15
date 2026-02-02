@@ -88,7 +88,19 @@ Used for new academic batches.
 5.  **Preview**: (Optional) Generate a preview for the first student to verify the layout.
 6.  **Process**:
     *   Click **"Generate Cards"**. This runs a background job to create `Student ID Card` records for all selected students.
-    *   Once done, options to **"Download ZIP"** (containing all images) or **"Download Print Layout"** become available.
+
+### 2.3 Bulk Download & Export
+After the bulk generation process is complete, the tool provides specific options for exporting the data:
+
+1.  **Download ZIP**:
+    *   **Action**: Click the **"Download ZIP"** button.
+    *   **Output**: A compressed `.zip` file containing individual image files for all generated cards (Front and Back).
+    *   **Use Case**: Sending raw image files to an external vendor for printing.
+
+2.  **Download Print Layout**:
+    *   **Action**: Click the **"Download Print Layout"** button.
+    *   **Output**: A generated HTML/PDF layout optimized for standard paper sizes (e.g., A4), arranging multiple cards per sheet with crop marks.
+    *   **Use Case**: In-house printing on card stock sheets.
 
 ---
 
