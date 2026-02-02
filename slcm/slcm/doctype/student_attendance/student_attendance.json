@@ -9,6 +9,7 @@
  "field_order": [
   "section_based_on",
   "based_on",
+  "attendance_based_on",
   "group_based_on",
   "column_break_1",
   "student_group",
@@ -25,8 +26,12 @@
   "academic_term",
   "section_attendance",
   "attendance_date",
+  "date",
   "period",
   "status",
+  "in_time",
+  "out_time",
+  "total_hours",
   "column_break_2",
   "source",
   "attendance_log",
@@ -49,6 +54,12 @@
    "label": "Based On",
    "options": "Student Group\nCourse Schedule\nClass",
    "reqd": 1
+  },
+  {
+   "fieldname": "attendance_based_on",
+   "fieldtype": "Select",
+   "label": "Attendance Based On",
+   "options": "RFID\\nManual\\nQR\\nStudent Group\\nCourse Schedule\\nClass"
   },
   {
    "depends_on": "eval:doc.based_on==\"Student Group\"",
@@ -165,6 +176,12 @@
    "reqd": 1
   },
   {
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "label": "Date",
+   "reqd": 1
+  },
+  {
    "fieldname": "period",
    "fieldtype": "Link",
    "label": "Period",
@@ -177,6 +194,22 @@
    "label": "Status",
    "options": "Present\nAbsent\nLate\nExcused",
    "reqd": 1
+  },
+  {
+   "fieldname": "in_time",
+   "fieldtype": "Datetime",
+   "label": "In Time"
+  },
+  {
+   "fieldname": "out_time",
+   "fieldtype": "Datetime",
+   "label": "Out Time"
+  },
+  {
+   "fieldname": "total_hours",
+   "fieldtype": "Float",
+   "label": "Total Hours",
+   "read_only": 1
   },
   {
    "fieldname": "column_break_2",

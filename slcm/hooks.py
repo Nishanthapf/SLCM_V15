@@ -255,4 +255,12 @@ doc_events = {
 # List of apps whose translatable strings should be excluded from this app's translations.
 # ignore_translatable_strings_from = []
 
-website_route_rules = [{"from_route": "/verify-student/<student_id>", "to_route": "verify_student"}]
+
+# RFID Attendance Processing
+scheduler_events = {
+	"cron": {
+		"*/10 * * * *": [  # Every 10 minutes
+			"slcm.slcm.doctype.attendance_log.process_attendance_logs.process_pending_logs"
+		]
+	}
+}

@@ -22,6 +22,7 @@
   "academic_status",
   "official_email_id",
   "intake",
+  "rfid_uid",
   "tab_program_mapping",
   "program_mapping_section",
   "department",
@@ -209,6 +210,14 @@
    "fieldname": "registration_id",
    "fieldtype": "Data",
    "label": "Student ID"
+  },
+  {
+   "fieldname": "rfid_uid",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "RFID UID",
+   "unique": 1
   },
   {
    "fieldname": "application_number",
@@ -1206,7 +1215,7 @@
   }
  ],
  "links": [],
- "modified": "2026-01-30 09:55:17.210711",
+ "modified": "2026-02-02 15:11:56.511422",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "Student Master",
