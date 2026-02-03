@@ -144,6 +144,7 @@ def process_student_logs(logs):
 		"Student Attendance",
 		{
 			"student": student,
+			"attendance_date": date,
 			"date": date
 		}
 	)
@@ -155,6 +156,7 @@ def process_student_logs(logs):
 		attendance_doc.out_time = out_time
 		attendance_doc.total_hours = total_hours
 		attendance_doc.status = status
+		attendance_doc.attendance_log = logs[-1].get("name") if logs else None
 		attendance_doc.save(ignore_permissions=True)
 		
 		frappe.logger().info(f"📝 Updated attendance for {student} on {date}")
@@ -163,12 +165,15 @@ def process_student_logs(logs):
 		attendance_doc = frappe.get_doc({
 			"doctype": "Student Attendance",
 			"student": student,
+			"attendance_date": date,
 			"date": date,
+			"based_on": "Student Group",
 			"status": status,
 			"in_time": in_time,
 			"out_time": out_time,
 			"total_hours": total_hours,
-			"attendance_based_on": "RFID"
+			"source": "RFID",
+			"attendance_log": logs[-1].get("name") if logs else None
 		})
 		attendance_doc.insert(ignore_permissions=True)
 		
