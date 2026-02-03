@@ -58,6 +58,39 @@ RFID is a **data ingestion source**. It feeds into the same System of Record.
     -   Creates a **Raw** `Attendance Log`.
     -   Status set to `Processed: 0`.
 
+### 📊 RFID Logic Flow Diagram
+
+```mermaid
+graph TD
+    A[Student Taps Card] -->|API Push| B(Raw Attendance Log Created)
+    B --> C{Batch Job Runs}
+    C -->|Check Settings| D{RFID Enabled?}
+    D -- No --> E[Stop]
+    D -- Yes --> F[Group Logs by Student & Date]
+    F --> G[Fetch Student's Sessions]
+    G --> H{Match Swipes to Session Window}
+    H -- No Match --> I[Log Ignored / Unknown]
+    H -- Match Found --> J{Check RFID Mode}
+    
+    %% In Only Mode
+    J -- In Only --> K{Has >= 1 Swipe?}
+    K -- Yes --> L[Mark PRESENT]
+    
+    %% In and Out Mode
+    J -- In & Out --> M{Has >= 2 Swipes?}
+    M -- Yes --> N{Duration > Threshold?}
+    N -- Yes --> L
+    N -- No --> O[Mark ABSENT]
+    
+    M -- No (Single Swipe) --> P{Is Session Active?}
+    P -- Yes --> Q[WAIT (Do nothing)]
+    P -- No (Session Closed) --> O
+    
+    L --> R[Create/Update Student Attendance]
+    O --> R
+    R --> S[Mark Log as Processed]
+```
+
 ### Phase 3: Processing & Reconciliation (System Job)
 *This happens automatically in the background.*
 
