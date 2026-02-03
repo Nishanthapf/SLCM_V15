@@ -1,0 +1,143 @@
+{
+    "actions": [],
+    "autoname": "OHA-.YYYY.-.#####",
+    "creation": "2026-02-03 02:26:00.000000",
+    "doctype": "DocType",
+    "engine": "InnoDB",
+    "field_order": [
+        "office_hours_session",
+        "student",
+        "student_name",
+        "column_break_basic",
+        "course_offering",
+        "attendance_date",
+        "check_in_time",
+        "check_out_time",
+        "duration_hours",
+        "details_section",
+        "source",
+        "remarks"
+    ],
+    "fields": [
+        {
+            "fieldname": "office_hours_session",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Office Hours Session",
+            "options": "Office Hours Session",
+            "reqd": 1
+        },
+        {
+            "fieldname": "student",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Student",
+            "options": "Student Master",
+            "reqd": 1
+        },
+        {
+            "fetch_from": "student.first_name",
+            "fieldname": "student_name",
+            "fieldtype": "Data",
+            "in_list_view": 1,
+            "label": "Student Name",
+            "read_only": 1
+        },
+        {
+            "fieldname": "column_break_basic",
+            "fieldtype": "Column Break"
+        },
+        {
+            "fetch_from": "office_hours_session.course_offering",
+            "fieldname": "course_offering",
+            "fieldtype": "Link",
+            "label": "Course Offering",
+            "options": "Course Offering",
+            "read_only": 1
+        },
+        {
+            "fetch_from": "office_hours_session.session_date",
+            "fieldname": "attendance_date",
+            "fieldtype": "Date",
+            "in_list_view": 1,
+            "label": "Attendance Date",
+            "read_only": 1
+        },
+        {
+            "fieldname": "check_in_time",
+            "fieldtype": "Datetime",
+            "label": "Check In Time"
+        },
+        {
+            "fieldname": "check_out_time",
+            "fieldtype": "Datetime",
+            "label": "Check Out Time"
+        },
+        {
+            "fieldname": "duration_hours",
+            "fieldtype": "Float",
+            "label": "Duration (Hours)",
+            "precision": "2",
+            "read_only": 1
+        },
+        {
+            "fieldname": "details_section",
+            "fieldtype": "Section Break",
+            "label": "Details"
+        },
+        {
+            "default": "Manual",
+            "fieldname": "source",
+            "fieldtype": "Select",
+            "label": "Source",
+            "options": "RFID\nManual\nQR"
+        },
+        {
+            "fieldname": "remarks",
+            "fieldtype": "Text",
+            "label": "Remarks"
+        }
+    ],
+    "links": [],
+    "modified": "2026-02-03 02:26:00.000000",
+    "modified_by": "Administrator",
+    "module": "SLCM",
+    "name": "Office Hours Attendance",
+    "naming_rule": "Expression (old style)",
+    "owner": "Administrator",
+    "permissions": [
+        {
+            "create": 1,
+            "delete": 1,
+            "email": 1,
+            "export": 1,
+            "print": 1,
+            "read": 1,
+            "report": 1,
+            "role": "System Manager",
+            "share": 1,
+            "write": 1
+        },
+        {
+            "create": 1,
+            "email": 1,
+            "export": 1,
+            "print": 1,
+            "read": 1,
+            "report": 1,
+            "role": "Faculty",
+            "share": 1,
+            "write": 1
+        },
+        {
+            "read": 1,
+            "role": "Student"
+        }
+    ],
+    "sort_field": "modified",
+    "sort_order": "DESC",
+    "states": [],
+    "track_changes": 1
+}

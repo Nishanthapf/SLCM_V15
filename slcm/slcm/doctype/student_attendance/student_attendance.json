@@ -1,278 +1,284 @@
 {
- "actions": [],
- "allow_import": 1,
- "allow_rename": 1,
- "autoname": "ATT-.YYYY.-.#####",
- "creation": "2025-12-30 13:24:56.712673",
- "doctype": "DocType",
- "engine": "InnoDB",
- "field_order": [
-  "section_based_on",
-  "based_on",
-  "attendance_based_on",
-  "group_based_on",
-  "column_break_1",
-  "student_group",
-  "class",
-  "course_schedule",
-  "section_student",
-  "student",
-  "student_name",
-  "section_course",
-  "course_offer",
-  "course",
-  "program",
-  "academic_year",
-  "academic_term",
-  "section_attendance",
-  "attendance_date",
-  "date",
-  "period",
-  "status",
-  "in_time",
-  "out_time",
-  "total_hours",
-  "column_break_2",
-  "source",
-  "attendance_log",
-  "instructor",
-  "room",
-  "remarks"
- ],
- "fields": [
-  {
-   "fieldname": "section_based_on",
-   "fieldtype": "Section Break",
-   "label": "Attendance Based On"
-  },
-  {
-   "default": "Student Group",
-   "fieldname": "based_on",
-   "fieldtype": "Select",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Based On",
-   "options": "Student Group\nCourse Schedule\nClass",
-   "reqd": 1
-  },
-  {
-   "fieldname": "attendance_based_on",
-   "fieldtype": "Select",
-   "label": "Attendance Based On",
-   "options": "RFID\\nManual\\nQR\\nStudent Group\\nCourse Schedule\\nClass"
-  },
-  {
-   "depends_on": "eval:doc.based_on==\"Student Group\"",
-   "fieldname": "group_based_on",
-   "fieldtype": "Select",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Group Based On",
-   "options": "\nBatch\nCourse\nActivity"
-  },
-  {
-   "fieldname": "column_break_1",
-   "fieldtype": "Column Break"
-  },
-  {
-   "depends_on": "eval:doc.based_on==\"Student Group\"",
-   "fieldname": "student_group",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Student Group",
-   "options": "Student Group"
-  },
-  {
-   "depends_on": "eval:doc.based_on==\"Class\"",
-   "fieldname": "class",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Class",
-   "options": "Student Group"
-  },
-  {
-   "depends_on": "eval:doc.based_on==\"Course Schedule\"",
-   "fieldname": "course_schedule",
-   "fieldtype": "Link",
-   "label": "Course Schedule",
-   "options": "Course Schedule"
-  },
-  {
-   "fieldname": "section_student",
-   "fieldtype": "Section Break",
-   "label": "Student Details"
-  },
-  {
-   "fieldname": "student",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Student",
-   "options": "Student Master",
-   "reqd": 1
-  },
-  {
-   "fetch_from": "student.first_name",
-   "fieldname": "student_name",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "label": "Student Name",
-   "read_only": 1
-  },
-  {
-   "fieldname": "section_course",
-   "fieldtype": "Section Break",
-   "label": "Course Details"
-  },
-  {
-   "fieldname": "course_offer",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "label": "Course Offering",
-   "options": "Course Offering"
-  },
-  {
-   "fetch_from": "course_offer.course_title",
-   "fieldname": "course",
-   "fieldtype": "Link",
-   "label": "Course",
-   "options": "Course",
-   "read_only": 1
-  },
-  {
-   "fetch_from": "course_schedule.program",
-   "fieldname": "program",
-   "fieldtype": "Link",
-   "label": "Program",
-   "options": "Program",
-   "read_only": 1
-  },
-  {
-   "fieldname": "academic_year",
-   "fieldtype": "Link",
-   "label": "Academic Year",
-   "options": "Academic Year",
-   "read_only": 1
-  },
-  {
-   "fieldname": "academic_term",
-   "fieldtype": "Link",
-   "label": "Academic Term",
-   "options": "Academic Term",
-   "read_only": 1
-  },
-  {
-   "fieldname": "section_attendance",
-   "fieldtype": "Section Break",
-   "label": "Attendance Details"
-  },
-  {
-   "fieldname": "attendance_date",
-   "fieldtype": "Date",
-   "in_list_view": 1,
-   "label": "Attendance Date",
-   "reqd": 1
-  },
-  {
-   "fieldname": "date",
-   "fieldtype": "Date",
-   "label": "Date",
-   "reqd": 1
-  },
-  {
-   "fieldname": "period",
-   "fieldtype": "Link",
-   "label": "Period",
-   "options": "Attendance Period"
-  },
-  {
-   "fieldname": "status",
-   "fieldtype": "Select",
-   "in_list_view": 1,
-   "label": "Status",
-   "options": "Present\nAbsent\nLate\nExcused",
-   "reqd": 1
-  },
-  {
-   "fieldname": "in_time",
-   "fieldtype": "Datetime",
-   "label": "In Time"
-  },
-  {
-   "fieldname": "out_time",
-   "fieldtype": "Datetime",
-   "label": "Out Time"
-  },
-  {
-   "fieldname": "total_hours",
-   "fieldtype": "Float",
-   "label": "Total Hours",
-   "read_only": 1
-  },
-  {
-   "fieldname": "column_break_2",
-   "fieldtype": "Column Break"
-  },
-  {
-   "default": "Manual",
-   "fieldname": "source",
-   "fieldtype": "Select",
-   "label": "Source",
-   "options": "RFID\nManual\nQR",
-   "reqd": 1
-  },
-  {
-   "fieldname": "attendance_log",
-   "fieldtype": "Link",
-   "label": "Attendance Log",
-   "options": "Attendance Log"
-  },
-  {
-   "fetch_from": "course_schedule.instructor",
-   "fieldname": "instructor",
-   "fieldtype": "Data",
-   "label": "Instructor",
-   "read_only": 1
-  },
-  {
-   "fetch_from": "course_schedule.room",
-   "fieldname": "room",
-   "fieldtype": "Link",
-   "label": "Room",
-   "options": "Room",
-   "read_only": 1
-  },
-  {
-   "fieldname": "remarks",
-   "fieldtype": "Small Text",
-   "label": "Remarks"
-  }
- ],
- "links": [],
- "modified": "2026-01-01 12:09:04.727114",
- "modified_by": "Administrator",
- "module": "SLCM",
- "name": "Student Attendance",
- "naming_rule": "Expression (old style)",
- "owner": "Administrator",
- "permissions": [
-  {
-   "create": 1,
-   "delete": 1,
-   "email": 1,
-   "export": 1,
-   "print": 1,
-   "read": 1,
-   "report": 1,
-   "role": "System Manager",
-   "share": 1,
-   "write": 1
-  }
- ],
- "row_format": "Dynamic",
- "sort_field": "modified",
- "sort_order": "DESC",
- "states": []
+    "actions": [],
+    "allow_import": 1,
+    "allow_rename": 1,
+    "autoname": "ATT-.YYYY.-.#####",
+    "creation": "2025-12-30 13:24:56.712673",
+    "doctype": "DocType",
+    "engine": "InnoDB",
+    "field_order": [
+        "section_based_on",
+        "based_on",
+        "attendance_based_on",
+        "group_based_on",
+        "column_break_1",
+        "student_group",
+        "class",
+        "course_schedule",
+        "section_student",
+        "student",
+        "student_name",
+        "section_course",
+        "course_offer",
+        "course",
+        "program",
+        "academic_year",
+        "academic_term",
+        "section_attendance",
+        "attendance_date",
+        "date",
+        "period",
+        "status",
+        "in_time",
+        "out_time",
+        "total_hours",
+        "column_break_2",
+        "source",
+        "attendance_log",
+        "instructor",
+        "room",
+        "remarks"
+    ],
+    "fields": [
+        {
+            "fieldname": "section_based_on",
+            "fieldtype": "Section Break",
+            "label": "Attendance Based On"
+        },
+        {
+            "default": "Student Group",
+            "fieldname": "based_on",
+            "fieldtype": "Select",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Based On",
+            "options": "Student Group\nCourse Schedule\nClass",
+            "reqd": 1
+        },
+        {
+            "fieldname": "attendance_based_on",
+            "fieldtype": "Select",
+            "label": "Attendance Based On",
+            "options": "RFID\\nManual\\nQR\\nStudent Group\\nCourse Schedule\\nClass"
+        },
+        {
+            "depends_on": "eval:doc.based_on==\"Student Group\"",
+            "fieldname": "group_based_on",
+            "fieldtype": "Select",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Group Based On",
+            "options": "\nBatch\nCourse\nActivity"
+        },
+        {
+            "fieldname": "column_break_1",
+            "fieldtype": "Column Break"
+        },
+        {
+            "depends_on": "eval:doc.based_on==\"Student Group\"",
+            "fieldname": "student_group",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Student Group",
+            "options": "Student Group"
+        },
+        {
+            "depends_on": "eval:doc.based_on==\"Class\"",
+            "fieldname": "class",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Class",
+            "options": "Student Group"
+        },
+        {
+            "depends_on": "eval:doc.based_on==\"Course Schedule\"",
+            "fieldname": "course_schedule",
+            "fieldtype": "Link",
+            "label": "Course Schedule",
+            "options": "Course Schedule"
+        },
+        {
+            "fieldname": "attendance_session",
+            "fieldtype": "Link",
+            "label": "Attendance Session",
+            "options": "Attendance Session"
+        },
+        {
+            "fieldname": "section_student",
+            "fieldtype": "Section Break",
+            "label": "Student Details"
+        },
+        {
+            "fieldname": "student",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Student",
+            "options": "Student Master",
+            "reqd": 1
+        },
+        {
+            "fetch_from": "student.first_name",
+            "fieldname": "student_name",
+            "fieldtype": "Data",
+            "in_list_view": 1,
+            "label": "Student Name",
+            "read_only": 1
+        },
+        {
+            "fieldname": "section_course",
+            "fieldtype": "Section Break",
+            "label": "Course Details"
+        },
+        {
+            "fieldname": "course_offer",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "label": "Course Offering",
+            "options": "Course Offering"
+        },
+        {
+            "fetch_from": "course_offer.course_title",
+            "fieldname": "course",
+            "fieldtype": "Link",
+            "label": "Course",
+            "options": "Course",
+            "read_only": 1
+        },
+        {
+            "fetch_from": "course_schedule.program",
+            "fieldname": "program",
+            "fieldtype": "Link",
+            "label": "Program",
+            "options": "Program",
+            "read_only": 1
+        },
+        {
+            "fieldname": "academic_year",
+            "fieldtype": "Link",
+            "label": "Academic Year",
+            "options": "Academic Year",
+            "read_only": 1
+        },
+        {
+            "fieldname": "academic_term",
+            "fieldtype": "Link",
+            "label": "Academic Term",
+            "options": "Academic Term",
+            "read_only": 1
+        },
+        {
+            "fieldname": "section_attendance",
+            "fieldtype": "Section Break",
+            "label": "Attendance Details"
+        },
+        {
+            "fieldname": "attendance_date",
+            "fieldtype": "Date",
+            "in_list_view": 1,
+            "label": "Attendance Date",
+            "reqd": 1
+        },
+        {
+            "fieldname": "date",
+            "fieldtype": "Date",
+            "label": "Date",
+            "reqd": 1
+        },
+        {
+            "fieldname": "period",
+            "fieldtype": "Link",
+            "label": "Period",
+            "options": "Attendance Period"
+        },
+        {
+            "fieldname": "status",
+            "fieldtype": "Select",
+            "in_list_view": 1,
+            "label": "Status",
+            "options": "Present\nAbsent\nLate\nExcused",
+            "reqd": 1
+        },
+        {
+            "fieldname": "in_time",
+            "fieldtype": "Datetime",
+            "label": "In Time"
+        },
+        {
+            "fieldname": "out_time",
+            "fieldtype": "Datetime",
+            "label": "Out Time"
+        },
+        {
+            "fieldname": "total_hours",
+            "fieldtype": "Float",
+            "label": "Total Hours",
+            "read_only": 1
+        },
+        {
+            "fieldname": "column_break_2",
+            "fieldtype": "Column Break"
+        },
+        {
+            "default": "Manual",
+            "fieldname": "source",
+            "fieldtype": "Select",
+            "label": "Source",
+            "options": "RFID\nManual\nQR",
+            "reqd": 1
+        },
+        {
+            "fieldname": "attendance_log",
+            "fieldtype": "Link",
+            "label": "Attendance Log",
+            "options": "Attendance Log"
+        },
+        {
+            "fetch_from": "course_schedule.instructor",
+            "fieldname": "instructor",
+            "fieldtype": "Data",
+            "label": "Instructor",
+            "read_only": 1
+        },
+        {
+            "fetch_from": "course_schedule.room",
+            "fieldname": "room",
+            "fieldtype": "Link",
+            "label": "Room",
+            "options": "Room",
+            "read_only": 1
+        },
+        {
+            "fieldname": "remarks",
+            "fieldtype": "Small Text",
+            "label": "Remarks"
+        }
+    ],
+    "links": [],
+    "modified": "2026-01-01 12:09:04.727114",
+    "modified_by": "Administrator",
+    "module": "SLCM",
+    "name": "Student Attendance",
+    "naming_rule": "Expression (old style)",
+    "owner": "Administrator",
+    "permissions": [
+        {
+            "create": 1,
+            "delete": 1,
+            "email": 1,
+            "export": 1,
+            "print": 1,
+            "read": 1,
+            "report": 1,
+            "role": "System Manager",
+            "share": 1,
+            "write": 1
+        }
+    ],
+    "row_format": "Dynamic",
+    "sort_field": "modified",
+    "sort_order": "DESC",
+    "states": []
 }

@@ -1,0 +1,159 @@
+{
+    "actions": [],
+    "autoname": "OH-.YYYY.-.#####",
+    "creation": "2026-02-03 02:25:00.000000",
+    "doctype": "DocType",
+    "engine": "InnoDB",
+    "field_order": [
+        "course_offering",
+        "course",
+        "course_type",
+        "column_break_basic",
+        "faculty",
+        "session_date",
+        "start_time",
+        "end_time",
+        "duration_hours",
+        "session_details_section",
+        "location",
+        "session_status",
+        "column_break_details",
+        "total_students_attended",
+        "remarks"
+    ],
+    "fields": [
+        {
+            "fieldname": "course_offering",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Course Offering",
+            "options": "Course Offering",
+            "reqd": 1
+        },
+        {
+            "fetch_from": "course_offering.course_title",
+            "fieldname": "course",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "label": "Course",
+            "options": "Course",
+            "read_only": 1
+        },
+        {
+            "description": "Core or Elective",
+            "fieldname": "course_type",
+            "fieldtype": "Data",
+            "label": "Course Type",
+            "read_only": 1
+        },
+        {
+            "fieldname": "column_break_basic",
+            "fieldtype": "Column Break"
+        },
+        {
+            "fieldname": "faculty",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Faculty",
+            "options": "Faculty",
+            "reqd": 1
+        },
+        {
+            "fieldname": "session_date",
+            "fieldtype": "Date",
+            "in_list_view": 1,
+            "label": "Session Date",
+            "reqd": 1
+        },
+        {
+            "fieldname": "start_time",
+            "fieldtype": "Time",
+            "label": "Start Time",
+            "reqd": 1
+        },
+        {
+            "fieldname": "end_time",
+            "fieldtype": "Time",
+            "label": "End Time",
+            "reqd": 1
+        },
+        {
+            "fieldname": "duration_hours",
+            "fieldtype": "Float",
+            "label": "Duration (Hours)",
+            "precision": "2",
+            "read_only": 1
+        },
+        {
+            "fieldname": "session_details_section",
+            "fieldtype": "Section Break",
+            "label": "Session Details"
+        },
+        {
+            "fieldname": "location",
+            "fieldtype": "Data",
+            "label": "Location"
+        },
+        {
+            "default": "Scheduled",
+            "fieldname": "session_status",
+            "fieldtype": "Select",
+            "in_list_view": 1,
+            "label": "Session Status",
+            "options": "Scheduled\nConducted\nCancelled"
+        },
+        {
+            "fieldname": "column_break_details",
+            "fieldtype": "Column Break"
+        },
+        {
+            "fieldname": "total_students_attended",
+            "fieldtype": "Int",
+            "label": "Total Students Attended",
+            "read_only": 1
+        },
+        {
+            "fieldname": "remarks",
+            "fieldtype": "Text",
+            "label": "Remarks"
+        }
+    ],
+    "links": [],
+    "modified": "2026-02-03 02:25:00.000000",
+    "modified_by": "Administrator",
+    "module": "SLCM",
+    "name": "Office Hours Session",
+    "naming_rule": "Expression (old style)",
+    "owner": "Administrator",
+    "permissions": [
+        {
+            "create": 1,
+            "delete": 1,
+            "email": 1,
+            "export": 1,
+            "print": 1,
+            "read": 1,
+            "report": 1,
+            "role": "System Manager",
+            "share": 1,
+            "write": 1
+        },
+        {
+            "create": 1,
+            "email": 1,
+            "export": 1,
+            "print": 1,
+            "read": 1,
+            "report": 1,
+            "role": "Faculty",
+            "share": 1,
+            "write": 1
+        }
+    ],
+    "sort_field": "modified",
+    "sort_order": "DESC",
+    "states": [],
+    "track_changes": 1
+}

@@ -1,0 +1,165 @@
+{
+    "actions": [],
+    "autoname": "LOG-.YYYY.-.#####",
+    "creation": "2026-02-03 02:23:00.000000",
+    "doctype": "DocType",
+    "engine": "InnoDB",
+    "field_order": [
+        "attendance_record",
+        "student",
+        "course",
+        "attendance_date",
+        "column_break_basic",
+        "field_changed",
+        "old_value",
+        "new_value",
+        "edit_section",
+        "edit_reason",
+        "edited_by",
+        "edit_timestamp",
+        "approval_section",
+        "approval_status",
+        "approved_by",
+        "approval_date"
+    ],
+    "fields": [
+        {
+            "fieldname": "attendance_record",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Attendance Record",
+            "options": "Student Attendance",
+            "reqd": 1
+        },
+        {
+            "fetch_from": "attendance_record.student",
+            "fieldname": "student",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Student",
+            "options": "Student Master",
+            "read_only": 1
+        },
+        {
+            "fetch_from": "attendance_record.course",
+            "fieldname": "course",
+            "fieldtype": "Link",
+            "in_standard_filter": 1,
+            "label": "Course",
+            "options": "Course",
+            "read_only": 1
+        },
+        {
+            "fetch_from": "attendance_record.attendance_date",
+            "fieldname": "attendance_date",
+            "fieldtype": "Date",
+            "in_list_view": 1,
+            "label": "Attendance Date",
+            "read_only": 1
+        },
+        {
+            "fieldname": "column_break_basic",
+            "fieldtype": "Column Break"
+        },
+        {
+            "fieldname": "field_changed",
+            "fieldtype": "Data",
+            "in_list_view": 1,
+            "label": "Field Changed"
+        },
+        {
+            "fieldname": "old_value",
+            "fieldtype": "Data",
+            "label": "Old Value"
+        },
+        {
+            "fieldname": "new_value",
+            "fieldtype": "Data",
+            "label": "New Value"
+        },
+        {
+            "fieldname": "edit_section",
+            "fieldtype": "Section Break",
+            "label": "Edit Details"
+        },
+        {
+            "fieldname": "edit_reason",
+            "fieldtype": "Text",
+            "in_list_view": 1,
+            "label": "Edit Reason",
+            "reqd": 1
+        },
+        {
+            "default": "user",
+            "fieldname": "edited_by",
+            "fieldtype": "Link",
+            "label": "Edited By",
+            "options": "User",
+            "read_only": 1
+        },
+        {
+            "default": "now",
+            "fieldname": "edit_timestamp",
+            "fieldtype": "Datetime",
+            "label": "Edit Timestamp",
+            "read_only": 1
+        },
+        {
+            "fieldname": "approval_section",
+            "fieldtype": "Section Break",
+            "label": "Approval"
+        },
+        {
+            "default": "Pending",
+            "fieldname": "approval_status",
+            "fieldtype": "Select",
+            "in_list_view": 1,
+            "label": "Approval Status",
+            "options": "Pending\nApproved\nRejected"
+        },
+        {
+            "fieldname": "approved_by",
+            "fieldtype": "Link",
+            "label": "Approved By",
+            "options": "User"
+        },
+        {
+            "fieldname": "approval_date",
+            "fieldtype": "Date",
+            "label": "Approval Date"
+        }
+    ],
+    "links": [],
+    "modified": "2026-02-03 02:23:00.000000",
+    "modified_by": "Administrator",
+    "module": "SLCM",
+    "name": "Attendance Edit Log",
+    "naming_rule": "Expression (old style)",
+    "owner": "Administrator",
+    "permissions": [
+        {
+            "email": 1,
+            "export": 1,
+            "print": 1,
+            "read": 1,
+            "report": 1,
+            "role": "System Manager",
+            "share": 1
+        },
+        {
+            "email": 1,
+            "export": 1,
+            "print": 1,
+            "read": 1,
+            "report": 1,
+            "role": "Academic Admin",
+            "share": 1
+        }
+    ],
+    "sort_field": "modified",
+    "sort_order": "DESC",
+    "states": [],
+    "track_changes": 1
+}

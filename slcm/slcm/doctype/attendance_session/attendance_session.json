@@ -1,0 +1,198 @@
+{
+    "actions": [],
+    "autoname": "AS-.YYYY.-.#####",
+    "creation": "2026-02-03 02:24:00.000000",
+    "doctype": "DocType",
+    "engine": "InnoDB",
+    "field_order": [
+        "course_schedule",
+        "course_offering",
+        "course",
+        "column_break_basic",
+        "session_date",
+        "session_start_time",
+        "session_end_time",
+        "duration_hours",
+        "session_details_section",
+        "instructor",
+        "room",
+        "column_break_details",
+        "session_status",
+        "cancellation_reason",
+        "attendance_section",
+        "attendance_marked",
+        "total_students",
+        "present_count",
+        "absent_count",
+        "attendance_percentage"
+    ],
+    "fields": [
+        {
+            "fieldname": "course_schedule",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Course Schedule",
+            "options": "Course Schedule",
+            "reqd": 1
+        },
+        {
+            "fieldname": "course_offering",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Course Offering",
+            "options": "Course Offering",
+            "reqd": 1
+        },
+        {
+            "fetch_from": "course_offering.course_title",
+            "fieldname": "course",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "label": "Course",
+            "options": "Course",
+            "read_only": 1
+        },
+        {
+            "fieldname": "column_break_basic",
+            "fieldtype": "Column Break"
+        },
+        {
+            "fieldname": "session_date",
+            "fieldtype": "Date",
+            "in_list_view": 1,
+            "label": "Session Date",
+            "reqd": 1
+        },
+        {
+            "fieldname": "session_start_time",
+            "fieldtype": "Time",
+            "label": "Session Start Time",
+            "reqd": 1
+        },
+        {
+            "fieldname": "session_end_time",
+            "fieldtype": "Time",
+            "label": "Session End Time",
+            "reqd": 1
+        },
+        {
+            "fieldname": "duration_hours",
+            "fieldtype": "Float",
+            "label": "Duration (Hours)",
+            "precision": "2",
+            "read_only": 1
+        },
+        {
+            "fieldname": "session_details_section",
+            "fieldtype": "Section Break",
+            "label": "Session Details"
+        },
+        {
+            "fetch_from": "course_schedule.instructor",
+            "fieldname": "instructor",
+            "fieldtype": "Link",
+            "label": "Instructor",
+            "options": "Faculty"
+        },
+        {
+            "fetch_from": "course_schedule.room",
+            "fieldname": "room",
+            "fieldtype": "Link",
+            "label": "Room",
+            "options": "Room"
+        },
+        {
+            "fieldname": "column_break_details",
+            "fieldtype": "Column Break"
+        },
+        {
+            "default": "Scheduled",
+            "fieldname": "session_status",
+            "fieldtype": "Select",
+            "in_list_view": 1,
+            "label": "Session Status",
+            "options": "Scheduled\nConducted\nCancelled\nPostponed",
+            "reqd": 1
+        },
+        {
+            "depends_on": "eval:doc.session_status=='Cancelled'",
+            "fieldname": "cancellation_reason",
+            "fieldtype": "Text",
+            "label": "Cancellation Reason"
+        },
+        {
+            "fieldname": "attendance_section",
+            "fieldtype": "Section Break",
+            "label": "Attendance Summary"
+        },
+        {
+            "default": "0",
+            "fieldname": "attendance_marked",
+            "fieldtype": "Check",
+            "label": "Attendance Marked"
+        },
+        {
+            "fieldname": "total_students",
+            "fieldtype": "Int",
+            "label": "Total Students",
+            "read_only": 1
+        },
+        {
+            "fieldname": "present_count",
+            "fieldtype": "Int",
+            "label": "Present Count",
+            "read_only": 1
+        },
+        {
+            "fieldname": "absent_count",
+            "fieldtype": "Int",
+            "label": "Absent Count",
+            "read_only": 1
+        },
+        {
+            "fieldname": "attendance_percentage",
+            "fieldtype": "Percent",
+            "label": "Attendance Percentage",
+            "precision": "2",
+            "read_only": 1
+        }
+    ],
+    "links": [],
+    "modified": "2026-02-03 02:24:00.000000",
+    "modified_by": "Administrator",
+    "module": "SLCM",
+    "name": "Attendance Session",
+    "naming_rule": "Expression (old style)",
+    "owner": "Administrator",
+    "permissions": [
+        {
+            "create": 1,
+            "delete": 1,
+            "email": 1,
+            "export": 1,
+            "print": 1,
+            "read": 1,
+            "report": 1,
+            "role": "System Manager",
+            "share": 1,
+            "write": 1
+        },
+        {
+            "create": 1,
+            "email": 1,
+            "export": 1,
+            "print": 1,
+            "read": 1,
+            "report": 1,
+            "role": "Faculty",
+            "share": 1,
+            "write": 1
+        }
+    ],
+    "sort_field": "modified",
+    "sort_order": "DESC",
+    "states": [],
+    "track_changes": 1
+}

@@ -10,7 +10,8 @@ class StudentAttendance(Document):
 	def validate(self):
 		self.validate_duplicate_attendance()
 		self.fetch_course_details()
-
+		self.track_changes()
+	
 	def validate_duplicate_attendance(self):
 		"""Prevent duplicate attendance for same student, date, and course schedule/group"""
 		filters = {"student": self.student, "attendance_date": self.attendance_date, "docstatus": ["<", 2]}
@@ -58,3 +59,85 @@ class StudentAttendance(Document):
 		if self.course_offer and not self.course:
 			offering = frappe.get_doc("Course Offering", self.course_offer)
 			self.course = offering.course_title
+	
+	def track_changes(self):
+		"""Track changes for audit log"""
+		if self.is_new():
+			return
+		
+		# Get old doc
+		old_doc = self.get_doc_before_save()
+		if not old_doc:
+			return
+		
+		# Track status changes
+		if old_doc.status != self.status:
+			self._log_change("status", old_doc.status, self.status)
+	
+	def _log_change(self, field, old_value, new_value):
+		"""Store change information for logging after save"""
+		if not hasattr(self, "_changes_to_log"):
+			self._changes_to_log = []
+		
+		self._changes_to_log.append({
+			"field": field,
+			"old_value": old_value,
+			"new_value": new_value
+		})
+	
+	def on_update(self):
+		"""Create audit log entries for changes"""
+		if hasattr(self, "_changes_to_log"):
+			for change in self._changes_to_log:
+				self.create_edit_log(
+					change["field"],
+					change["old_value"],
+					change["new_value"]
+				)
+	
+	def create_edit_log(self, field_changed, old_value, new_value):
+		"""Create an attendance edit log entry"""
+		try:
+			from slcm.slcm.doctype.attendance_edit_log.attendance_edit_log import log_attendance_edit
+			
+			edit_reason = self.get("edit_reason") or "Attendance updated"
+			
+			log_attendance_edit(
+				attendance_record=self.name,
+				field_changed=field_changed,
+				old_value=old_value,
+				new_value=new_value,
+				edit_reason=edit_reason
+			)
+		except Exception as e:
+			frappe.log_error(f"Error creating edit log: {str(e)}")
+	
+	def on_trash(self):
+		"""Prevent deletion of attendance records"""
+		frappe.throw(_("Attendance records cannot be deleted. Please cancel the record instead."))
+	
+	def after_insert(self):
+		"""Trigger attendance recalculation after insert"""
+		self.trigger_recalculation()
+	
+	def on_update_after_submit(self):
+		"""Trigger attendance recalculation after update"""
+		self.trigger_recalculation()
+	
+	def on_cancel(self):
+		"""Trigger attendance recalculation after cancel"""
+		self.trigger_recalculation()
+	
+	def trigger_recalculation(self):
+		"""Trigger attendance summary recalculation"""
+		if self.student and self.course_offer:
+			try:
+				from slcm.slcm.utils.attendance_calculator import calculate_student_attendance
+				frappe.enqueue(
+					calculate_student_attendance,
+					student=self.student,
+					course_offering=self.course_offer,
+					queue="short"
+				)
+			except Exception as e:
+				frappe.log_error(f"Error triggering recalculation: {str(e)}")

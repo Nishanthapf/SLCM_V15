@@ -1,0 +1,197 @@
+{
+    "actions": [],
+    "creation": "2026-02-03 02:15:00.000000",
+    "doctype": "DocType",
+    "engine": "InnoDB",
+    "field_order": [
+        "attendance_configuration_section",
+        "minimum_attendance_percentage",
+        "attendance_unit",
+        "column_break_basic",
+        "auto_calculate_summary",
+        "calculation_frequency",
+        "course_hours_section",
+        "core_course_hours",
+        "elective_course_hours",
+        "column_break_course",
+        "core_office_hours",
+        "elective_office_hours",
+        "include_office_hours_in_attendance",
+        "condonation_section",
+        "allow_condonation",
+        "condonation_approval_role",
+        "fa_mfa_section",
+        "allow_fa_mfa",
+        "fa_application_days_before_exam",
+        "fa_application_days_after_exam"
+    ],
+    "fields": [
+        {
+            "fieldname": "attendance_configuration_section",
+            "fieldtype": "Section Break",
+            "label": "Attendance Configuration"
+        },
+        {
+            "default": "75",
+            "description": "Minimum attendance percentage required for exam eligibility",
+            "fieldname": "minimum_attendance_percentage",
+            "fieldtype": "Percent",
+            "in_list_view": 1,
+            "label": "Minimum Attendance Percentage",
+            "read_only": 1,
+            "reqd": 1
+        },
+        {
+            "default": "Session",
+            "description": "Unit for attendance calculation (Session-based)",
+            "fieldname": "attendance_unit",
+            "fieldtype": "Data",
+            "in_list_view": 1,
+            "label": "Attendance Unit",
+            "read_only": 1,
+            "reqd": 1
+        },
+        {
+            "fieldname": "column_break_basic",
+            "fieldtype": "Column Break"
+        },
+        {
+            "default": "1",
+            "description": "Automatically calculate attendance summary",
+            "fieldname": "auto_calculate_summary",
+            "fieldtype": "Check",
+            "label": "Auto Calculate Summary"
+        },
+        {
+            "default": "Daily",
+            "depends_on": "eval:doc.auto_calculate_summary==1",
+            "description": "How often to recalculate attendance summaries",
+            "fieldname": "calculation_frequency",
+            "fieldtype": "Select",
+            "label": "Calculation Frequency",
+            "options": "Daily\nWeekly"
+        },
+        {
+            "fieldname": "course_hours_section",
+            "fieldtype": "Section Break",
+            "label": "Course Hours Configuration"
+        },
+        {
+            "default": "60",
+            "description": "Total hours for core courses per trimester",
+            "fieldname": "core_course_hours",
+            "fieldtype": "Int",
+            "in_list_view": 1,
+            "label": "Core Course Hours",
+            "reqd": 1
+        },
+        {
+            "default": "40",
+            "description": "Total hours for elective courses per trimester",
+            "fieldname": "elective_course_hours",
+            "fieldtype": "Int",
+            "in_list_view": 1,
+            "label": "Elective Course Hours",
+            "reqd": 1
+        },
+        {
+            "fieldname": "column_break_course",
+            "fieldtype": "Column Break"
+        },
+        {
+            "default": "1",
+            "description": "Office hours per core course",
+            "fieldname": "core_office_hours",
+            "fieldtype": "Int",
+            "label": "Core Office Hours",
+            "reqd": 1
+        },
+        {
+            "default": "2",
+            "description": "Office hours per elective course",
+            "fieldname": "elective_office_hours",
+            "fieldtype": "Int",
+            "label": "Elective Office Hours",
+            "reqd": 1
+        },
+        {
+            "default": "1",
+            "description": "Include office hours in attendance calculation",
+            "fieldname": "include_office_hours_in_attendance",
+            "fieldtype": "Check",
+            "label": "Include Office Hours in Attendance"
+        },
+        {
+            "fieldname": "condonation_section",
+            "fieldtype": "Section Break",
+            "label": "Attendance Condonation"
+        },
+        {
+            "default": "1",
+            "description": "Allow students to apply for attendance condonation",
+            "fieldname": "allow_condonation",
+            "fieldtype": "Check",
+            "label": "Allow Condonation"
+        },
+        {
+            "default": "Programme Chair",
+            "depends_on": "eval:doc.allow_condonation==1",
+            "description": "Role responsible for approving condonation requests",
+            "fieldname": "condonation_approval_role",
+            "fieldtype": "Link",
+            "label": "Condonation Approval Role",
+            "options": "Role"
+        },
+        {
+            "fieldname": "fa_mfa_section",
+            "fieldtype": "Section Break",
+            "label": "First Attempt (FA) / Medical First Attempt (MFA)"
+        },
+        {
+            "default": "1",
+            "description": "Allow students to apply for FA/MFA",
+            "fieldname": "allow_fa_mfa",
+            "fieldtype": "Check",
+            "label": "Allow FA/MFA Applications"
+        },
+        {
+            "default": "10",
+            "depends_on": "eval:doc.allow_fa_mfa==1",
+            "description": "Days before exam to apply for FA (University Representation)",
+            "fieldname": "fa_application_days_before_exam",
+            "fieldtype": "Int",
+            "label": "FA Application Days Before Exam"
+        },
+        {
+            "default": "10",
+            "depends_on": "eval:doc.allow_fa_mfa==1",
+            "description": "Days after exam to apply for FA with justification",
+            "fieldname": "fa_application_days_after_exam",
+            "fieldtype": "Int",
+            "label": "FA Application Days After Exam"
+        }
+    ],
+    "issingle": 1,
+    "links": [],
+    "modified": "2026-02-03 02:15:00.000000",
+    "modified_by": "Administrator",
+    "module": "SLCM",
+    "name": "Attendance Settings",
+    "owner": "Administrator",
+    "permissions": [
+        {
+            "create": 1,
+            "delete": 1,
+            "email": 1,
+            "print": 1,
+            "read": 1,
+            "role": "System Manager",
+            "share": 1,
+            "write": 1
+        }
+    ],
+    "sort_field": "modified",
+    "sort_order": "DESC",
+    "states": [],
+    "track_changes": 1
+}
