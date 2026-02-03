@@ -9,11 +9,9 @@ from frappe.model.document import Document
 from frappe.utils import get_url, now
 from frappe.utils.file_manager import save_file
 
-try:
-	import qrcode
-	from PIL import Image, ImageDraw, ImageFont, ImageOps
-except ImportError:
-	frappe.msgprint("Please install PIL (Pillow) and qrcode libraries.")
+# Lazy imports for qrcode and PIL - imported when needed to avoid errors during migration
+# import qrcode
+# from PIL import Image, ImageDraw, ImageFont, ImageOps
 
 
 def hex_to_rgb(hex_color):
@@ -146,6 +144,9 @@ class StudentIDCard(Document):
 		if not self.qr_code_data:
 			return
 
+		# Lazy import
+		import qrcode
+
 		# Generate QR Image
 		qr = qrcode.QRCode(
 			version=1,
@@ -243,11 +244,17 @@ class StudentIDCard(Document):
 			back_bg_path = self.get_file_path(template.back_background)
 
 			if front_bg_path:
+				# Lazy import
+				from PIL import Image
+
 				front_img = Image.open(front_bg_path).convert("RGBA")
 				self.process_side(front_img, template, person, "Front")
 				self.save_image(front_img, f"{self.name}_Front.png", "front_id_image")
 
 			if back_bg_path:
+				# Lazy import
+				from PIL import Image
+
 				back_img = Image.open(back_bg_path).convert("RGBA")
 				self.process_side(back_img, template, person, "Back")
 				self.save_image(back_img, f"{self.name}_Back.png", "back_id_image")
@@ -590,6 +597,9 @@ class StudentIDCard(Document):
 				os.remove(output_path)
 
 	def process_side(self, image, template, student, side):
+		# Lazy import
+		from PIL import ImageDraw
+
 		draw = ImageDraw.Draw(image)
 		fields = [f for f in template.fields if f.side == side]
 
@@ -609,6 +619,9 @@ class StudentIDCard(Document):
 		font_color = hex_to_rgb(field.font_color or "#000000")
 
 		# Font Loading
+		# Lazy import
+		from PIL import ImageFont
+
 		# Try to load custom font, fallback to default
 		try:
 			# Need a font path. Using default for now or look for assets
@@ -662,6 +675,9 @@ class StudentIDCard(Document):
 		return None
 
 	def paste_photo(self, base_image, photo_path, x, y, w, h):
+		# Lazy import
+		from PIL import Image
+
 		if not photo_path:
 			return
 		try:
@@ -681,6 +697,10 @@ class StudentIDCard(Document):
 			print(f"Error pasting photo: {e}")
 
 	def paste_qr(self, base_image, data, x, y, size):
+		# Lazy imports
+		import qrcode
+		from PIL import Image
+
 		qr = qrcode.QRCode(
 			version=1,
 			error_correction=qrcode.constants.ERROR_CORRECT_H,
