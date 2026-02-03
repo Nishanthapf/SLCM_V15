@@ -9,8 +9,9 @@ from frappe.model.document import Document
 from frappe.utils import get_url, now
 from frappe.utils.file_manager import save_file
 
-import qrcode
-from PIL import Image, ImageDraw, ImageFont, ImageOps
+# Lazy imports for qrcode and PIL - imported when needed to avoid errors during migration
+# import qrcode
+# from PIL import Image, ImageDraw, ImageFont, ImageOps
 
 
 def hex_to_rgb(hex_color):
@@ -162,6 +163,9 @@ class IDCardGeneration(Document):
 		if not self.qr_code_data:
 			return
 
+		# Lazy import
+		import qrcode
+
 		# Generate QR Image
 		qr = qrcode.QRCode(
 			version=1,
@@ -237,6 +241,9 @@ class IDCardGeneration(Document):
 
 	@frappe.whitelist()
 	def generate_card(self):
+		# Lazy imports
+		from PIL import Image
+
 		if self.is_new():
 			self.save()
 
@@ -616,6 +623,9 @@ class IDCardGeneration(Document):
 				os.remove(output_path)
 
 	def process_side(self, image, template, student, side):
+		# Lazy imports
+		from PIL import ImageDraw
+
 		draw = ImageDraw.Draw(image)
 		fields = [f for f in template.fields if f.side == side]
 
@@ -626,6 +636,9 @@ class IDCardGeneration(Document):
 		# TODO: Handle Institute Logo if it's dynamic placement
 
 	def draw_field(self, draw, image, field, student):
+		# Lazy imports
+		from PIL import ImageFont
+
 		content = self.get_field_value(field.student_fieldname, student)
 		if not content:
 			return
@@ -688,6 +701,9 @@ class IDCardGeneration(Document):
 		return None
 
 	def paste_photo(self, base_image, photo_path, x, y, w, h):
+		# Lazy imports
+		from PIL import Image
+
 		if not photo_path:
 			return
 		try:
@@ -707,6 +723,10 @@ class IDCardGeneration(Document):
 			print(f"Error pasting photo: {e}")
 
 	def paste_qr(self, base_image, data, x, y, size):
+		# Lazy imports
+		import qrcode
+		from PIL import Image
+
 		qr = qrcode.QRCode(
 			version=1,
 			error_correction=qrcode.constants.ERROR_CORRECT_H,
