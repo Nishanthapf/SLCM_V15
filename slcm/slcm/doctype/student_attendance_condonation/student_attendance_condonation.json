@@ -1,0 +1,165 @@
+{
+    "actions": [],
+    "creation": "2026-02-03 10:00:00.000000",
+    "doctype": "DocType",
+    "engine": "InnoDB",
+    "field_order": [
+        "student",
+        "student_name",
+        "course_offering",
+        "course",
+        "academic_year",
+        "column_break_1",
+        "number_of_sessions",
+        "condonation_reason",
+        "proof_document",
+        "section_approval",
+        "faculty_recommendation",
+        "final_status",
+        "approver",
+        "remarks",
+        "amended_from"
+    ],
+    "fields": [
+        {
+            "fieldname": "student",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "label": "Student",
+            "options": "Student Master",
+            "reqd": 1
+        },
+        {
+            "fetch_from": "student.first_name",
+            "fieldname": "student_name",
+            "fieldtype": "Data",
+            "in_list_view": 1,
+            "label": "Student Name",
+            "read_only": 1
+        },
+        {
+            "fieldname": "course_offering",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "label": "Course Offering",
+            "options": "Course Offering",
+            "reqd": 1
+        },
+        {
+            "fetch_from": "course_offering.course_title",
+            "fieldname": "course",
+            "fieldtype": "Link",
+            "label": "Course",
+            "options": "Course",
+            "read_only": 1
+        },
+        {
+            "fetch_from": "course_offering.academic_year",
+            "fieldname": "academic_year",
+            "fieldtype": "Link",
+            "label": "Academic Year",
+            "options": "Academic Year",
+            "read_only": 1
+        },
+        {
+            "fieldname": "column_break_1",
+            "fieldtype": "Column Break"
+        },
+        {
+            "fieldname": "number_of_sessions",
+            "fieldtype": "Int",
+            "label": "Number of Sessions to Condone",
+            "reqd": 1
+        },
+        {
+            "fieldname": "condonation_reason",
+            "fieldtype": "Small Text",
+            "label": "Reason",
+            "reqd": 1
+        },
+        {
+            "fieldname": "proof_document",
+            "fieldtype": "Attach",
+            "label": "Proof Document"
+        },
+        {
+            "fieldname": "section_approval",
+            "fieldtype": "Section Break",
+            "label": "Approval"
+        },
+        {
+            "default": "Pending",
+            "fieldname": "faculty_recommendation",
+            "fieldtype": "Select",
+            "label": "Faculty Recommendation",
+            "options": "Pending\nRecommended\nNot Recommended"
+        },
+        {
+            "default": "Pending",
+            "fieldname": "final_status",
+            "fieldtype": "Select",
+            "in_list_view": 1,
+            "label": "Final Status",
+            "options": "Pending\nApproved\nRejected",
+            "reqd": 1
+        },
+        {
+            "fieldname": "approver",
+            "fieldtype": "Link",
+            "label": "Approver",
+            "options": "User"
+        },
+        {
+            "fieldname": "remarks",
+            "fieldtype": "Small Text",
+            "label": "Remarks"
+        },
+        {
+            "fieldname": "amended_from",
+            "fieldtype": "Link",
+            "label": "Amended From",
+            "no_copy": 1,
+            "options": "Student Attendance Condonation",
+            "read_only": 1
+        }
+    ],
+    "is_submittable": 1,
+    "modified": "2026-02-03 10:00:00.000000",
+    "modified_by": "Administrator",
+    "module": "SLCM",
+    "name": "Student Attendance Condonation",
+    "owner": "Administrator",
+    "permissions": [
+        {
+            "create": 1,
+            "delete": 1,
+            "email": 1,
+            "export": 1,
+            "print": 1,
+            "read": 1,
+            "report": 1,
+            "role": "System Manager",
+            "share": 1,
+            "submit": 1,
+            "write": 1
+        },
+        {
+            "create": 1,
+            "read": 1,
+            "role": "Student",
+            "write": 1
+        },
+        {
+            "email": 1,
+            "print": 1,
+            "read": 1,
+            "report": 1,
+            "role": "Faculty",
+            "share": 1,
+            "write": 1
+        }
+    ],
+    "sort_field": "modified",
+    "sort_order": "DESC",
+    "track_changes": 1
+}

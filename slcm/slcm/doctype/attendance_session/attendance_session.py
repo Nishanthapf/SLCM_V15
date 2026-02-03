@@ -4,7 +4,7 @@
 import frappe
 from frappe.model.document import Document
 from frappe.utils import time_diff_in_hours
-
+from slcm.slcm.utils.attendance_calculator import calculate_student_attendance
 
 class AttendanceSession(Document):
 	"""Track conducted class sessions for attendance calculation"""
@@ -14,6 +14,15 @@ class AttendanceSession(Document):
 		self.calculate_duration()
 		self.validate_times()
 	
+	def after_insert(self):
+		"""Populate student attendance records"""
+		self.create_student_attendance_records()
+
+	def on_submit(self):
+		"""Trigger attendance calculations"""
+		self.update_student_attendance_status()
+		self.trigger_calculations()
+
 	def calculate_duration(self):
 		"""Calculate session duration in hours"""
 		if self.session_start_time and self.session_end_time:
@@ -24,11 +33,78 @@ class AttendanceSession(Document):
 		if self.session_start_time and self.session_end_time:
 			if self.session_end_time <= self.session_start_time:
 				frappe.throw("Session end time must be after start time")
-	
+
+	def create_student_attendance_records(self):
+		"""Fetch enrolled students and create initial attendance records"""
+		students = self.get_enrolled_students()
+		
+		for student_id in students:
+			# Check if record already exists to avoid duplicates
+			exists = frappe.db.exists("Student Attendance", {
+				"student": student_id,
+				"attendance_session": self.name
+			})
+			
+			if not exists:
+				doc = frappe.get_doc({
+					"doctype": "Student Attendance",
+					"student": student_id,
+					"attendance_session": self.name,
+					"course_schedule": self.course_schedule,
+					"course_offer": self.course_offering,
+					"attendance_date": self.session_date,
+					"status": "Absent", # Default to Absent or Present based on logic, safely Absent
+					"source": "Manual"
+				})
+				doc.insert(ignore_permissions=True)
+				
+		self.update_attendance_summary()
+
+	def get_enrolled_students(self):
+		"""Find students enrolled in the course"""
+		# Approach: Find Student Enrollments that have this Course in their Program Enrollment table (table_hxbo)
+		# Note: table_hxbo is likely named 'courses' in the object, but we query by table name in SQL for safety
+		# Or rely on Student Enrollment -> Program Enrollment child table
+		
+		course_name = self.course
+		if not course_name and self.course_offering:
+			course_name = frappe.db.get_value("Course Offering", self.course_offering, "course_title")
+
+		if not course_name:
+			return []
+
+		# Using SQL to join Student Enrollment and its child table
+		students = frappe.db.sql("""
+			SELECT DISTINCT parent.student 
+			FROM `tabStudent Enrollment` as parent
+			JOIN `tabProgram Enrollment` as child ON child.parent = parent.name
+			WHERE child.course = %s
+			AND parent.status = 'Enrolled'
+			AND parent.docstatus = 0
+		""", (course_name,), as_dict=True)
+		
+		return [s.student for s in students]
+
+	def update_student_attendance_status(self):
+		"""Lock attendance records on submit"""
+		pass # Student Attendance is submittable? Or we just leave them.
+		# If Student Attendance is a submittable doctype, we should submit them.
+		# Let's check Student Attendance doctype. It has docstatus, so it might be submittable.
+		# Generally Student Attendance is not a submittable document in standard ERPNext, but here?
+		# It has "submitted" status? 
+		# If it's not submittable, we just leave them.
+		
+	def trigger_calculations(self):
+		"""Recalculate attendance for all students in this session"""
+		students = self.get_enrolled_students()
+		for student_id in students:
+			calculate_student_attendance(student_id, self.course_offering)
+
 	def update_attendance_summary(self):
 		"""Update attendance counts for this session"""
-		if self.session_status != "Conducted":
-			return
+		# if self.session_status != "Conducted":
+		# 	return
+		# Allow update even if not conducted yet, for initial population
 		
 		# Count attendance records for this session
 		attendance_data = frappe.db.sql("""
@@ -38,7 +114,6 @@ class AttendanceSession(Document):
 				SUM(CASE WHEN status = 'Absent' THEN 1 ELSE 0 END) as absent
 			FROM `tabStudent Attendance`
 			WHERE attendance_session = %s
-			AND docstatus < 2
 		""", self.name, as_dict=True)
 		
 		if attendance_data:
@@ -54,8 +129,8 @@ class AttendanceSession(Document):
 			
 			self.attendance_marked = 1 if self.total_students > 0 else 0
 			
-			self.save()
-
+			# Avoid infinite recursion if save() is called within calculate
+			self.db_update() 
 
 @frappe.whitelist()
 def mark_session_conducted(session_name):

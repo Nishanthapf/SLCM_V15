@@ -8,9 +8,27 @@ from frappe.model.document import Document
 
 class StudentAttendance(Document):
 	def validate(self):
+		self.validate_attendance_lock()
 		self.validate_duplicate_attendance()
 		self.fetch_course_details()
 		self.track_changes()
+	
+	def validate_attendance_lock(self):
+		"""Prevent modification of attendance records older than lock period"""
+		if frappe.session.user == "Administrator" or "System Manager" in frappe.get_roles():
+			return
+			
+		lock_days = frappe.db.get_single_value("Attendance Settings", "attendance_lock_days")
+		if not lock_days:
+			return
+
+		if self.attendance_date:
+			from frappe.utils import date_diff, nowdate
+			days_diff = date_diff(nowdate(), self.attendance_date)
+			
+			if days_diff > lock_days:
+				frappe.throw(_("Attendance for this date is locked and cannot be modified."))
+
 	
 	def validate_duplicate_attendance(self):
 		"""Prevent duplicate attendance for same student, date, and course schedule/group"""
@@ -94,6 +112,8 @@ class StudentAttendance(Document):
 					change["old_value"],
 					change["new_value"]
 				)
+		self.trigger_recalculation()
+		self.trigger_session_update()
 	
 	def create_edit_log(self, field_changed, old_value, new_value):
 		"""Create an attendance edit log entry"""
@@ -113,20 +133,24 @@ class StudentAttendance(Document):
 			frappe.log_error(f"Error creating edit log: {str(e)}")
 	
 	def on_trash(self):
-		"""Prevent deletion of attendance records"""
-		frappe.throw(_("Attendance records cannot be deleted. Please cancel the record instead."))
+		"""Trigger updates on deletion"""
+		self.trigger_recalculation()
+		self.trigger_session_update()
 	
 	def after_insert(self):
 		"""Trigger attendance recalculation after insert"""
 		self.trigger_recalculation()
+		self.trigger_session_update()
 	
 	def on_update_after_submit(self):
 		"""Trigger attendance recalculation after update"""
 		self.trigger_recalculation()
+		self.trigger_session_update()
 	
 	def on_cancel(self):
 		"""Trigger attendance recalculation after cancel"""
 		self.trigger_recalculation()
+		self.trigger_session_update()
 	
 	def trigger_recalculation(self):
 		"""Trigger attendance summary recalculation"""
@@ -141,3 +165,12 @@ class StudentAttendance(Document):
 				)
 			except Exception as e:
 				frappe.log_error(f"Error triggering recalculation: {str(e)}")
+
+	def trigger_session_update(self):
+		"""Update the parent Attendance Session counts"""
+		if self.attendance_session:
+			try:
+				doc = frappe.get_doc("Attendance Session", self.attendance_session)
+				doc.update_attendance_summary()
+			except Exception as e:
+				frappe.log_error(f"Error updating session summary: {str(e)}")

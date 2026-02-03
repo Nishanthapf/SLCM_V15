@@ -26,6 +26,9 @@ def calculate_student_attendance(student, course_offering):
 	# Get or create attendance summary
 	summary = get_or_create_summary(student, course_offering)
 	
+	# Get Settings
+	settings = frappe.get_single("Attendance Settings")
+	
 	# Calculate sessions
 	sessions_data = calculate_sessions(course_offering)
 	
@@ -38,54 +41,43 @@ def calculate_student_attendance(student, course_offering):
 	# Get condonation
 	condonation_data = get_approved_condonation(student, course_offering)
 	
-	# Update summary
-	summary.total_sessions_scheduled = sessions_data['scheduled']
-	summary.total_sessions_conducted = sessions_data['conducted']
-	summary.total_sessions_cancelled = sessions_data['cancelled']
-	
-	summary.sessions_present = attendance_data['present']
-	summary.sessions_absent = attendance_data['absent']
-	summary.sessions_late = attendance_data['late']
-	summary.sessions_excused = attendance_data['excused']
-	
-	summary.attended_classes = attendance_data['present'] + attendance_data['late']
+	# -- Update summary fields --
+	# Map to existing fields in Attendance Summary JSON
 	summary.total_classes = sessions_data['conducted']
 	
-	# Calculate raw percentage
+	# Basic Attendance (Sessions)
+	raw_attended = attendance_data['present'] + attendance_data['late']
+	
+	# Total Attended (including exceptions)
+	total_attended = raw_attended
+	
+	# Add Office Hours if enabled
+	if settings.include_office_hours_in_attendance:
+		total_attended += office_hours_data['total']
+	
+	# Add Condonation
+	total_attended += condonation_data['sessions']
+	
+	summary.attended_classes = total_attended
+	
+	# Calculate Percentage
 	if summary.total_classes > 0:
 		summary.attendance_percentage = (summary.attended_classes / summary.total_classes) * 100
 	else:
 		summary.attendance_percentage = 0
 	
-	# Apply condonation
-	summary.condonation_hours_approved = condonation_data['sessions']
-	adjusted_attended = summary.attended_classes + condonation_data['sessions']
-	
-	# Calculate final percentage
-	if summary.total_classes > 0:
-		summary.final_attendance_percentage = (adjusted_attended / summary.total_classes) * 100
-	else:
-		summary.final_attendance_percentage = 0
-	
 	# Determine eligibility
-	settings = frappe.get_single("Attendance Settings")
 	minimum_required = flt(settings.minimum_attendance_percentage)
 	
-	if summary.final_attendance_percentage >= minimum_required:
+	if summary.attendance_percentage >= minimum_required:
 		summary.eligible_for_exam = 1
-		summary.eligibility_status = "Eligible"
-		summary.shortage_hours = 0
+		# summary.eligibility_status = "Eligible" # Field not in JSON
 	else:
 		summary.eligible_for_exam = 0
-		required_sessions = (minimum_required * summary.total_classes) / 100
-		summary.shortage_hours = required_sessions - adjusted_attended
-		
-		if summary.shortage_hours > 5:
-			summary.eligibility_status = "Critical"
-		else:
-			summary.eligibility_status = "Shortage"
+		# summary.eligibility_status = "Shortage" # Field not in JSON
 	
-	summary.last_calculated_on = frappe.utils.now()
+	# Save
+	summary.last_updated = frappe.utils.now()
 	summary.save()
 	
 	return summary.as_dict()
@@ -154,7 +146,7 @@ def get_approved_condonation(student, course_offering):
 			SELECT 
 				SUM(number_of_sessions) as sessions,
 				SUM(number_of_hours) as hours
-			FROM `tabAttendance Condonation`
+			FROM `tabStudent Attendance Condonation`
 			WHERE student = %s
 			AND course_offering = %s
 			AND final_status = 'Approved'

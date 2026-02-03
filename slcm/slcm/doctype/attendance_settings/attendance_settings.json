@@ -6,6 +6,10 @@
     "field_order": [
         "attendance_configuration_section",
         "minimum_attendance_percentage",
+        "enable_rfid",
+        "rfid_swipe_mode",
+        "attendance_lock_days",
+        "late_entry_buffer_minutes",
         "attendance_unit",
         "column_break_basic",
         "auto_calculate_summary",
@@ -42,14 +46,42 @@
             "reqd": 1
         },
         {
+            "default": "0",
+            "description": "Enable RFID Attendance features",
+            "fieldname": "enable_rfid",
+            "fieldtype": "Check",
+            "label": "Enable RFID Attendance"
+        },
+        {
+            "default": "7",
+            "description": "Days after which attendance cannot be modified",
+            "fieldname": "attendance_lock_days",
+            "fieldtype": "Int",
+            "label": "Attendance Lock Days"
+        },
+        {
+            "default": "In Only",
+            "description": "Logic mode for RFID processing",
+            "fieldname": "rfid_swipe_mode",
+            "fieldtype": "Select",
+            "label": "RFID Swipe Mode",
+            "options": "In Only\nIn and Out"
+        },
+        {
+            "default": "15",
+            "description": "Grace period in minutes before marking Late",
+            "fieldname": "late_entry_buffer_minutes",
+            "fieldtype": "Int",
+            "label": "Late Entry Buffer (Minutes)"
+        },
+        {
             "default": "Session",
             "description": "Unit for attendance calculation (Session-based)",
             "fieldname": "attendance_unit",
             "fieldtype": "Data",
             "in_list_view": 1,
             "label": "Attendance Unit",
-            "read_only": 1,
-            "reqd": 1
+            "read_only": 1
         },
         {
             "fieldname": "column_break_basic",

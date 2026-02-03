@@ -119,6 +119,9 @@ def create_attendance_log():
 	# --------------------------------------------------
 	# 7. Create Attendance Log with Student Link
 	# --------------------------------------------------
+	# --------------------------------------------------
+	# 7. Create Attendance Log with Student Link
+	# --------------------------------------------------
 	attendance_log = frappe.get_doc({
 		"doctype": "Attendance Log",
 		"rfid_uid": rfid_uid,
@@ -133,44 +136,35 @@ def create_attendance_log():
 	attendance_log.insert(ignore_permissions=True)
 	frappe.db.commit()
 
+	# Reload to get updates from after_insert hook (rfid_processor)
+	attendance_log.reload()
+
 	# --------------------------------------------------
-	# 8. IMMEDIATE ATTENDANCE PROCESSING (Real-time)
+	# 8. Construct Response
 	# --------------------------------------------------
-	try:
-		# Process this log immediately to create/update Student Attendance
-		attendance_record = process_single_log(attendance_log)
-		
-		# Mark log as processed
-		attendance_log.processed = 1
-		attendance_log.student_attendance = attendance_record.name if attendance_record else None
-		attendance_log.save(ignore_permissions=True)
-		frappe.db.commit()
-		
-		attendance_info = {
+	attendance_info = {
+		"attendance_created": False,
+		"attendance_id": None,
+		"status": None
+	}
+
+	if attendance_log.student_attendance:
+		att = frappe.get_doc("Student Attendance", attendance_log.student_attendance)
+		attendance_info.update({
 			"attendance_created": True,
-			"attendance_id": attendance_record.name if attendance_record else None,
-			"status": attendance_record.status if attendance_record else None,
-			"in_time": str(attendance_record.in_time) if attendance_record and attendance_record.in_time else None,
-			"out_time": str(attendance_record.out_time) if attendance_record and attendance_record.out_time else None,
-			"total_hours": attendance_record.total_hours if attendance_record and attendance_record.total_hours else 0
-		}
-	except Exception as e:
-		# If processing fails, log will remain unprocessed for background job
-		frappe.log_error(
-			title=f"Immediate Attendance Processing Failed for {attendance_log.name}",
-			message=str(e)
-		)
-		attendance_info = {
-			"attendance_created": False,
-			"error": "Attendance will be processed by background job"
-		}
+			"attendance_id": att.name,
+			"status": att.status,
+			"in_time": str(att.in_time) if att.in_time else None
+		})
+	elif attendance_log.processed and not attendance_log.student_attendance:
+		attendance_info["message"] = "Log processed but no matching session found or ignored."
 
 	# --------------------------------------------------
 	# 9. Success response with student and attendance information
 	# --------------------------------------------------
 	return {
 		"status": "success",
-		"message": "Attendance created successfully",
+		"message": "Attendance log received",
 		"attendance_log": attendance_log.name,
 		"student": student.get("name"),
 		"student_name": f"{student.get('first_name')} {student.get('last_name') or ''}".strip(),
@@ -179,86 +173,3 @@ def create_attendance_log():
 		"swipe_time": str(swipe_time),
 		"attendance": attendance_info
 	}
-
-
-def process_single_log(log):
-	"""
-	Process a single attendance log immediately and create/update Student Attendance.
-	This is called right after log creation for real-time processing.
-	
-	Args:
-		log: Attendance Log document object
-	
-	Returns:
-		Student Attendance document or None
-	"""
-	if not log.student:
-		return None
-	
-	student = log.student
-	date = getdate(log.swipe_time)
-	swipe_time = get_datetime(log.swipe_time)
-	
-	# Check if attendance record already exists for this student and date
-	existing_attendance = frappe.db.get_value(
-		"Student Attendance",
-		{
-			"student": student,
-			"attendance_date": date,
-			"date": date
-		},
-		["name", "in_time", "out_time"],
-		as_dict=True
-	)
-	
-	if existing_attendance:
-		# Update existing record
-		attendance_doc = frappe.get_doc("Student Attendance", existing_attendance.name)
-		
-		# Determine if this is IN or OUT
-		if not attendance_doc.in_time or swipe_time < get_datetime(attendance_doc.in_time):
-			# This is the earliest swipe - set as IN time
-			attendance_doc.in_time = swipe_time
-		
-		if not attendance_doc.out_time or swipe_time > get_datetime(attendance_doc.out_time):
-			# This is the latest swipe - set as OUT time
-			attendance_doc.out_time = swipe_time
-		
-		# Calculate total hours
-		if attendance_doc.in_time and attendance_doc.out_time:
-			attendance_doc.total_hours = time_diff_in_hours(
-				get_datetime(attendance_doc.out_time),
-				get_datetime(attendance_doc.in_time)
-			)
-			
-			# Update status based on hours
-			if attendance_doc.total_hours < 4:
-				attendance_doc.status = "Half Day"
-			else:
-				attendance_doc.status = "Present"
-		else:
-			attendance_doc.status = "Present"
-			attendance_doc.total_hours = 0
-		
-		attendance_doc.save(ignore_permissions=True)
-		frappe.logger().info(f"✅ Updated attendance for {student} on {date}")
-		
-	else:
-		# Create new attendance record
-		attendance_doc = frappe.get_doc({
-			"doctype": "Student Attendance",
-			"student": student,
-			"attendance_date": date,
-			"date": date,
-			"based_on": "Student Group",
-			"status": "Present",
-			"in_time": swipe_time,
-			"out_time": None,
-			"total_hours": 0,
-			"source": "RFID"
-		})
-		attendance_doc.insert(ignore_permissions=True)
-		frappe.logger().info(f"✅ Created attendance for {student} on {date}")
-	
-	frappe.db.commit()
-	return attendance_doc
