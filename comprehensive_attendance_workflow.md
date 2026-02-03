@@ -67,24 +67,24 @@ graph TD
     C -->|Check Settings| D{RFID Enabled?}
     D -- No --> E[Stop]
     D -- Yes --> F[Group Logs by Student & Date]
-    F --> G[Fetch Student's Sessions]
+    F --> G["Fetch Student's Sessions"]
     G --> H{Match Swipes to Session Window}
     H -- No Match --> I[Log Ignored / Unknown]
     H -- Match Found --> J{Check RFID Mode}
     
     %% In Only Mode
-    J -- In Only --> K{Has >= 1 Swipe?}
+    J -- "In Only" --> K{"Has >= 1 Swipe?"}
     K -- Yes --> L[Mark PRESENT]
     
     %% In and Out Mode
-    J -- In & Out --> M{Has >= 2 Swipes?}
-    M -- Yes --> N{Duration > Threshold?}
+    J -- "In & Out" --> M{"Has >= 2 Swipes?"}
+    M -- Yes --> N{"Duration > Threshold?"}
     N -- Yes --> L
     N -- No --> O[Mark ABSENT]
     
-    M -- No (Single Swipe) --> P{Is Session Active?}
-    P -- Yes --> Q[WAIT (Do nothing)]
-    P -- No (Session Closed) --> O
+    M -- "No (Single Swipe)" --> P{"Is Session Active?"}
+    P -- Yes --> Q["WAIT (Do nothing)"]
+    P -- "No (Session Closed)" --> O
     
     L --> R[Create/Update Student Attendance]
     O --> R
