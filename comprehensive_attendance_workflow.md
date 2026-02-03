@@ -31,6 +31,27 @@ This is the **System of Record**. Even if RFID is used, this workflow remains av
     -   Recalculates `Attendance Summary` for each student.
     -   Updates `Attendance Percentage` and `Eligibility Status`.
 
+### 📊 Manual Logic Flow Diagram
+
+```mermaid
+graph TD
+    A[Start] --> B(Faculty Creates Session)
+    B --> C[Select Course, Date, & Time]
+    C --> D{Students Auto-Fetched}
+    D --> E[Faculty Marks Status]
+    E --> F{Status Options}
+    F -->|Present| G[Mark Present]
+    F -->|Absent| H[Mark Absent]
+    F -->|Late/Excused| I[Mark Late/Excused]
+    G --> J[Submit Session]
+    H --> J
+    I --> J
+    J --> K[System Locks Record]
+    K --> L[Update Student Attendance]
+    L --> M[Recalculate Summary & %]
+    M --> N[End]
+```
+
 ---
 
 ## 🟠 Workflow 2: RFID Attendance (Automated Layer)
@@ -128,4 +149,19 @@ Handling medical or official leaves.
     -   Approved days/hours are added to the "Attended" count in `Attendance Summary`.
     -   Percentage increases.
     -   Students may move from "Detained" to "Eligible".
+
+### 📊 Condonation Logic Flow Diagram
+
+```mermaid
+graph TD
+    A[Student Applies for Condonation] --> B(Upload Proof / Medical Cert)
+    B --> C{Faculty Review}
+    C -- Recommended --> D{Admin Approval}
+    C -- Rejected --> E[Request Closed]
+    D -- Approved --> F[Add Condonation Hours]
+    D -- Rejected --> E
+    F --> G[Update Attendance Summary]
+    G --> H[Recalculate Eligibility]
+    H --> I[End]
+```
 
