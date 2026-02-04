@@ -10,6 +10,7 @@ Business Rules:
 - Second swipe → OUT time  
 - Single swipe → Mark as PRESENT
 - Multiple swipes → Calculate total hours
+- Supports Regular Class Sessions and Office Hours
 """
 
 import frappe
@@ -19,7 +20,8 @@ from frappe.utils import (
 	now_datetime, 
 	get_datetime, 
 	time_diff_in_hours,
-	add_to_date
+	add_to_date,
+	flt
 )
 from collections import defaultdict
 
@@ -113,7 +115,7 @@ def group_logs_by_student_and_date(logs):
 def process_student_logs(logs):
 	"""
 	Process logs for a single student on a single date.
-	Matches swipes to Attendance Sessions.
+	Matches swipes to Attendance Sessions and Office Hours.
 	"""
 	if not logs:
 		return
@@ -123,9 +125,19 @@ def process_student_logs(logs):
 	log_date = getdate(first_log.get("swipe_time"))
 	
 	# Fetch Student's Sessions for the day
-	sessions = get_student_sessions(student, log_date)
+	class_sessions = get_student_sessions(student, log_date)
+	office_sessions = get_student_office_hour_sessions(student, log_date)
 	
-	if not sessions:
+	all_sessions = []
+	# Tag sessions with type
+	for s in class_sessions:
+		s['type'] = 'Class'
+		all_sessions.append(s)
+	for s in office_sessions:
+		s['type'] = 'Office'
+		all_sessions.append(s)
+
+	if not all_sessions:
 		frappe.logger().info(f"⚠️ No sessions found for {student} on {log_date}. Logs ignored.")
 		return
 
@@ -135,14 +147,13 @@ def process_student_logs(logs):
 	# Sort logs by time
 	logs = sorted(logs, key=lambda x: x.get("swipe_time"))
 	
-	processed_logs = []
+	processed_log_names = set()
 	
-	for session in sessions:
+	for session in all_sessions:
 		# Match swipes to this session
 		session_logs = match_swipes_to_session(logs, session)
-		print(f"DEBUG: Session {session.name}: matched {len(session_logs)} logs")
+		print(f"DEBUG: Session {session.name} ({session.type}): matched {len(session_logs)} logs")
 
-		
 		if not session_logs:
 			continue
 			
@@ -150,20 +161,25 @@ def process_student_logs(logs):
 		attendance_status = determine_attendance_status(session_logs, session, rfid_mode)
 		
 		if attendance_status:
-			create_session_attendance(student, session, attendance_status, session_logs)
-			processed_logs.extend(session_logs)
+			if session.type == 'Class':
+				create_session_attendance(student, session, attendance_status, session_logs)
+			else:
+				# For Office Hours, status isn't "Present/Absent" exactly same way, but we track duration
+				create_office_hours_attendance(student, session, session_logs)
+
+			# Mark logs as processed for this session
+			for log in session_logs:
+				processed_log_names.add(log.name)
 
 	# Mark processed logs
-	for log in processed_logs:
-		frappe.db.set_value("Attendance Log", log.get("name"), {"processed": 1})
+	for log in logs:
+		if log.name in processed_log_names:
+			frappe.db.set_value("Attendance Log", log.name, {"processed": 1})
 
 
 def get_student_sessions(student, date):
 	"""Get all Attendance Sessions for the student on the given date"""
 	# Find sessions where the student is part of the Student Group or Course Offering
-	
-	# 1. Get Course Offerings/Groups the student is part of (Simplified for Phase 1: Check matches in Python or simple query)
-	# For strictness, we should use the `Student Group Student` table.
 	
 	valid_sessions = []
 	all_sessions = frappe.get_all("Attendance Session", 
@@ -174,6 +190,23 @@ def get_student_sessions(student, date):
 	for session in all_sessions:
 		# Check if student belongs to this session
 		if is_student_in_session(student, session):
+			valid_sessions.append(session)
+			
+	return valid_sessions
+
+
+def get_student_office_hour_sessions(student, date):
+	"""Get all Office Hours Sessions available for the student on the given date"""
+	valid_sessions = []
+	# Fetch all Office Hours Sessions for the date
+	all_oh_sessions = frappe.get_all("Office Hours Session", 
+		filters={"session_date": date, "session_status": ["!=", "Cancelled"]},
+		fields=["name", "session_date", "start_time as session_start_time", "end_time as session_end_time", "course_offering"]
+	)
+
+	for session in all_oh_sessions:
+		# Check if student is enrolled in the course offering
+		if is_student_in_course_offering(student, session.course_offering):
 			valid_sessions.append(session)
 			
 	return valid_sessions
@@ -195,18 +228,23 @@ def is_student_in_session(student, session):
 			
 	# C. Check Course Offering Enrollment (Fallback if no group)
 	if session.course_offering:
-		# Assuming 'Program Enrollment' or direct check? 
-		# For this Phase, assume if they swipe, and session exists for the offering, they are enrolled? 
-		# OR use 'Course Enrollment' table.
-		# Let's check 'Student Enrollment' or 'Course Enrollment' if it exists.
-		# Trying 'Course Enrollment'
-		if frappe.db.exists("Course Enrollment", {"student": student, "course_offering": session.course_offering}):
-			return True
-
+		return is_student_in_course_offering(student, session.course_offering)
+		
 	# D. For the sake of the Test Script where we skipped setup, allow if 'course_offering' matches test data
 	if session.course_offering == "CO-TEST-001":
 		return True
 		
+	return False
+
+
+def is_student_in_course_offering(student, course_offering):
+	"""Check if student is enrolled in course offering"""
+	# Check Course Enrollment
+	if frappe.db.exists("Course Enrollment", {"student": student, "course_offering": course_offering}):
+		return True
+	
+	# Also check Program Enrollment -> Program Enrollment Course if needed? 
+	# Usually Course Enrollment is the source of truth for "active" courses.
 	return False
 
 
@@ -217,7 +255,7 @@ def match_swipes_to_session(logs, session):
 	start_time = get_datetime(f"{session_date} {session.session_start_time}")
 	end_time = get_datetime(f"{session_date} {session.session_end_time}")
 	
-	# Add Buffer (e.g., 15 mins before start, 15 mins after end)
+	# Add Buffer (e.g., 20 mins before start, 20 mins after end)
 	buffer_mins = 20 
 	window_start = add_to_date(start_time, minutes=-buffer_mins)
 	window_end = add_to_date(end_time, minutes=buffer_mins)
@@ -245,10 +283,12 @@ def determine_attendance_status(session_logs, session, mode):
 			start = get_datetime(session_logs[0].swipe_time)
 			end = get_datetime(session_logs[-1].swipe_time)
 			duration = time_diff_in_hours(end, start)
-			session_duration = time_diff_in_hours(
-				get_datetime(f"2000-01-01 {session.session_end_time}"), 
-				get_datetime(f"2000-01-01 {session.session_start_time}")
-			)
+			
+			# Handle different session types time handling if needed, but Office Hours and Class seem similar structure
+			session_start = get_datetime(f"2000-01-01 {session.session_start_time}")
+			session_end = get_datetime(f"2000-01-01 {session.session_end_time}")
+			session_duration = time_diff_in_hours(session_end, session_start)
+			
 			if duration >= (session_duration * 0.5):
 				return "Present"
 		
@@ -303,6 +343,44 @@ def create_session_attendance(student, session, status, logs):
 			"out_time": end_log.swipe_time,
 			"source": "RFID",
 			"attendance_log": start_log.name
+		})
+		doc.insert(ignore_permissions=True)
+
+
+def create_office_hours_attendance(student, session, logs):
+	"""Create or Update Office Hours Attendance"""
+	start_log = logs[0]
+	end_log = logs[-1] if len(logs) > 1 else logs[0]
+	
+	start_time = get_datetime(start_log.swipe_time)
+	end_time = get_datetime(end_log.swipe_time)
+	
+	duration_hours = time_diff_in_hours(end_time, start_time)
+	if duration_hours < 0: duration_hours = 0
+	
+	existing = frappe.db.exists("Office Hours Attendance", {
+		"student": student,
+		"office_hours_session": session.name
+	})
+	
+	if existing:
+		doc = frappe.get_doc("Office Hours Attendance", existing)
+		doc.check_in_time = start_log.swipe_time
+		doc.check_out_time = end_log.swipe_time
+		doc.duration_hours = duration_hours
+		doc.source = "RFID"
+		doc.save(ignore_permissions=True)
+	else:
+		doc = frappe.get_doc({
+			"doctype": "Office Hours Attendance",
+			"student": student,
+			"office_hours_session": session.name,
+			"course_offering": session.course_offering,
+			"attendance_date": getdate(start_log.swipe_time),
+			"check_in_time": start_log.swipe_time,
+			"check_out_time": end_log.swipe_time,
+			"duration_hours": duration_hours,
+			"source": "RFID"
 		})
 		doc.insert(ignore_permissions=True)
 

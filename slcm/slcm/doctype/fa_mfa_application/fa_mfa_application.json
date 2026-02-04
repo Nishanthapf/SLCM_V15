@@ -1,24 +1,26 @@
 {
  "actions": [],
  "autoname": "autoincrement",
- "creation": "2026-02-03 10:00:00",
+ "creation": "2026-02-04 10:30:00",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
   "student",
   "student_name",
-  "course_offering",
   "course",
-  "academic_year",
+  "course_name",
+  "examination_date",
+  "event_from_date",
+  "event_to_date",
   "column_break_1",
-  "number_of_sessions",
-  "condonation_reason",
+  "application_type",
+  "reason",
+  "description",
   "proof_document",
   "section_approval",
-  "faculty_recommendation",
-  "final_status",
+  "status",
   "approver",
-  "remarks",
+  "rejection_reason",
   "amended_from"
  ],
  "fields": [
@@ -39,50 +41,67 @@
    "read_only": 1
   },
   {
-   "fieldname": "course_offering",
+   "fieldname": "course",
    "fieldtype": "Link",
    "in_list_view": 1,
-   "label": "Course Offering",
-   "options": "Course Offering",
+   "label": "Course",
+   "options": "Course",
    "reqd": 1
   },
   {
-   "fetch_from": "course_offering.course_title",
-   "fieldname": "course",
-   "fieldtype": "Link",
-   "label": "Course",
-   "options": "Course",
+   "fetch_from": "course.course_name",
+   "fieldname": "course_name",
+   "fieldtype": "Data",
+   "label": "Course Name",
    "read_only": 1
   },
   {
-   "fetch_from": "course_offering.academic_year",
-   "fieldname": "academic_year",
-   "fieldtype": "Link",
-   "label": "Academic Year",
-   "options": "Academic Year",
-   "read_only": 1
+   "fieldname": "examination_date",
+   "fieldtype": "Date",
+   "label": "Examination Date",
+   "reqd": 1
+  },
+  {
+   "depends_on": "eval:doc.reason=='University Representation'",
+   "fieldname": "event_from_date",
+   "fieldtype": "Date",
+   "label": "Event From Date"
+  },
+  {
+   "depends_on": "eval:doc.reason=='University Representation'",
+   "fieldname": "event_to_date",
+   "fieldtype": "Date",
+   "label": "Event To Date"
   },
   {
    "fieldname": "column_break_1",
    "fieldtype": "Column Break"
   },
   {
-   "fieldname": "number_of_sessions",
-   "fieldtype": "Int",
-   "label": "Number of Sessions to Condone",
+   "fieldname": "application_type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Application Type",
+   "options": "First Attempt (FA)\nMedical First Attempt (MFA)",
    "reqd": 1
   },
   {
-   "fieldname": "condonation_reason",
+   "fieldname": "reason",
    "fieldtype": "Select",
    "label": "Reason",
-   "options": "Repeat examination date clash\nMenstrual leave\nMedical reasons\nBereavement",
+   "options": "University Representation\nMedical Reasons\nBereavement",
    "reqd": 1
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Small Text",
+   "label": "Description / Details"
   },
   {
    "fieldname": "proof_document",
    "fieldtype": "Attach",
-   "label": "Proof Document"
+   "label": "Proof Document",
+   "reqd": 1
   },
   {
    "fieldname": "section_approval",
@@ -91,46 +110,40 @@
   },
   {
    "default": "Pending",
-   "fieldname": "faculty_recommendation",
-   "fieldtype": "Select",
-   "label": "Faculty Recommendation",
-   "options": "Pending\nRecommended\nNot Recommended"
-  },
-  {
-   "default": "Pending",
-   "fieldname": "final_status",
+   "fieldname": "status",
    "fieldtype": "Select",
    "in_list_view": 1,
-   "label": "Final Status",
-   "options": "Pending\nApproved\nRejected",
-   "reqd": 1
+   "label": "Status",
+   "options": "Pending\nApproved\nRejected"
   },
   {
    "fieldname": "approver",
    "fieldtype": "Link",
    "label": "Approver",
-   "options": "User"
+   "options": "User",
+   "read_only": 1
   },
   {
-   "fieldname": "remarks",
+   "depends_on": "eval:doc.status=='Rejected'",
+   "fieldname": "rejection_reason",
    "fieldtype": "Small Text",
-   "label": "Remarks"
+   "label": "Rejection Reason"
   },
   {
    "fieldname": "amended_from",
    "fieldtype": "Link",
    "label": "Amended From",
    "no_copy": 1,
-   "options": "Student Attendance Condonation",
+   "options": "FA MFA Application",
    "read_only": 1
   }
  ],
  "is_submittable": 1,
  "links": [],
- "modified": "2026-02-04 10:40:41.336138",
+ "modified": "2026-02-04 10:47:47.437926",
  "modified_by": "Administrator",
  "module": "SLCM",
- "name": "Student Attendance Condonation",
+ "name": "FA MFA Application",
  "naming_rule": "Autoincrement",
  "owner": "Administrator",
  "permissions": [
@@ -154,12 +167,9 @@
    "write": 1
   },
   {
-   "email": 1,
-   "print": 1,
    "read": 1,
-   "report": 1,
-   "role": "Faculty",
-   "share": 1,
+   "role": "Programme Chair",
+   "submit": 1,
    "write": 1
   }
  ],

@@ -88,9 +88,9 @@ def calculate_sessions(course_offering):
 	sessions = frappe.db.sql("""
 		SELECT 
 			COUNT(*) as total,
-			SUM(CASE WHEN session_status = 'Scheduled' THEN 1 ELSE 0 END) as scheduled,
-			SUM(CASE WHEN session_status = 'Conducted' THEN 1 ELSE 0 END) as conducted,
-			SUM(CASE WHEN session_status = 'Cancelled' THEN 1 ELSE 0 END) as cancelled
+			COALESCE(SUM(CASE WHEN session_status = 'Scheduled' THEN 1 ELSE 0 END), 0) as scheduled,
+			COALESCE(SUM(CASE WHEN session_status = 'Conducted' THEN 1 ELSE 0 END), 0) as conducted,
+			COALESCE(SUM(CASE WHEN session_status = 'Cancelled' THEN 1 ELSE 0 END), 0) as cancelled
 		FROM `tabAttendance Session`
 		WHERE course_offering = %s
 	""", course_offering, as_dict=True)
@@ -106,10 +106,10 @@ def calculate_attendance_records(student, course_offering):
 	attendance = frappe.db.sql("""
 		SELECT 
 			COUNT(*) as total,
-			SUM(CASE WHEN status = 'Present' THEN 1 ELSE 0 END) as present,
-			SUM(CASE WHEN status = 'Absent' THEN 1 ELSE 0 END) as absent,
-			SUM(CASE WHEN status = 'Late' THEN 1 ELSE 0 END) as late,
-			SUM(CASE WHEN status = 'Excused' THEN 1 ELSE 0 END) as excused
+			COALESCE(SUM(CASE WHEN status = 'Present' THEN 1 ELSE 0 END), 0) as present,
+			COALESCE(SUM(CASE WHEN status = 'Absent' THEN 1 ELSE 0 END), 0) as absent,
+			COALESCE(SUM(CASE WHEN status = 'Late' THEN 1 ELSE 0 END), 0) as late,
+			COALESCE(SUM(CASE WHEN status = 'Excused' THEN 1 ELSE 0 END), 0) as excused
 		FROM `tabStudent Attendance`
 		WHERE student = %s
 		AND course_offer = %s
@@ -127,7 +127,7 @@ def calculate_office_hours(student, course_offering):
 	office_hours = frappe.db.sql("""
 		SELECT 
 			COUNT(*) as total,
-			SUM(duration_hours) as total_hours
+			COALESCE(SUM(duration_hours), 0) as total_hours
 		FROM `tabOffice Hours Attendance`
 		WHERE student = %s
 		AND course_offering = %s
@@ -144,8 +144,8 @@ def get_approved_condonation(student, course_offering):
 	try:
 		condonation = frappe.db.sql("""
 			SELECT 
-				SUM(number_of_sessions) as sessions,
-				SUM(number_of_hours) as hours
+				COALESCE(SUM(number_of_sessions), 0) as sessions,
+				COALESCE(SUM(number_of_hours), 0) as hours
 			FROM `tabStudent Attendance Condonation`
 			WHERE student = %s
 			AND course_offering = %s
@@ -244,13 +244,12 @@ def get_shortage_students(course_offering, threshold=None):
 		SELECT 
 			student,
 			student_name,
-			final_attendance_percentage,
-			shortage_hours,
-			eligibility_status
+			attendance_percentage,
+			eligible_for_exam
 		FROM `tabAttendance Summary`
 		WHERE course_offering = %s
-		AND final_attendance_percentage < %s
-		ORDER BY final_attendance_percentage ASC
+		AND attendance_percentage < %s
+		ORDER BY attendance_percentage ASC
 	""", (course_offering, threshold), as_dict=True)
 	
 	return shortage_students
@@ -263,8 +262,8 @@ def get_eligibility_list(course_offering):
 		SELECT 
 			student,
 			student_name,
-			final_attendance_percentage,
-			eligibility_status
+			attendance_percentage,
+			eligible_for_exam
 		FROM `tabAttendance Summary`
 		WHERE course_offering = %s
 		AND eligible_for_exam = 1

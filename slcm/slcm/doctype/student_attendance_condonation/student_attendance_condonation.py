@@ -16,7 +16,7 @@ class StudentAttendanceCondonation(Document):
 			# Fetch current summary
 			summary = frappe.db.get_value("Attendance Summary", 
 				{"student": self.student, "course_offering": self.course_offering}, 
-				["attendance_percentage", "eligibility_status"], as_dict=True)
+				["attendance_percentage"], as_dict=True)
 			
 			if not summary:
 				# Force calculation if summary doesn't exist
