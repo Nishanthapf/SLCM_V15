@@ -10,6 +10,7 @@
         "course",
         "column_break_basic",
         "session_date",
+        "session_type",
         "session_start_time",
         "session_end_time",
         "duration_hours",
@@ -34,7 +35,7 @@
             "in_standard_filter": 1,
             "label": "Course Schedule",
             "options": "Course Schedule",
-            "reqd": 1
+            "reqd": 0
         },
         {
             "fieldname": "course_offering",
@@ -63,6 +64,15 @@
             "fieldtype": "Date",
             "in_list_view": 1,
             "label": "Session Date",
+            "reqd": 1
+        },
+        {
+            "default": "Lecture",
+            "fieldname": "session_type",
+            "fieldtype": "Select",
+            "in_list_view": 1,
+            "label": "Session Type",
+            "options": "Lecture\nOffice Hour\nTutorial",
             "reqd": 1
         },
         {

@@ -1,0 +1,93 @@
+{
+ "charts": [],
+ "content": "[{\"id\":\"KubNzboJeQ\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Attendance</span>\",\"col\":12}},{\"id\":\"WDJcH9WDuQ\",\"type\":\"paragraph\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Manual Process</span>\",\"col\":12}},{\"id\":\"za2-PzEA9j\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Student Attendance Tool\",\"col\":3}},{\"id\":\"UYSux4UnV6\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Office Hours (Bonus)\",\"col\":3}},{\"id\":\"RB9Ro1HMy9\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Student Attendance Condonation\",\"col\":3}},{\"id\":\"JKTLg7kQfz\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"FA MFA Application\",\"col\":3}},{\"id\":\"OAizugpMID\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Attendance Summary\",\"col\":3}},{\"id\":\"yG0REgN3CO\",\"type\":\"paragraph\",\"data\":{\"text\":\"<span class=\\\"h4\\\">RFID Process</span>\",\"col\":12}},{\"id\":\"zfW3roK0zu\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Attendance Session\",\"col\":3}},{\"id\":\"YSLh9jI0gg\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Attendance Log \",\"col\":3}},{\"id\":\"TtHTRdYWWL\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Student Attendance\",\"col\":3}}]",
+ "creation": "2026-02-04 17:41:15.897875",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "customization",
+ "idx": 0,
+ "indicator_color": "green",
+ "is_hidden": 0,
+ "label": "Attendance",
+ "links": [],
+ "modified": "2026-02-04 17:48:40.731802",
+ "modified_by": "Administrator",
+ "module": "SLCM",
+ "name": "Attendance",
+ "number_cards": [],
+ "owner": "Administrator",
+ "parent_page": "",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [],
+ "sequence_id": 23.0,
+ "shortcuts": [
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Student Attendance Tool",
+   "link_to": "Student Attendance Tool",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Attendance Session",
+   "link_to": "Attendance Session",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Office Hours (Bonus)",
+   "link_to": "Student Attendance",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Attendance Log ",
+   "link_to": "Attendance Log",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Student Attendance Condonation",
+   "link_to": "Student Attendance Condonation",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Student Attendance",
+   "link_to": "Student Attendance",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "FA MFA Application",
+   "link_to": "FA MFA Application",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Attendance Summary",
+   "link_to": "Attendance Summary",
+   "stats_filter": "[]",
+   "type": "DocType"
+  }
+ ],
+ "title": "Attendance"
+}

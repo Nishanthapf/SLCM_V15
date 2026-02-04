@@ -230,6 +230,22 @@
             "reqd": 1
         },
         {
+            "default": "Lecture",
+            "fieldname": "session_type",
+            "fieldtype": "Select",
+            "in_list_view": 1,
+            "label": "Session Type",
+            "options": "Lecture\nOffice Hour\nTutorial",
+            "reqd": 1
+        },
+        {
+            "default": "1.0",
+            "fieldname": "hours_counted",
+            "fieldtype": "Float",
+            "label": "Hours Counted",
+            "reqd": 1
+        },
+        {
             "fieldname": "attendance_log",
             "fieldtype": "Link",
             "label": "Attendance Log",

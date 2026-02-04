@@ -69,14 +69,14 @@
     },
     {
       "fieldname": "total_classes",
-      "fieldtype": "Int",
+      "fieldtype": "Float",
       "label": "Total Classes",
       "read_only": 1,
       "in_list_view": 1
     },
     {
       "fieldname": "attended_classes",
-      "fieldtype": "Int",
+      "fieldtype": "Float",
       "label": "Attended Classes",
       "read_only": 1,
       "in_list_view": 1
@@ -115,7 +115,7 @@
       "read": 1,
       "write": 0,
       "create": 0,
-      "delete": 0,
+      "delete": 1,
       "print": 1,
       "export": 1,
       "report": 1,

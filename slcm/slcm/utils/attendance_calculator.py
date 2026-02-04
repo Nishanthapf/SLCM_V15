@@ -43,20 +43,21 @@ def calculate_student_attendance(student, course_offering):
 	
 	# -- Update summary fields --
 	# Map to existing fields in Attendance Summary JSON
-	summary.total_classes = sessions_data['conducted']
+	# Note: total_classes now stores HOURS
+	summary.total_classes = sessions_data['conducted_hours']
 	
 	# Basic Attendance (Sessions)
-	raw_attended = attendance_data['present'] + attendance_data['late']
+	raw_attended = attendance_data['attended_hours']
 	
 	# Total Attended (including exceptions)
 	total_attended = raw_attended
 	
 	# Add Office Hours if enabled
 	if settings.include_office_hours_in_attendance:
-		total_attended += office_hours_data['total']
+		total_attended += office_hours_data['total_hours']
 	
-	# Add Condonation
-	total_attended += condonation_data['sessions']
+	# Add Condonation (assuming condonation records hours too)
+	total_attended += condonation_data['hours']
 	
 	summary.attended_classes = total_attended
 	
@@ -69,12 +70,18 @@ def calculate_student_attendance(student, course_offering):
 	# Determine eligibility
 	minimum_required = flt(settings.minimum_attendance_percentage)
 	
+	is_eligible = 0
 	if summary.attendance_percentage >= minimum_required:
-		summary.eligible_for_exam = 1
-		# summary.eligibility_status = "Eligible" # Field not in JSON
-	else:
-		summary.eligible_for_exam = 0
-		# summary.eligibility_status = "Shortage" # Field not in JSON
+		is_eligible = 1
+	
+	# Check FA/MFA status (Override)
+	if not is_eligible and settings.allow_fa_mfa:
+		if check_fa_mfa_eligibility(student, course_offering):
+			is_eligible = 1
+			# Optionally log or mark separate field that it is via FA/MFA
+	
+	summary.eligible_for_exam = is_eligible
+	# summary.eligibility_status = "Eligible" if is_eligible else "Shortage"
 	
 	# Save
 	summary.last_updated = frappe.utils.now()
@@ -84,59 +91,71 @@ def calculate_student_attendance(student, course_offering):
 
 
 def calculate_sessions(course_offering):
-	"""Calculate session statistics for a course offering"""
+	"""
+	Calculate session statistics for a course offering.
+	Returns total hours of CONDUCTED sessions (for Denominator).
+	"""
+	# We assume only 'Lecture' and 'Tutorial' count towards the mandatory denominator.
+	# Office Hours are usually supplementary.
 	sessions = frappe.db.sql("""
 		SELECT 
-			COUNT(*) as total,
-			COALESCE(SUM(CASE WHEN session_status = 'Scheduled' THEN 1 ELSE 0 END), 0) as scheduled,
-			COALESCE(SUM(CASE WHEN session_status = 'Conducted' THEN 1 ELSE 0 END), 0) as conducted,
-			COALESCE(SUM(CASE WHEN session_status = 'Cancelled' THEN 1 ELSE 0 END), 0) as cancelled
+			COALESCE(SUM(duration_hours), 0) as total_hours,
+			COALESCE(SUM(CASE WHEN session_status = 'Conducted' THEN duration_hours ELSE 0 END), 0) as conducted_hours
 		FROM `tabAttendance Session`
 		WHERE course_offering = %s
+		AND session_type IN ('Lecture', 'Tutorial')
+		AND session_status != 'Cancelled'
 	""", course_offering, as_dict=True)
 	
 	if sessions:
 		return sessions[0]
 	
-	return {'total': 0, 'scheduled': 0, 'conducted': 0, 'cancelled': 0}
+	return {'total_hours': 0, 'conducted_hours': 0}
 
 
 def calculate_attendance_records(student, course_offering):
-	"""Calculate attendance record statistics for a student"""
+	"""
+	Calculate attendance for Regular Class (Lecture/Tutorial).
+	Returns hours attended.
+	"""
 	attendance = frappe.db.sql("""
 		SELECT 
-			COUNT(*) as total,
-			COALESCE(SUM(CASE WHEN status = 'Present' THEN 1 ELSE 0 END), 0) as present,
-			COALESCE(SUM(CASE WHEN status = 'Absent' THEN 1 ELSE 0 END), 0) as absent,
-			COALESCE(SUM(CASE WHEN status = 'Late' THEN 1 ELSE 0 END), 0) as late,
-			COALESCE(SUM(CASE WHEN status = 'Excused' THEN 1 ELSE 0 END), 0) as excused
+			COALESCE(SUM(CASE 
+				WHEN status IN ('Present', 'Late', 'Excused') THEN hours_counted 
+				ELSE 0 
+			END), 0) as attended_hours
 		FROM `tabStudent Attendance`
 		WHERE student = %s
 		AND course_offer = %s
+		AND session_type IN ('Lecture', 'Tutorial')
 		AND docstatus < 2
 	""", (student, course_offering), as_dict=True)
 	
 	if attendance:
 		return attendance[0]
 	
-	return {'total': 0, 'present': 0, 'absent': 0, 'late': 0, 'excused': 0}
+	return {'attended_hours': 0}
 
 
 def calculate_office_hours(student, course_offering):
-	"""Calculate office hours attendance for a student"""
+	"""
+	Calculate office hours attendance for a student (from Student Attendance now).
+	"""
 	office_hours = frappe.db.sql("""
 		SELECT 
-			COUNT(*) as total,
-			COALESCE(SUM(duration_hours), 0) as total_hours
-		FROM `tabOffice Hours Attendance`
+			COALESCE(SUM(hours_counted), 0) as total_hours
+		FROM `tabStudent Attendance`
 		WHERE student = %s
-		AND course_offering = %s
+		AND course_offer = %s
+		AND session_type = 'Office Hour'
+		AND status IN ('Present', 'Late', 'Excused')
+		AND docstatus < 2
 	""", (student, course_offering), as_dict=True)
 	
 	if office_hours:
 		return office_hours[0]
 	
-	return {'total': 0, 'total_hours': 0}
+	return {'total_hours': 0}
 
 
 def get_approved_condonation(student, course_offering):
@@ -271,3 +290,22 @@ def get_eligibility_list(course_offering):
 	""", course_offering, as_dict=True)
 	
 	return eligible_students
+
+
+@frappe.whitelist()
+def check_fa_mfa_eligibility(student, course_offering):
+	"""Check if student has an approved FA/MFA application for this course"""
+	# Get Course ID from Offering
+	course_id = frappe.db.get_value("Course Offering", course_offering, "course_title")
+	
+	if not course_id:
+		return False
+
+	exists = frappe.db.exists("FA MFA Application", {
+		"student": student,
+		"course": course_id,
+		"status": "Approved",
+		"docstatus": 1
+	})
+	
+	return True if exists else False

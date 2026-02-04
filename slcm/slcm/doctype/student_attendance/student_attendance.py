@@ -31,23 +31,36 @@ class StudentAttendance(Document):
 
 	
 	def validate_duplicate_attendance(self):
-		"""Prevent duplicate attendance for same student, date, and course schedule/group"""
-		filters = {"student": self.student, "attendance_date": self.attendance_date, "docstatus": ["<", 2]}
-
-		if self.course_schedule:
-			filters["course_schedule"] = self.course_schedule
-		elif self.student_group:
-			filters["student_group"] = self.student_group
-		elif self.course_offer:
-			filters["course_offer"] = self.course_offer
-
-		if self.period:
-			filters["period"] = self.period
+		"""Prevent duplicate attendance for same student, date, and Session/Schedule"""
+		filters = {"student": self.student, "docstatus": ["<", 2]}
+		
+		# If linked to a Session, uniqueness is strictly on Session
+		if self.attendance_session:
+			filters["attendance_session"] = self.attendance_session
+		else:
+			# Legacy/Manual checks
+			filters["attendance_date"] = self.attendance_date
+			if self.course_schedule:
+				filters["course_schedule"] = self.course_schedule
+			elif self.student_group:
+				filters["student_group"] = self.student_group
+			elif self.course_offer:
+				filters["course_offer"] = self.course_offer
+			
+			if self.period:
+				filters["period"] = self.period
+			
+			# Allow same day attendance if Session Type is different (e.g. Lecture vs Office Hour)
+			if self.session_type:
+				filters["session_type"] = self.session_type
 
 		existing = frappe.db.exists("Student Attendance", filters)
 
 		if existing and existing != self.name:
-			frappe.throw(_("Attendance already exists for this student on {0}").format(self.attendance_date))
+			if self.attendance_session:
+				frappe.throw(_("Attendance already marked for this session."))
+			else:
+				frappe.throw(_("Attendance already exists for this student on {0}").format(self.attendance_date))
 
 	def fetch_course_details(self):
 		"""Fetch course details based on based_on field"""

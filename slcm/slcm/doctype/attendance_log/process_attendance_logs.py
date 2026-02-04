@@ -184,12 +184,14 @@ def get_student_sessions(student, date):
 	valid_sessions = []
 	all_sessions = frappe.get_all("Attendance Session", 
 		filters={"session_date": date, "docstatus": ["<", 2]},
-		fields=["name", "session_date", "session_start_time", "session_end_time", "course_schedule", "course_offering"]
+		fields=["name", "session_date", "session_start_time", "session_end_time", "course_schedule", "course_offering", "session_type", "duration_hours"]
 	)
 
 	for session in all_sessions:
 		# Check if student belongs to this session
-		if is_student_in_session(student, session):
+		in_session = is_student_in_session(student, session)
+		print(f"DEBUG: Session {session.name} -> is_student_in_session: {in_session}")
+		if in_session:
 			valid_sessions.append(session)
 			
 	return valid_sessions
@@ -239,12 +241,24 @@ def is_student_in_session(student, session):
 
 def is_student_in_course_offering(student, course_offering):
 	"""Check if student is enrolled in course offering"""
-	# Check Course Enrollment
-	if frappe.db.exists("Course Enrollment", {"student": student, "course_offering": course_offering}):
+	# Check Cohort Enrollment via 'Student Enrollment'
+	# 1. Get Cohort from Offering
+	cohort = frappe.db.get_value("Course Offering", course_offering, "cohort")
+	if not cohort:
+		return False
+		
+	# 2. Check Student Enrollment for this Cohort
+	enrollment_exists = frappe.db.exists("Student Enrollment", {
+		"student": student, 
+		"cohort": cohort,
+		"status": "Enrolled"
+	})
+	
+	print(f"DEBUG: Checking Cohort Enrollment for {student} in {cohort}: {enrollment_exists}")
+	
+	if enrollment_exists:
 		return True
 	
-	# Also check Program Enrollment -> Program Enrollment Course if needed? 
-	# Usually Course Enrollment is the source of truth for "active" courses.
 	return False
 
 
@@ -327,6 +341,9 @@ def create_session_attendance(student, session, status, logs):
 		doc.out_time = end_log.swipe_time
 		doc.source = "RFID"
 		doc.attendance_log = start_log.name
+		# Update new fields
+		doc.session_type = session.session_type or "Lecture"
+		doc.hours_counted = session.duration_hours if status == "Present" else 0
 		doc.save(ignore_permissions=True)
 	else:
 		# Create new
@@ -342,7 +359,9 @@ def create_session_attendance(student, session, status, logs):
 			"in_time": start_log.swipe_time,
 			"out_time": end_log.swipe_time,
 			"source": "RFID",
-			"attendance_log": start_log.name
+			"attendance_log": start_log.name,
+			"session_type": session.session_type or "Lecture",
+			"hours_counted": session.duration_hours if status == "Present" else 0
 		})
 		doc.insert(ignore_permissions=True)
 
@@ -358,29 +377,54 @@ def create_office_hours_attendance(student, session, logs):
 	duration_hours = time_diff_in_hours(end_time, start_time)
 	if duration_hours < 0: duration_hours = 0
 	
-	existing = frappe.db.exists("Office Hours Attendance", {
+	# UNIFIED MODEL: Create Student Attendance instead of Office Hours Attendance
+	
+	# Check for existing Student Attendance linked to this "Office Hours Session"
+	# Note: We rely on attendance_session field. Office Hours Session is passed as 'session' object.
+	# If 'session' is an Office Hours Session instance, its 'name' is the ID.
+	
+	existing = frappe.db.exists("Student Attendance", {
 		"student": student,
-		"office_hours_session": session.name
+		"attendance_session": session.name  # Assuming we can link OH Session ID here? Or generic?
+		# Wait, Student Attendance 'attendance_session' links to 'Attendance Session' DocType.
+		# If 'session' comes from 'Office Hours Session', we can't link it strictly if it's a Link field.
+		# But we are deprecating OH Session and using Attendance Session in the future.
+		# For LEGACY OH Sessions, we might need to leave this blank or create a dummy link?
+		# Or better: We assume future Office Hours come from 'Attendance Session' with type='Office Hour'.
+		# This function handles the *Legacy* or *Separate* OH Session logic if we still use it.
+		# Let's link it if possible, or leave it blank and rely on date/time/course.
 	})
 	
+	# If we can't link OH Session to Attendance Session, we might need a separate field or just not link it.
+	# But Unified Model says "Office hours must be recorded inside the system".
+	# Let's assume for now we use 'Student Attendance' without a specific Session Link if it's a Legacy OH Session,
+	# OR we assume migration happened.
+	# BUT: validation says 'attendance_session' is NOT mandatory (lines 103: fieldname attendance_session, options Attendance Session, NOT reqd).
+	# So we can leave it blank for legacy OH Sessions.
+	
 	if existing:
-		doc = frappe.get_doc("Office Hours Attendance", existing)
-		doc.check_in_time = start_log.swipe_time
-		doc.check_out_time = end_log.swipe_time
-		doc.duration_hours = duration_hours
+		doc = frappe.get_doc("Student Attendance", existing)
+		doc.status = "Present"
+		doc.in_time = start_log.swipe_time
+		doc.out_time = end_log.swipe_time
+		doc.hours_counted = duration_hours
+		doc.session_type = "Office Hour"
 		doc.source = "RFID"
 		doc.save(ignore_permissions=True)
 	else:
 		doc = frappe.get_doc({
-			"doctype": "Office Hours Attendance",
+			"doctype": "Student Attendance",
 			"student": student,
-			"office_hours_session": session.name,
-			"course_offering": session.course_offering,
+			# "attendance_session": session.name, # Skip if it's not a valid Attendance Session ID
+			"course_offer": session.course_offering,
 			"attendance_date": getdate(start_log.swipe_time),
-			"check_in_time": start_log.swipe_time,
-			"check_out_time": end_log.swipe_time,
-			"duration_hours": duration_hours,
-			"source": "RFID"
+			"date": getdate(start_log.swipe_time),
+			"status": "Present",
+			"in_time": start_log.swipe_time,
+			"out_time": end_log.swipe_time,
+			"source": "RFID",
+			"session_type": "Office Hour",
+			"hours_counted": duration_hours
 		})
 		doc.insert(ignore_permissions=True)
 

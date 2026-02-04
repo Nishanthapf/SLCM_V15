@@ -9,6 +9,18 @@ from frappe.utils import getdate, date_diff
 class FAMFAApplication(Document):
 	def validate(self):
 		self.validate_dates()
+		self.validate_approval_status()
+
+	def validate_approval_status(self):
+		if self.status == "Approved":
+			if not self.approver:
+				self.approver = frappe.session.user
+		
+		if self.status == "Rejected":
+			if not self.rejection_reason:
+				frappe.throw("Rejection Reason is required when rejecting an application.")
+			if not self.approver:
+				self.approver = frappe.session.user
 
 	def validate_dates(self):
 		if not self.examination_date:
@@ -67,3 +79,35 @@ class FAMFAApplication(Document):
 	def on_submit(self):
 		if self.status != "Approved":
 			frappe.throw("Only Approved applications can be submitted.")
+		self.trigger_attendance_recalculation()
+
+	def on_cancel(self):
+		self.trigger_attendance_recalculation()
+
+	def on_trash(self):
+		self.trigger_attendance_recalculation()
+
+	def trigger_attendance_recalculation(self):
+		"""
+		Recalculate attendance for the Student and Course linked to this application.
+		Since FA/MFA applies to a Course, we need to find relevant Course Offerings.
+		"""
+		try:
+			# Find Course Offerings for this Course where the student has attendance/enrollment
+			# Searching Attendance Summary is the most direct way to find relevant offerings
+			summaries = frappe.get_all("Attendance Summary", 
+				filters={"student": self.student, "course": self.course},
+				fields=["course_offering"]
+			)
+			
+			from slcm.slcm.utils.attendance_calculator import calculate_student_attendance
+			
+			for summary in summaries:
+				frappe.enqueue(
+					calculate_student_attendance,
+					student=self.student,
+					course_offering=summary.course_offering,
+					queue="short"
+				)
+		except Exception as e:
+			frappe.log_error(f"FA/MFA Recalc Error: {str(e)}")
