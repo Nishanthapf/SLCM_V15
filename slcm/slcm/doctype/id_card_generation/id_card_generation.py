@@ -221,7 +221,7 @@ class IDCardGeneration(Document):
 		elif self.card_type == "Visitor":
 			parts = [
 				"VISITOR",
-				self.visitor_name or "",
+				self.visitor_name or "",																																									
 				self.visitor_company or "",
 				self.issue_date or "",
 			]
@@ -229,17 +229,17 @@ class IDCardGeneration(Document):
 			parts = [
 				"STAFF",
 				self.non_faculty_name or "",
-				self.designation or "",
+				self.designation or "",																																																																																																																																																																																				
 				self.department or "",
 			]
 
 		return " | ".join(filter(None, [str(p) for p in parts]))
 
 	def generate_verification_url(self):
-		base_url = get_url()
+		base_url = get_url()																																																
 		return f"{base_url}/verify-student/{self.student}"
 
-	@frappe.whitelist()
+	@frappe.whitelist()																																										
 	def generate_card(self):
 		# Lazy imports
 		from PIL import Image
