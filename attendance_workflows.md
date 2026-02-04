@@ -180,11 +180,11 @@ flowchart TD
     Pair -- No --> Timeout[Assume Default Duration]
     
     CalcDur --> Match{Match Session?}
-    Match -- Lecture --> MarkLec[Mark 'Lecture' (1 hr)]
-    Match -- Office Hour --> MarkOH[Mark 'Office Hour' (Actual Duration)]
-    Match -- None --> Unmapped[Mark Unmapped / Extra]
+    Match -- Lecture --> MarkLec["Mark 'Lecture' (1 hr)"]
+    Match -- Office Hour --> MarkOH["Mark 'Office Hour' (Actual Duration)"]
+    Match -- None --> Unmapped["Mark Unmapped / Extra"]
     
-    MarkLec --> Save[Save Student Attendance]
+    MarkLec --> Save["Save Student Attendance"]
     MarkOH --> Save
     Unmapped --> Save
 ```
@@ -199,9 +199,9 @@ flowchart TD
     Sum --> Pct{Calculate %}
     Pct --> CheckMin{>= 75%?}
     
-    CheckMin -- Yes --> Eligible[Eligible: YES]
+    CheckMin -- Yes --> Eligible["Eligible: YES"]
     CheckMin -- No --> CheckFA{Has FA/MFA App?}
     
-    CheckFA -- Yes (Approved) --> Override[Eligible: YES (Override)]
-    CheckFA -- No --> NotEl[Eligible: NO]
+    CheckFA -- Yes (Approved) --> Override["Eligible: YES (Override)"]
+    CheckFA -- No --> NotEl["Eligible: NO"]
 ```
