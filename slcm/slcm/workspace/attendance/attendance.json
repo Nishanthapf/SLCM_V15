@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"KubNzboJeQ\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Attendance</span>\",\"col\":12}},{\"id\":\"WDJcH9WDuQ\",\"type\":\"paragraph\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Manual Process</span>\",\"col\":12}},{\"id\":\"za2-PzEA9j\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Student Attendance Tool\",\"col\":3}},{\"id\":\"UYSux4UnV6\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Office Hours (Bonus)\",\"col\":3}},{\"id\":\"RB9Ro1HMy9\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Student Attendance Condonation\",\"col\":3}},{\"id\":\"JKTLg7kQfz\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"FA MFA Application\",\"col\":3}},{\"id\":\"OAizugpMID\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Attendance Summary\",\"col\":3}},{\"id\":\"yG0REgN3CO\",\"type\":\"paragraph\",\"data\":{\"text\":\"<span class=\\\"h4\\\">RFID Process</span>\",\"col\":12}},{\"id\":\"zfW3roK0zu\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Attendance Session\",\"col\":3}},{\"id\":\"YSLh9jI0gg\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Attendance Log \",\"col\":3}},{\"id\":\"TtHTRdYWWL\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Student Attendance\",\"col\":3}}]",
+ "content": "[{\"id\":\"KubNzboJeQ\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Attendance</span>\",\"col\":12}},{\"id\":\"WDJcH9WDuQ\",\"type\":\"paragraph\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Manual Process</span>\",\"col\":12}},{\"id\":\"Ga7Yn_ifTq\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Attendance Settings\",\"col\":3}},{\"id\":\"za2-PzEA9j\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Student Attendance Tool\",\"col\":3}},{\"id\":\"UYSux4UnV6\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Office Hours (Bonus)\",\"col\":3}},{\"id\":\"RB9Ro1HMy9\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Student Attendance Condonation\",\"col\":3}},{\"id\":\"JKTLg7kQfz\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"FA MFA Application\",\"col\":3}},{\"id\":\"OAizugpMID\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Attendance Summary\",\"col\":3}},{\"id\":\"yG0REgN3CO\",\"type\":\"paragraph\",\"data\":{\"text\":\"<span class=\\\"h4\\\">RFID Process</span>\",\"col\":12}},{\"id\":\"zfW3roK0zu\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Attendance Session\",\"col\":3}},{\"id\":\"YSLh9jI0gg\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Attendance Log \",\"col\":3}},{\"id\":\"TtHTRdYWWL\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Student Attendance\",\"col\":3}}]",
  "creation": "2026-02-04 17:41:15.897875",
  "custom_blocks": [],
  "docstatus": 0,
@@ -13,7 +13,7 @@
  "is_hidden": 0,
  "label": "Attendance",
  "links": [],
- "modified": "2026-02-04 17:48:40.731802",
+ "modified": "2026-02-05 10:36:23.098713",
  "modified_by": "Administrator",
  "module": "SLCM",
  "name": "Attendance",
@@ -38,6 +38,13 @@
    "label": "Attendance Session",
    "link_to": "Attendance Session",
    "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Attendance Settings",
+   "link_to": "Attendance Settings",
    "type": "DocType"
   },
   {
