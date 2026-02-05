@@ -19,6 +19,9 @@ frappe.ui.form.on("Student Attendance Tool", {
 			frm.set_value("based_on", frappe.route_options.based_on);
 			frm.set_value("student_group", frappe.route_options.student_group);
 			frm.set_value("course_schedule", frappe.route_options.course_schedule);
+			if (frappe.route_options.date) {
+				frm.set_value("date", frappe.route_options.date);
+			}
 			frappe.route_options = null;
 		}
 
@@ -69,8 +72,8 @@ frappe.ui.form.on("Student Attendance Tool", {
 		if ((frm.doc.student_group && frm.doc.date) || frm.doc.course_schedule) {
 			frm.students_area.html(
 				"<div style='padding:2rem;text-align:center'>" +
-					"<i class='fa fa-spinner fa-spin'></i> Fetching students..." +
-					"</div>"
+				"<i class='fa fa-spinner fa-spin'></i> Fetching students..." +
+				"</div>"
 			);
 
 			frappe.call({

@@ -7,6 +7,17 @@ frappe.ui.form.on('Class Schedule', {
         if (!frm.doc.title && frm.doc.course) {
             frm.trigger('generate_title');
         }
+
+        if (!frm.is_new()) {
+            frm.add_custom_button(__('Mark Attendance'), function () {
+                frappe.route_options = {
+                    'based_on': 'Student Group',
+                    'student_group': frm.doc.student_group,
+                    'date': frm.doc.schedule_date
+                };
+                frappe.set_route('Form', 'Student Attendance Tool');
+            });
+        }
     },
 
     class_configuration: function (frm) {
