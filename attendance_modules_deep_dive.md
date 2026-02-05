@@ -118,3 +118,81 @@ graph TD
     FA[FA/MFA App] -->|Overrides| Eligibility{Eligible for Exam?}
     Summary -->|Check %| Eligibility
 ```
+
+---
+
+## 6. Attendance Settings
+
+### Purpose
+**Attendance Settings** is a Single DocType (Global Configuration) that defines the rules of the game for the entire university.
+
+### Key Configuration Points
+*   **Thresholds**: Sets the `minimum_attendance_percentage` (e.g., 75%).
+*   **Locking**: Defines `attendance_lock_days` to freeze old records (preventing retroactive tampering).
+*   **Course Logic**: Defines default hours for Core vs Elective courses (`core_course_hours`, `elective_course_hours`), used in planning.
+*   **Office Hours**: Toggles if Office Hours count towards attendance (`include_office_hours_in_attendance`) and sets their weight.
+*   **Calculations**: Controls automation (`auto_calculate_summary`).
+
+### Impact
+Changing a value here immediately affects validation logic across the entire system. For example, disabling FA/MFA here will instantly block all new applications.
+
+---
+
+## 7. Attendance Summary
+
+### Purpose
+The **Attendance Summary** is the aggregated "Scorecard" for a student in a specific course. It is the destination where all daily attendance records are summed up.
+
+### Key Features
+*   **Real-Time Dashboard**: Shows Total Conducted, Total Attended, Condoned Hours, and Final Percentage.
+*   **Eligibility Flag**: The critical `Eligible for Exam` (Yes/No) field is calculated here.
+*   **Direct Link**: Acts as the pivot point between a Student and a Course Offering.
+
+### Data Flow
+It is updated automatically whenever:
+1.  A new `Student Attendance` record is marked.
+2.  A `Student Attendance Condonation` is approved.
+3.  An FA/MFA override is applied.
+
+---
+
+## 8. Attendance Edit Log
+
+### Purpose
+The **Attendance Edit Log** provides a secure, tamper-evident audit trail for any changes made to attendance records after their initial creation.
+
+### Key Features
+*   **Forensics**: Records `Who` changed `What`, `When`, and `Why`.
+*   **Field-Level Tracking**: Captures the "Old Value" (e.g., Absent) and "New Value" (e.g., Present).
+*   **Reasoning**: Enforces that users verify *why* they are changing older records (e.g., "Correction of manual error").
+
+### Use Case
+If a student disputes their attendance, this log proves exactly when a record was changed and by whom.
+
+---
+
+## 9. Office Hours Session & Office Hours Attendance
+
+### Purpose
+These are specialized entities designed to handle the unique nature of Office Hours, which differ from scheduled lectures.
+*   **Office Hours Session**: Defines a faculty member's open slot (e.g., "Prof. Smith, Fridays 2-4 PM").
+*   **Office Hours Attendance**: Tracks the specific duration a student spent in that session.
+
+### Distinction from Regular Attendance
+*   **Duration-Based**: Unlike a lecture (fixed 1 hour credit), a student might visit office hours for 15 minutes or 2 hours. This DocType captures that specific `duration_hours`.
+*   **Optionality**: Usually does not increase the "Total Conducted Classes" denominator, but adds to the "Attended" numerator (Bonus Time).
+
+### Relationship
+The system allows configuring whether these specialized records feed into the main `Student Attendance` table or are kept separate for analytics only.
+
+---
+
+## 10. Attendance Period
+
+### Purpose
+The **Attendance Period** defines the standard time slots for the university (e.g., "Period 1: 09:00 - 10:00").
+
+### Usage
+*   **Scheduling**: Simplifies data entry when creating timetables (select "Period 1" instead of typing start/end times manually).
+*   **Validation**: Ensures `Attendance Sessions` align with approved university time blocks.
+
