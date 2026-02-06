@@ -107,6 +107,25 @@
       "fieldtype": "Datetime",
       "label": "Last Updated",
       "read_only": 1
+    },
+    {
+      "fieldname": "applications_section",
+      "fieldtype": "Section Break",
+      "label": "Applications"
+    },
+    {
+      "fieldname": "condonation_list",
+      "fieldtype": "Table",
+      "label": "Condonation Applications",
+      "options": "Attendance Condonation Reference",
+      "read_only": 1
+    },
+    {
+      "fieldname": "fa_mfa_list",
+      "fieldtype": "Table",
+      "label": "FA / MFA Applications",
+      "options": "Attendance FA MFA Reference",
+      "read_only": 1
     }
   ],
   "permissions": [

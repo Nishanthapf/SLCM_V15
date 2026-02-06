@@ -83,6 +83,9 @@ def calculate_student_attendance(student, course_offering):
 	summary.eligible_for_exam = is_eligible
 	# summary.eligibility_status = "Eligible" if is_eligible else "Shortage"
 	
+	# Populate Application Lists (Condonation & FA/MFA)
+	populate_application_lists(summary, student, course_offering)
+
 	# Save
 	summary.last_updated = frappe.utils.now()
 	summary.save()
@@ -309,3 +312,61 @@ def check_fa_mfa_eligibility(student, course_offering):
 	})
 	
 	return True if exists else False
+
+
+def populate_application_lists(summary, student, course_offering):
+	"""
+	Populate Condonation and FA/MFA application tables in Attendance Summary.
+	"""
+	# 1. Condonation Applications
+	summary.set("condonation_list", [])
+	
+	try:
+		condonation_apps = frappe.get_all("Student Attendance Condonation",
+			filters={
+				"student": student,
+				"course_offering": course_offering,
+				"docstatus": ["<", 2]  # Exclude Cancelled
+			},
+			fields=["name", "condonation_reason", "number_of_sessions", "number_of_hours", "final_status"],
+			order_by="creation desc"
+		)
+		
+		for app in condonation_apps:
+			row = summary.append("condonation_list", {})
+			row.condonation_application = app.name
+			row.condonation_reason = app.condonation_reason
+			row.number_of_sessions = app.number_of_sessions
+			row.number_of_hours = app.number_of_hours
+			row.final_status = app.final_status
+			
+	except Exception as e:
+		frappe.log_error(f"Error fetching condonation list: {str(e)}")
+
+	# 2. FA/MFA Applications
+	summary.set("fa_mfa_list", [])
+	
+	try:
+		# Need Course ID for FA/MFA
+		course_id = frappe.db.get_value("Course Offering", course_offering, "course_title")
+		if course_id:
+			fa_mfa_apps = frappe.get_all("FA MFA Application",
+				filters={
+					"student": student,
+					"course": course_id,
+					"docstatus": ["<", 2]
+				},
+				fields=["name", "application_type", "reason", "status"],
+				order_by="creation desc"
+			)
+			
+			for app in fa_mfa_apps:
+				row = summary.append("fa_mfa_list", {})
+				row.fa_mfa_application = app.name
+				row.application_type = app.application_type
+				row.reason = app.reason
+				row.status = app.status
+				
+	except Exception as e:
+		frappe.log_error(f"Error fetching FA/MFA list: {str(e)}")
+

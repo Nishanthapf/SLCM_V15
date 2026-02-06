@@ -1,0 +1,60 @@
+{
+    "actions": [],
+    "autoname": "autoincrement",
+    "creation": "2026-02-06 10:30:00.000000",
+    "doctype": "DocType",
+    "editable_grid": 1,
+    "engine": "InnoDB",
+    "field_order": [
+        "fa_mfa_application",
+        "application_type",
+        "reason",
+        "status"
+    ],
+    "fields": [
+        {
+            "fieldname": "fa_mfa_application",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "label": "Application ID",
+            "options": "FA MFA Application",
+            "read_only": 1
+        },
+        {
+            "fetch_from": "fa_mfa_application.application_type",
+            "fieldname": "application_type",
+            "fieldtype": "Data",
+            "in_list_view": 1,
+            "label": "Type",
+            "read_only": 1
+        },
+        {
+            "fetch_from": "fa_mfa_application.reason",
+            "fieldname": "reason",
+            "fieldtype": "Data",
+            "in_list_view": 1,
+            "label": "Reason",
+            "read_only": 1
+        },
+        {
+            "fetch_from": "fa_mfa_application.status",
+            "fieldname": "status",
+            "fieldtype": "Data",
+            "in_list_view": 1,
+            "label": "Status",
+            "read_only": 1
+        }
+    ],
+    "index_web_pages_for_search": 1,
+    "istable": 1,
+    "links": [],
+    "modified": "2026-02-06 10:30:00.000000",
+    "modified_by": "Administrator",
+    "module": "SLCM",
+    "name": "Attendance FA MFA Reference",
+    "owner": "Administrator",
+    "permissions": [],
+    "sort_field": "modified",
+    "sort_order": "DESC",
+    "states": []
+}
