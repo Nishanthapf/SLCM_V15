@@ -64,6 +64,43 @@ class ClassSchedule(Document):
         """Create recurring schedules if repeat is enabled"""
         if self.repeat_frequency and self.repeat_frequency != "Never":
             self.create_recurring_schedules()
+        
+        # Create attendance session for this schedule
+        self.create_attendance_session()
+
+    def create_attendance_session(self):
+        """Create an attendance session for this schedule"""
+        from frappe.utils import getdate
+
+        if not self.schedule_date or not self.from_time or not self.to_time:
+            return
+
+        # Check if session already exists
+        exists = frappe.db.exists("Attendance Session", {
+            "class_schedule": self.name,
+            "session_date": self.schedule_date,
+            "session_start_time": self.from_time
+        })
+
+        if exists:
+            return
+
+        doc = frappe.get_doc({
+            "doctype": "Attendance Session",
+            "based_on": "Class Schedule",
+            "class_schedule": self.name,
+            "student_group": self.student_group,
+            "course_offering": self.course_offering,
+            "course": self.course,
+            "instructor": self.instructor,
+            "room": self.room,
+            "session_date": self.schedule_date,
+            "session_start_time": self.from_time,
+            "session_end_time": self.to_time,
+            "session_type": "Lecture",  # Default to Lecture or similar
+            "session_status": "Scheduled"
+        })
+        doc.insert(ignore_permissions=True)
 
     def create_recurring_schedules(self):
         """Create recurring class schedules based on repeat frequency"""

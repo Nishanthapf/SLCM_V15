@@ -248,57 +248,69 @@ def mark_attendance(
 				course_offering = offerings[0].name
 
 	# ---------------------------------------------------------
-	# Ensure Attendance Session Exists (Unified Model)
+	# Ensure Attendance Session Exists and Update It
 	# ---------------------------------------------------------
 	attendance_session = None
-	if class_sched:
-		# Check if session exists for this schedule and date
-		session_name = frappe.db.exists(
-			"Attendance Session",
-			{
-				"course_schedule": class_schedule if based_on == "Course Schedule" else None, # Class Schedule logic used strictly below
-				# Wait, fields are mismatched.
-				# Attendance Session has 'course_schedule' (Link: Course Schedule).
-				# It doesn't seem to have 'class_schedule' yet?
-				# If we are moving to Class Schedule, Attendance Session might need updating too.
-				# For now, let's look for session by DATE and COURSE OFFERING + START TIME
+	
+	# Lookup Filters
+	session_filters = {
+		"session_date": date,
+		"course_offering": course_offering,
+		"docstatus": ("<", 2)
+	}
+
+	if based_on == "Class Schedule" and class_schedule:
+		session_filters["class_schedule"] = class_schedule
+	elif based_on == "Course Schedule" and course_schedule:
+		session_filters["course_schedule"] = course_schedule
+	
+	# Try finding existing session
+	# DEBUG LOGGING
+	frappe.log_error(f"DEBUG: Lookup filters: {session_filters}")
+	session_name = frappe.db.exists("Attendance Session", session_filters)
+	frappe.log_error(f"DEBUG: Found Session: {session_name}")
+	
+	if session_name:
+		attendance_session = session_name
+		# UPDATE STATUS
+		try:
+			session_doc = frappe.get_doc("Attendance Session", session_name)
+			if session_doc.session_status != "Conducted":
+				session_doc.session_status = "Conducted"
+			
+			session_doc.attendance_marked = 1
+			session_doc.save(ignore_permissions=True)
+		except Exception as e:
+			frappe.log_error(f"Failed to update session status for {session_name}: {e!s}")
+
+	else:
+		# Create new Attendance Session if not found (Fallback)
+		if class_sched and class_sched.from_time and class_sched.to_time:
+			# Calculate duration
+			start_dt = frappe.utils.get_datetime(f"{date} {class_sched.from_time}")
+			end_dt = frappe.utils.get_datetime(f"{date} {class_sched.to_time}")
+			duration = frappe.utils.time_diff_in_hours(end_dt, start_dt)
+			
+			sess_doc = frappe.get_doc({
+				"doctype": "Attendance Session",
 				"session_date": date,
+				"based_on": based_on,
+				"student_group": student_group,
+				"class_schedule": class_schedule,
+				"course_schedule": course_schedule if based_on == "Course Schedule" else None,
 				"course_offering": course_offering,
-				"docstatus": ("<", 2)
-			}
-		)
-		
-		if session_name:
-			attendance_session = session_name
-		else:
-			# Create new Attendance Session
-			# We need start/end time from Class Schedule
-			if class_sched.from_time and class_sched.to_time:
-				# Calculate duration
-				start_dt = frappe.utils.get_datetime(f"{date} {class_sched.from_time}")
-				end_dt = frappe.utils.get_datetime(f"{date} {class_sched.to_time}")
-				duration = frappe.utils.time_diff_in_hours(end_dt, start_dt)
-				
-				sess_doc = frappe.get_doc({
-					"doctype": "Attendance Session",
-					"session_date": date,
-					"based_on": based_on,
-					"student_group": student_group,
-					"class_schedule": class_schedule,
-					"course_schedule": course_schedule if based_on == "Course Schedule" else None,
-					"course_offering": course_offering,
-					"session_start_time": class_sched.from_time,
-					"session_end_time": class_sched.to_time,
-					"duration_hours": duration,
-					"session_type": "Lecture", # Default, maybe fetch from Class Schedule later
-					"instructor": class_sched.instructor,
-					"room": class_sched.room,
-					"session_status": "Conducted", # Since we are marking attendance
-					"attendance_marked": 1
-				})
-				sess_doc.flags.skip_auto_attendance = True
-				sess_doc.insert(ignore_permissions=True)
-				attendance_session = sess_doc.name
+				"session_start_time": class_sched.from_time,
+				"session_end_time": class_sched.to_time,
+				"duration_hours": duration,
+				"session_type": "Lecture", # Default
+				"instructor": class_sched.instructor,
+				"room": class_sched.room,
+				"session_status": "Conducted", 
+				"attendance_marked": 1
+			})
+			sess_doc.flags.skip_auto_attendance = True
+			sess_doc.insert(ignore_permissions=True)
+			attendance_session = sess_doc.name
 
 	# ---------------------------------------------------------
 

@@ -16,7 +16,9 @@ class AttendanceSession(Document):
 	
 	def after_insert(self):
 		"""Populate student attendance records"""
-		self.create_student_attendance_records()
+		# Student Attendance creation is now handled by Student Attendance Tool
+		# self.create_student_attendance_records()
+		pass
 
 	def on_submit(self):
 		"""Trigger attendance calculations"""
@@ -65,11 +67,16 @@ class AttendanceSession(Document):
 		self.update_attendance_summary()
 
 	def get_enrolled_students(self):
-		"""Find students enrolled in the course"""
-		# Approach: Find Student Enrollments that have this Course in their Program Enrollment table (table_hxbo)
-		# Note: table_hxbo is likely named 'courses' in the object, but we query by table name in SQL for safety
-		# Or rely on Student Enrollment -> Program Enrollment child table
-		
+		"""Find students based on Student Group or Class Enrollment"""
+		if self.student_group:
+			# Fetch from Student Group
+			students = frappe.get_all("Student Group Student", 
+				filters={"parent": self.student_group, "active": 1},
+				fields=["student"]
+			)
+			return [s.student for s in students]
+
+		# Fallback: Find Student Enrollments that have this Course in their Program Enrollment
 		course_name = self.course
 		if not course_name and self.course_offering:
 			course_name = frappe.db.get_value("Course Offering", self.course_offering, "course_title")

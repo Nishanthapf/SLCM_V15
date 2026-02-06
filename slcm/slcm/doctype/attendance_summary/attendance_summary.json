@@ -1,162 +1,162 @@
 {
- "actions": [],
- "allow_rename": 1,
- "autoname": "ASU-.YYYY.-.#####",
- "creation": "2026-02-06 10:52:45.032631",
- "doctype": "DocType",
- "engine": "InnoDB",
- "field_order": [
-  "student",
-  "student_name",
-  "course_offering",
-  "course",
-  "academic_year",
-  "term_name",
-  "total_classes",
-  "attended_classes",
-  "attendance_percentage",
-  "minimum_required_percentage",
-  "eligible_for_exam",
-  "last_updated",
-  "applications_section",
-  "condonation_list",
-  "fa_mfa_list"
- ],
- "fields": [
-  {
-   "fieldname": "student",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "label": "Student",
-   "options": "Student Master",
-   "reqd": 1
-  },
-  {
-   "fetch_from": "student.first_name",
-   "fieldname": "student_name",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Student Name",
-   "read_only": 1
-  },
-  {
-   "fieldname": "course_offering",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Course Offering",
-   "options": "Course Offering",
-   "reqd": 1
-  },
-  {
-   "fetch_from": "course_offering.course_title",
-   "fieldname": "course",
-   "fieldtype": "Link",
-   "label": "Course",
-   "options": "Course",
-   "read_only": 1
-  },
-  {
-   "fetch_from": "course_offering.academic_year",
-   "fieldname": "academic_year",
-   "fieldtype": "Link",
-   "in_standard_filter": 1,
-   "label": "Academic Year",
-   "options": "Academic Year",
-   "read_only": 1
-  },
-  {
-   "fetch_from": "course_offering.term_name",
-   "fieldname": "term_name",
-   "fieldtype": "Data",
-   "in_standard_filter": 1,
-   "label": "Term",
-   "read_only": 1
-  },
-  {
-   "fieldname": "total_classes",
-   "fieldtype": "Float",
-   "in_list_view": 1,
-   "label": "Total Classes",
-   "read_only": 1
-  },
-  {
-   "fieldname": "attended_classes",
-   "fieldtype": "Float",
-   "in_list_view": 1,
-   "label": "Attended Classes",
-   "read_only": 1
-  },
-  {
-   "fieldname": "attendance_percentage",
-   "fieldtype": "Percent",
-   "in_list_view": 1,
-   "label": "Attendance Percentage",
-   "read_only": 1
-  },
-  {
-   "default": "75",
-   "fieldname": "minimum_required_percentage",
-   "fieldtype": "Percent",
-   "label": "Minimum Required %",
-   "read_only": 1
-  },
-  {
-   "default": "0",
-   "fieldname": "eligible_for_exam",
-   "fieldtype": "Check",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Eligible for Exam",
-   "read_only": 1
-  },
-  {
-   "fieldname": "last_updated",
-   "fieldtype": "Datetime",
-   "label": "Last Updated",
-   "read_only": 1
-  },
-  {
-   "fieldname": "applications_section",
-   "fieldtype": "Section Break",
-   "label": "Applications"
-  },
-  {
-   "fieldname": "condonation_list",
-   "fieldtype": "Table",
-   "label": "Condonation Applications",
-   "options": "Attendance Condonation Reference",
-   "read_only": 1
-  },
-  {
-   "fieldname": "fa_mfa_list",
-   "fieldtype": "Table",
-   "label": "FA / MFA Applications",
-   "options": "Attendance FA MFA Reference",
-   "read_only": 1
-  }
- ],
- "links": [],
- "modified": "2026-02-06 11:00:16.289272",
- "modified_by": "Administrator",
- "module": "SLCM",
- "name": "Attendance Summary",
- "naming_rule": "Expression (old style)",
- "owner": "Administrator",
- "permissions": [
-  {
-   "delete": 1,
-   "export": 1,
-   "print": 1,
-   "read": 1,
-   "report": 1,
-   "role": "System Manager",
-   "share": 1
-  }
- ],
- "row_format": "Dynamic",
- "sort_field": "modified",
- "sort_order": "DESC",
- "states": []
+    "actions": [],
+    "allow_rename": 1,
+    "autoname": "ASU-.YYYY.-.#####",
+    "creation": "2026-02-06 10:52:45.032631",
+    "doctype": "DocType",
+    "engine": "InnoDB",
+    "field_order": [
+        "student",
+        "student_name",
+        "course_offering",
+        "course",
+        "academic_year",
+        "term_name",
+        "total_classes",
+        "attended_classes",
+        "attendance_percentage",
+        "minimum_required_percentage",
+        "eligible_for_exam",
+        "last_updated",
+        "applications_section",
+        "condonation_list",
+        "fa_mfa_list"
+    ],
+    "fields": [
+        {
+            "fieldname": "student",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "label": "Student",
+            "options": "Student Master",
+            "reqd": 1
+        },
+        {
+            "fetch_from": "student.first_name",
+            "fieldname": "student_name",
+            "fieldtype": "Data",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Student Name",
+            "read_only": 1
+        },
+        {
+            "fieldname": "course_offering",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Course Offering",
+            "options": "Course Offering",
+            "reqd": 1
+        },
+        {
+            "fetch_from": "course_offering.course_title",
+            "fieldname": "course",
+            "fieldtype": "Link",
+            "label": "Course",
+            "options": "Course",
+            "read_only": 1
+        },
+        {
+            "fetch_from": "course_offering.academic_year",
+            "fieldname": "academic_year",
+            "fieldtype": "Link",
+            "in_standard_filter": 1,
+            "label": "Academic Year",
+            "options": "Academic Year",
+            "read_only": 1
+        },
+        {
+            "fetch_from": "course_offering.term_name",
+            "fieldname": "term_name",
+            "fieldtype": "Data",
+            "in_standard_filter": 1,
+            "label": "Term",
+            "read_only": 1
+        },
+        {
+            "fieldname": "total_classes",
+            "fieldtype": "Float",
+            "in_list_view": 1,
+            "label": "Total Classes",
+            "read_only": 1
+        },
+        {
+            "fieldname": "attended_classes",
+            "fieldtype": "Float",
+            "in_list_view": 1,
+            "label": "Attended Classes",
+            "read_only": 1
+        },
+        {
+            "fieldname": "attendance_percentage",
+            "fieldtype": "Percent",
+            "in_list_view": 1,
+            "label": "Attendance Percentage",
+            "read_only": 1
+        },
+        {
+            "default": "75",
+            "fieldname": "minimum_required_percentage",
+            "fieldtype": "Percent",
+            "label": "Minimum Required %",
+            "read_only": 1
+        },
+        {
+            "default": "0",
+            "fieldname": "eligible_for_exam",
+            "fieldtype": "Check",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Eligible for Exam",
+            "read_only": 1
+        },
+        {
+            "fieldname": "last_updated",
+            "fieldtype": "Datetime",
+            "label": "Last Updated",
+            "read_only": 1
+        },
+        {
+            "fieldname": "applications_section",
+            "fieldtype": "Section Break",
+            "label": "Applications"
+        },
+        {
+            "fieldname": "condonation_list",
+            "fieldtype": "Table",
+            "label": "Condonation Applications",
+            "options": "Attendance Condonation Reference",
+            "read_only": 1
+        },
+        {
+            "fieldname": "fa_mfa_list",
+            "fieldtype": "Table",
+            "label": "FA / MFA Applications",
+            "options": "Attendance FA MFA Reference",
+            "read_only": 1
+        }
+    ],
+    "links": [],
+    "modified": "2026-02-06 11:00:16.289272",
+    "modified_by": "Administrator",
+    "module": "SLCM",
+    "name": "Attendance Summary",
+    "naming_rule": "Expression (old style)",
+    "owner": "Administrator",
+    "permissions": [
+        {
+            "delete": 1,
+            "export": 1,
+            "print": 1,
+            "read": 1,
+            "report": 1,
+            "role": "System Manager",
+            "share": 1
+        }
+    ],
+    "row_format": "Dynamic",
+    "sort_field": "modified",
+    "sort_order": "DESC",
+    "states": []
 }
