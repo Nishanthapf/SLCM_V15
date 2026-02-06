@@ -36,6 +36,9 @@ class AttendanceSession(Document):
 
 	def create_student_attendance_records(self):
 		"""Fetch enrolled students and create initial attendance records"""
+		if self.flags.skip_auto_attendance:
+			return
+
 		students = self.get_enrolled_students()
 		
 		for student_id in students:
@@ -53,6 +56,7 @@ class AttendanceSession(Document):
 					"course_schedule": self.course_schedule,
 					"course_offer": self.course_offering,
 					"attendance_date": self.session_date,
+					"date": self.session_date,
 					"status": "Absent", # Default to Absent or Present based on logic, safely Absent
 					"source": "Manual"
 				})
@@ -100,20 +104,24 @@ class AttendanceSession(Document):
 		for student_id in students:
 			calculate_student_attendance(student_id, self.course_offering)
 
+	def before_save(self):
+		"""Calculate summary before saving"""
+		self.update_attendance_summary()
+	
 	def update_attendance_summary(self):
-		"""Update attendance counts for this session"""
-		# if self.session_status != "Conducted":
-		# 	return
-		# Allow update even if not conducted yet, for initial population
-		
+		"""Update attendance counts and student list"""
 		# Count attendance records for this session
+		# Query for counts
 		attendance_data = frappe.db.sql("""
 			SELECT 
 				COUNT(*) as total,
 				SUM(CASE WHEN status IN ('Present', 'Late') THEN 1 ELSE 0 END) as present,
-				SUM(CASE WHEN status = 'Absent' THEN 1 ELSE 0 END) as absent
-			FROM `tabStudent Attendance`
-			WHERE attendance_session = %s
+				SUM(CASE WHEN status = 'Absent' THEN 1 ELSE 0 END) as absent,
+				SUM(CASE WHEN status IN ('Present', 'Late') AND (s.gender = 'Male' OR s.gender = 'Man') THEN 1 ELSE 0 END) as boys,
+				SUM(CASE WHEN status IN ('Present', 'Late') AND (s.gender = 'Female' OR s.gender = 'Woman') THEN 1 ELSE 0 END) as girls
+			FROM `tabStudent Attendance` sa
+			JOIN `tabStudent Master` s ON sa.student = s.name
+			WHERE sa.attendance_session = %s
 		""", self.name, as_dict=True)
 		
 		if attendance_data:
@@ -121,6 +129,8 @@ class AttendanceSession(Document):
 			self.total_students = data.get('total', 0)
 			self.present_count = data.get('present', 0)
 			self.absent_count = data.get('absent', 0)
+			self.total_boys = data.get('boys', 0)
+			self.total_girls = data.get('girls', 0)
 			
 			if self.total_students > 0:
 				self.attendance_percentage = (self.present_count / self.total_students) * 100
@@ -129,8 +139,29 @@ class AttendanceSession(Document):
 			
 			self.attendance_marked = 1 if self.total_students > 0 else 0
 			
-			# Avoid infinite recursion if save() is called within calculate
-			self.db_update() 
+		# Populate Child Table
+		# Clear existing rows to avoid duplication/stale data
+		self.set("students", [])
+		
+		# Fetch details for child table
+		student_records = frappe.db.sql("""
+			SELECT sa.student, s.first_name, sa.status, s.gender
+			FROM `tabStudent Attendance` sa
+			JOIN `tabStudent Master` s ON sa.student = s.name
+			WHERE sa.attendance_session = %s
+			ORDER BY s.first_name asc
+		""", self.name, as_dict=True)
+		
+		for record in student_records:
+			self.append("students", {
+				"student": record.student,
+				"student_name": record.first_name,
+				"status": record.status,
+				"gender": record.gender
+			})
+			
+	# Note: No separate save() call needed because this is called in before_save
+	# or can be called manually followed by save() 
 
 @frappe.whitelist()
 def mark_session_conducted(session_name):

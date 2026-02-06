@@ -187,3 +187,19 @@ class StudentAttendance(Document):
 				doc.update_attendance_summary()
 			except Exception as e:
 				frappe.log_error(f"Error updating session summary: {str(e)}")
+
+
+@frappe.whitelist()
+def get_enrolled_cohorts(student):
+	"""
+	Fetch all cohorts that a student is currently enrolled in.
+	Used to filter Course Offerings in the UI.
+	"""
+	if not student:
+		return []
+
+	return frappe.get_all(
+		"Student Enrollment",
+		filters={"student": student, "status": "Enrolled"},
+		pluck="cohort"
+	)

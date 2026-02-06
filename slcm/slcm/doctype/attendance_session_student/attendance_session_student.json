@@ -1,0 +1,57 @@
+{
+    "actions": [],
+    "creation": "2026-02-06 10:00:00.000000",
+    "doctype": "DocType",
+    "editable_grid": 1,
+    "engine": "InnoDB",
+    "field_order": [
+        "student",
+        "student_name",
+        "status",
+        "gender"
+    ],
+    "fields": [
+        {
+            "fieldname": "student",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "label": "Student",
+            "options": "Student Master",
+            "reqd": 1
+        },
+        {
+            "fetch_from": "student.first_name",
+            "fieldname": "student_name",
+            "fieldtype": "Data",
+            "in_list_view": 1,
+            "label": "Student Name",
+            "read_only": 1
+        },
+        {
+            "fieldname": "status",
+            "fieldtype": "Select",
+            "in_list_view": 1,
+            "label": "Status",
+            "options": "Present\nAbsent\nOn Leave\nLate",
+            "read_only": 1
+        },
+        {
+            "fetch_from": "student.gender",
+            "fieldname": "gender",
+            "fieldtype": "Data",
+            "label": "Gender",
+            "read_only": 1
+        }
+    ],
+    "istable": 1,
+    "links": [],
+    "modified": "2026-02-06 10:00:00.000000",
+    "modified_by": "Administrator",
+    "module": "SLCM",
+    "name": "Attendance Session Student",
+    "owner": "Administrator",
+    "permissions": [],
+    "sort_field": "modified",
+    "sort_order": "DESC",
+    "states": []
+}

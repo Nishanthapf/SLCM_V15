@@ -11,7 +11,8 @@ frappe.ui.form.on('Class Schedule', {
         if (!frm.is_new()) {
             frm.add_custom_button(__('Mark Attendance'), function () {
                 frappe.route_options = {
-                    'based_on': 'Student Group',
+                    'based_on': 'Class Schedule',
+                    'class_schedule': frm.doc.name,
                     'student_group': frm.doc.student_group,
                     'date': frm.doc.schedule_date
                 };
@@ -37,7 +38,19 @@ frappe.ui.form.on('Class Schedule', {
     },
 
     course: function (frm) {
-        frm.trigger('generate_title');
+        frm.events.get_title(frm);
+    },
+
+    course_offering: function (frm) {
+        if (frm.doc.course_offering) {
+            frappe.db.get_value("Course Offering", frm.doc.course_offering, ["course_title", "program", "faculty"], (r) => {
+                if (r) {
+                    frm.set_value("course", r.course_title);
+                    frm.set_value("programme", r.program);
+                    if (r.faculty) frm.set_value("instructor", r.faculty);
+                }
+            });
+        }
     },
 
     class_schedule_color: function (frm) {

@@ -1,84 +1,115 @@
 {
-    "charts": [
-        {
-            "chart_name": "Attendance Shortage Distribution",
-            "label": "Shortage Distribution"
-        }
-    ],
-    "content": "[{\"type\":\"header\",\"data\":{\"text\":\"Attendance Overview\",\"col\":12}},{\"type\":\"chart\",\"data\":{\"chart_name\":\"Attendance Shortage Distribution\",\"col\":12}},{\"type\":\"card\",\"data\":{\"card_name\":\"Daily Absentees\",\"col\":4}},{\"type\":\"card\",\"data\":{\"card_name\":\"Consecutive Absents\",\"col\":4}},{\"type\":\"card\",\"data\":{\"card_name\":\"Course Completion\",\"col\":4}}]",
-    "creation": "2026-02-03 13:10:00.000000",
-    "docstatus": 0,
-    "doctype": "Workspace",
-    "icon": "calendar",
-    "idx": 0,
-    "is_standard": 1,
-    "label": "Attendance Monitoring",
-    "links": [
-        {
-            "label": "Reports",
-            "link_type": "Report",
-            "link_to": "Daily Absentees",
-            "type": "Link"
-        },
-        {
-            "label": "Reports",
-            "link_type": "Report",
-            "link_to": "Consecutive Absents",
-            "type": "Link"
-        },
-        {
-            "label": "Reports",
-            "link_type": "Report",
-            "link_to": "Course Completion",
-            "type": "Link"
-        },
-        {
-            "label": "Transactions",
-            "link_type": "DocType",
-            "link_to": "Attendance Session",
-            "type": "Link"
-        },
-        {
-            "label": "Transactions",
-            "link_type": "DocType",
-            "link_to": "Student Attendance",
-            "type": "Link"
-        }
-    ],
-    "modified": "2026-02-03 13:10:00.000000",
-    "modified_by": "Administrator",
-    "module": "SLCM",
-    "name": "Attendance Monitoring",
-    "owner": "Administrator",
-    "public": 1,
-    "roles": [
-        {
-            "role": "System Manager"
-        },
-        {
-            "role": "Faculty"
-        },
-        {
-            "role": "Student Admin"
-        }
-    ],
-    "sequence_id": 10.0,
-    "shortcuts": [
-        {
-            "label": "Daily Absentees",
-            "link_to": "Daily Absentees",
-            "type": "Report"
-        },
-        {
-            "label": "Consecutive Absents",
-            "link_to": "Consecutive Absents",
-            "type": "Report"
-        },
-        {
-            "label": "Course Completion",
-            "link_to": "Course Completion",
-            "type": "Report"
-        }
-    ],
-    "title": "Attendance Monitoring"
+ "charts": [
+  {
+   "chart_name": "Attendance Shortage Distribution",
+   "label": "Shortage Distribution"
+  }
+ ],
+ "content": "[{\"type\":\"header\",\"data\":{\"text\":\"Attendance Overview\",\"col\":12}},{\"type\":\"chart\",\"data\":{\"chart_name\":\"Attendance Shortage Distribution\",\"col\":12}},{\"type\":\"card\",\"data\":{\"card_name\":\"Daily Absentees\",\"col\":4}},{\"type\":\"card\",\"data\":{\"card_name\":\"Consecutive Absents\",\"col\":4}},{\"type\":\"card\",\"data\":{\"card_name\":\"Course Completion\",\"col\":4}}]",
+ "creation": "2026-02-03 13:10:00",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "hide_custom": 0,
+ "icon": "calendar",
+ "idx": 0,
+ "is_hidden": 0,
+ "label": "Attendance Monitoring",
+ "links": [
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Reports",
+   "link_count": 0,
+   "link_to": "Daily Absentees",
+   "link_type": "Report",
+   "onboard": 0,
+   "report_ref_doctype": "Student Attendance",
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Reports",
+   "link_count": 0,
+   "link_to": "Consecutive Absents",
+   "link_type": "Report",
+   "onboard": 0,
+   "report_ref_doctype": "Student Attendance",
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Reports",
+   "link_count": 0,
+   "link_to": "Course Completion",
+   "link_type": "Report",
+   "onboard": 0,
+   "report_ref_doctype": "Course Offering",
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Transactions",
+   "link_count": 0,
+   "link_to": "Attendance Session",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Transactions",
+   "link_count": 0,
+   "link_to": "Student Attendance",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  }
+ ],
+ "modified": "2026-02-05 15:30:07.670306",
+ "modified_by": "Administrator",
+ "module": "SLCM",
+ "name": "Attendance Monitoring",
+ "number_cards": [],
+ "owner": "Administrator",
+ "parent_page": "",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [
+  {
+   "role": "System Manager"
+  },
+  {
+   "role": "Faculty"
+  },
+  {
+   "role": "Student Admin"
+  }
+ ],
+ "sequence_id": 10.0,
+ "shortcuts": [
+  {
+   "label": "Daily Absentees",
+   "link_to": "Daily Absentees",
+   "report_ref_doctype": "Student Attendance",
+   "type": "Report"
+  },
+  {
+   "label": "Consecutive Absents",
+   "link_to": "Consecutive Absents",
+   "report_ref_doctype": "Student Attendance",
+   "type": "Report"
+  },
+  {
+   "label": "Course Completion",
+   "link_to": "Course Completion",
+   "report_ref_doctype": "Course Offering",
+   "type": "Report"
+  }
+ ],
+ "title": "Attendance Monitoring"
 }

@@ -19,6 +19,7 @@ frappe.ui.form.on("Student Attendance Tool", {
 			frm.set_value("based_on", frappe.route_options.based_on);
 			frm.set_value("student_group", frappe.route_options.student_group);
 			frm.set_value("course_schedule", frappe.route_options.course_schedule);
+			frm.set_value("class_schedule", frappe.route_options.class_schedule);
 			if (frappe.route_options.date) {
 				frm.set_value("date", frappe.route_options.date);
 			}
@@ -34,6 +35,7 @@ frappe.ui.form.on("Student Attendance Tool", {
 		frm.set_value("student_group", null);
 		frm.set_value("group_based_on", null);
 		frm.set_value("course_schedule", null);
+		frm.set_value("class_schedule", null);
 		frm.students_area.empty();
 		frm.trigger("set_student_group_query");
 	},
@@ -69,7 +71,7 @@ frappe.ui.form.on("Student Attendance Tool", {
 	/* ---------------- Data Fetch ---------------- */
 
 	student_group(frm) {
-		if ((frm.doc.student_group && frm.doc.date) || frm.doc.course_schedule) {
+		if ((frm.doc.student_group && frm.doc.date) || frm.doc.course_schedule || frm.doc.class_schedule) {
 			frm.students_area.html(
 				"<div style='padding:2rem;text-align:center'>" +
 				"<i class='fa fa-spinner fa-spin'></i> Fetching students..." +
@@ -83,6 +85,7 @@ frappe.ui.form.on("Student Attendance Tool", {
 					student_group: frm.doc.student_group,
 					date: frm.doc.date,
 					course_schedule: frm.doc.course_schedule,
+					class_schedule: frm.doc.class_schedule,
 				},
 				callback(r) {
 					frm.events.get_students(frm, r.message || []);
@@ -101,7 +104,41 @@ frappe.ui.form.on("Student Attendance Tool", {
 	},
 
 	course_schedule(frm) {
-		frm.trigger("student_group");
+		if (frm.doc.course_schedule) {
+			frappe.db.get_value("Course Schedule", frm.doc.course_schedule, "schedule_date", (r) => {
+				if (r && r.schedule_date) {
+					frm.set_value("date", r.schedule_date);
+				}
+				frm.trigger("student_group");
+			});
+		} else {
+			frm.trigger("student_group");
+		}
+	},
+
+	class_schedule(frm) {
+		if (frm.doc.class_schedule) {
+			frappe.db.get_value("Class Schedule", frm.doc.class_schedule, ["schedule_date", "repeat_frequency"], (r) => {
+				if (r) {
+					// MASTER FIX: Only set date if user hasn't already picked one
+					if (!frm.doc.date) {
+						// Case 1: Non-recurring (One-time) event -> Use its specific date
+						if (!r.repeat_frequency || r.repeat_frequency === "Never") {
+							if (r.schedule_date) {
+								frm.set_value("date", r.schedule_date);
+							}
+						}
+						// Case 2: Recurring event -> Default to Today (most common use case)
+						else {
+							frm.set_value("date", frappe.datetime.get_today());
+						}
+					}
+				}
+				frm.trigger("student_group");
+			});
+		} else {
+			frm.trigger("student_group");
+		}
 	},
 
 	get_students(frm, students) {
@@ -211,6 +248,7 @@ class StudentsEditor {
 						students_absent,
 						student_group: this.frm.doc.student_group,
 						course_schedule: this.frm.doc.course_schedule,
+						class_schedule: this.frm.doc.class_schedule,
 						date: this.frm.doc.date,
 						based_on: this.frm.doc.based_on,
 						group_based_on: this.frm.doc.group_based_on,

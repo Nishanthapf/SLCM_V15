@@ -15,7 +15,9 @@
         "batch",
         "course",
         "section",
+        "section",
         "course_schedule",
+        "class_schedule",
         "date",
         "attendance",
         "students_html"
@@ -26,7 +28,7 @@
             "fieldname": "based_on",
             "fieldtype": "Select",
             "label": "Based On",
-            "options": "Student Group\nCourse Schedule"
+            "options": "Student Group\nCourse Schedule\nClass Schedule"
         },
         {
             "default": "Batch",
@@ -59,15 +61,23 @@
             "reqd": 1
         },
         {
-            "depends_on": "eval:doc.based_on ==\"Student Group\"",
+            "depends_on": "eval:doc.based_on ==\"Class Schedule\"",
+            "fieldname": "class_schedule",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "label": "Class Schedule",
+            "options": "Class Schedule",
+            "reqd": 1
+        },
+        {
+            "depends_on": "eval:doc.based_on",
             "fieldname": "date",
             "fieldtype": "Date",
-            "in_list_view": 1,
             "label": "Date",
             "reqd": 1
         },
         {
-            "depends_on": "eval: (doc.course_schedule \n|| (doc.student_group && doc.date))",
+            "depends_on": "eval: (doc.course_schedule || doc.class_schedule\n|| (doc.student_group && doc.date))",
             "fieldname": "attendance",
             "fieldtype": "Section Break",
             "label": "Attendance"

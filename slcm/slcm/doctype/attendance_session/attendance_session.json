@@ -5,6 +5,9 @@
     "doctype": "DocType",
     "engine": "InnoDB",
     "field_order": [
+        "based_on",
+        "student_group",
+        "class_schedule",
         "course_schedule",
         "course_offering",
         "course",
@@ -21,13 +24,36 @@
         "session_status",
         "cancellation_reason",
         "attendance_section",
+        "students",
         "attendance_marked",
+        "total_students",
         "total_students",
         "present_count",
         "absent_count",
+        "total_boys",
+        "total_girls",
         "attendance_percentage"
     ],
     "fields": [
+        {
+            "default": "Student Group",
+            "fieldname": "based_on",
+            "fieldtype": "Select",
+            "label": "Based On",
+            "options": "Student Group\nCourse Schedule\nClass Schedule"
+        },
+        {
+            "fieldname": "student_group",
+            "fieldtype": "Link",
+            "label": "Student Group",
+            "options": "Student Group"
+        },
+        {
+            "fieldname": "class_schedule",
+            "fieldtype": "Link",
+            "label": "Class Schedule",
+            "options": "Class Schedule"
+        },
         {
             "fieldname": "course_schedule",
             "fieldtype": "Link",
@@ -138,6 +164,12 @@
             "label": "Attendance Summary"
         },
         {
+            "fieldname": "students",
+            "fieldtype": "Table",
+            "label": "Students",
+            "options": "Attendance Session Student"
+        },
+        {
             "default": "0",
             "fieldname": "attendance_marked",
             "fieldtype": "Check",
@@ -159,6 +191,18 @@
             "fieldname": "absent_count",
             "fieldtype": "Int",
             "label": "Absent Count",
+            "read_only": 1
+        },
+        {
+            "fieldname": "total_boys",
+            "fieldtype": "Int",
+            "label": "Boys Present",
+            "read_only": 1
+        },
+        {
+            "fieldname": "total_girls",
+            "fieldtype": "Int",
+            "label": "Girls Present",
             "read_only": 1
         },
         {

@@ -5,6 +5,7 @@ import json
 
 import frappe
 from frappe import _
+from frappe.utils import time_diff_in_hours, get_datetime
 
 
 # ------------------------------------------------------------
@@ -164,6 +165,7 @@ def mark_attendance(
 	students_absent=None,
 	student_group=None,
 	course_schedule=None,
+	class_schedule=None,
 	date=None,
 	based_on=None,
 ):
@@ -183,11 +185,122 @@ def mark_attendance(
 
 	group = frappe.get_doc("Student Group", student_group) if student_group else None
 	schedule = frappe.get_doc("Course Schedule", course_schedule) if course_schedule else None
+	class_sched = frappe.get_doc("Class Schedule", class_schedule) if class_schedule else None
 
-	program = schedule.program if schedule else group.program if group else None
+	program = None
+	if schedule:
+		program = schedule.program
+	elif class_sched:
+		program = class_sched.programme
+	elif group:
+		program = group.program
 
 	if not program:
 		frappe.throw(_("Program could not be determined"))
+
+	# Determine Course
+	course = None
+	if schedule:
+		course = schedule.course
+	elif class_sched:
+		course = class_sched.course
+	elif group:
+		course = group.course
+
+	# Determine Course Offering
+	course_offering = None
+	
+	# Priority 0: Explicit link in Class Schedule
+	if class_sched and class_sched.course_offering:
+		course_offering = class_sched.course_offering
+	
+	# Priority 1: Strict match with Academic Year and Term (if available)
+	if not course_offering and course and program:
+		filters = {"course_title": course, "program": program, "docstatus": 1}
+		
+		# Add Academic Year if available in Student Group
+		if group and group.academic_year:
+			filters["academic_year"] = group.academic_year
+			
+		# Add Academic Term if available in Student Group (check against term_name or similar)
+		# Note: Course Offering has 'term_name' data field, might be risky to filter strictly if naming differs.
+		# We'll stick to Year for strictness first.
+		
+		# Try fetching with Year
+		course_offering = frappe.db.get_value("Course Offering", filters, "name")
+		
+		# Strategy 2: If fail, try removing Academic Year (maybe data mismatch)
+		if not course_offering:
+			filters.pop("academic_year", None)
+			course_offering = frappe.db.get_value("Course Offering", filters, "name")
+			
+		# Strategy 3: If still fail, try finding *any* Open/Active offering for this Course+Program
+		# Sort by creation desc to get the most recent one
+		if not course_offering:
+			offerings = frappe.get_all(
+				"Course Offering",
+				filters={"course_title": course, "program": program, "docstatus": 1},
+				fields=["name"],
+				order_by="creation desc",
+				limit=1
+			)
+			if offerings:
+				course_offering = offerings[0].name
+
+	# ---------------------------------------------------------
+	# Ensure Attendance Session Exists (Unified Model)
+	# ---------------------------------------------------------
+	attendance_session = None
+	if class_sched:
+		# Check if session exists for this schedule and date
+		session_name = frappe.db.exists(
+			"Attendance Session",
+			{
+				"course_schedule": class_schedule if based_on == "Course Schedule" else None, # Class Schedule logic used strictly below
+				# Wait, fields are mismatched.
+				# Attendance Session has 'course_schedule' (Link: Course Schedule).
+				# It doesn't seem to have 'class_schedule' yet?
+				# If we are moving to Class Schedule, Attendance Session might need updating too.
+				# For now, let's look for session by DATE and COURSE OFFERING + START TIME
+				"session_date": date,
+				"course_offering": course_offering,
+				"docstatus": ("<", 2)
+			}
+		)
+		
+		if session_name:
+			attendance_session = session_name
+		else:
+			# Create new Attendance Session
+			# We need start/end time from Class Schedule
+			if class_sched.from_time and class_sched.to_time:
+				# Calculate duration
+				start_dt = frappe.utils.get_datetime(f"{date} {class_sched.from_time}")
+				end_dt = frappe.utils.get_datetime(f"{date} {class_sched.to_time}")
+				duration = frappe.utils.time_diff_in_hours(end_dt, start_dt)
+				
+				sess_doc = frappe.get_doc({
+					"doctype": "Attendance Session",
+					"session_date": date,
+					"based_on": based_on,
+					"student_group": student_group,
+					"class_schedule": class_schedule,
+					"course_schedule": course_schedule if based_on == "Course Schedule" else None,
+					"course_offering": course_offering,
+					"session_start_time": class_sched.from_time,
+					"session_end_time": class_sched.to_time,
+					"duration_hours": duration,
+					"session_type": "Lecture", # Default, maybe fetch from Class Schedule later
+					"instructor": class_sched.instructor,
+					"room": class_sched.room,
+					"session_status": "Conducted", # Since we are marking attendance
+					"attendance_marked": 1
+				})
+				sess_doc.flags.skip_auto_attendance = True
+				sess_doc.insert(ignore_permissions=True)
+				attendance_session = sess_doc.name
+
+	# ---------------------------------------------------------
 
 	def upsert(student_id, status):
 		existing = frappe.db.exists(
@@ -198,6 +311,7 @@ def mark_attendance(
 				"based_on": based_on,
 				"student_group": student_group,
 				"course_schedule": course_schedule,
+				"class_schedule": class_schedule,
 				"docstatus": ("<", 2),
 			},
 		)
@@ -216,9 +330,16 @@ def mark_attendance(
 				"date": date,
 				"status": status,
 				"based_on": based_on,
+				"attendance_based_on": based_on,
 				"student_group": student_group,
 				"course_schedule": course_schedule,
+				"class_schedule": class_schedule,
 				"program": program,
+				"course": course,
+				"course_offer": course_offering,
+				"attendance_session": attendance_session,
+				"instructor": schedule.instructor if schedule else class_sched.instructor if class_sched else None,
+				"room": schedule.room if schedule else class_sched.room if class_sched else None,
 				"source": "Manual",
 			}
 		).insert()
@@ -241,6 +362,18 @@ def mark_attendance(
 			updated += result == "updated"
 		except Exception as e:
 			errors.append(f"{row.get('student')}: {e!s}")
+
+	# ---------------------------------------------------------
+	# Trigger Session Summary Update
+	# ---------------------------------------------------------
+	if attendance_session:
+		try:
+			session_doc = frappe.get_doc("Attendance Session", attendance_session)
+			session_doc.update_attendance_summary()
+		except Exception as e:
+			# Don't fail the whole request if summary update fails, just log it
+			frappe.log_error(f"Failed to update summary for session {attendance_session}: {e!s}")
+	# ---------------------------------------------------------
 
 	return {
 		"status": "success",

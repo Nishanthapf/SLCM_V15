@@ -16,6 +16,7 @@ def get_student_attendance_records(
 	date=None,
 	student_group=None,
 	course_schedule=None,
+	class_schedule=None,
 ):
 	"""
 	Get student list with existing attendance status
@@ -34,12 +35,23 @@ def get_student_attendance_records(
 		if not course_schedule:
 			frappe.throw(_("Course Schedule is required"))
 
+	if based_on == "Class Schedule":
+		if not class_schedule:
+			frappe.throw(_("Class Schedule is required"))
+
 	# -------------------- RESOLVE STUDENT GROUP --------------------
 
 	if based_on == "Course Schedule" and course_schedule:
 		student_group = frappe.db.get_value(
 			"Course Schedule",
 			course_schedule,
+			"student_group",
+		)
+
+	if based_on == "Class Schedule" and class_schedule:
+		student_group = frappe.db.get_value(
+			"Class Schedule",
+			class_schedule,
 			"student_group",
 		)
 
@@ -80,6 +92,9 @@ def get_student_attendance_records(
 
 	if based_on == "Course Schedule":
 		query = query.where(StudentAttendance.course_schedule == course_schedule)
+
+	if based_on == "Class Schedule":
+		query = query.where(StudentAttendance.class_schedule == class_schedule)
 
 	if date:
 		query = query.where(StudentAttendance.attendance_date == date)
