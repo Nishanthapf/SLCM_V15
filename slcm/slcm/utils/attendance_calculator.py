@@ -87,7 +87,10 @@ def calculate_student_attendance(student, course_offering):
 	populate_application_lists(summary, student, course_offering)
 	
 	# Populate Student Group (Section)
-	summary.student_group = get_student_group(student, course_offering)
+	student_group = get_student_group(student, course_offering)
+	summary.student_group = student_group
+	if student_group:
+		summary.section = frappe.db.get_value("Student Group", student_group, "section")
 
 	# Save
 	summary.last_updated = frappe.utils.now()

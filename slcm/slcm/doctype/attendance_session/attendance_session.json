@@ -7,6 +7,7 @@
     "field_order": [
         "based_on",
         "student_group",
+        "section",
         "class_schedule",
         "course_schedule",
         "course_offering",
@@ -47,6 +48,14 @@
             "fieldtype": "Link",
             "label": "Student Group",
             "options": "Student Group"
+        },
+        {
+            "fetch_from": "student_group.section",
+            "fieldname": "section",
+            "fieldtype": "Link",
+            "label": "Section",
+            "options": "Program Batch Section",
+            "read_only": 1
         },
         {
             "fieldname": "class_schedule",
@@ -214,7 +223,7 @@
         }
     ],
     "links": [],
-    "modified": "2026-02-03 02:24:00.000000",
+    "modified": "2026-02-09 10:41:00.000000",
     "modified_by": "Administrator",
     "module": "SLCM",
     "name": "Attendance Session",

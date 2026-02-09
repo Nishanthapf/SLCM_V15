@@ -35,8 +35,17 @@
             "fieldname": "student_group",
             "fieldtype": "Link",
             "in_list_view": 1,
-            "label": "Section",
+            "label": "Student Group",
             "options": "Student Group",
+            "read_only": 1
+        },
+        {
+            "fetch_from": "student_group.section",
+            "fieldname": "section",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "label": "Section",
+            "options": "Program Batch Section",
             "read_only": 1
         },
         {

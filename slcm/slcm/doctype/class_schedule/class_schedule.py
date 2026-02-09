@@ -7,6 +7,8 @@ from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
 
 
+from frappe.utils import to_timedelta
+
 class ClassSchedule(Document):
     def validate(self):
         """Validate the Class Schedule"""
@@ -17,7 +19,7 @@ class ClassSchedule(Document):
     def validate_time(self):
         """Validate that to_time is after from_time"""
         if self.from_time and self.to_time:
-            if self.from_time >= self.to_time:
+            if to_timedelta(self.from_time) >= to_timedelta(self.to_time):
                 frappe.throw("To Time must be after From Time")
 
     def validate_repeat_settings(self):
@@ -58,7 +60,7 @@ class ClassSchedule(Document):
 
     def times_overlap(self, start1, end1, start2, end2):
         """Check if two time ranges overlap"""
-        return start1 < end2 and end1 > start2
+        return to_timedelta(start1) < to_timedelta(end2) and to_timedelta(end1) > to_timedelta(start2)
 
     def after_insert(self):
         """Create recurring schedules if repeat is enabled"""

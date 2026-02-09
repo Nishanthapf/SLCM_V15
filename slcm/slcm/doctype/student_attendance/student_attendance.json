@@ -84,6 +84,16 @@
             "options": "Student Group"
         },
         {
+            "fetch_from": "student_group.section",
+            "fieldname": "section",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Section",
+            "options": "Program Batch Section",
+            "read_only": 1
+        },
+        {
             "depends_on": "eval:doc.based_on==\"Class\"",
             "fieldname": "class",
             "fieldtype": "Link",
