@@ -60,7 +60,8 @@ class AttendanceSession(Document):
 					"attendance_date": self.session_date,
 					"date": self.session_date,
 					"status": "Absent", # Default to Absent or Present based on logic, safely Absent
-					"source": "Manual"
+					"source": "Manual",
+					"student_group": self.student_group
 				})
 				doc.insert(ignore_permissions=True)
 				

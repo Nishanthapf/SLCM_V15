@@ -266,9 +266,9 @@ def mark_attendance(
 	
 	# Try finding existing session
 	# DEBUG LOGGING
-	frappe.log_error(f"DEBUG: Lookup filters: {session_filters}")
+	frappe.log_error(message=f"Lookup filters: {session_filters}", title="Lookup Filters Debug")
 	session_name = frappe.db.exists("Attendance Session", session_filters)
-	frappe.log_error(f"DEBUG: Found Session: {session_name}")
+	frappe.log_error(message=f"Found Session: {session_name}", title="Session Found Debug")
 	
 	if session_name:
 		attendance_session = session_name
@@ -281,7 +281,7 @@ def mark_attendance(
 			session_doc.attendance_marked = 1
 			session_doc.save(ignore_permissions=True)
 		except Exception as e:
-			frappe.log_error(f"Failed to update session status for {session_name}: {e!s}")
+			frappe.log_error(message=f"Failed to update session status for {session_name}: {e!s}", title="Update Session Status Error")
 
 	else:
 		# Create new Attendance Session if not found (Fallback)
@@ -382,9 +382,10 @@ def mark_attendance(
 		try:
 			session_doc = frappe.get_doc("Attendance Session", attendance_session)
 			session_doc.update_attendance_summary()
+			session_doc.save()
 		except Exception as e:
 			# Don't fail the whole request if summary update fails, just log it
-			frappe.log_error(f"Failed to update summary for session {attendance_session}: {e!s}")
+			frappe.log_error(message=f"Failed to update summary for session {attendance_session}: {e!s}", title="Update Session Summary Error")
 	# ---------------------------------------------------------
 
 	return {

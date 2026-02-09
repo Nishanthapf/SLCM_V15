@@ -1,4 +1,5 @@
 import frappe
+from slcm.slcm.utils.attendance_calculator import get_student_group
 
 def debug_session(session_name):
     print(f"Checking Session: {session_name}")
@@ -32,4 +33,20 @@ def debug_session(session_name):
     """, session_name, as_dict=True)
     print(f"Code Query returned {len(code_query_results)} rows.")
 
-debug_session("AS-2026-00008")
+debug_session("AS-2026-00025")
+
+# Test get_student_group
+try:
+    from slcm.slcm.utils.attendance_calculator import get_student_group
+    # Fetch a student from the session to test
+    students = frappe.db.sql("SELECT student FROM `tabStudent Attendance` WHERE attendance_session = 'AS-2026-00025' LIMIT 1", as_dict=True)
+    if students:
+        student = students[0].student
+        offering = frappe.db.get_value("Attendance Session", "AS-2026-00025", "course_offering")
+        print(f"\nTesting get_student_group for {student} in {offering}:")
+        group = get_student_group(student, offering)
+        print(f"Result: {group}")
+    else:
+        print("\nNo students found in session to test get_student_group")
+except Exception as e:
+    print(f"\nError testing get_student_group: {e}")

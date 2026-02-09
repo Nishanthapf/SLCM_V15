@@ -492,7 +492,7 @@ def bulk_student_enrollment(students):
 			success.append(student_id)
 
 		except Exception as e:
-			frappe.log_error("Bulk Enrollment Error", str(e))
+			frappe.log_error(message=str(e), title="Bulk Enrollment Error")
 			failed.append({"student": student_id, "reason": str(e)})
 
 	return {"success": success, "failed": failed}

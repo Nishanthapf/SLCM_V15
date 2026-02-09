@@ -32,6 +32,14 @@
             "reqd": 1
         },
         {
+            "fieldname": "student_group",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "label": "Section",
+            "options": "Student Group",
+            "read_only": 1
+        },
+        {
             "fetch_from": "student.first_name",
             "fieldname": "student_name",
             "fieldtype": "Data",

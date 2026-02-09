@@ -192,7 +192,7 @@ class ClassSchedule(Document):
                     alert=True,
                 )
         except Exception as e:
-            frappe.log_error(f"Error creating recurring schedules: {str(e)}")
+            frappe.log_error(message=f"Error creating recurring schedules: {str(e)}", title="Recurring Schedule Creation Error")
             frappe.throw(f"Error creating recurring schedules: {str(e)}")
 
 

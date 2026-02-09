@@ -143,7 +143,7 @@ class StudentAttendance(Document):
 				edit_reason=edit_reason
 			)
 		except Exception as e:
-			frappe.log_error(f"Error creating edit log: {str(e)}")
+			frappe.log_error(message=f"Error creating edit log: {str(e)}", title="Edit Log Creation Error")
 	
 	def on_trash(self):
 		"""Trigger updates on deletion"""
@@ -177,7 +177,7 @@ class StudentAttendance(Document):
 					queue="short"
 				)
 			except Exception as e:
-				frappe.log_error(f"Error triggering recalculation: {str(e)}")
+				frappe.log_error(message=f"Error triggering recalculation: {str(e)}", title="Recalculation Trigger Error")
 
 	def trigger_session_update(self):
 		"""Update the parent Attendance Session counts"""
@@ -185,8 +185,9 @@ class StudentAttendance(Document):
 			try:
 				doc = frappe.get_doc("Attendance Session", self.attendance_session)
 				doc.update_attendance_summary()
+				doc.save()
 			except Exception as e:
-				frappe.log_error(f"Error updating session summary: {str(e)}")
+				frappe.log_error(message=f"Error updating session summary: {str(e)}", title="Session Summary Update Error")
 
 
 @frappe.whitelist()
