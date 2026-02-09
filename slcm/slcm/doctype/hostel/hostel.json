@@ -1,100 +1,104 @@
 {
- "actions": [],
- "allow_rename": 1,
- "autoname": "field:hostel_name",
- "creation": "2026-01-05 16:36:33.847296",
- "doctype": "DocType",
- "engine": "InnoDB",
- "field_order": [
-  "hostel_details_section",
-  "hostel_name",
-  "hostel_code",
-  "hostel_type",
-  "warden_details_section",
-  "warden_details",
-  "capacity_section",
-  "total_rooms",
-  "total_capacity"
- ],
- "fields": [
-  {
-   "fieldname": "hostel_details_section",
-   "fieldtype": "Section Break",
-   "label": "Hostel Details"
-  },
-  {
-   "fieldname": "hostel_name",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "label": "Hostel Name",
-   "reqd": 1,
-   "unique": 1
-  },
-  {
-   "fieldname": "hostel_code",
-   "fieldtype": "Data",
-   "label": "Hostel Code",
-   "unique": 1
-  },
-  {
-   "fieldname": "hostel_type",
-   "fieldtype": "Select",
-   "label": "Hostel Type",
-   "options": "Boys\nGirls\nCo-ed"
-  },
-  {
-   "fieldname": "warden_details_section",
-   "fieldtype": "Section Break",
-   "label": "Warden Details"
-  },
-  {
-   "fieldname": "capacity_section",
-   "fieldtype": "Section Break",
-   "label": "Capacity Details"
-  },
-  {
-   "fieldname": "total_rooms",
-   "fieldtype": "Int",
-   "label": "Total Rooms"
-  },
-  {
-   "fieldname": "total_capacity",
-   "fieldtype": "Int",
-   "label": "Total Capacity (Beds)"
-  },
-  {
-   "fieldname": "warden_details",
-   "fieldtype": "Table",
-   "label": "Warden Details",
-   "options": "Hostel Warden"
-  }
- ],
- "grid_page_length": 50,
- "index_web_pages_for_search": 1,
- "links": [],
- "modified": "2026-01-05 17:47:11.347620",
- "modified_by": "Administrator",
- "module": "SLCM",
- "name": "Hostel",
- "naming_rule": "By fieldname",
- "owner": "Administrator",
- "permissions": [
-  {
-   "create": 1,
-   "delete": 1,
-   "email": 1,
-   "export": 1,
-   "print": 1,
-   "read": 1,
-   "report": 1,
-   "role": "System Manager",
-   "share": 1,
-   "write": 1
-  }
- ],
- "row_format": "Dynamic",
- "sort_field": "modified",
- "sort_order": "DESC",
- "states": [],
- "title_field": "hostel_name"
+    "actions": [],
+    "allow_rename": 1,
+    "autoname": "field:hostel_name",
+    "creation": "2026-01-05 16:36:33.847296",
+    "doctype": "DocType",
+    "engine": "InnoDB",
+    "field_order": [
+        "hostel_details_section",
+        "hostel_name",
+        "hostel_code",
+        "hostel_type",
+        "warden_details_section",
+        "warden_details",
+        "capacity_section",
+        "total_rooms",
+        "total_capacity"
+    ],
+    "fields": [
+        {
+            "fieldname": "hostel_details_section",
+            "fieldtype": "Section Break",
+            "label": "Hostel Details"
+        },
+        {
+            "fieldname": "hostel_name",
+            "fieldtype": "Data",
+            "in_list_view": 1,
+            "label": "Hostel Name",
+            "reqd": 1,
+            "unique": 1
+        },
+        {
+            "fieldname": "hostel_code",
+            "fieldtype": "Data",
+            "label": "Hostel Code",
+            "unique": 1
+        },
+        {
+            "fieldname": "hostel_type",
+            "fieldtype": "Select",
+            "label": "Hostel Type",
+            "options": "Boys\nGirls\nCo-ed"
+        },
+        {
+            "fieldname": "warden_details_section",
+            "fieldtype": "Section Break",
+            "label": "Warden Details"
+        },
+        {
+            "fieldname": "capacity_section",
+            "fieldtype": "Section Break",
+            "label": "Capacity Details"
+        },
+        {
+            "fieldname": "total_rooms",
+            "fieldtype": "Int",
+            "label": "Total Rooms"
+        },
+        {
+            "fieldname": "total_capacity",
+            "fieldtype": "Int",
+            "label": "Total Capacity (Beds)"
+        },
+        {
+            "fieldname": "warden_details",
+            "fieldtype": "Table",
+            "label": "Warden Details",
+            "options": "Hostel Warden"
+        }
+    ],
+    "grid_page_length": 50,
+    "index_web_pages_for_search": 1,
+    "links": [],
+    "modified": "2026-01-05 17:47:11.347620",
+    "modified_by": "Administrator",
+    "module": "SLCM",
+    "name": "Hostel",
+    "naming_rule": "By fieldname",
+    "owner": "Administrator",
+    "permissions": [
+        {
+            "create": 1,
+            "delete": 1,
+            "email": 1,
+            "export": 1,
+            "print": 1,
+            "read": 1,
+            "report": 1,
+            "role": "System Manager",
+            "share": 1,
+            "write": 1
+        },
+        {
+            "read": 1,
+            "role": "Student"
+        }
+    ],
+    "row_format": "Dynamic",
+    "sort_field": "modified",
+    "sort_order": "DESC",
+    "states": [],
+    "title_field": "hostel_name"
 }

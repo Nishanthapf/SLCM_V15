@@ -8,6 +8,10 @@ from frappe.utils import flt
 class StudentAttendanceCondonation(Document):
 	def validate(self):
 		self.validate_shortage()
+		
+		# Auto-fill approver
+		if self.final_status in ["Approved", "Rejected"] and not self.approver:
+			self.approver = frappe.session.user
 	
 	def validate_shortage(self):
 		"""Ensure student actually has a shortage before allowing application"""

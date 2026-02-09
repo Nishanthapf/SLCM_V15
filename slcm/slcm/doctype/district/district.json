@@ -1,75 +1,79 @@
 {
- "actions": [],
- "allow_import": 1,
- "allow_rename": 1,
- "autoname": "field:district_name",
- "creation": "2026-01-28 22:46:00",
- "doctype": "DocType",
- "engine": "InnoDB",
- "field_order": [
-  "district_name",
-  "state",
-  "district_code"
- ],
- "fields": [
-  {
-   "fieldname": "district_name",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "label": "District Name",
-   "reqd": 1,
-   "unique": 1
-  },
-  {
-   "fieldname": "state",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "State",
-   "options": "State",
-   "reqd": 1
-  },
-  {
-   "fieldname": "district_code",
-   "fieldtype": "Data",
-   "label": "District Code",
-   "length": 10
-  }
- ],
- "links": [],
- "modified": "2026-01-29 10:29:42.299724",
- "modified_by": "Administrator",
- "module": "SLCM",
- "name": "District",
- "naming_rule": "By fieldname",
- "owner": "Administrator",
- "permissions": [
-  {
-   "create": 1,
-   "delete": 1,
-   "email": 1,
-   "print": 1,
-   "read": 1,
-   "report": 1,
-   "role": "System Manager",
-   "share": 1,
-   "write": 1
-  },
-  {
-   "create": 1,
-   "delete": 1,
-   "email": 1,
-   "print": 1,
-   "read": 1,
-   "report": 1,
-   "role": "Academics User",
-   "share": 1,
-   "write": 1
-  }
- ],
- "row_format": "Dynamic",
- "sort_field": "modified",
- "sort_order": "DESC",
- "states": [],
- "track_changes": 1
+    "actions": [],
+    "allow_import": 1,
+    "allow_rename": 1,
+    "autoname": "field:district_name",
+    "creation": "2026-01-28 22:46:00",
+    "doctype": "DocType",
+    "engine": "InnoDB",
+    "field_order": [
+        "district_name",
+        "state",
+        "district_code"
+    ],
+    "fields": [
+        {
+            "fieldname": "district_name",
+            "fieldtype": "Data",
+            "in_list_view": 1,
+            "label": "District Name",
+            "reqd": 1,
+            "unique": 1
+        },
+        {
+            "fieldname": "state",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "State",
+            "options": "State",
+            "reqd": 1
+        },
+        {
+            "fieldname": "district_code",
+            "fieldtype": "Data",
+            "label": "District Code",
+            "length": 10
+        }
+    ],
+    "links": [],
+    "modified": "2026-01-29 10:29:42.299724",
+    "modified_by": "Administrator",
+    "module": "SLCM",
+    "name": "District",
+    "naming_rule": "By fieldname",
+    "owner": "Administrator",
+    "permissions": [
+        {
+            "create": 1,
+            "delete": 1,
+            "email": 1,
+            "print": 1,
+            "read": 1,
+            "report": 1,
+            "role": "System Manager",
+            "share": 1,
+            "write": 1
+        },
+        {
+            "create": 1,
+            "delete": 1,
+            "email": 1,
+            "print": 1,
+            "read": 1,
+            "report": 1,
+            "role": "Academics User",
+            "share": 1,
+            "write": 1
+        },
+        {
+            "read": 1,
+            "role": "Student"
+        }
+    ],
+    "row_format": "Dynamic",
+    "sort_field": "modified",
+    "sort_order": "DESC",
+    "states": [],
+    "track_changes": 1
 }

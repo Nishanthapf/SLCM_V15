@@ -1,1292 +1,1309 @@
 {
- "actions": [],
- "allow_import": 1,
- "allow_rename": 1,
- "autoname": "naming_series:naming_series",
- "creation": "2026-01-07 14:46:29.467983",
- "doctype": "DocType",
- "engine": "InnoDB",
- "field_order": [
-  "tab_registration",
-  "registration_admission_section",
-  "registration_id",
-  "application_number",
-  "admission_sequence",
-  "admission_type",
-  "quota",
-  "user",
-  "naming_series",
-  "column_break_vdpc",
-  "academic_year",
-  "current_year",
-  "academic_status",
-  "official_email_id",
-  "intake",
-  "rfid_uid",
-  "tab_program_mapping",
-  "program_mapping_section",
-  "department",
-  "programme",
-  "program_shortcode",
-  "specialisation",
-  "current_cgpa",
-  "column_break_vnsv",
-  "batch_year",
-  "current_term",
-  "term_name",
-  "term_year",
-  "attendance_status",
-  "tab_programme",
-  "programme_section",
-  "programme_system",
-  "number_of_programmes_enrolled",
-  "tab_personal",
-  "personal_details_section",
-  "first_name",
-  "middle_name",
-  "last_name",
-  "dob",
-  "gender",
-  "marital_status",
-  "nationality",
-  "religion",
-  "blood_group",
-  "state_of_domicile",
-  "column_break_mlne",
-  "country",
-  "state",
-  "district",
-  "city",
-  "pincode",
-  "aadhaar_number",
-  "pan_number",
-  "passport_number",
-  "passport_expiry_date",
-  "date_of_registration",
-  "passport_available",
-  "pwd",
-  "disability_special_needs",
-  "pre_existing_conditions",
-  "dietary_restrictions",
-  "tab_contact",
-  "contact_details_section",
-  "email",
-  "personal_email",
-  "phone",
-  "alternate_phone",
-  "emergency_contact",
-  "mentor_name_code",
-  "counsellor_name_code",
-  "present_address",
-  "permanent_address",
-  "tab_parent",
-  "parent_guardian_section",
-  "parents",
-  "tab_residence",
-  "residence_section",
-  "is_hosteller",
-  "hostel",
-  "hostel_block",
-  "hostel_room",
-  "hostel_bed",
-  "allocation_date",
-  "vacated_date",
-  "hostel_status",
-  "hostel_remarks",
-  "meal_plan",
-  "signature_ppkg",
-  "residence_agreement_signed",
-  "keys_handed_over",
-  "key_number",
-  "allocation_end_date",
-  "tab_education",
-  "class_x_details_section",
-  "class_x_completion_year",
-  "class_x_percentage",
-  "class_x_school",
-  "class_x_board",
-  "class_x_max_cgpa",
-  "column_break_academics_1",
-  "class_xii_details_section",
-  "class_xii_exam_name",
-  "class_xii_completion_year",
-  "class_xii_school",
-  "class_xii_board",
-  "class_xii_percentage",
-  "class_xii_max_cgpa",
-  "ug_degree_details_section",
-  "ug_degree_completed",
-  "ug_degree_name",
-  "ug_completion_year",
-  "ug_college",
-  "ug_percentage",
-  "ug_max_cgpa",
-  "tab_finance",
-  "finance_section",
-  "applying_scholarship",
-  "scholarship_percentage",
-  "scholarship_amount",
-  "scholarship_approval_date",
-  "number_of_instalments",
-  "fee_details_section",
-  "total_program_fee",
-  "discount_amount",
-  "net_program_fee",
-  "total_paid_amount",
-  "outstanding_balance",
-  "fee_payment_status",
-  "bank_details_section",
-  "bank_name",
-  "bank_account_number",
-  "ifsc_code",
-  "branch_name",
-  "account_holder_name",
-  "tab_documents",
-  "personal_documents_section",
-  "aadhaar_card",
-  "aadhaar_verified",
-  "pan_card",
-  "pan_verified",
-  "passport",
-  "passport_verified",
-  "passport_size_photo",
-  "pwd_certificate",
-  "pwd_verified",
-  "educational_documents_section",
-  "std_x_marksheet",
-  "class_xii_marksheet",
-  "ug_certificate",
-  "ug_transcripts",
-  "transfer_certificate",
-  "entrance_exam_score_marksheet",
-  "offer_letter",
-  "offer_letter_verified",
-  "rules_and_regulations_section",
-  "posh_anti_ragging_declaration",
-  "student_declaration",
-  "student_declaration_verified",
-  "parent_declaration",
-  "tab_account",
-  "account_status_section",
-  "column_break_zfil",
-  "student_status",
-  "account_status",
-  "status_remark",
-  "id_card_issued",
-  "laptop_issued",
-  "laptop_details_section",
-  "laptop_brand",
-  "laptop_model",
-  "column_break_laptop",
-  "laptop_serial_number",
-  "laptop_issue_date",
-  "laptop_return_date",
-  "tab_status_history",
-  "status_history_section",
-  "workflow_history",
-  "registration_status"
- ],
- "fields": [
-  {
-   "fieldname": "tab_registration",
-   "fieldtype": "Tab Break",
-   "label": "Registration"
-  },
-  {
-   "fieldname": "registration_admission_section",
-   "fieldtype": "Section Break",
-   "label": "Registration & Admission Details"
-  },
-  {
-   "default": "STUD-.YYYY.-",
-   "fieldname": "naming_series",
-   "fieldtype": "Select",
-   "hidden": 1,
-   "label": "Naming Series",
-   "no_copy": 1,
-   "options": "STUD-.YYYY.-"
-  },
-  {
-   "fieldname": "registration_id",
-   "fieldtype": "Data",
-   "label": "Student ID"
-  },
-  {
-   "fieldname": "rfid_uid",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "RFID UID",
-   "unique": 1
-  },
-  {
-   "fieldname": "application_number",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Application Number",
-   "reqd": 1
-  },
-  {
-   "fieldname": "admission_sequence",
-   "fieldtype": "Int",
-   "label": "Admission Sequence"
-  },
-  {
-   "fieldname": "admission_type",
-   "fieldtype": "Select",
-   "label": "Admission Type",
-   "options": "Regular\nPACE\nOther"
-  },
-  {
-   "fieldname": "quota",
-   "fieldtype": "Select",
-   "label": "Quota / Category",
-   "options": "General\nSC\nST\nOBC\nEWS\nNRI",
-   "permlevel": 1
-  },
-  {
-   "fieldname": "intake",
-   "fieldtype": "Data",
-   "label": "Intake"
-  },
-  {
-   "fieldname": "academic_status",
-   "fieldtype": "Select",
-   "label": "Academic Status",
-   "options": "Active\nInactive"
-  },
-  {
-   "fieldname": "tab_finance",
-   "fieldtype": "Tab Break",
-   "label": "Finance"
-  },
-  {
-   "fieldname": "finance_section",
-   "fieldtype": "Section Break",
-   "label": "Scholarship Details"
-  },
-  {
-   "fieldname": "applying_scholarship",
-   "fieldtype": "Select",
-   "label": "Applying for Scholarship",
-   "options": "Yes\nNo"
-  },
-  {
-   "depends_on": "eval:doc.applying_scholarship=='Yes'",
-   "fieldname": "scholarship_amount",
-   "fieldtype": "Currency",
-   "label": "Scholarship Amount",
-   "permlevel": 2
-  },
-  {
-   "depends_on": "eval:doc.applying_scholarship=='Yes'",
-   "fieldname": "scholarship_percentage",
-   "fieldtype": "Percent",
-   "label": "Scholarship Percentage"
-  },
-  {
-   "fieldname": "scholarship_approval_date",
-   "fieldtype": "Date",
-   "label": "Date of Approval"
-  },
-  {
-   "fieldname": "number_of_instalments",
-   "fieldtype": "Int",
-   "label": "Number of Instalments"
-  },
-  {
-   "fieldname": "fee_details_section",
-   "fieldtype": "Section Break",
-   "label": "Fee Details"
-  },
-  {
-   "fieldname": "total_program_fee",
-   "fieldtype": "Currency",
-   "label": "Total Program Fee"
-  },
-  {
-   "fieldname": "discount_amount",
-   "fieldtype": "Currency",
-   "label": "Scholarship Amount",
-   "read_only": 1
-  },
-  {
-   "fieldname": "net_program_fee",
-   "fieldtype": "Currency",
-   "label": "Net Program Fee",
-   "read_only": 1
-  },
-  {
-   "fieldname": "total_paid_amount",
-   "fieldtype": "Currency",
-   "label": "Total Paid Amount"
-  },
-  {
-   "fieldname": "fee_payment_status",
-   "fieldtype": "Select",
-   "label": "Fee Payment Status",
-   "options": "\nPaid\nPartially Paid\nUnpaid"
-  },
-  {
-   "fieldname": "bank_details_section",
-   "fieldtype": "Section Break",
-   "label": "Bank Details"
-  },
-  {
-   "fieldname": "bank_name",
-   "fieldtype": "Data",
-   "label": "Bank Name"
-  },
-  {
-   "fieldname": "bank_account_number",
-   "fieldtype": "Data",
-   "label": "Bank Account Number"
-  },
-  {
-   "fieldname": "ifsc_code",
-   "fieldtype": "Data",
-   "label": "IFSC Code"
-  },
-  {
-   "fieldname": "branch_name",
-   "fieldtype": "Data",
-   "label": "Branch Name"
-  },
-  {
-   "fieldname": "account_holder_name",
-   "fieldtype": "Data",
-   "label": "Account Holder Name"
-  },
-  {
-   "fieldname": "tab_program_mapping",
-   "fieldtype": "Tab Break",
-   "label": "Program Mapping"
-  },
-  {
-   "fieldname": "program_mapping_section",
-   "fieldtype": "Section Break",
-   "label": "Program & Academic Mapping"
-  },
-  {
-   "fieldname": "department",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Department",
-   "options": "Department"
-  },
-  {
-   "fieldname": "programme",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Programme",
-   "options": "Cohort"
-  },
-  {
-   "fieldname": "specialisation",
-   "fieldtype": "Data",
-   "label": "Specialisation"
-  },
-  {
-   "fetch_from": "programme.batch",
-   "fieldname": "batch_year",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Batch"
-  },
-  {
-   "fetch_from": "programme.current_year",
-   "fieldname": "current_year",
-   "fieldtype": "Data",
-   "label": "Current Year"
-  },
-  {
-   "fetch_from": "programme.term_name",
-   "fieldname": "current_term",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Current Term"
-  },
-  {
-   "fieldname": "current_cgpa",
-   "fieldtype": "Float",
-   "label": "Current CGPA"
-  },
-  {
-   "fieldname": "attendance_status",
-   "fieldtype": "Data",
-   "label": "Attendance Status"
-  },
-  {
-   "fieldname": "tab_programme",
-   "fieldtype": "Tab Break",
-   "label": "Programme"
-  },
-  {
-   "fieldname": "programme_section",
-   "fieldtype": "Section Break",
-   "label": "Programme Details"
-  },
-  {
-   "fieldname": "programme_system",
-   "fieldtype": "Select",
-   "label": "Programme System",
-   "options": "Semester\nTrimester"
-  },
-  {
-   "fieldname": "number_of_programmes_enrolled",
-   "fieldtype": "Int",
-   "label": "Number of Courses Enrolled"
-  },
-  {
-   "fieldname": "tab_personal",
-   "fieldtype": "Tab Break",
-   "label": "Personal"
-  },
-  {
-   "fieldname": "personal_details_section",
-   "fieldtype": "Section Break",
-   "label": "Personal Details"
-  },
-  {
-   "fieldname": "first_name",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "First Name",
-   "reqd": 1
-  },
-  {
-   "fieldname": "middle_name",
-   "fieldtype": "Data",
-   "label": "Middle Name"
-  },
-  {
-   "fieldname": "last_name",
-   "fieldtype": "Data",
-   "label": "Last Name"
-  },
-  {
-   "fieldname": "dob",
-   "fieldtype": "Date",
-   "label": "Date of Birth",
-   "reqd": 1
-  },
-  {
-   "fieldname": "gender",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Gender",
-   "options": "Genders"
-  },
-  {
-   "fieldname": "nationality",
-   "fieldtype": "Data",
-   "label": "Nationality"
-  },
-  {
-   "fieldname": "religion",
-   "fieldtype": "Data",
-   "label": "Religion"
-  },
-  {
-   "fieldname": "blood_group",
-   "fieldtype": "Select",
-   "label": "Blood Group",
-   "options": "A+\nA-\nB+\nB-\nO+\nO-\nAB+\nAB-"
-  },
-  {
-   "default": "0",
-   "fieldname": "pwd",
-   "fieldtype": "Check",
-   "label": "PWD"
-  },
-  {
-   "depends_on": "eval:doc.pwd==1",
-   "fieldname": "disability_special_needs",
-   "fieldtype": "Small Text",
-   "hidden": 1,
-   "label": "Disability/Special Needs"
-  },
-  {
-   "fieldname": "pre_existing_conditions",
-   "fieldtype": "Small Text",
-   "hidden": 1,
-   "label": "Pre-existing Conditions"
-  },
-  {
-   "fieldname": "dietary_restrictions",
-   "fieldtype": "Data",
-   "label": "Dietary Restrictions"
-  },
-  {
-   "fieldname": "state_of_domicile",
-   "fieldtype": "Data",
-   "label": "State of Domicile"
-  },
-  {
-   "fieldname": "state",
-   "fieldtype": "Link",
-   "label": "State",
-   "options": "State"
-  },
-  {
-   "depends_on": "eval:doc.state",
-   "fieldname": "district",
-   "fieldtype": "Link",
-   "label": "District",
-   "options": "District"
-  },
-  {
-   "fieldname": "aadhaar_number",
-   "fieldtype": "Int",
-   "label": "Aadhaar Number",
-   "length": 12
-  },
-  {
-   "fieldname": "pan_number",
-   "fieldtype": "Data",
-   "label": "PAN Number"
-  },
-  {
-   "fieldname": "passport_available",
-   "fieldtype": "Select",
-   "label": "Passport Available",
-   "options": "Yes\nNo"
-  },
-  {
-   "depends_on": "eval:doc.passport_available==\"Yes\"",
-   "fieldname": "passport_number",
-   "fieldtype": "Data",
-   "label": "Passport Number"
-  },
-  {
-   "depends_on": "eval:doc.passport_available==\"Yes\"",
-   "fieldname": "date_of_registration",
-   "fieldtype": "Date",
-   "label": "Date of Registration"
-  },
-  {
-   "fieldname": "tab_contact",
-   "fieldtype": "Tab Break",
-   "label": "Contact"
-  },
-  {
-   "fieldname": "contact_details_section",
-   "fieldtype": "Section Break",
-   "label": "Contact Details"
-  },
-  {
-   "fieldname": "email",
-   "fieldtype": "Data",
-   "label": "Email",
-   "options": "Email",
-   "reqd": 1
-  },
-  {
-   "fieldname": "phone",
-   "fieldtype": "Phone",
-   "label": "Phone",
-   "reqd": 1
-  },
-  {
-   "fieldname": "alternate_phone",
-   "fieldtype": "Phone",
-   "label": "Alternate Phone"
-  },
-  {
-   "fieldname": "emergency_contact",
-   "fieldtype": "Phone",
-   "label": "Emergency Contact"
-  },
-  {
-   "fieldname": "mentor_name_code",
-   "fieldtype": "Data",
-   "label": "Mentor Name & Code"
-  },
-  {
-   "fieldname": "counsellor_name_code",
-   "fieldtype": "Data",
-   "label": "Counsellor Name & Code"
-  },
-  {
-   "fieldname": "tab_parent",
-   "fieldtype": "Tab Break",
-   "label": "Parent / Guardian"
-  },
-  {
-   "fieldname": "parent_guardian_section",
-   "fieldtype": "Section Break",
-   "label": "Parent & Guardian Details"
-  },
-  {
-   "fieldname": "parents",
-   "fieldtype": "Table",
-   "label": "Parents",
-   "options": "Student Parent"
-  },
-  {
-   "fieldname": "tab_residence",
-   "fieldtype": "Tab Break",
-   "label": "Residence"
-  },
-  {
-   "fieldname": "residence_section",
-   "fieldtype": "Section Break",
-   "label": "Hostel & Dining"
-  },
-  {
-   "default": "0",
-   "fieldname": "is_hosteller",
-   "fieldtype": "Check",
-   "label": "Is Hosteller",
-   "permlevel": 3
-  },
-  {
-   "fieldname": "hostel",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "label": "Hostel",
-   "options": "Hostel"
-  },
-  {
-   "fieldname": "hostel_block",
-   "fieldtype": "Data",
-   "label": "Block / Building"
-  },
-  {
-   "fieldname": "hostel_room",
-   "fieldtype": "Link",
-   "label": "Room",
-   "options": "Hostel Room"
-  },
-  {
-   "fieldname": "hostel_bed",
-   "fieldtype": "Link",
-   "label": "Bed",
-   "options": "Hostel Bed"
-  },
-  {
-   "fieldname": "allocation_date",
-   "fieldtype": "Date",
-   "label": "Allocation Date"
-  },
-  {
-   "fieldname": "vacated_date",
-   "fieldtype": "Date",
-   "label": "Vacated Date"
-  },
-  {
-   "fieldname": "hostel_status",
-   "fieldtype": "Data",
-   "label": "Hostel Status"
-  },
-  {
-   "fieldname": "hostel_remarks",
-   "fieldtype": "Small Text",
-   "label": "Hostel Remarks",
-   "read_only": 1
-  },
-  {
-   "fieldname": "meal_plan",
-   "fieldtype": "Select",
-   "label": "Meal Plan",
-   "options": "Plan A\nPlan B\nPlan C"
-  },
-  {
-   "default": "0",
-   "fieldname": "residence_agreement_signed",
-   "fieldtype": "Check",
-   "label": "Residence Agreement Signed",
-   "read_only": 1
-  },
-  {
-   "default": "0",
-   "fieldname": "keys_handed_over",
-   "fieldtype": "Check",
-   "label": "Keys Handed Over",
-   "read_only": 1
-  },
-  {
-   "fieldname": "allocation_end_date",
-   "fieldtype": "Date",
-   "label": "Allocation End Date",
-   "read_only": 1
-  },
-  {
-   "fieldname": "tab_education",
-   "fieldtype": "Tab Break",
-   "label": "Academic Qualification"
-  },
-  {
-   "fieldname": "class_x_details_section",
-   "fieldtype": "Section Break",
-   "label": "Class X details"
-  },
-  {
-   "fieldname": "class_x_completion_year",
-   "fieldtype": "Data",
-   "label": "Year of Completion (Class X)",
-   "reqd": 1
-  },
-  {
-   "fieldname": "class_x_percentage",
-   "fieldtype": "Float",
-   "label": "Percentage/CGPA obtained (Class X)",
-   "reqd": 1
-  },
-  {
-   "fieldname": "class_x_school",
-   "fieldtype": "Data",
-   "label": "School/College/University (Class X)",
-   "reqd": 1
-  },
-  {
-   "fieldname": "class_x_board",
-   "fieldtype": "Data",
-   "label": "Board (Class X)",
-   "reqd": 1
-  },
-  {
-   "fieldname": "class_x_max_cgpa",
-   "fieldtype": "Float",
-   "label": "If CGPA, maximum CGPA (Class X)"
-  },
-  {
-   "fieldname": "column_break_academics_1",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "class_xii_details_section",
-   "fieldtype": "Section Break",
-   "label": "Class XII/Equivalent details"
-  },
-  {
-   "fieldname": "class_xii_exam_name",
-   "fieldtype": "Data",
-   "label": "Name of Examination (Class XII/Equivalent - as per marksheet)",
-   "reqd": 1
-  },
-  {
-   "fieldname": "class_xii_completion_year",
-   "fieldtype": "Data",
-   "label": "Year of Completion (Class XII/Equivalent)",
-   "reqd": 1
-  },
-  {
-   "fieldname": "class_xii_school",
-   "fieldtype": "Data",
-   "label": "School/College/University (Class XII/Equivalent)",
-   "reqd": 1
-  },
-  {
-   "fieldname": "class_xii_board",
-   "fieldtype": "Data",
-   "label": "Board (Class XII/Equivalent)",
-   "reqd": 1
-  },
-  {
-   "fieldname": "class_xii_percentage",
-   "fieldtype": "Float",
-   "label": "Percentage/CGPA obtained (Class XII/Equivalent)",
-   "reqd": 1
-  },
-  {
-   "fieldname": "class_xii_max_cgpa",
-   "fieldtype": "Float",
-   "label": "If CGPA, maximum CGPA (Class XII/Equivalent)"
-  },
-  {
-   "fieldname": "ug_degree_details_section",
-   "fieldtype": "Section Break",
-   "label": "UG Degree details"
-  },
-  {
-   "fieldname": "ug_degree_completed",
-   "fieldtype": "Select",
-   "label": "Have you completed your UG degree",
-   "options": "\nYes\nNo",
-   "reqd": 1
-  },
-  {
-   "depends_on": "eval:doc.ug_degree_completed=='Yes'",
-   "fieldname": "ug_degree_name",
-   "fieldtype": "Data",
-   "label": "Name of Degree (UG)",
-   "mandatory_depends_on": "eval:doc.ug_degree_completed=='Yes'"
-  },
-  {
-   "depends_on": "eval:doc.ug_degree_completed=='Yes'",
-   "fieldname": "ug_completion_year",
-   "fieldtype": "Data",
-   "label": "Year of Completion (UG Degree)",
-   "mandatory_depends_on": "eval:doc.ug_degree_completed=='Yes'"
-  },
-  {
-   "depends_on": "eval:doc.ug_degree_completed=='Yes'",
-   "fieldname": "ug_college",
-   "fieldtype": "Data",
-   "label": "College/University (UG Degree)",
-   "mandatory_depends_on": "eval:doc.ug_degree_completed=='Yes'"
-  },
-  {
-   "depends_on": "eval:doc.ug_degree_completed=='Yes'",
-   "fieldname": "ug_percentage",
-   "fieldtype": "Float",
-   "label": "Percentage/CGPA obtained (UG Degree)",
-   "mandatory_depends_on": "eval:doc.ug_degree_completed=='Yes'"
-  },
-  {
-   "depends_on": "eval:doc.ug_degree_completed=='Yes'",
-   "fieldname": "ug_max_cgpa",
-   "fieldtype": "Float",
-   "label": "If CGPA, maximum CGPA (UG Degree)",
-   "mandatory_depends_on": "eval:doc.ug_degree_completed=='Yes'"
-  },
-  {
-   "fieldname": "tab_account",
-   "fieldtype": "Tab Break",
-   "label": "Account"
-  },
-  {
-   "fieldname": "account_status_section",
-   "fieldtype": "Section Break",
-   "label": "Account Status"
-  },
-  {
-   "fieldname": "student_status",
-   "fieldtype": "Select",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Student Status",
-   "options": "Active\nInactive\nGraduated\nDropped\nAlumni\nDormant"
-  },
-  {
-   "fieldname": "account_status",
-   "fieldtype": "Select",
-   "label": "Account Status",
-   "options": "Active\nBlocked"
-  },
-  {
-   "fieldname": "status_remark",
-   "fieldtype": "Text",
-   "label": "Status Remark"
-  },
-  {
-   "fieldname": "tab_documents",
-   "fieldtype": "Tab Break",
-   "label": "Documents"
-  },
-  {
-   "fieldname": "personal_documents_section",
-   "fieldtype": "Section Break",
-   "label": "Personal Documents"
-  },
-  {
-   "fieldname": "aadhaar_card",
-   "fieldtype": "Attach",
-   "label": "Aadhaar Card",
-   "reqd": 1
-  },
-  {
-   "default": "0",
-   "fieldname": "aadhaar_verified",
-   "fieldtype": "Check",
-   "label": "Aadhaar Verified"
-  },
-  {
-   "fieldname": "pan_card",
-   "fieldtype": "Attach",
-   "label": "PAN Card",
-   "reqd": 1
-  },
-  {
-   "fieldname": "passport",
-   "fieldtype": "Attach",
-   "label": "Passport"
-  },
-  {
-   "description": "Latest image",
-   "fieldname": "passport_size_photo",
-   "fieldtype": "Attach",
-   "label": "Passport size photo",
-   "reqd": 1
-  },
-  {
-   "fieldname": "pwd_certificate",
-   "fieldtype": "Attach",
-   "label": "PWD (Persons with Disabilities) Certificate"
-  },
-  {
-   "fieldname": "educational_documents_section",
-   "fieldtype": "Section Break",
-   "label": "Educational Documents"
-  },
-  {
-   "fieldname": "std_x_marksheet",
-   "fieldtype": "Attach",
-   "label": "STD X Marksheet",
-   "reqd": 1
-  },
-  {
-   "fieldname": "class_xii_marksheet",
-   "fieldtype": "Attach",
-   "label": "Class XII Marksheet/Equivalent documents to be uploaded (Max 5MB - Supported formats png, jpeg, jpg, pdf)",
-   "reqd": 1
-  },
-  {
-   "depends_on": "eval:doc.ug_degree_completed=='Yes'",
-   "fieldname": "ug_certificate",
-   "fieldtype": "Attach",
-   "label": "UG Degree Certificate/Bonafide Certificate to be uploaded (Max 5MB - Supported formats png, jpeg, jpg, pdf)",
-   "mandatory_depends_on": "eval:doc.ug_degree_completed=='Yes'"
-  },
-  {
-   "depends_on": "eval:doc.ug_degree_completed=='Yes'",
-   "fieldname": "ug_transcripts",
-   "fieldtype": "Attach",
-   "label": "Transcripts/Marksheets to be uploaded (Max 5MB - Supported formats png, jpeg, jpg, pdf)",
-   "mandatory_depends_on": "eval:doc.ug_degree_completed=='Yes'"
-  },
-  {
-   "fieldname": "transfer_certificate",
-   "fieldtype": "Attach",
-   "label": "Transfer Certificate"
-  },
-  {
-   "fieldname": "entrance_exam_score_marksheet",
-   "fieldtype": "Attach",
-   "label": "Entrance exam score marksheet"
-  },
-  {
-   "fieldname": "offer_letter",
-   "fieldtype": "Attach",
-   "label": "Offer Letter"
-  },
-  {
-   "default": "0",
-   "fieldname": "offer_letter_verified",
-   "fieldtype": "Check",
-   "label": "Offer Letter Verified",
-   "permlevel": 1
-  },
-  {
-   "fieldname": "rules_and_regulations_section",
-   "fieldtype": "Section Break",
-   "label": "Rules and Regulations"
-  },
-  {
-   "fieldname": "posh_anti_ragging_declaration",
-   "fieldtype": "Attach",
-   "label": "PoSH & Anti-Ragging Declaration"
-  },
-  {
-   "fieldname": "student_declaration",
-   "fieldtype": "Attach",
-   "label": "Student Declaration"
-  },
-  {
-   "fieldname": "parent_declaration",
-   "fieldtype": "Attach",
-   "label": "Parent Declaration"
-  },
-  {
-   "fieldname": "user",
-   "fieldtype": "Link",
-   "label": "User",
-   "options": "User"
-  },
-  {
-   "fetch_from": "programme.term_name",
-   "fieldname": "term_name",
-   "fieldtype": "Data",
-   "label": "Term Name"
-  },
-  {
-   "fieldname": "signature_ppkg",
-   "fieldtype": "Signature",
-   "label": "Residence Agreement"
-  },
-  {
-   "fieldname": "registration_status",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Current Status",
-   "options": "Workflow State",
-   "read_only": 1
-  },
-  {
-   "fieldname": "official_email_id",
-   "fieldtype": "Data",
-   "label": "Official Email ID"
-  },
-  {
-   "fetch_from": "programme.program_shortcode",
-   "fieldname": "program_shortcode",
-   "fieldtype": "Data",
-   "label": "Program Shortcode"
-  },
-  {
-   "fetch_from": "programme.academic_year",
-   "fieldname": "academic_year",
-   "fieldtype": "Data",
-   "label": "Academic Year"
-  },
-  {
-   "fetch_from": "programme.term_year",
-   "fieldname": "term_year",
-   "fieldtype": "Int",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Term Year"
-  },
-  {
-   "default": "0",
-   "fieldname": "id_card_issued",
-   "fieldtype": "Check",
-   "label": "ID Card Issued"
-  },
-  {
-   "fieldname": "tab_status_history",
-   "fieldtype": "Tab Break",
-   "label": "Status History"
-  },
-  {
-   "fieldname": "workflow_history",
-   "fieldtype": "Table",
-   "label": "History",
-   "options": "Student Workflow History",
-   "read_only": 1
-  },
-  {
-   "fieldname": "status_history_section",
-   "fieldtype": "Section Break",
-   "label": "Status History"
-  },
-  {
-   "fieldname": "column_break_zfil",
-   "fieldtype": "Column Break",
-   "options": "\nPaid\nUnpaid"
-  },
-  {
-   "fieldname": "present_address",
-   "fieldtype": "Small Text",
-   "label": "Comminication Address"
-  },
-  {
-   "fieldname": "permanent_address",
-   "fieldtype": "Small Text",
-   "label": "Permanent Address"
-  },
-  {
-   "fieldname": "outstanding_balance",
-   "fieldtype": "Currency",
-   "label": "Due Balance"
-  },
-  {
-   "fieldname": "column_break_vdpc",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "column_break_vnsv",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "column_break_mlne",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "personal_email",
-   "fieldtype": "Data",
-   "label": "Personal Email",
-   "options": "Email",
-   "reqd": 1
-  },
-  {
-   "fieldname": "key_number",
-   "fieldtype": "Data",
-   "label": "Key Number"
-  },
-  {
-   "default": "0",
-   "fieldname": "pan_verified",
-   "fieldtype": "Check",
-   "label": "Pan Verified"
-  },
-  {
-   "default": "0",
-   "fieldname": "passport_verified",
-   "fieldtype": "Check",
-   "label": "Passport Verified"
-  },
-  {
-   "default": "0",
-   "fieldname": "pwd_verified",
-   "fieldtype": "Check",
-   "label": "PWD Verified"
-  },
-  {
-   "default": "0",
-   "fieldname": "student_declaration_verified",
-   "fieldtype": "Check",
-   "label": "Student Declaration Verified",
-   "permlevel": 1
-  },
-  {
-   "fieldname": "marital_status",
-   "fieldtype": "Select",
-   "label": "Marital status",
-   "options": "\nMarried\nUnmarried\nWidowed\nDivorced\nSeparated",
-   "reqd": 1
-  },
-  {
-   "fieldname": "laptop_issued",
-   "fieldtype": "Select",
-   "label": "Laptop Issued",
-   "options": "\nYes\nNo"
-  },
-  {
-   "depends_on": "eval:doc.laptop_issued=='Yes'",
-   "fieldname": "laptop_details_section",
-   "fieldtype": "Section Break",
-   "label": "Laptop Details"
-  },
-  {
-   "depends_on": "eval:doc.laptop_issued=='Yes'",
-   "fieldname": "laptop_brand",
-   "fieldtype": "Data",
-   "label": "Laptop Brand"
-  },
-  {
-   "depends_on": "eval:doc.laptop_issued=='Yes'",
-   "fieldname": "laptop_model",
-   "fieldtype": "Data",
-   "label": "Laptop Model"
-  },
-  {
-   "fieldname": "column_break_laptop",
-   "fieldtype": "Column Break"
-  },
-  {
-   "depends_on": "eval:doc.laptop_issued=='Yes'",
-   "fieldname": "laptop_serial_number",
-   "fieldtype": "Data",
-   "label": "Serial Number"
-  },
-  {
-   "depends_on": "eval:doc.laptop_issued=='Yes'",
-   "fieldname": "laptop_issue_date",
-   "fieldtype": "Date",
-   "label": "Issue Date"
-  },
-  {
-   "depends_on": "eval:doc.laptop_issued=='Yes'",
-   "fieldname": "laptop_return_date",
-   "fieldtype": "Date",
-   "label": "Return Date"
-  },
-  {
-   "depends_on": "eval:doc.state",
-   "fieldname": "city",
-   "fieldtype": "Data",
-   "label": "City"
-  },
-  {
-   "depends_on": "eval:doc.state",
-   "fieldname": "pincode",
-   "fieldtype": "Data",
-   "label": "Pincode"
-  },
-  {
-   "fieldname": "country",
-   "fieldtype": "Data",
-   "label": "Country"
-  },
-  {
-   "fieldname": "passport_expiry_date",
-   "fieldtype": "Date",
-   "label": "Passport Expiry Date"
-  }
- ],
- "links": [],
- "modified": "2026-02-02 15:11:56.511422",
- "modified_by": "Administrator",
- "module": "SLCM",
- "name": "Student Master",
- "naming_rule": "Expression",
- "owner": "Administrator",
- "permissions": [
-  {
-   "create": 1,
-   "read": 1,
-   "role": "Guest",
-   "write": 1
-  },
-  {
-   "create": 1,
-   "delete": 1,
-   "email": 1,
-   "print": 1,
-   "read": 1,
-   "role": "System Manager",
-   "write": 1
-  },
-  {
-   "create": 1,
-   "email": 1,
-   "print": 1,
-   "read": 1,
-   "role": "SLCM Registrar",
-   "write": 1
-  },
-  {
-   "email": 1,
-   "print": 1,
-   "read": 1,
-   "role": "Accounts User",
-   "write": 1
-  },
-  {
-   "email": 1,
-   "print": 1,
-   "read": 1,
-   "role": "Hostel Warden",
-   "write": 1
-  },
-  {
-   "permlevel": 1,
-   "read": 1,
-   "role": "SLCM Registrar",
-   "write": 1
-  },
-  {
-   "permlevel": 2,
-   "read": 1,
-   "role": "Accounts User",
-   "write": 1
-  },
-  {
-   "permlevel": 3,
-   "read": 1,
-   "role": "Hostel Warden",
-   "write": 1
-  },
-  {
-   "permlevel": 4,
-   "read": 1,
-   "role": "System Manager",
-   "write": 1
-  }
- ],
- "row_format": "Dynamic",
- "sort_field": "modified",
- "sort_order": "DESC",
- "states": [],
- "title_field": "first_name"
+    "actions": [],
+    "allow_import": 1,
+    "allow_rename": 1,
+    "autoname": "naming_series:naming_series",
+    "creation": "2026-01-07 14:46:29.467983",
+    "doctype": "DocType",
+    "engine": "InnoDB",
+    "field_order": [
+        "tab_registration",
+        "registration_admission_section",
+        "registration_id",
+        "application_number",
+        "admission_sequence",
+        "admission_type",
+        "quota",
+        "user",
+        "naming_series",
+        "column_break_vdpc",
+        "academic_year",
+        "current_year",
+        "academic_status",
+        "official_email_id",
+        "intake",
+        "rfid_uid",
+        "tab_program_mapping",
+        "program_mapping_section",
+        "department",
+        "programme",
+        "program_shortcode",
+        "specialisation",
+        "current_cgpa",
+        "column_break_vnsv",
+        "batch_year",
+        "current_term",
+        "term_name",
+        "term_year",
+        "attendance_status",
+        "tab_programme",
+        "programme_section",
+        "programme_system",
+        "number_of_programmes_enrolled",
+        "tab_personal",
+        "personal_details_section",
+        "first_name",
+        "middle_name",
+        "last_name",
+        "dob",
+        "gender",
+        "marital_status",
+        "nationality",
+        "religion",
+        "blood_group",
+        "state_of_domicile",
+        "column_break_mlne",
+        "country",
+        "state",
+        "district",
+        "city",
+        "pincode",
+        "aadhaar_number",
+        "pan_number",
+        "passport_number",
+        "passport_expiry_date",
+        "date_of_registration",
+        "passport_available",
+        "pwd",
+        "disability_special_needs",
+        "pre_existing_conditions",
+        "dietary_restrictions",
+        "tab_contact",
+        "contact_details_section",
+        "email",
+        "personal_email",
+        "phone",
+        "alternate_phone",
+        "emergency_contact",
+        "mentor_name_code",
+        "counsellor_name_code",
+        "present_address",
+        "permanent_address",
+        "tab_parent",
+        "parent_guardian_section",
+        "parents",
+        "tab_residence",
+        "residence_section",
+        "is_hosteller",
+        "hostel",
+        "hostel_block",
+        "hostel_room",
+        "hostel_bed",
+        "allocation_date",
+        "vacated_date",
+        "hostel_status",
+        "hostel_remarks",
+        "meal_plan",
+        "signature_ppkg",
+        "residence_agreement_signed",
+        "keys_handed_over",
+        "key_number",
+        "allocation_end_date",
+        "tab_education",
+        "class_x_details_section",
+        "class_x_completion_year",
+        "class_x_percentage",
+        "class_x_school",
+        "class_x_board",
+        "class_x_max_cgpa",
+        "column_break_academics_1",
+        "class_xii_details_section",
+        "class_xii_exam_name",
+        "class_xii_completion_year",
+        "class_xii_school",
+        "class_xii_board",
+        "class_xii_percentage",
+        "class_xii_max_cgpa",
+        "ug_degree_details_section",
+        "ug_degree_completed",
+        "ug_degree_name",
+        "ug_completion_year",
+        "ug_college",
+        "ug_percentage",
+        "ug_max_cgpa",
+        "tab_finance",
+        "finance_section",
+        "applying_scholarship",
+        "scholarship_percentage",
+        "scholarship_amount",
+        "scholarship_approval_date",
+        "number_of_instalments",
+        "fee_details_section",
+        "total_program_fee",
+        "discount_amount",
+        "net_program_fee",
+        "total_paid_amount",
+        "outstanding_balance",
+        "fee_payment_status",
+        "bank_details_section",
+        "bank_name",
+        "bank_account_number",
+        "ifsc_code",
+        "branch_name",
+        "account_holder_name",
+        "tab_documents",
+        "personal_documents_section",
+        "aadhaar_card",
+        "aadhaar_verified",
+        "pan_card",
+        "pan_verified",
+        "passport",
+        "passport_verified",
+        "passport_size_photo",
+        "pwd_certificate",
+        "pwd_verified",
+        "educational_documents_section",
+        "std_x_marksheet",
+        "class_xii_marksheet",
+        "ug_certificate",
+        "ug_transcripts",
+        "transfer_certificate",
+        "entrance_exam_score_marksheet",
+        "offer_letter",
+        "offer_letter_verified",
+        "rules_and_regulations_section",
+        "posh_anti_ragging_declaration",
+        "student_declaration",
+        "student_declaration_verified",
+        "parent_declaration",
+        "tab_account",
+        "account_status_section",
+        "column_break_zfil",
+        "student_status",
+        "account_status",
+        "status_remark",
+        "id_card_issued",
+        "laptop_issued",
+        "laptop_details_section",
+        "laptop_brand",
+        "laptop_model",
+        "column_break_laptop",
+        "laptop_serial_number",
+        "laptop_issue_date",
+        "laptop_return_date",
+        "tab_status_history",
+        "status_history_section",
+        "workflow_history",
+        "registration_status"
+    ],
+    "fields": [
+        {
+            "fieldname": "tab_registration",
+            "fieldtype": "Tab Break",
+            "label": "Registration"
+        },
+        {
+            "fieldname": "registration_admission_section",
+            "fieldtype": "Section Break",
+            "label": "Registration & Admission Details"
+        },
+        {
+            "default": "STUD-.YYYY.-",
+            "fieldname": "naming_series",
+            "fieldtype": "Select",
+            "hidden": 1,
+            "label": "Naming Series",
+            "no_copy": 1,
+            "options": "STUD-.YYYY.-"
+        },
+        {
+            "fieldname": "registration_id",
+            "fieldtype": "Data",
+            "label": "Student ID"
+        },
+        {
+            "fieldname": "rfid_uid",
+            "fieldtype": "Data",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "RFID UID",
+            "unique": 1
+        },
+        {
+            "fieldname": "application_number",
+            "fieldtype": "Data",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Application Number",
+            "reqd": 1
+        },
+        {
+            "fieldname": "admission_sequence",
+            "fieldtype": "Int",
+            "label": "Admission Sequence"
+        },
+        {
+            "fieldname": "admission_type",
+            "fieldtype": "Select",
+            "label": "Admission Type",
+            "options": "Regular\nPACE\nOther"
+        },
+        {
+            "fieldname": "quota",
+            "fieldtype": "Select",
+            "label": "Quota / Category",
+            "options": "General\nSC\nST\nOBC\nEWS\nNRI",
+            "permlevel": 1
+        },
+        {
+            "fieldname": "intake",
+            "fieldtype": "Data",
+            "label": "Intake"
+        },
+        {
+            "fieldname": "academic_status",
+            "fieldtype": "Select",
+            "label": "Academic Status",
+            "options": "Active\nInactive"
+        },
+        {
+            "fieldname": "tab_finance",
+            "fieldtype": "Tab Break",
+            "label": "Finance"
+        },
+        {
+            "fieldname": "finance_section",
+            "fieldtype": "Section Break",
+            "label": "Scholarship Details"
+        },
+        {
+            "fieldname": "applying_scholarship",
+            "fieldtype": "Select",
+            "label": "Applying for Scholarship",
+            "options": "Yes\nNo"
+        },
+        {
+            "depends_on": "eval:doc.applying_scholarship=='Yes'",
+            "fieldname": "scholarship_amount",
+            "fieldtype": "Currency",
+            "label": "Scholarship Amount",
+            "permlevel": 2
+        },
+        {
+            "depends_on": "eval:doc.applying_scholarship=='Yes'",
+            "fieldname": "scholarship_percentage",
+            "fieldtype": "Percent",
+            "label": "Scholarship Percentage"
+        },
+        {
+            "fieldname": "scholarship_approval_date",
+            "fieldtype": "Date",
+            "label": "Date of Approval"
+        },
+        {
+            "fieldname": "number_of_instalments",
+            "fieldtype": "Int",
+            "label": "Number of Instalments"
+        },
+        {
+            "fieldname": "fee_details_section",
+            "fieldtype": "Section Break",
+            "label": "Fee Details"
+        },
+        {
+            "fieldname": "total_program_fee",
+            "fieldtype": "Currency",
+            "label": "Total Program Fee"
+        },
+        {
+            "fieldname": "discount_amount",
+            "fieldtype": "Currency",
+            "label": "Scholarship Amount",
+            "read_only": 1
+        },
+        {
+            "fieldname": "net_program_fee",
+            "fieldtype": "Currency",
+            "label": "Net Program Fee",
+            "read_only": 1
+        },
+        {
+            "fieldname": "total_paid_amount",
+            "fieldtype": "Currency",
+            "label": "Total Paid Amount"
+        },
+        {
+            "fieldname": "fee_payment_status",
+            "fieldtype": "Select",
+            "label": "Fee Payment Status",
+            "options": "\nPaid\nPartially Paid\nUnpaid"
+        },
+        {
+            "fieldname": "bank_details_section",
+            "fieldtype": "Section Break",
+            "label": "Bank Details"
+        },
+        {
+            "fieldname": "bank_name",
+            "fieldtype": "Data",
+            "label": "Bank Name"
+        },
+        {
+            "fieldname": "bank_account_number",
+            "fieldtype": "Data",
+            "label": "Bank Account Number"
+        },
+        {
+            "fieldname": "ifsc_code",
+            "fieldtype": "Data",
+            "label": "IFSC Code"
+        },
+        {
+            "fieldname": "branch_name",
+            "fieldtype": "Data",
+            "label": "Branch Name"
+        },
+        {
+            "fieldname": "account_holder_name",
+            "fieldtype": "Data",
+            "label": "Account Holder Name"
+        },
+        {
+            "fieldname": "tab_program_mapping",
+            "fieldtype": "Tab Break",
+            "label": "Program Mapping"
+        },
+        {
+            "fieldname": "program_mapping_section",
+            "fieldtype": "Section Break",
+            "label": "Program & Academic Mapping"
+        },
+        {
+            "fieldname": "department",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Department",
+            "options": "Department"
+        },
+        {
+            "fieldname": "programme",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Programme",
+            "options": "Cohort"
+        },
+        {
+            "fieldname": "specialisation",
+            "fieldtype": "Data",
+            "label": "Specialisation"
+        },
+        {
+            "fetch_from": "programme.batch",
+            "fieldname": "batch_year",
+            "fieldtype": "Data",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Batch"
+        },
+        {
+            "fetch_from": "programme.current_year",
+            "fieldname": "current_year",
+            "fieldtype": "Data",
+            "label": "Current Year"
+        },
+        {
+            "fetch_from": "programme.term_name",
+            "fieldname": "current_term",
+            "fieldtype": "Data",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Current Term"
+        },
+        {
+            "fieldname": "current_cgpa",
+            "fieldtype": "Float",
+            "label": "Current CGPA"
+        },
+        {
+            "fieldname": "attendance_status",
+            "fieldtype": "Data",
+            "label": "Attendance Status"
+        },
+        {
+            "fieldname": "tab_programme",
+            "fieldtype": "Tab Break",
+            "label": "Programme"
+        },
+        {
+            "fieldname": "programme_section",
+            "fieldtype": "Section Break",
+            "label": "Programme Details"
+        },
+        {
+            "fieldname": "programme_system",
+            "fieldtype": "Select",
+            "label": "Programme System",
+            "options": "Semester\nTrimester"
+        },
+        {
+            "fieldname": "number_of_programmes_enrolled",
+            "fieldtype": "Int",
+            "label": "Number of Courses Enrolled"
+        },
+        {
+            "fieldname": "tab_personal",
+            "fieldtype": "Tab Break",
+            "label": "Personal"
+        },
+        {
+            "fieldname": "personal_details_section",
+            "fieldtype": "Section Break",
+            "label": "Personal Details"
+        },
+        {
+            "fieldname": "first_name",
+            "fieldtype": "Data",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "First Name",
+            "reqd": 1
+        },
+        {
+            "fieldname": "middle_name",
+            "fieldtype": "Data",
+            "label": "Middle Name"
+        },
+        {
+            "fieldname": "last_name",
+            "fieldtype": "Data",
+            "label": "Last Name"
+        },
+        {
+            "fieldname": "dob",
+            "fieldtype": "Date",
+            "label": "Date of Birth",
+            "reqd": 1
+        },
+        {
+            "fieldname": "gender",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Gender",
+            "options": "Genders"
+        },
+        {
+            "fieldname": "nationality",
+            "fieldtype": "Data",
+            "label": "Nationality"
+        },
+        {
+            "fieldname": "religion",
+            "fieldtype": "Data",
+            "label": "Religion"
+        },
+        {
+            "fieldname": "blood_group",
+            "fieldtype": "Select",
+            "label": "Blood Group",
+            "options": "A+\nA-\nB+\nB-\nO+\nO-\nAB+\nAB-"
+        },
+        {
+            "default": "0",
+            "fieldname": "pwd",
+            "fieldtype": "Check",
+            "label": "PWD"
+        },
+        {
+            "depends_on": "eval:doc.pwd==1",
+            "fieldname": "disability_special_needs",
+            "fieldtype": "Small Text",
+            "hidden": 1,
+            "label": "Disability/Special Needs"
+        },
+        {
+            "fieldname": "pre_existing_conditions",
+            "fieldtype": "Small Text",
+            "hidden": 1,
+            "label": "Pre-existing Conditions"
+        },
+        {
+            "fieldname": "dietary_restrictions",
+            "fieldtype": "Data",
+            "label": "Dietary Restrictions"
+        },
+        {
+            "fieldname": "state_of_domicile",
+            "fieldtype": "Data",
+            "label": "State of Domicile"
+        },
+        {
+            "fieldname": "state",
+            "fieldtype": "Link",
+            "label": "State",
+            "options": "State"
+        },
+        {
+            "depends_on": "eval:doc.state",
+            "fieldname": "district",
+            "fieldtype": "Link",
+            "label": "District",
+            "options": "District"
+        },
+        {
+            "fieldname": "aadhaar_number",
+            "fieldtype": "Int",
+            "label": "Aadhaar Number",
+            "length": 12
+        },
+        {
+            "fieldname": "pan_number",
+            "fieldtype": "Data",
+            "label": "PAN Number"
+        },
+        {
+            "fieldname": "passport_available",
+            "fieldtype": "Select",
+            "label": "Passport Available",
+            "options": "Yes\nNo"
+        },
+        {
+            "depends_on": "eval:doc.passport_available==\"Yes\"",
+            "fieldname": "passport_number",
+            "fieldtype": "Data",
+            "label": "Passport Number"
+        },
+        {
+            "depends_on": "eval:doc.passport_available==\"Yes\"",
+            "fieldname": "date_of_registration",
+            "fieldtype": "Date",
+            "label": "Date of Registration"
+        },
+        {
+            "fieldname": "tab_contact",
+            "fieldtype": "Tab Break",
+            "label": "Contact"
+        },
+        {
+            "fieldname": "contact_details_section",
+            "fieldtype": "Section Break",
+            "label": "Contact Details"
+        },
+        {
+            "fieldname": "email",
+            "fieldtype": "Data",
+            "label": "Email",
+            "options": "Email",
+            "reqd": 1
+        },
+        {
+            "fieldname": "phone",
+            "fieldtype": "Phone",
+            "label": "Phone",
+            "reqd": 1
+        },
+        {
+            "fieldname": "alternate_phone",
+            "fieldtype": "Phone",
+            "label": "Alternate Phone"
+        },
+        {
+            "fieldname": "emergency_contact",
+            "fieldtype": "Phone",
+            "label": "Emergency Contact"
+        },
+        {
+            "fieldname": "mentor_name_code",
+            "fieldtype": "Data",
+            "label": "Mentor Name & Code"
+        },
+        {
+            "fieldname": "counsellor_name_code",
+            "fieldtype": "Data",
+            "label": "Counsellor Name & Code"
+        },
+        {
+            "fieldname": "tab_parent",
+            "fieldtype": "Tab Break",
+            "label": "Parent / Guardian"
+        },
+        {
+            "fieldname": "parent_guardian_section",
+            "fieldtype": "Section Break",
+            "label": "Parent & Guardian Details"
+        },
+        {
+            "fieldname": "parents",
+            "fieldtype": "Table",
+            "label": "Parents",
+            "options": "Student Parent"
+        },
+        {
+            "fieldname": "tab_residence",
+            "fieldtype": "Tab Break",
+            "label": "Residence"
+        },
+        {
+            "fieldname": "residence_section",
+            "fieldtype": "Section Break",
+            "label": "Hostel & Dining"
+        },
+        {
+            "default": "0",
+            "fieldname": "is_hosteller",
+            "fieldtype": "Check",
+            "label": "Is Hosteller",
+            "permlevel": 3
+        },
+        {
+            "fieldname": "hostel",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "label": "Hostel",
+            "options": "Hostel"
+        },
+        {
+            "fieldname": "hostel_block",
+            "fieldtype": "Data",
+            "label": "Block / Building"
+        },
+        {
+            "fieldname": "hostel_room",
+            "fieldtype": "Link",
+            "label": "Room",
+            "options": "Hostel Room"
+        },
+        {
+            "fieldname": "hostel_bed",
+            "fieldtype": "Link",
+            "label": "Bed",
+            "options": "Hostel Bed"
+        },
+        {
+            "fieldname": "allocation_date",
+            "fieldtype": "Date",
+            "label": "Allocation Date"
+        },
+        {
+            "fieldname": "vacated_date",
+            "fieldtype": "Date",
+            "label": "Vacated Date"
+        },
+        {
+            "fieldname": "hostel_status",
+            "fieldtype": "Data",
+            "label": "Hostel Status"
+        },
+        {
+            "fieldname": "hostel_remarks",
+            "fieldtype": "Small Text",
+            "label": "Hostel Remarks",
+            "read_only": 1
+        },
+        {
+            "fieldname": "meal_plan",
+            "fieldtype": "Select",
+            "label": "Meal Plan",
+            "options": "Plan A\nPlan B\nPlan C"
+        },
+        {
+            "default": "0",
+            "fieldname": "residence_agreement_signed",
+            "fieldtype": "Check",
+            "label": "Residence Agreement Signed",
+            "read_only": 1
+        },
+        {
+            "default": "0",
+            "fieldname": "keys_handed_over",
+            "fieldtype": "Check",
+            "label": "Keys Handed Over",
+            "read_only": 1
+        },
+        {
+            "fieldname": "allocation_end_date",
+            "fieldtype": "Date",
+            "label": "Allocation End Date",
+            "read_only": 1
+        },
+        {
+            "fieldname": "tab_education",
+            "fieldtype": "Tab Break",
+            "label": "Academic Qualification"
+        },
+        {
+            "fieldname": "class_x_details_section",
+            "fieldtype": "Section Break",
+            "label": "Class X details"
+        },
+        {
+            "fieldname": "class_x_completion_year",
+            "fieldtype": "Data",
+            "label": "Year of Completion (Class X)",
+            "reqd": 1
+        },
+        {
+            "fieldname": "class_x_percentage",
+            "fieldtype": "Float",
+            "label": "Percentage/CGPA obtained (Class X)",
+            "reqd": 1
+        },
+        {
+            "fieldname": "class_x_school",
+            "fieldtype": "Data",
+            "label": "School/College/University (Class X)",
+            "reqd": 1
+        },
+        {
+            "fieldname": "class_x_board",
+            "fieldtype": "Data",
+            "label": "Board (Class X)",
+            "reqd": 1
+        },
+        {
+            "fieldname": "class_x_max_cgpa",
+            "fieldtype": "Float",
+            "label": "If CGPA, maximum CGPA (Class X)"
+        },
+        {
+            "fieldname": "column_break_academics_1",
+            "fieldtype": "Column Break"
+        },
+        {
+            "fieldname": "class_xii_details_section",
+            "fieldtype": "Section Break",
+            "label": "Class XII/Equivalent details"
+        },
+        {
+            "fieldname": "class_xii_exam_name",
+            "fieldtype": "Data",
+            "label": "Name of Examination (Class XII/Equivalent - as per marksheet)",
+            "reqd": 1
+        },
+        {
+            "fieldname": "class_xii_completion_year",
+            "fieldtype": "Data",
+            "label": "Year of Completion (Class XII/Equivalent)",
+            "reqd": 1
+        },
+        {
+            "fieldname": "class_xii_school",
+            "fieldtype": "Data",
+            "label": "School/College/University (Class XII/Equivalent)",
+            "reqd": 1
+        },
+        {
+            "fieldname": "class_xii_board",
+            "fieldtype": "Data",
+            "label": "Board (Class XII/Equivalent)",
+            "reqd": 1
+        },
+        {
+            "fieldname": "class_xii_percentage",
+            "fieldtype": "Float",
+            "label": "Percentage/CGPA obtained (Class XII/Equivalent)",
+            "reqd": 1
+        },
+        {
+            "fieldname": "class_xii_max_cgpa",
+            "fieldtype": "Float",
+            "label": "If CGPA, maximum CGPA (Class XII/Equivalent)"
+        },
+        {
+            "fieldname": "ug_degree_details_section",
+            "fieldtype": "Section Break",
+            "label": "UG Degree details"
+        },
+        {
+            "fieldname": "ug_degree_completed",
+            "fieldtype": "Select",
+            "label": "Have you completed your UG degree",
+            "options": "\nYes\nNo",
+            "reqd": 1
+        },
+        {
+            "depends_on": "eval:doc.ug_degree_completed=='Yes'",
+            "fieldname": "ug_degree_name",
+            "fieldtype": "Data",
+            "label": "Name of Degree (UG)",
+            "mandatory_depends_on": "eval:doc.ug_degree_completed=='Yes'"
+        },
+        {
+            "depends_on": "eval:doc.ug_degree_completed=='Yes'",
+            "fieldname": "ug_completion_year",
+            "fieldtype": "Data",
+            "label": "Year of Completion (UG Degree)",
+            "mandatory_depends_on": "eval:doc.ug_degree_completed=='Yes'"
+        },
+        {
+            "depends_on": "eval:doc.ug_degree_completed=='Yes'",
+            "fieldname": "ug_college",
+            "fieldtype": "Data",
+            "label": "College/University (UG Degree)",
+            "mandatory_depends_on": "eval:doc.ug_degree_completed=='Yes'"
+        },
+        {
+            "depends_on": "eval:doc.ug_degree_completed=='Yes'",
+            "fieldname": "ug_percentage",
+            "fieldtype": "Float",
+            "label": "Percentage/CGPA obtained (UG Degree)",
+            "mandatory_depends_on": "eval:doc.ug_degree_completed=='Yes'"
+        },
+        {
+            "depends_on": "eval:doc.ug_degree_completed=='Yes'",
+            "fieldname": "ug_max_cgpa",
+            "fieldtype": "Float",
+            "label": "If CGPA, maximum CGPA (UG Degree)",
+            "mandatory_depends_on": "eval:doc.ug_degree_completed=='Yes'"
+        },
+        {
+            "fieldname": "tab_account",
+            "fieldtype": "Tab Break",
+            "label": "Account"
+        },
+        {
+            "fieldname": "account_status_section",
+            "fieldtype": "Section Break",
+            "label": "Account Status"
+        },
+        {
+            "fieldname": "column_break_zfil",
+            "fieldtype": "Column Break"
+        },
+        {
+            "fieldname": "student_status",
+            "fieldtype": "Select",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Student Status",
+            "options": "Active\nInactive\nGraduated\nDropped\nAlumni\nDormant"
+        },
+        {
+            "fieldname": "account_status",
+            "fieldtype": "Select",
+            "label": "Account Status",
+            "options": "Active\nBlocked"
+        },
+        {
+            "fieldname": "status_remark",
+            "fieldtype": "Text",
+            "label": "Status Remark"
+        },
+        {
+            "fieldname": "id_card_issued",
+            "fieldtype": "Check",
+            "label": "ID Card Issued"
+        },
+        {
+            "fieldname": "laptop_issued",
+            "fieldtype": "Select",
+            "label": "Laptop Issued",
+            "options": "\nYes\nNo"
+        },
+        {
+            "depends_on": "eval:doc.laptop_issued=='Yes'",
+            "fieldname": "laptop_details_section",
+            "fieldtype": "Section Break",
+            "label": "Laptop Details"
+        },
+        {
+            "depends_on": "eval:doc.laptop_issued=='Yes'",
+            "fieldname": "laptop_brand",
+            "fieldtype": "Data",
+            "label": "Laptop Brand"
+        },
+        {
+            "depends_on": "eval:doc.laptop_issued=='Yes'",
+            "fieldname": "laptop_model",
+            "fieldtype": "Data",
+            "label": "Laptop Model"
+        },
+        {
+            "fieldname": "column_break_laptop",
+            "fieldtype": "Column Break"
+        },
+        {
+            "depends_on": "eval:doc.laptop_issued=='Yes'",
+            "fieldname": "laptop_serial_number",
+            "fieldtype": "Data",
+            "label": "Serial Number"
+        },
+        {
+            "depends_on": "eval:doc.laptop_issued=='Yes'",
+            "fieldname": "laptop_issue_date",
+            "fieldtype": "Date",
+            "label": "Issue Date"
+        },
+        {
+            "depends_on": "eval:doc.laptop_issued=='Yes'",
+            "fieldname": "laptop_return_date",
+            "fieldtype": "Date",
+            "label": "Return Date"
+        },
+        {
+            "fieldname": "tab_status_history",
+            "fieldtype": "Tab Break",
+            "label": "Status History"
+        },
+        {
+            "fieldname": "status_history_section",
+            "fieldtype": "Section Break",
+            "label": "Status History"
+        },
+        {
+            "fieldname": "workflow_history",
+            "fieldtype": "Table",
+            "label": "History",
+            "options": "Student Workflow History",
+            "read_only": 1
+        },
+        {
+            "fieldname": "registration_status",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Current Status",
+            "options": "Workflow State",
+            "read_only": 1
+        },
+        {
+            "fieldname": "tab_documents",
+            "fieldtype": "Tab Break",
+            "label": "Documents"
+        },
+        {
+            "fieldname": "personal_documents_section",
+            "fieldtype": "Section Break",
+            "label": "Personal Documents"
+        },
+        {
+            "fieldname": "aadhaar_card",
+            "fieldtype": "Attach",
+            "label": "Aadhaar Card",
+            "reqd": 1
+        },
+        {
+            "default": "0",
+            "fieldname": "aadhaar_verified",
+            "fieldtype": "Check",
+            "label": "Aadhaar Verified"
+        },
+        {
+            "fieldname": "pan_card",
+            "fieldtype": "Attach",
+            "label": "PAN Card",
+            "reqd": 1
+        },
+        {
+            "default": "0",
+            "fieldname": "pan_verified",
+            "fieldtype": "Check",
+            "label": "Pan Verified"
+        },
+        {
+            "fieldname": "passport",
+            "fieldtype": "Attach",
+            "label": "Passport"
+        },
+        {
+            "default": "0",
+            "fieldname": "passport_verified",
+            "fieldtype": "Check",
+            "label": "Passport Verified"
+        },
+        {
+            "description": "Latest image",
+            "fieldname": "passport_size_photo",
+            "fieldtype": "Attach",
+            "label": "Passport size photo",
+            "reqd": 1
+        },
+        {
+            "fieldname": "pwd_certificate",
+            "fieldtype": "Attach",
+            "label": "PWD (Persons with Disabilities) Certificate"
+        },
+        {
+            "default": "0",
+            "fieldname": "pwd_verified",
+            "fieldtype": "Check",
+            "label": "PWD Verified"
+        },
+        {
+            "fieldname": "educational_documents_section",
+            "fieldtype": "Section Break",
+            "label": "Educational Documents"
+        },
+        {
+            "fieldname": "std_x_marksheet",
+            "fieldtype": "Attach",
+            "label": "STD X Marksheet",
+            "reqd": 1
+        },
+        {
+            "fieldname": "class_xii_marksheet",
+            "fieldtype": "Attach",
+            "label": "Class XII Marksheet/Equivalent documents to be uploaded (Max 5MB - Supported formats png, jpeg, jpg, pdf)",
+            "reqd": 1
+        },
+        {
+            "depends_on": "eval:doc.ug_degree_completed=='Yes'",
+            "fieldname": "ug_certificate",
+            "fieldtype": "Attach",
+            "label": "UG Degree Certificate/Bonafide Certificate to be uploaded (Max 5MB - Supported formats png, jpeg, jpg, pdf)",
+            "mandatory_depends_on": "eval:doc.ug_degree_completed=='Yes'"
+        },
+        {
+            "depends_on": "eval:doc.ug_degree_completed=='Yes'",
+            "fieldname": "ug_transcripts",
+            "fieldtype": "Attach",
+            "label": "Transcripts/Marksheets to be uploaded (Max 5MB - Supported formats png, jpeg, jpg, pdf)",
+            "mandatory_depends_on": "eval:doc.ug_degree_completed=='Yes'"
+        },
+        {
+            "fieldname": "transfer_certificate",
+            "fieldtype": "Attach",
+            "label": "Transfer Certificate"
+        },
+        {
+            "fieldname": "entrance_exam_score_marksheet",
+            "fieldtype": "Attach",
+            "label": "Entrance exam score marksheet"
+        },
+        {
+            "fieldname": "offer_letter",
+            "fieldtype": "Attach",
+            "label": "Offer Letter"
+        },
+        {
+            "default": "0",
+            "fieldname": "offer_letter_verified",
+            "fieldtype": "Check",
+            "label": "Offer Letter Verified",
+            "permlevel": 1
+        },
+        {
+            "fieldname": "rules_and_regulations_section",
+            "fieldtype": "Section Break",
+            "label": "Rules and Regulations"
+        },
+        {
+            "fieldname": "posh_anti_ragging_declaration",
+            "fieldtype": "Attach",
+            "label": "PoSH & Anti-Ragging Declaration"
+        },
+        {
+            "fieldname": "student_declaration",
+            "fieldtype": "Attach",
+            "label": "Student Declaration"
+        },
+        {
+            "default": "0",
+            "fieldname": "student_declaration_verified",
+            "fieldtype": "Check",
+            "label": "Student Declaration Verified",
+            "permlevel": 1
+        },
+        {
+            "fieldname": "parent_declaration",
+            "fieldtype": "Attach",
+            "label": "Parent Declaration"
+        },
+        {
+            "fieldname": "user",
+            "fieldtype": "Link",
+            "label": "User",
+            "options": "User"
+        },
+        {
+            "fetch_from": "programme.term_name",
+            "fieldname": "term_name",
+            "fieldtype": "Data",
+            "label": "Term Name"
+        },
+        {
+            "fieldname": "signature_ppkg",
+            "fieldtype": "Signature",
+            "label": "Residence Agreement"
+        },
+        {
+            "fieldname": "official_email_id",
+            "fieldtype": "Data",
+            "label": "Official Email ID"
+        },
+        {
+            "fetch_from": "programme.program_shortcode",
+            "fieldname": "program_shortcode",
+            "fieldtype": "Data",
+            "label": "Program Shortcode"
+        },
+        {
+            "fetch_from": "programme.academic_year",
+            "fieldname": "academic_year",
+            "fieldtype": "Data",
+            "label": "Academic Year"
+        },
+        {
+            "fetch_from": "programme.term_year",
+            "fieldname": "term_year",
+            "fieldtype": "Int",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Term Year"
+        },
+        {
+            "fieldname": "present_address",
+            "fieldtype": "Small Text",
+            "label": "Comminication Address"
+        },
+        {
+            "fieldname": "permanent_address",
+            "fieldtype": "Small Text",
+            "label": "Permanent Address"
+        },
+        {
+            "fieldname": "outstanding_balance",
+            "fieldtype": "Currency",
+            "label": "Due Balance"
+        },
+        {
+            "fieldname": "column_break_vdpc",
+            "fieldtype": "Column Break"
+        },
+        {
+            "fieldname": "column_break_vnsv",
+            "fieldtype": "Column Break"
+        },
+        {
+            "fieldname": "column_break_mlne",
+            "fieldtype": "Column Break"
+        },
+        {
+            "fieldname": "personal_email",
+            "fieldtype": "Data",
+            "label": "Personal Email",
+            "options": "Email",
+            "reqd": 1
+        },
+        {
+            "fieldname": "key_number",
+            "fieldtype": "Data",
+            "label": "Key Number"
+        },
+        {
+            "fieldname": "marital_status",
+            "fieldtype": "Select",
+            "label": "Marital status",
+            "options": "\nMarried\nUnmarried\nWidowed\nDivorced\nSeparated",
+            "reqd": 1
+        },
+        {
+            "depends_on": "eval:doc.state",
+            "fieldname": "city",
+            "fieldtype": "Data",
+            "label": "City"
+        },
+        {
+            "depends_on": "eval:doc.state",
+            "fieldname": "pincode",
+            "fieldtype": "Data",
+            "label": "Pincode"
+        },
+        {
+            "fieldname": "country",
+            "fieldtype": "Data",
+            "label": "Country"
+        },
+        {
+            "fieldname": "passport_expiry_date",
+            "fieldtype": "Date",
+            "label": "Passport Expiry Date"
+        }
+    ],
+    "links": [],
+    "modified": "2026-02-02 15:11:56.511422",
+    "modified_by": "Administrator",
+    "module": "SLCM",
+    "name": "Student Master",
+    "naming_rule": "Expression",
+    "owner": "Administrator",
+    "permissions": [
+        {
+            "create": 1,
+            "read": 1,
+            "role": "Guest",
+            "write": 1
+        },
+        {
+            "create": 1,
+            "delete": 1,
+            "email": 1,
+            "print": 1,
+            "read": 1,
+            "role": "System Manager",
+            "write": 1
+        },
+        {
+            "create": 1,
+            "email": 1,
+            "print": 1,
+            "read": 1,
+            "role": "SLCM Registrar",
+            "write": 1
+        },
+        {
+            "email": 1,
+            "print": 1,
+            "read": 1,
+            "role": "Accounts User",
+            "write": 1
+        },
+        {
+            "email": 1,
+            "print": 1,
+            "read": 1,
+            "role": "Hostel Warden",
+            "write": 1
+        },
+        {
+            "permlevel": 1,
+            "read": 1,
+            "role": "SLCM Registrar",
+            "write": 1
+        },
+        {
+            "permlevel": 2,
+            "read": 1,
+            "role": "Accounts User",
+            "write": 1
+        },
+        {
+            "permlevel": 3,
+            "read": 1,
+            "role": "Hostel Warden",
+            "write": 1
+        },
+        {
+            "permlevel": 4,
+            "read": 1,
+            "role": "System Manager",
+            "write": 1
+        },
+        {
+            "create": 1,
+            "email": 1,
+            "export": 1,
+            "print": 1,
+            "read": 1,
+            "report": 1,
+            "role": "Faculty",
+            "share": 1,
+            "write": 1
+        },
+        {
+            "read": 1,
+            "role": "Programme Chair"
+        },
+        {
+            "read": 1,
+            "role": "Student"
+        }
+    ],
+    "row_format": "Dynamic",
+    "sort_field": "modified",
+    "sort_order": "DESC",
+    "states": [],
+    "title_field": "first_name"
 }

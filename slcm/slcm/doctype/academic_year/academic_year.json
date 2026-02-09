@@ -69,6 +69,10 @@
             "role": "System Manager",
             "share": 1,
             "write": 1
+        },
+        {
+            "read": 1,
+            "role": "Student"
         }
     ],
     "row_format": "Dynamic",

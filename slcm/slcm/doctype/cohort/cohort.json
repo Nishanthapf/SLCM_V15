@@ -1,183 +1,187 @@
 {
- "actions": [],
- "allow_import": 1,
- "allow_rename": 1,
- "autoname": "field:cohort_name",
- "creation": "2025-12-27 10:08:08.385290",
- "doctype": "DocType",
- "engine": "InnoDB",
- "field_order": [
-  "cohort_code",
-  "cohort_name",
-  "program",
-  "program_shortcode",
-  "current_year",
-  "academic_year",
-  "term_name",
-  "term_year",
-  "batch",
-  "seat_limit",
-  "section_schedule",
-  "start_date",
-  "end_date",
-  "term_days",
-  "term_weeks",
-  "section_status",
-  "status",
-  "description"
- ],
- "fields": [
-  {
-   "fieldname": "cohort_code",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Cohort Code",
-   "reqd": 1,
-   "unique": 1
-  },
-  {
-   "fieldname": "cohort_name",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Cohort Name",
-   "reqd": 1,
-   "unique": 1
-  },
-  {
-   "fieldname": "program",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Program",
-   "options": "Program",
-   "reqd": 1
-  },
-  {
-   "fieldname": "academic_year",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Academic Year",
-   "options": "Academic Year",
-   "reqd": 1
-  },
-  {
-   "fieldname": "term_name",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Term Name",
-   "reqd": 1
-  },
-  {
-   "fieldname": "section_schedule",
-   "fieldtype": "Section Break",
-   "label": "Term Schedule"
-  },
-  {
-   "fieldname": "start_date",
-   "fieldtype": "Date",
-   "label": "Term Start Date",
-   "reqd": 1
-  },
-  {
-   "fieldname": "end_date",
-   "fieldtype": "Date",
-   "label": "Term End Date",
-   "reqd": 1
-  },
-  {
-   "fieldname": "term_days",
-   "fieldtype": "Int",
-   "label": "Term Duration (Days)",
-   "read_only": 1
-  },
-  {
-   "fieldname": "term_weeks",
-   "fieldtype": "Int",
-   "label": "Term Duration (Weeks)",
-   "read_only": 1
-  },
-  {
-   "fieldname": "section_status",
-   "fieldtype": "Section Break",
-   "label": "Status & Notes"
-  },
-  {
-   "default": "Planned",
-   "fieldname": "status",
-   "fieldtype": "Select",
-   "label": "Status",
-   "options": "Planned\nActive\nCompleted\nInactive",
-   "reqd": 1
-  },
-  {
-   "fieldname": "description",
-   "fieldtype": "Small Text",
-   "label": "Description"
-  },
-  {
-   "fieldname": "seat_limit",
-   "fieldtype": "Int",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Seat Limit"
-  },
-  {
-   "fieldname": "batch",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Batch"
-  },
-  {
-   "description": "Term of the Current Year",
-   "fieldname": "term_year",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Term Year"
-  },
-  {
-   "fetch_from": "program.program_shortcode",
-   "fieldname": "program_shortcode",
-   "fieldtype": "Data",
-   "label": "Program Shortcode"
-  },
-  {
-   "description": "Enter the last two digit of the current year",
-   "fetch_from": "program.current_year",
-   "fieldname": "current_year",
-   "fieldtype": "Data",
-   "label": "Current Year"
-  }
- ],
- "links": [],
- "modified": "2026-01-06 18:17:41.308176",
- "modified_by": "Administrator",
- "module": "SLCM",
- "name": "Cohort",
- "naming_rule": "By fieldname",
- "owner": "Administrator",
- "permissions": [
-  {
-   "create": 1,
-   "delete": 1,
-   "email": 1,
-   "export": 1,
-   "print": 1,
-   "read": 1,
-   "report": 1,
-   "role": "System Manager",
-   "share": 1,
-   "write": 1
-  }
- ],
- "row_format": "Dynamic",
- "sort_field": "modified",
- "sort_order": "DESC",
- "states": [],
- "title_field": "cohort_name"
+    "actions": [],
+    "allow_import": 1,
+    "allow_rename": 1,
+    "autoname": "field:cohort_name",
+    "creation": "2025-12-27 10:08:08.385290",
+    "doctype": "DocType",
+    "engine": "InnoDB",
+    "field_order": [
+        "cohort_code",
+        "cohort_name",
+        "program",
+        "program_shortcode",
+        "current_year",
+        "academic_year",
+        "term_name",
+        "term_year",
+        "batch",
+        "seat_limit",
+        "section_schedule",
+        "start_date",
+        "end_date",
+        "term_days",
+        "term_weeks",
+        "section_status",
+        "status",
+        "description"
+    ],
+    "fields": [
+        {
+            "fieldname": "cohort_code",
+            "fieldtype": "Data",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Cohort Code",
+            "reqd": 1,
+            "unique": 1
+        },
+        {
+            "fieldname": "cohort_name",
+            "fieldtype": "Data",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Cohort Name",
+            "reqd": 1,
+            "unique": 1
+        },
+        {
+            "fieldname": "program",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Program",
+            "options": "Program",
+            "reqd": 1
+        },
+        {
+            "fieldname": "academic_year",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Academic Year",
+            "options": "Academic Year",
+            "reqd": 1
+        },
+        {
+            "fieldname": "term_name",
+            "fieldtype": "Data",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Term Name",
+            "reqd": 1
+        },
+        {
+            "fieldname": "section_schedule",
+            "fieldtype": "Section Break",
+            "label": "Term Schedule"
+        },
+        {
+            "fieldname": "start_date",
+            "fieldtype": "Date",
+            "label": "Term Start Date",
+            "reqd": 1
+        },
+        {
+            "fieldname": "end_date",
+            "fieldtype": "Date",
+            "label": "Term End Date",
+            "reqd": 1
+        },
+        {
+            "fieldname": "term_days",
+            "fieldtype": "Int",
+            "label": "Term Duration (Days)",
+            "read_only": 1
+        },
+        {
+            "fieldname": "term_weeks",
+            "fieldtype": "Int",
+            "label": "Term Duration (Weeks)",
+            "read_only": 1
+        },
+        {
+            "fieldname": "section_status",
+            "fieldtype": "Section Break",
+            "label": "Status & Notes"
+        },
+        {
+            "default": "Planned",
+            "fieldname": "status",
+            "fieldtype": "Select",
+            "label": "Status",
+            "options": "Planned\nActive\nCompleted\nInactive",
+            "reqd": 1
+        },
+        {
+            "fieldname": "description",
+            "fieldtype": "Small Text",
+            "label": "Description"
+        },
+        {
+            "fieldname": "seat_limit",
+            "fieldtype": "Int",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Seat Limit"
+        },
+        {
+            "fieldname": "batch",
+            "fieldtype": "Data",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Batch"
+        },
+        {
+            "description": "Term of the Current Year",
+            "fieldname": "term_year",
+            "fieldtype": "Data",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Term Year"
+        },
+        {
+            "fetch_from": "program.program_shortcode",
+            "fieldname": "program_shortcode",
+            "fieldtype": "Data",
+            "label": "Program Shortcode"
+        },
+        {
+            "description": "Enter the last two digit of the current year",
+            "fetch_from": "program.current_year",
+            "fieldname": "current_year",
+            "fieldtype": "Data",
+            "label": "Current Year"
+        }
+    ],
+    "links": [],
+    "modified": "2026-01-06 18:17:41.308176",
+    "modified_by": "Administrator",
+    "module": "SLCM",
+    "name": "Cohort",
+    "naming_rule": "By fieldname",
+    "owner": "Administrator",
+    "permissions": [
+        {
+            "create": 1,
+            "delete": 1,
+            "email": 1,
+            "export": 1,
+            "print": 1,
+            "read": 1,
+            "report": 1,
+            "role": "System Manager",
+            "share": 1,
+            "write": 1
+        },
+        {
+            "read": 1,
+            "role": "Student"
+        }
+    ],
+    "row_format": "Dynamic",
+    "sort_field": "modified",
+    "sort_order": "DESC",
+    "states": [],
+    "title_field": "cohort_name"
 }

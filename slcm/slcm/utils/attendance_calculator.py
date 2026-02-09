@@ -94,7 +94,7 @@ def calculate_student_attendance(student, course_offering):
 
 	# Save
 	summary.last_updated = frappe.utils.now()
-	summary.save()
+	summary.save(ignore_permissions=True)
 	
 	return summary.as_dict()
 
@@ -206,7 +206,7 @@ def get_or_create_summary(student, course_offering):
 		"student": student,
 		"course_offering": course_offering
 	})
-	summary.insert()
+	summary.insert(ignore_permissions=True)
 	return summary
 
 

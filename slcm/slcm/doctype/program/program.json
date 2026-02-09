@@ -1,173 +1,177 @@
 {
- "actions": [],
- "allow_import": 1,
- "allow_rename": 1,
- "autoname": "field:program_name",
- "creation": "2025-12-18 10:59:03.532617",
- "default_view": "List",
- "doctype": "DocType",
- "engine": "InnoDB",
- "field_order": [
-  "program_id",
-  "program_name",
-  "program_shortcode",
-  "department",
-  "hero_image",
-  "column_break_3",
-  "program_level",
-  "program_duration",
-  "academic_year",
-  "current_year",
-  "academic_term",
-  "graduation_credits",
-  "program_status",
-  "section_break_xbux",
-  "table_fela",
-  "connections_tab"
- ],
- "fields": [
-  {
-   "fieldname": "program_name",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Program Name",
-   "reqd": 1,
-   "unique": 1
-  },
-  {
-   "fieldname": "department",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Department",
-   "options": "Department"
-  },
-  {
-   "fieldname": "hero_image",
-   "fieldtype": "Attach Image",
-   "hidden": 1,
-   "label": "Image"
-  },
-  {
-   "fieldname": "column_break_3",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "connections_tab",
-   "fieldtype": "Tab Break",
-   "label": "Connections",
-   "show_dashboard": 1
-  },
-  {
-   "fieldname": "section_break_xbux",
-   "fieldtype": "Section Break"
-  },
-  {
-   "fieldname": "table_fela",
-   "fieldtype": "Table",
-   "options": "Program Enrollment Course"
-  },
-  {
-   "fieldname": "academic_year",
-   "fieldtype": "Link",
-   "hidden": 1,
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Academic Year",
-   "options": "Academic Year"
-  },
-  {
-   "fieldname": "academic_term",
-   "fieldtype": "Link",
-   "hidden": 1,
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Academic Term",
-   "options": "Academic Term"
-  },
-  {
-   "fieldname": "program_id",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Program Code"
-  },
-  {
-   "fieldname": "program_level",
-   "fieldtype": "Select",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Level of Study",
-   "options": "\nUG\nPG"
-  },
-  {
-   "fieldname": "program_duration",
-   "fieldtype": "Int",
-   "hidden": 1,
-   "label": "Program Duration"
-  },
-  {
-   "fieldname": "graduation_credits",
-   "fieldtype": "Int",
-   "hidden": 1,
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Graduation Credits"
-  },
-  {
-   "fieldname": "program_status",
-   "fieldtype": "Select",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Program Status",
-   "options": "\nActive\nInactive"
-  },
-  {
-   "fieldname": "program_shortcode",
-   "fieldtype": "Data",
-   "label": "Program Shortcode",
-   "reqd": 1
-  },
-  {
-   "description": "Enter the last two digit of the current year",
-   "fieldname": "current_year",
-   "fieldtype": "Data",
-   "label": "Current Year"
-  }
- ],
- "image_field": "hero_image",
- "links": [
-  {
-   "group": "Admission and Enrollments",
-   "link_doctype": "Student Enrollment",
-   "link_fieldname": "program"
-  }
- ],
- "modified": "2026-01-06 18:17:28.299785",
- "modified_by": "Administrator",
- "module": "SLCM",
- "name": "Program",
- "naming_rule": "By fieldname",
- "owner": "Administrator",
- "permissions": [
-  {
-   "create": 1,
-   "delete": 1,
-   "email": 1,
-   "export": 1,
-   "print": 1,
-   "read": 1,
-   "report": 1,
-   "role": "System Manager",
-   "share": 1,
-   "write": 1
-  }
- ],
- "row_format": "Dynamic",
- "search_fields": "program_name",
- "show_name_in_global_search": 1,
- "sort_field": "modified",
- "sort_order": "DESC",
- "states": []
+    "actions": [],
+    "allow_import": 1,
+    "allow_rename": 1,
+    "autoname": "field:program_name",
+    "creation": "2025-12-18 10:59:03.532617",
+    "default_view": "List",
+    "doctype": "DocType",
+    "engine": "InnoDB",
+    "field_order": [
+        "program_id",
+        "program_name",
+        "program_shortcode",
+        "department",
+        "hero_image",
+        "column_break_3",
+        "program_level",
+        "program_duration",
+        "academic_year",
+        "current_year",
+        "academic_term",
+        "graduation_credits",
+        "program_status",
+        "section_break_xbux",
+        "table_fela",
+        "connections_tab"
+    ],
+    "fields": [
+        {
+            "fieldname": "program_name",
+            "fieldtype": "Data",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Program Name",
+            "reqd": 1,
+            "unique": 1
+        },
+        {
+            "fieldname": "department",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Department",
+            "options": "Department"
+        },
+        {
+            "fieldname": "hero_image",
+            "fieldtype": "Attach Image",
+            "hidden": 1,
+            "label": "Image"
+        },
+        {
+            "fieldname": "column_break_3",
+            "fieldtype": "Column Break"
+        },
+        {
+            "fieldname": "connections_tab",
+            "fieldtype": "Tab Break",
+            "label": "Connections",
+            "show_dashboard": 1
+        },
+        {
+            "fieldname": "section_break_xbux",
+            "fieldtype": "Section Break"
+        },
+        {
+            "fieldname": "table_fela",
+            "fieldtype": "Table",
+            "options": "Program Enrollment Course"
+        },
+        {
+            "fieldname": "academic_year",
+            "fieldtype": "Link",
+            "hidden": 1,
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Academic Year",
+            "options": "Academic Year"
+        },
+        {
+            "fieldname": "academic_term",
+            "fieldtype": "Link",
+            "hidden": 1,
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Academic Term",
+            "options": "Academic Term"
+        },
+        {
+            "fieldname": "program_id",
+            "fieldtype": "Data",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Program Code"
+        },
+        {
+            "fieldname": "program_level",
+            "fieldtype": "Select",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Level of Study",
+            "options": "\nUG\nPG"
+        },
+        {
+            "fieldname": "program_duration",
+            "fieldtype": "Int",
+            "hidden": 1,
+            "label": "Program Duration"
+        },
+        {
+            "fieldname": "graduation_credits",
+            "fieldtype": "Int",
+            "hidden": 1,
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Graduation Credits"
+        },
+        {
+            "fieldname": "program_status",
+            "fieldtype": "Select",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Program Status",
+            "options": "\nActive\nInactive"
+        },
+        {
+            "fieldname": "program_shortcode",
+            "fieldtype": "Data",
+            "label": "Program Shortcode",
+            "reqd": 1
+        },
+        {
+            "description": "Enter the last two digit of the current year",
+            "fieldname": "current_year",
+            "fieldtype": "Data",
+            "label": "Current Year"
+        }
+    ],
+    "image_field": "hero_image",
+    "links": [
+        {
+            "group": "Admission and Enrollments",
+            "link_doctype": "Student Enrollment",
+            "link_fieldname": "program"
+        }
+    ],
+    "modified": "2026-01-06 18:17:28.299785",
+    "modified_by": "Administrator",
+    "module": "SLCM",
+    "name": "Program",
+    "naming_rule": "By fieldname",
+    "owner": "Administrator",
+    "permissions": [
+        {
+            "create": 1,
+            "delete": 1,
+            "email": 1,
+            "export": 1,
+            "print": 1,
+            "read": 1,
+            "report": 1,
+            "role": "System Manager",
+            "share": 1,
+            "write": 1
+        },
+        {
+            "read": 1,
+            "role": "Student"
+        }
+    ],
+    "row_format": "Dynamic",
+    "search_fields": "program_name",
+    "show_name_in_global_search": 1,
+    "sort_field": "modified",
+    "sort_order": "DESC",
+    "states": []
 }
